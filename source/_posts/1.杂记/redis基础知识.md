@@ -1,7 +1,7 @@
 ---
 title: redis基础知识
 date: 2019-02-25 23:01:21
-categories: 读书杂记
+categories: 杂记
 tags:
   - redis
   - 分布式锁

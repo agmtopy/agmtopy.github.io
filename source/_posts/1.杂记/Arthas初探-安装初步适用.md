@@ -1,7 +1,7 @@
 ---
 title: Arthas初探--安装初步适用
 date: 2020-04-29 22:40:08
-categories: linux
+categories: 杂记
 tags:
   - linux
   - arthas
@@ -20,7 +20,7 @@ githup项目地址：**https://github.com/alibaba/arthas**
 wget https://alibaba.github.io/arthas/arthas-boot.jar
 java -jar arthas-boot.jar
 ```
-linux下直接执行，window下下载文件执行
+linux下直接执行，window下载文件后执行
 
 ![在这里插入图片描述](https://img-blog.csdnimg.cn/20190630153613103.png)
 执行完成后，显示当前path中指定的JDK中正在运行的java进程
@@ -81,34 +81,35 @@ Arthas命令初步使用，大概分为5类：
 
 - jad 反编译代码工具
 ```bash
- jad com.demo.model.UserDO
+ jad com.sankuai.inf.leaf.common.ZeroIDGen
 ```
-![jdb反编译代码](待填充)
 
+![aVeudO.png](https://s1.ax1x.com/2020/07/28/aVeudO.png)
 
 - watch 查看输入参数与输出参数
 ```bash
-    watch com.demo.service.UserService saveUser '{params, target, returnObj}' -x 2
+    watch com.sankuai.inf.leaf.server.service.SegmentService getId '{params, target, returnObj}' -x 2
 ```
 
 > **params**表示入参，**target**表示当前的类，**returnObj**表示返回值
 
-![watch监控数据](待填充)
+![aVmDAO.png](https://s1.ax1x.com/2020/07/28/aVmDAO.png)
 
-- stack 
-
-```bash
- stack org.apache.commons.lang.StringUtils isBlank
-```
-![stack调用路径](待填充)
-
-- sc 
+- stack 查看被调用的路径(向上)
 
 ```bash
-sc -d org.apache.commons.lang.StringUtils
+ stack com.sankuai.inf.leaf.server.service.SegmentService getId
 ```
 
-![sc调用路径](待填充)
+![aVKIUK.png](https://s1.ax1x.com/2020/07/28/aVKIUK.png)
+
+- sc 查看JVM已加载的类信息
+
+```bash
+sc -d com.sankuai.inf.leaf.server.service.SegmentService getId
+```
+
+![aVMArn.png](https://s1.ax1x.com/2020/07/28/aVMArn.png)
 
 
 - thread 分析死锁

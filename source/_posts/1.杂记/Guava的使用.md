@@ -1,7 +1,7 @@
 ---
 title: Guava的使用
 date: 2020-05-20 00:54:09
-categories: guava
+categories: 杂记
 tags:
   - guava
 ---
