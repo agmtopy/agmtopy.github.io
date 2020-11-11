@@ -1,0 +1,85 @@
+---
+title: JVM问题排查思路
+date: 2020-06-10 21:07:34
+categories: jvm
+tags:
+  - jvm
+---
+
+# JVM问题排查思路
+
+## GC log
+
+### 启动脚本
+
+```bash
+    -verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps 
+    -XX:+PrintGCApplicationStoppedTime -XX:+PrintTenuringDistribution 
+    -Xloggc:/tmp/logs/gc_%p.log -XX:+HeapDumpOnOutOfMemoryError 
+    -XX:HeapDumpPath=/tmp/logs -XX:ErrorFile=/tmp/logs/hs_error_pid%p.log 
+    -XX:-OmitStackTraceInFastThrow
+```
+
+### 时间日志
+
+> time ls
+
+![0YV6te.png](https://s1.ax1x.com/2020/10/05/0YV6te.png)
+
+- real
+real表示实际花费的时间，从开始到结束包括阻塞时间
+
+- user
+user表示用户态说花费的时间，只统计本进程(多核状态)下所使用的时间
+
+- sys
+sys表示的是进程在cpu核心状态下所使用的时间
+
+
+## jstat
+
+```bash
+ # 垃圾回收信息
+ jstat -gcutil $pid 1000 
+
+ # GC相关的信息
+ jstat -gc
+
+ # 显示各个代的容量
+ jstat -gccapacity 
+
+ # 显示classLoader
+ jstat -class
+```
+
+## 实际案例
+
+### 老年代溢出
+
+- Oomtest.java
+```java
+public class OldOomTest {
+    public static final int _1MB = 1024 * 1024;
+    /**
+     * 静态变量
+     */
+    private static List<byte[]> bytes = new ArrayList<>();
+
+    public static void main(String[] args) throws InterruptedException {
+        while (true) {
+            byte[] bts = new byte[_1MB];
+            bytes.add(bts);
+            TimeUnit.SECONDS.sleep(1L);
+        }
+    }
+}
+
+```
+
+![0Nr7es.png](https://s1.ax1x.com/2020/10/06/0Nr7es.png)
+
+从上图中可以看到byte[]占用9462402字节≈9.02MB,在尝试继续分配时失败
+
+
+### 元数据空间溢出
+
