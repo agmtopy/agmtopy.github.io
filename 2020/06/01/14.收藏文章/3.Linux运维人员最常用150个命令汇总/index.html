@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="linux," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Linux运维人员最常用150个命令汇总转载自:Linux运维人员最常用150个命令汇总  linux下最常用的150个命令，感觉有点多啊！  线上查询及帮助命令              命令         功能说明                   man         Debian&#x2F;Ubuntu 下安装man中文版 sudo apt install manpages-zh">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux运维人员最常用150个命令汇总">
+<meta property="og:url" content="http://yoursite.com/2020/06/01/14.%E6%94%B6%E8%97%8F%E6%96%87%E7%AB%A0/3.Linux%E8%BF%90%E7%BB%B4%E4%BA%BA%E5%91%98%E6%9C%80%E5%B8%B8%E7%94%A8150%E4%B8%AA%E5%91%BD%E4%BB%A4%E6%B1%87%E6%80%BB/index.html">
+<meta property="og:site_name" content="agmtopy博客">
+<meta property="og:description" content="Linux运维人员最常用150个命令汇总转载自:Linux运维人员最常用150个命令汇总  linux下最常用的150个命令，感觉有点多啊！  线上查询及帮助命令              命令         功能说明                   man         Debian&#x2F;Ubuntu 下安装man中文版 sudo apt install manpages-zh">
+<meta property="article:published_time" content="2020-06-01T13:48:40.000Z">
+<meta property="article:modified_time" content="2020-11-30T15:52:16.955Z">
+<meta property="article:author" content="agmtopy">
+<meta property="article:tag" content="linux">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/06/01/14.收藏文章/3.Linux运维人员最常用150个命令汇总/"/>
+
+
+
+
+
+  <title>Linux运维人员最常用150个命令汇总 | agmtopy博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">agmtopy博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">agmtopy</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/01/14.%E6%94%B6%E8%97%8F%E6%96%87%E7%AB%A0/3.Linux%E8%BF%90%E7%BB%B4%E4%BA%BA%E5%91%98%E6%9C%80%E5%B8%B8%E7%94%A8150%E4%B8%AA%E5%91%BD%E4%BB%A4%E6%B1%87%E6%80%BB/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="agmtopy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://lh3.googleusercontent.com/a-/AOh14GgpoPhwzcSUZRZB6lHH_maq8ImUPog4tGdED1r5=s96-cc-rg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="agmtopy博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Linux运维人员最常用150个命令汇总</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-01T21:48:40+08:00">
+                2020-06-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%96%87%E7%AB%A0%E6%94%B6%E8%97%8F/" itemprop="url" rel="index">
+                    <span itemprop="name">文章收藏</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  709
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Linux运维人员最常用150个命令汇总"><a href="#Linux运维人员最常用150个命令汇总" class="headerlink" title="Linux运维人员最常用150个命令汇总"></a>Linux运维人员最常用150个命令汇总</h1><p>转载自:<a href="https://www.cnblogs.com/bananaaa/p/7774467.html" target="_blank" rel="noopener">Linux运维人员最常用150个命令汇总</a></p>
+<blockquote>
+<p>linux下最常用的150个命令，感觉有点多啊！</p>
+</blockquote>
+<h2 id="线上查询及帮助命令"><a href="#线上查询及帮助命令" class="headerlink" title="线上查询及帮助命令"></a>线上查询及帮助命令</h2><table>
+    <tr>
+        <td>命令</td>
+        <td>功能说明</td>
+    </tr>
+    <tr>
+        <td>man</td>
+        <td>Debian/Ubuntu 下安装man中文版<br> sudo apt install manpages-zh</td>
+    </tr>
+    <tr>
+        <td>help</td>
+        <td>查看Linux内置命令的帮助，比如'cd'命令</td>
+    </tr>
+</table>
+
+<h2 id="文件和目录操作命令"><a href="#文件和目录操作命令" class="headerlink" title="文件和目录操作命令"></a>文件和目录操作命令</h2><table>
+    <tr>
+        <td>命令</td>
+        <td>功能说明</td>
+    </tr>
+    <tr>
+        <td>ls</td>
+        <td>全拼list，功能是列出目录的内容及其内容属性信息</td>
+    </tr>
+    <tr>
+        <td>cd</td>
+        <td>全拼change directory，功能是从当前工作目录切换到指定的工作目录</td>
+    </tr>
+    <tr>
+        <td>cp</td>
+        <td>全拼copy，其功能为复制文件或目录</td>
+    </tr>
+    <tr>
+        <td>find</td>
+        <td>查找的意思，用于查找目录及目录下的文件</td>
+    </tr>
+    <tr>
+        <td>mkdir</td>
+        <td>全拼 make directories，其功能是创建目录</td>
+    </tr>
+    <tr>
+        <td>mv</td>
+        <td>全拼 move，其功能是移动或重命名文件</td>
+    </tr>
+    <tr>
+        <td>pwd</td>
+        <td>全拼 print working directory，其功能是显示当前工作目录的绝对路径</td>
+    </tr>
+    <tr>
+        <td>rename</td>
+        <td>用于重命名文件</td>
+    </tr>
+    <tr>
+        <td>rm</td>
+        <td>全拼remove，其功能是删除一个或多个文件或目录</td>
+    </tr>
+    <tr>
+        <td>rmdir</td>
+        <td>全拼remove empty directories，功能是删除空目录</td>
+    </tr>
+    <tr>
+        <td>touch</td>
+        <td>创建新的空文件或改变已有文件的时间戳属性</td>
+    </tr>
+    <tr>
+        <td>tree</td>
+        <td>功能是以树形结构显示目录下的内容</td>
+    </tr>
+    <tr>
+        <td>basename</td>
+        <td>显示文件名或目录名</td>
+    </tr>
+    <tr>
+        <td>dirname</td>
+        <td>显示文件或目录路径</td>
+    </tr>
+    <tr>
+        <td>chattr</td>
+        <td>改变文件的扩展属性</td>
+    </tr>
+    <tr>
+        <td>lsattr</td>
+        <td>查看文件扩展属性</td>
+    </tr>
+    <tr>
+        <td>file</td>
+        <td>显示文件的类型</td>
+    </tr>
+    <tr>
+        <td>md5sum</td>
+        <td>计算和校验文件的 MD5 值</td>
+    </tr>
+</table>
+
+
+<h2 id="查看文件及内容处理命令"><a href="#查看文件及内容处理命令" class="headerlink" title="查看文件及内容处理命令"></a>查看文件及内容处理命令</h2><table>
+    <tr>
+        <td>命令</td>
+        <td>功能说明</td>
+    </tr>
+    <tr>
+        <td>cat</td>
+        <td>全拼 concatenate，功能是用于连接多个文件并且打印到屏幕输出或重定向到指定文件中</td>
+    </tr>
+    <tr>
+        <td>tac</td>
+        <td>tac 是 cat 的反向拼写，因此命令的功能为反向显示文件内容</td>
+    </tr>
+    <tr>
+        <td>more</td>
+        <td>分页显示文件内容</td>
+    </tr>
+    <tr>
+        <td>less</td>
+        <td>分页显示文件内容</td>
+    </tr>
+    <tr>
+        <td>head</td>
+        <td>显示文件内容的头部</td>
+    </tr>
+    <tr>
+        <td>tail</td>
+        <td>显示文件内容的头部</td>
+    </tr>
+    <tr>
+        <td>cut</td>
+        <td>将文件的每一行按指定分隔符分割并输出</td>
+    </tr>
+    <tr>
+        <td>split</td>
+        <td>分割文件为不同的小片段</td>
+    </tr>
+    <tr>
+        <td>paste</td>
+        <td>按行合并文件内容</td>
+    </tr>
+    <tr>
+        <td>sort</td>
+        <td>对文件的文本内容排序</td>
+    </tr>
+    <tr>
+        <td>uniq</td>
+        <td>去除重复行。oldboy</td>
+    </tr>
+    <tr>
+        <td>wc</td>
+        <td>统计文件的行数、单词数或字节数</td>
+    </tr>
+    <tr>
+        <td>iconv</td>
+        <td>转换文件的编码格式</td>
+    </tr>
+    <tr>
+        <td>dos2unix</td>
+        <td>将 DOS 格式文件转换成 UNIX 格式</td>
+    </tr>
+    <tr>
+        <td>diff</td>
+        <td>全拼difference，比较文件的差异，常用于文本文件</td>
+    </tr>
+    <tr>
+        <td>vimdiff</td>
+        <td>命令行可视化文件比较工具，常用于文本文件</td>
+    </tr>
+    <tr>
+        <td>rev</td>
+        <td>反向输出文件内容</td>
+    </tr>
+    <tr>
+        <td>grep/egrep</td>
+        <td>过滤字符串</td>
+    </tr>
+    <tr>
+        <td>join</td>
+        <td>按两个文件的相同字段合并</td>
+    </tr>
+    <tr>
+        <td>tr</td>
+        <td>替换或删除字符</td>
+    </tr>
+    <tr>
+        <td>vi/vim</td>
+        <td>命令行文本编辑器</td>
+    </tr>
+</table>
+
+<h2 id="文件压缩及解压缩命令"><a href="#文件压缩及解压缩命令" class="headerlink" title="文件压缩及解压缩命令"></a>文件压缩及解压缩命令</h2><table>
+    <tr>
+        <td>命令</td>
+        <td>功能说明</td>
+    </tr>
+    <tr>
+        <td>tar</td>
+        <td>打包压缩</td>
+    </tr>
+    <tr>
+        <td>unzip</td>
+        <td>解压文件</td>
+    </tr>
+    <tr>
+        <td>gzip</td>
+        <td>gzip 压缩工具</td>
+    </tr>
+    <tr>
+        <td>zip</td>
+        <td>zip 压缩工具</td>
+    </tr>
+</table>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/31/13.LeetCode/5.%E6%95%B4%E6%95%B0%E5%8F%8D%E8%BD%AC-LeetCode05/" rel="next" title="整数反转_LeetCode05">
+                <i class="fa fa-chevron-left"></i> 整数反转_LeetCode05
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/01/13.LeetCode/6.%E5%9B%9E%E6%96%87%E6%95%B0-LeetCode06/" rel="prev" title="回文数_LeetCode06">
+                回文数_LeetCode06 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://lh3.googleusercontent.com/a-/AOh14GgpoPhwzcSUZRZB6lHH_maq8ImUPog4tGdED1r5=s96-cc-rg"
+                alt="agmtopy" />
+            
+              <p class="site-author-name" itemprop="name">agmtopy</p>
+              <p class="site-description motion-element" itemprop="description">你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">108</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">63</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Linux运维人员最常用150个命令汇总"><span class="nav-number">1.</span> <span class="nav-text">Linux运维人员最常用150个命令汇总</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#线上查询及帮助命令"><span class="nav-number">1.1.</span> <span class="nav-text">线上查询及帮助命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件和目录操作命令"><span class="nav-number">1.2.</span> <span class="nav-text">文件和目录操作命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#查看文件及内容处理命令"><span class="nav-number">1.3.</span> <span class="nav-text">查看文件及内容处理命令</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#文件压缩及解压缩命令"><span class="nav-number">1.4.</span> <span class="nav-text">文件压缩及解压缩命令</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">agmtopy</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">网站总字数&#58;</span>
+    
+    <span title="网站总字数">95.9k</span>
+  
+</div>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

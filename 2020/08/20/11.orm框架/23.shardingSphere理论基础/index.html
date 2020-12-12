@@ -1,0 +1,877 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="ShardingSphere," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="shardingSphere理论基础理论shardingSpgere实现JDBC规范，并在此基础上进行扩展 核心概念数据分片按照拆分的方式分为水平拆分和垂直拆分  垂直拆分  垂直拆分指的是专库专用，将不同业务的表拆分到对应的库中。微服务架构下已基本实现垂直拆分   水平拆分  水平拆分指的是通过根据某种规则将数据放到指定的数据节点中，数据节点是由库和表组合而成的    shardingSpher">
+<meta property="og:type" content="article">
+<meta property="og:title" content="shardingSphere理论基础">
+<meta property="og:url" content="http://yoursite.com/2020/08/20/11.orm%E6%A1%86%E6%9E%B6/23.shardingSphere%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/index.html">
+<meta property="og:site_name" content="agmtopy博客">
+<meta property="og:description" content="shardingSphere理论基础理论shardingSpgere实现JDBC规范，并在此基础上进行扩展 核心概念数据分片按照拆分的方式分为水平拆分和垂直拆分  垂直拆分  垂直拆分指的是专库专用，将不同业务的表拆分到对应的库中。微服务架构下已基本实现垂直拆分   水平拆分  水平拆分指的是通过根据某种规则将数据放到指定的数据节点中，数据节点是由库和表组合而成的    shardingSpher">
+<meta property="article:published_time" content="2020-08-20T15:33:35.000Z">
+<meta property="article:modified_time" content="2020-11-30T15:52:16.940Z">
+<meta property="article:author" content="agmtopy">
+<meta property="article:tag" content="ShardingSphere">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/08/20/11.orm框架/23.shardingSphere理论基础/"/>
+
+
+
+
+
+  <title>shardingSphere理论基础 | agmtopy博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">agmtopy博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">agmtopy</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/08/20/11.orm%E6%A1%86%E6%9E%B6/23.shardingSphere%E7%90%86%E8%AE%BA%E5%9F%BA%E7%A1%80/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="agmtopy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://lh3.googleusercontent.com/a-/AOh14GgpoPhwzcSUZRZB6lHH_maq8ImUPog4tGdED1r5=s96-cc-rg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="agmtopy博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">shardingSphere理论基础</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-08-20T23:33:35+08:00">
+                2020-08-20
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/ShardingSphere/" itemprop="url" rel="index">
+                    <span itemprop="name">ShardingSphere</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.4k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  5
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="shardingSphere理论基础"><a href="#shardingSphere理论基础" class="headerlink" title="shardingSphere理论基础"></a>shardingSphere理论基础</h1><h2 id="理论"><a href="#理论" class="headerlink" title="理论"></a>理论</h2><p>shardingSpgere实现JDBC规范，并在此基础上进行扩展</p>
+<h2 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h2><p>数据分片按照拆分的方式分为水平拆分和垂直拆分</p>
+<ul>
+<li><p>垂直拆分</p>
+<blockquote>
+<p>垂直拆分指的是专库专用，将不同业务的表拆分到对应的库中。微服务架构下已基本实现垂直拆分</p>
+</blockquote>
+</li>
+<li><p>水平拆分</p>
+<blockquote>
+<p>水平拆分指的是通过根据某种规则将数据放到指定的数据节点中，数据节点是由库和表组合而成的</p>
+</blockquote>
+</li>
+</ul>
+<h3 id="shardingSphere中的基本概念"><a href="#shardingSphere中的基本概念" class="headerlink" title="shardingSphere中的基本概念"></a>shardingSphere中的基本概念</h3><table>
+<thead>
+<tr>
+<th>名称</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>逻辑表</td>
+<td>在代码逻辑上对拆分表的总称</td>
+</tr>
+<tr>
+<td>真实表</td>
+<td>在分片的数据库中真实存在的物理表</td>
+</tr>
+<tr>
+<td>数据节点</td>
+<td>数据分片的最小单位,由数据源名称和数据表组成(shema.tableName)</td>
+</tr>
+<tr>
+<td>绑定表</td>
+<td>绑定表是shardingSphere中特有的概念，指的是分片规则一致的主表和子表。如果指定互为绑定表，在进行联表查询时将不会出现笛卡尔积</td>
+</tr>
+<tr>
+<td>广播表</td>
+<td>广播表类似于mycat中的全局表,适用于作为字典表</td>
+</tr>
+</tbody></table>
+<ul>
+<li>shardingSphere支持的分片策略</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>精确分片算法</td>
+<td>用于处理使用单一键作为分片键的=与IN进行分片的场景</td>
+</tr>
+<tr>
+<td>范围分片算法</td>
+<td>用于处理使用单一键作为分片键的BETWEEN AND、&gt;、&lt;、&gt;=、&lt;=进行分片的场景</td>
+</tr>
+<tr>
+<td>复合分片算法</td>
+<td>用于处理使用多键作为分片键进行分片的场景</td>
+</tr>
+<tr>
+<td>Hint分片算法</td>
+<td>用于处理使用Hint行分片的场景(使用外部数据进行分片)</td>
+</tr>
+</tbody></table>
+<h3 id="JDBC规范"><a href="#JDBC规范" class="headerlink" title="JDBC规范"></a>JDBC规范</h3><ul>
+<li><p>DataSource</p>
+<blockquote>
+<p>DataSource 在 JDBC 规范中代表的是一种数据源，核心作用是获取数据库连接对象 Connection。可以直接通过 DriverManager 获取 Connection</p>
+</blockquote>
+</li>
+<li><p>Connection</p>
+<blockquote>
+<p>DataSource 的目的是获取 Connection 对象，我们可以把 Connection 理解为一种会话（Session）机制。Connection 代表一个数据库连接，负责完成与数据库之间的通信。所有 SQL 的执行都是在某个特定 Connection 环境中进行的，同时它还提供了一组重载方法，分别用于创建 Statement 和 PreparedStatement。</p>
+</blockquote>
+</li>
+<li><p>Statement</p>
+<blockquote>
+<p>JDBC 规范中的 Statement 存在两种类型，一种是普通的 Statement，一种是支持预编译的 PreparedStatement</p>
+</blockquote>
+</li>
+</ul>
+<p>ps: PreparedStatement具体做了什么？</p>
+<blockquote>
+<p>预编译指的是数据库的编译器会对sql进行提前编译，然后将预编译的结果缓存到数据库中。这样下次执行时就可以只用替换参数调用预编译的sql语句，从而提高sql的执行效率</p>
+</blockquote>
+<ul>
+<li><p>ResultSet</p>
+<blockquote>
+<p>代表sql的执行结果</p>
+</blockquote>
+</li>
+<li><p>基于JDBC规范的流程图</p>
+</li>
+</ul>
+<p>Driver -&gt; 创建DataSource -&gt; 获取Connection -&gt; 创建Statement -&gt; 执行SQL语句 -&gt; 处理ResultSet -&gt; 关闭资源对象</p>
+<ul>
+<li>shardingshere基于适配器模式的JDBC重写实现方案</li>
+</ul>
+<p>shardingshere通过继承jdbc预留的Wrapper接口，然后在wrapper中执行jdbc的增强。</p>
+<h2 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h2><p>shardingSphere功能上可以划分为四大部分，<B>基础设施</B>、<B>分片引擎</B>、<B>分布式事务</B>、<B>治理与集成</B></p>
+<h3 id="基础设施层"><a href="#基础设施层" class="headerlink" title="基础设施层"></a>基础设施层</h3><p>基础设施层包含<B>微内核架构</B>、<B>分布式主键</B></p>
+<h3 id="分片引擎"><a href="#分片引擎" class="headerlink" title="分片引擎"></a>分片引擎</h3><p>分片引擎包括<B>数据分片</B>、<B>读写分离</B></p>
+<h3 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h3><p>分布式事务包括<B>标准化事务处理接口</B>、<B>强一致性事务与柔性事务</B></p>
+<h3 id="集成与治理"><a href="#集成与治理" class="headerlink" title="集成与治理"></a>集成与治理</h3><p>集成与治理包括<B>数据脱敏</B>、<B>配置中心</B>、<B>注册中心</B>、<B>链路跟踪</B>、<B>系统集成</B></p>
+<h2 id="业务集成"><a href="#业务集成" class="headerlink" title="业务集成"></a>业务集成</h2><h3 id="jdbc集成"><a href="#jdbc集成" class="headerlink" title="jdbc集成"></a>jdbc集成</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> DataSource <span class="title">dataSource</span><span class="params">()</span> <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line">    <span class="comment">//创建分片规则配置类</span></span><br><span class="line">    ShardingRuleConfiguration shardingRuleConfig = <span class="keyword">new</span> ShardingRuleConfiguration();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//创建分表规则配置类</span></span><br><span class="line">    TableRuleConfiguration tableRuleConfig = <span class="keyword">new</span> TableRuleConfiguration(<span class="string">"t_user"</span>, <span class="string">"ds$&#123;0..1&#125;.t_user"</span>);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//创建分布式主键生成配置类</span></span><br><span class="line">    Properties properties = <span class="keyword">new</span> Properties();</span><br><span class="line">    properties.setProperty(<span class="string">"worker.id"</span>, <span class="string">"33"</span>);</span><br><span class="line">    KeyGeneratorConfiguration keyGeneratorConfig = <span class="keyword">new</span> KeyGeneratorConfiguration(<span class="string">"SNOWFLAKE"</span>, <span class="string">"id"</span>, properties);</span><br><span class="line">    tableRuleConfig.setKeyGeneratorConfig(keyGeneratorConfig);</span><br><span class="line">    shardingRuleConfig.getTableRuleConfigs().add(tableRuleConfig);</span><br><span class="line"></span><br><span class="line">    <span class="comment">//分库规则</span></span><br><span class="line">    shardingRuleConfig.setDefaultDatabaseShardingStrategyConfig(<span class="keyword">new</span> InlineShardingStrategyConfiguration(<span class="string">"id"</span>, <span class="string">"ds$&#123;id%2&#125;"</span>));</span><br><span class="line"></span><br><span class="line">    <span class="comment">//创建具体的DataSource</span></span><br><span class="line">    <span class="keyword">return</span> ShardingDataSourceFactory.createDataSource(createDataSourceMap(), shardingRuleConfig, <span class="keyword">new</span> Properties());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+<h3 id="orm框架集成"><a href="#orm框架集成" class="headerlink" title="orm框架集成"></a>orm框架集成</h3><h4 id="jpa框架"><a href="#jpa框架" class="headerlink" title="jpa框架"></a>jpa框架</h4><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">shardingsphere:</span></span><br><span class="line">    <span class="attr">datasource:</span></span><br><span class="line">      <span class="attr">names:</span> <span class="string">ds0,ds1</span></span><br><span class="line">      <span class="attr">ds0:</span></span><br><span class="line">        <span class="attr">type:</span> <span class="string">com.zaxxer.hikari.HikariDataSource</span></span><br><span class="line">        <span class="attr">driver-class-name:</span> <span class="string">com.mysql.cj.jdbc.Driver</span></span><br><span class="line">        <span class="attr">jdbcUrl:</span> <span class="string">jdbc:mysql://127.0.0.1:3306/ds0?useUnicode=true&amp;characterEncoding=utf-8&amp;serverTimezone=GMT</span></span><br><span class="line">        <span class="attr">username:</span> <span class="string">root</span></span><br><span class="line">        <span class="attr">password:</span> <span class="string">******</span></span><br><span class="line">      <span class="attr">ds1:</span></span><br><span class="line">        <span class="attr">type:</span> <span class="string">com.zaxxer.hikari.HikariDataSource</span></span><br><span class="line">        <span class="attr">driver-class-name:</span> <span class="string">com.mysql.cj.jdbc.Driver</span></span><br><span class="line">        <span class="attr">jdbcUrl:</span> <span class="string">jdbc:mysql://127.0.0.1:3306/ds1?useUnicode=true&amp;characterEncoding=utf-8&amp;serverTimezone=GMT</span></span><br><span class="line">        <span class="attr">username:</span> <span class="string">root</span></span><br><span class="line">        <span class="attr">password:</span> <span class="string">******</span></span><br><span class="line">      <span class="attr">sharding:</span></span><br><span class="line">        <span class="attr">default-database-strategy:</span> <span class="comment"># 分库规则</span></span><br><span class="line">          <span class="attr">inline:</span></span><br><span class="line">            <span class="attr">sharding-column:</span> <span class="string">vender_id</span></span><br><span class="line">            <span class="attr">algorithm-expression:</span> <span class="string">ds$&#123;vender_id</span> <span class="string">%</span> <span class="number">2</span><span class="string">&#125;</span></span><br><span class="line">        <span class="attr">tables:</span></span><br><span class="line">          <span class="attr">t_user:</span>  <span class="comment">#t_user表</span></span><br><span class="line">            <span class="attr">key-generator-column-name:</span> <span class="string">id</span>  <span class="comment">#主键</span></span><br><span class="line">            <span class="attr">actual-data-nodes:</span> <span class="string">ds$&#123;0..1&#125;.t_user$&#123;0..1&#125;</span>    <span class="comment">#真实数据节点</span></span><br><span class="line">            <span class="attr">databaseStrategy:</span> <span class="comment"># 分库策略</span></span><br><span class="line">              <span class="attr">inline:</span></span><br><span class="line">                <span class="attr">sharding-column:</span> <span class="string">vender_id</span> <span class="comment"># 分库键</span></span><br><span class="line">                <span class="attr">algorithm-expression:</span> <span class="string">ds$&#123;vender_id</span> <span class="string">%</span> <span class="number">2</span><span class="string">&#125;</span></span><br><span class="line">            <span class="attr">tableStrategy:</span> <span class="comment">#分表策略</span></span><br><span class="line">              <span class="attr">inline:</span> <span class="comment">#行表达式</span></span><br><span class="line">                <span class="attr">shardingColumn:</span> <span class="string">vender_id</span></span><br><span class="line">                <span class="attr">algorithmExpression:</span> <span class="string">t_user$&#123;vender_id</span> <span class="string">%</span> <span class="number">2</span><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<h4 id="javaConfig"><a href="#javaConfig" class="headerlink" title="javaConfig"></a>javaConfig</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> DataSource <span class="title">getShardingDataSource</span><span class="params">()</span> <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line">        ShardingRuleConfiguration shardingRuleConfig = <span class="keyword">new</span> ShardingRuleConfiguration();</span><br><span class="line">        <span class="comment">//设置分库分表策略</span></span><br><span class="line">        shardingRuleConfig.getTableRuleConfigs().add(getOrderTableRuleConfiguration());</span><br><span class="line">        shardingRuleConfig.getTableRuleConfigs().add(getOrderItemTableRuleConfiguration());</span><br><span class="line">        <span class="comment">//设置绑定表</span></span><br><span class="line">        shardingRuleConfig.getBindingTableGroups().add(<span class="string">"t_order, t_order_item"</span>);</span><br><span class="line">        <span class="comment">//设置广播表</span></span><br><span class="line">        shardingRuleConfig.getBroadcastTables().add(<span class="string">"t_config"</span>);</span><br><span class="line">        <span class="comment">//设置分库默认策略</span></span><br><span class="line">        shardingRuleConfig.setDefaultDatabaseShardingStrategyConfig(<span class="keyword">new</span> InlineShardingStrategyConfiguration(<span class="string">"user_id"</span>, <span class="string">"ds$&#123;user_id % 2&#125;"</span>));</span><br><span class="line">        <span class="comment">//设置分表默认策略</span></span><br><span class="line">        shardingRuleConfig.setDefaultTableShardingStrategyConfig(<span class="keyword">new</span> StandardShardingStrategyConfiguration(<span class="string">"order_id"</span>, <span class="keyword">null</span>));</span><br><span class="line">        <span class="keyword">return</span> ShardingDataSourceFactory.createDataSource(createDataSourceMap(), shardingRuleConfig, <span class="keyword">new</span> Properties());</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="shardingSphere的配置"><a href="#shardingSphere的配置" class="headerlink" title="shardingSphere的配置"></a>shardingSphere的配置</h2><h3 id="行内表达式"><a href="#行内表达式" class="headerlink" title="行内表达式"></a>行内表达式</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ds<span class="variable">$&#123;0..1&#125;</span>.user<span class="variable">$&#123;1..1&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>行内表达式是用来作为shardingSphere的配置信息的一种表达方式。</p>
+<p>${begin..end} 标识的是从begin到end的一个区间</p>
+<p>多个${expression}可以用点号来形成组合关系表达式</p>
+<h3 id="核心配置项"><a href="#核心配置项" class="headerlink" title="核心配置项"></a>核心配置项</h3><blockquote>
+<p>shardingSphere的核心功能就是分库分表，核心功能是依赖配置的。掌握如何使用shardingsphere就是掌握如何进行配置。</p>
+</blockquote>
+<h4 id="ShardingRuleConfiguration"><a href="#ShardingRuleConfiguration" class="headerlink" title="ShardingRuleConfiguration"></a>ShardingRuleConfiguration</h4>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ShardingSphere/" rel="tag"># ShardingSphere</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/08/08/15.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84/%E7%A8%8B%E5%BA%8F%E8%AE%BE%E8%AE%A1%E4%B8%AD%E7%9A%84%E5%9F%BA%E7%9F%B3-%E6%95%B0%E7%BB%84/" rel="next" title="程序设计中的基石:数组">
+                <i class="fa fa-chevron-left"></i> 程序设计中的基石:数组
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/08/23/1.%E6%9D%82%E8%AE%B0/%E6%97%A5%E5%B8%B8%E7%A2%8E%E7%A2%8E%E5%BF%B5/" rel="prev" title="日常碎碎念">
+                日常碎碎念 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://lh3.googleusercontent.com/a-/AOh14GgpoPhwzcSUZRZB6lHH_maq8ImUPog4tGdED1r5=s96-cc-rg"
+                alt="agmtopy" />
+            
+              <p class="site-author-name" itemprop="name">agmtopy</p>
+              <p class="site-description motion-element" itemprop="description">你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">108</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">63</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#shardingSphere理论基础"><span class="nav-number">1.</span> <span class="nav-text">shardingSphere理论基础</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#理论"><span class="nav-number">1.1.</span> <span class="nav-text">理论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#核心概念"><span class="nav-number">1.2.</span> <span class="nav-text">核心概念</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#shardingSphere中的基本概念"><span class="nav-number">1.2.1.</span> <span class="nav-text">shardingSphere中的基本概念</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#JDBC规范"><span class="nav-number">1.2.2.</span> <span class="nav-text">JDBC规范</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#功能"><span class="nav-number">1.3.</span> <span class="nav-text">功能</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#基础设施层"><span class="nav-number">1.3.1.</span> <span class="nav-text">基础设施层</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分片引擎"><span class="nav-number">1.3.2.</span> <span class="nav-text">分片引擎</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#分布式事务"><span class="nav-number">1.3.3.</span> <span class="nav-text">分布式事务</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#集成与治理"><span class="nav-number">1.3.4.</span> <span class="nav-text">集成与治理</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#业务集成"><span class="nav-number">1.4.</span> <span class="nav-text">业务集成</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#jdbc集成"><span class="nav-number">1.4.1.</span> <span class="nav-text">jdbc集成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#orm框架集成"><span class="nav-number">1.4.2.</span> <span class="nav-text">orm框架集成</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#jpa框架"><span class="nav-number">1.4.2.1.</span> <span class="nav-text">jpa框架</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#javaConfig"><span class="nav-number">1.4.2.2.</span> <span class="nav-text">javaConfig</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#shardingSphere的配置"><span class="nav-number">1.5.</span> <span class="nav-text">shardingSphere的配置</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#行内表达式"><span class="nav-number">1.5.1.</span> <span class="nav-text">行内表达式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#核心配置项"><span class="nav-number">1.5.2.</span> <span class="nav-text">核心配置项</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ShardingRuleConfiguration"><span class="nav-number">1.5.2.1.</span> <span class="nav-text">ShardingRuleConfiguration</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">agmtopy</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">网站总字数&#58;</span>
+    
+    <span title="网站总字数">95.9k</span>
+  
+</div>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

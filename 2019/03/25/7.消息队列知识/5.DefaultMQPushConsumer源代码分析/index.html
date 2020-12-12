@@ -1,0 +1,837 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="RocketMQ," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="DefaultMQPushConsumer源代码分析基本使用 DefaultMQPushConsumer是默认进行消费的工具类，类图如下：    1234567public DefaultMQPushConsumer(final String namespace, final String consumerGroup, RPCHook rpcHook,    AllocateMessageQueu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Consumer源代码分析">
+<meta property="og:url" content="http://yoursite.com/2019/03/25/7.%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9F%A5%E8%AF%86/5.DefaultMQPushConsumer%E6%BA%90%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/index.html">
+<meta property="og:site_name" content="agmtopy博客">
+<meta property="og:description" content="DefaultMQPushConsumer源代码分析基本使用 DefaultMQPushConsumer是默认进行消费的工具类，类图如下：    1234567public DefaultMQPushConsumer(final String namespace, final String consumerGroup, RPCHook rpcHook,    AllocateMessageQueu">
+<meta property="og:image" content="https://s1.ax1x.com/2020/03/25/8x1zJP.png">
+<meta property="article:published_time" content="2019-03-25T14:09:27.000Z">
+<meta property="article:modified_time" content="2020-11-30T15:52:16.995Z">
+<meta property="article:author" content="agmtopy">
+<meta property="article:tag" content="RocketMQ">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1.ax1x.com/2020/03/25/8x1zJP.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2019/03/25/7.消息队列知识/5.DefaultMQPushConsumer源代码分析/"/>
+
+
+
+
+
+  <title>Consumer源代码分析 | agmtopy博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">agmtopy博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">agmtopy</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/03/25/7.%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9F%A5%E8%AF%86/5.DefaultMQPushConsumer%E6%BA%90%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="agmtopy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://lh3.googleusercontent.com/a-/AOh14GgpoPhwzcSUZRZB6lHH_maq8ImUPog4tGdED1r5=s96-cc-rg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="agmtopy博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Consumer源代码分析</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-03-25T22:09:27+08:00">
+                2019-03-25
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" itemprop="url" rel="index">
+                    <span itemprop="name">消息队列</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.2k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  5
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="DefaultMQPushConsumer源代码分析"><a href="#DefaultMQPushConsumer源代码分析" class="headerlink" title="DefaultMQPushConsumer源代码分析"></a>DefaultMQPushConsumer源代码分析</h1><h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><p> <strong>DefaultMQPushConsumer</strong>是默认进行消费的工具类，类图如下：</p>
+<p> <img src="https://s1.ax1x.com/2020/03/25/8x1zJP.png" alt="8x1zJP.png"></p>
+ <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">DefaultMQPushConsumer</span><span class="params">(<span class="keyword">final</span> String namespace, <span class="keyword">final</span> String consumerGroup, RPCHook rpcHook,</span></span></span><br><span class="line"><span class="function"><span class="params">    AllocateMessageQueueStrategy allocateMessageQueueStrategy)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.consumerGroup = consumerGroup;</span><br><span class="line">    <span class="keyword">this</span>.namespace = namespace;</span><br><span class="line">    <span class="keyword">this</span>.allocateMessageQueueStrategy = allocateMessageQueueStrategy;</span><br><span class="line">    defaultMQPushConsumerImpl = <span class="keyword">new</span> DefaultMQPushConsumerImpl(<span class="keyword">this</span>, rpcHook);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>默认的构造函数参数如下</p>
+</blockquote>
+<table>
+<thead>
+<tr>
+<th>参数</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>namespace</td>
+<td>指定producer/consumer实例,只有在同一个实例下的消息才能被消费到</td>
+</tr>
+<tr>
+<td>consumerGroup</td>
+<td>消费组</td>
+</tr>
+<tr>
+<td>defaultMQPushConsumerImpl</td>
+<td></td>
+</tr>
+<tr>
+<td>allocateMessageQueueStrategy</td>
+<td>默认的消费策略</td>
+</tr>
+<tr>
+<td>namesrvAddr</td>
+<td>namesrv的地址</td>
+</tr>
+<tr>
+<td>subscribe(topic,subExpression)</td>
+<td>订阅的主题和tag过滤的规则</td>
+</tr>
+</tbody></table>
+<h2 id="底层原理"><a href="#底层原理" class="headerlink" title="底层原理"></a>底层原理</h2><p>主要是一下几个步骤</p>
+<ol start="0">
+<li>准备环境，设置各种环境变量(例如topic,过滤策略)，根据环境变量初始化<strong>pullRequest</strong></li>
+<li>从本地或者Broker中获取到offerSet偏移量</li>
+<li>从本地的brokerTable中获取到对应的broker地址</li>
+<li>调用<strong>MQClientAPIImpl</strong>操作获取消息并执行回调(将Netty的操作封装成MQ层面的业务操作)</li>
+<li>底层调用<strong>NettyRemotingClient</strong>进行网络连接，<strong>特殊的报文结构</strong></li>
+</ol>
+<p>消息的方式是通过“长轮询”的方式进行处理的，通过服务端hold住请求(默认是15s)来实现的</p>
+<h1 id="ConsumerMessageConcurrentlyService源代码分析"><a href="#ConsumerMessageConcurrentlyService源代码分析" class="headerlink" title="ConsumerMessageConcurrentlyService源代码分析"></a>ConsumerMessageConcurrentlyService源代码分析</h1><p>上面讲到如何初始化一个<strong>DefaultMQPushConsumer</strong>,但是在实际执行获取动作的是<strong>ConsumerMessageConcurrentlyService</strong>来进行的。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="title">ConsumeMessageConcurrentlyService</span><span class="params">(DefaultMQPushConsumerImpl defaultMQPushConsumerImpl,</span></span></span><br><span class="line"><span class="function"><span class="params">    MessageListenerConcurrently messageListener)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">this</span>.defaultMQPushConsumerImpl = defaultMQPushConsumerImpl;</span><br><span class="line">    <span class="keyword">this</span>.messageListener = messageListener;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">this</span>.defaultMQPushConsumer = <span class="keyword">this</span>.defaultMQPushConsumerImpl.getDefaultMQPushConsumer();</span><br><span class="line">    <span class="keyword">this</span>.consumerGroup = <span class="keyword">this</span>.defaultMQPushConsumer.getConsumerGroup();</span><br><span class="line">    <span class="keyword">this</span>.consumeRequestQueue = <span class="keyword">new</span> LinkedBlockingQueue&lt;Runnable&gt;();</span><br><span class="line"></span><br><span class="line">    <span class="comment">//1. 创建一个主线程池用来拉去消息</span></span><br><span class="line">    <span class="keyword">this</span>.consumeExecutor = <span class="keyword">new</span> ThreadPoolExecutor(</span><br><span class="line">        <span class="keyword">this</span>.defaultMQPushConsumer.getConsumeThreadMin(),</span><br><span class="line">        <span class="keyword">this</span>.defaultMQPushConsumer.getConsumeThreadMax(),</span><br><span class="line">        <span class="number">1000</span> * <span class="number">60</span>,</span><br><span class="line">        TimeUnit.MILLISECONDS,</span><br><span class="line">        <span class="keyword">this</span>.consumeRequestQueue,</span><br><span class="line">        <span class="keyword">new</span> ThreadFactoryImpl(<span class="string">"ConsumeMessageThread_"</span>));</span><br><span class="line"></span><br><span class="line">    <span class="comment">//2. 创建一个用来执行推迟消费的线程池</span></span><br><span class="line">    <span class="keyword">this</span>.scheduledExecutorService = Executors.newSingleThreadScheduledExecutor(<span class="keyword">new</span> ThreadFactoryImpl(<span class="string">"ConsumeMessageScheduledThread_"</span>));</span><br><span class="line">    <span class="comment">//3. 定时清理超时的消息</span></span><br><span class="line">    <span class="keyword">this</span>.cleanExpireMsgExecutors = Executors.newSingleThreadScheduledExecutor(<span class="keyword">new</span> ThreadFactoryImpl(<span class="string">"CleanExpireMsgScheduledThread_"</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>主线程池执行的逻辑<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">submitConsumeRequest</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">final</span> List&lt;MessageExt&gt; msgs,</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">final</span> ProcessQueue processQueue,</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">final</span> MessageQueue messageQueue,</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">final</span> <span class="keyword">boolean</span> dispatchToConsume)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">final</span> <span class="keyword">int</span> consumeBatchSize = <span class="keyword">this</span>.defaultMQPushConsumer.getConsumeMessageBatchMaxSize();</span><br><span class="line">    <span class="comment">//1. msgs是一批消息，先判断这一批消息是否大于最大处理量</span></span><br><span class="line">    <span class="keyword">if</span> (msgs.size() &lt;= consumeBatchSize) &#123;</span><br><span class="line">        ConsumeRequest consumeRequest = <span class="keyword">new</span> ConsumeRequest(msgs, processQueue, messageQueue);</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            <span class="comment">//2. 放入正常队列执行业务上的消费逻辑</span></span><br><span class="line">            <span class="keyword">this</span>.consumeExecutor.submit(consumeRequest);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (RejectedExecutionException e) &#123;</span><br><span class="line">            <span class="comment">//3. 消费失败，放入延迟等待线程池中</span></span><br><span class="line">            <span class="keyword">this</span>.submitConsumeRequestLater(consumeRequest);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">//4. 如果batch消息太多会按照最大消费长度分批进行处理</span></span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> total = <span class="number">0</span>; total &lt; msgs.size(); ) &#123;</span><br><span class="line">            List&lt;MessageExt&gt; msgThis = <span class="keyword">new</span> ArrayList&lt;MessageExt&gt;(consumeBatchSize);</span><br><span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; consumeBatchSize; i++, total++) &#123;</span><br><span class="line">                <span class="keyword">if</span> (total &lt; msgs.size()) &#123;</span><br><span class="line">                    msgThis.add(msgs.get(total));</span><br><span class="line">                &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">                    <span class="keyword">break</span>;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//重复2、3的逻辑</span></span><br><span class="line">            ConsumeRequest consumeRequest = <span class="keyword">new</span> ConsumeRequest(msgThis, processQueue, messageQueue);</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="keyword">this</span>.consumeExecutor.submit(consumeRequest);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (RejectedExecutionException e) &#123;</span><br><span class="line">                <span class="keyword">for</span> (; total &lt; msgs.size(); total++) &#123;</span><br><span class="line">                    msgThis.add(msgs.get(total));</span><br><span class="line">                &#125;</span><br><span class="line"></span><br><span class="line">                <span class="keyword">this</span>.submitConsumeRequestLater(consumeRequest);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>消费的逻辑：</p>
+<ol>
+<li>创建三个不同的线程池分别是正常消费的线程池、等待消费的线程池、清理消息的线程池</li>
+<li>判断当前消息数量是否大于最大处理数量</li>
+<li>尝试使用正常消费的线程池进行消费 如果失败 -&gt; 等待消费的线程池</li>
+</ol>
+<h1 id="消费消息的线程池逻辑"><a href="#消费消息的线程池逻辑" class="headerlink" title="消费消息的线程池逻辑"></a>消费消息的线程池逻辑</h1><ul>
+<li><strong>ConsumeRequest</strong></li>
+</ul>
+<ol>
+<li>线程调用消息的处理逻辑，根据消息从处理逻辑返回结果进行下一步操作</li>
+</ol>
+<ul>
+<li><p>调用消息的逻辑</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">ConsumeReturnType returnType = ConsumeReturnType.SUCCESS;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">if</span> (msgs != <span class="keyword">null</span> &amp;&amp; !msgs.isEmpty()) &#123;</span><br><span class="line">            <span class="keyword">for</span> (MessageExt msg : msgs) &#123;</span><br><span class="line">                MessageAccessor.setConsumeStartTimeStamp(msg, String.valueOf(System.currentTimeMillis()));</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//listener就是消息的处理逻辑方法</span></span><br><span class="line">        status = listener.consumeMessage(Collections.unmodifiableList(msgs), context);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">        log.warn(<span class="string">"consumeMessage exception: &#123;&#125; Group: &#123;&#125; Msgs: &#123;&#125; MQ: &#123;&#125;"</span>,</span><br><span class="line">            RemotingHelper.exceptionSimpleDesc(e),</span><br><span class="line">            ConsumeMessageConcurrentlyService.<span class="keyword">this</span>.consumerGroup,</span><br><span class="line">            msgs,</span><br><span class="line">            messageQueue);</span><br><span class="line">        hasException = <span class="keyword">true</span>;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>处理消息的逻辑</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">switch</span> (status) &#123;</span><br><span class="line">    <span class="keyword">case</span> CONSUME_SUCCESS:</span><br><span class="line">        <span class="keyword">if</span> (ackIndex &gt;= consumeRequest.getMsgs().size()) &#123;</span><br><span class="line">            ackIndex = consumeRequest.getMsgs().size() - <span class="number">1</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">int</span> ok = ackIndex + <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">int</span> failed = consumeRequest.getMsgs().size() - ok;</span><br><span class="line">        <span class="keyword">this</span>.getConsumerStatsManager().incConsumeOKTPS(consumerGroup, consumeRequest.getMessageQueue().getTopic(), ok);</span><br><span class="line">        <span class="keyword">this</span>.getConsumerStatsManager().incConsumeFailedTPS(consumerGroup, consumeRequest.getMessageQueue().getTopic(), failed);</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> RECONSUME_LATER:</span><br><span class="line">        ackIndex = -<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">this</span>.getConsumerStatsManager().incConsumeFailedTPS(consumerGroup, consumeRequest.getMessageQueue().getTopic(),</span><br><span class="line">            consumeRequest.getMsgs().size());</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">switch</span> (<span class="keyword">this</span>.defaultMQPushConsumer.getMessageModel()) &#123;</span><br><span class="line">    <span class="keyword">case</span> BROADCASTING:</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = ackIndex + <span class="number">1</span>; i &lt; consumeRequest.getMsgs().size(); i++) &#123;</span><br><span class="line">            MessageExt msg = consumeRequest.getMsgs().get(i);</span><br><span class="line">            log.warn(<span class="string">"BROADCASTING, the message consume failed, drop it, &#123;&#125;"</span>, msg.toString());</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">break</span>;</span><br><span class="line">    <span class="keyword">case</span> CLUSTERING:</span><br><span class="line">        List&lt;MessageExt&gt; msgBackFailed = <span class="keyword">new</span> ArrayList&lt;MessageExt&gt;(consumeRequest.getMsgs().size());</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = ackIndex + <span class="number">1</span>; i &lt; consumeRequest.getMsgs().size(); i++) &#123;</span><br><span class="line">            MessageExt msg = consumeRequest.getMsgs().get(i);</span><br><span class="line">            <span class="keyword">boolean</span> result = <span class="keyword">this</span>.sendMessageBack(msg, context);</span><br><span class="line">            <span class="keyword">if</span> (!result) &#123;</span><br><span class="line">                msg.setReconsumeTimes(msg.getReconsumeTimes() + <span class="number">1</span>);</span><br><span class="line">                msgBackFailed.add(msg);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure>
+<ol>
+<li>将不同返回值的消息写入不同的队列中</li>
+<li>根据不同的消费方式做不同的处理<br> 2.1 广播模式 消费不成功不处理<br> 2.2 集群模式消费不成功，推送broker，让broker通知其他consumer进行消费，还是失败进入延迟队列</li>
+</ol>
+<h1 id="ProcessQueue"><a href="#ProcessQueue" class="headerlink" title="ProcessQueue"></a>ProcessQueue</h1><p><strong>ProcessQueue</strong>是consumer中每一个MessageQueue所对应的队列消耗快照。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> ReadWriteLock lockTreeMap = <span class="keyword">new</span> ReentrantReadWriteLock();</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">final</span> TreeMap&lt;Long, MessageExt&gt; msgTreeMap = <span class="keyword">new</span> TreeMap&lt;Long, MessageExt&gt;();</span><br></pre></td></tr></table></figure>
+
+<p>主要是由一个TreeMep和ReadWriteLock锁组成，TreeMap里以MessageQueue的Offset作为Key，以消息内容的引用为Value，保存了所有从MessageQueue获取到但是还未被处理的消息，读写锁控制着多个线程对TreeMap对象的并发访问。</p>
+<h1 id="MessageQueue的分析"><a href="#MessageQueue的分析" class="headerlink" title="MessageQueue的分析"></a>MessageQueue的分析</h1>
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/RocketMQ/" rel="tag"># RocketMQ</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/03/22/7.%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9F%A5%E8%AF%86/4.RocketMq%E6%BA%90%E4%BB%A3%E7%A0%81%E4%B9%8BNameServer/" rel="next" title="RocketMq源代码之NameServer">
+                <i class="fa fa-chevron-left"></i> RocketMq源代码之NameServer
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/03/27/7.%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9F%A5%E8%AF%86/6.MessageQueue%E7%9A%84%E5%88%86%E6%9E%90/" rel="prev" title="MessageQueue的分析">
+                MessageQueue的分析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://lh3.googleusercontent.com/a-/AOh14GgpoPhwzcSUZRZB6lHH_maq8ImUPog4tGdED1r5=s96-cc-rg"
+                alt="agmtopy" />
+            
+              <p class="site-author-name" itemprop="name">agmtopy</p>
+              <p class="site-description motion-element" itemprop="description">你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">108</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">63</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#DefaultMQPushConsumer源代码分析"><span class="nav-number">1.</span> <span class="nav-text">DefaultMQPushConsumer源代码分析</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基本使用"><span class="nav-number">1.1.</span> <span class="nav-text">基本使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#底层原理"><span class="nav-number">1.2.</span> <span class="nav-text">底层原理</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ConsumerMessageConcurrentlyService源代码分析"><span class="nav-number">2.</span> <span class="nav-text">ConsumerMessageConcurrentlyService源代码分析</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#消费消息的线程池逻辑"><span class="nav-number">3.</span> <span class="nav-text">消费消息的线程池逻辑</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#ProcessQueue"><span class="nav-number">4.</span> <span class="nav-text">ProcessQueue</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MessageQueue的分析"><span class="nav-number">5.</span> <span class="nav-text">MessageQueue的分析</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">agmtopy</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">网站总字数&#58;</span>
+    
+    <span title="网站总字数">95.9k</span>
+  
+</div>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

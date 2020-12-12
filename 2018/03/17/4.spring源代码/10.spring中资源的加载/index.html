@@ -1,0 +1,827 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="spring源代码," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="spring中资源的加载对于资源的加载这个场景首先要划分边界,spring抽象出两个组件：Resource、ResourceLoader Resource接口Resource是对资源的一种抽象，提供一系列操作文件的方法 定义 resource.java12345678910111213141516171819202122public interface Resource extends Input">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spring中资源的加载">
+<meta property="og:url" content="http://yoursite.com/2018/03/17/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/10.spring%E4%B8%AD%E8%B5%84%E6%BA%90%E7%9A%84%E5%8A%A0%E8%BD%BD/index.html">
+<meta property="og:site_name" content="agmtopy博客">
+<meta property="og:description" content="spring中资源的加载对于资源的加载这个场景首先要划分边界,spring抽象出两个组件：Resource、ResourceLoader Resource接口Resource是对资源的一种抽象，提供一系列操作文件的方法 定义 resource.java12345678910111213141516171819202122public interface Resource extends Input">
+<meta property="og:image" content="https://s1.ax1x.com/2020/03/18/8dJXjg.png">
+<meta property="article:published_time" content="2018-03-17T15:44:43.000Z">
+<meta property="article:modified_time" content="2020-11-30T15:52:16.976Z">
+<meta property="article:author" content="agmtopy">
+<meta property="article:tag" content="spring源代码">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1.ax1x.com/2020/03/18/8dJXjg.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/03/17/4.spring源代码/10.spring中资源的加载/"/>
+
+
+
+
+
+  <title>spring中资源的加载 | agmtopy博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">agmtopy博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">agmtopy</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/17/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/10.spring%E4%B8%AD%E8%B5%84%E6%BA%90%E7%9A%84%E5%8A%A0%E8%BD%BD/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="agmtopy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://lh3.googleusercontent.com/a-/AOh14GgpoPhwzcSUZRZB6lHH_maq8ImUPog4tGdED1r5=s96-cc-rg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="agmtopy博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">spring中资源的加载</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-17T23:44:43+08:00">
+                2018-03-17
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/spring/" itemprop="url" rel="index">
+                    <span itemprop="name">spring</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  842
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  3
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="spring中资源的加载"><a href="#spring中资源的加载" class="headerlink" title="spring中资源的加载"></a>spring中资源的加载</h1><p>对于资源的加载这个场景首先要划分<strong>边界</strong>,spring抽象出两个组件：<strong>Resource</strong>、<strong>ResourceLoader</strong></p>
+<h2 id="Resource接口"><a href="#Resource接口" class="headerlink" title="Resource接口"></a>Resource接口</h2><p><strong>Resource</strong>是对资源的一种抽象，提供一系列操作文件的方法</p>
+<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><ul>
+<li>resource.java<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">Resource</span> <span class="keyword">extends</span> <span class="title">InputStreamSource</span> </span>&#123;</span><br><span class="line">    <span class="comment">//文件是否存在</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">exists</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="comment">//文件是否可读</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">isReadable</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="comment">//文件是否打开</span></span><br><span class="line">    <span class="function"><span class="keyword">boolean</span> <span class="title">isOpen</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="comment">//返回统一资源定位器(URL)</span></span><br><span class="line">    <span class="function">URL <span class="title">getURL</span><span class="params">()</span> <span class="keyword">throws</span> IOException</span>;</span><br><span class="line">    <span class="comment">//返回URI</span></span><br><span class="line">    <span class="function">URI <span class="title">getURI</span><span class="params">()</span> <span class="keyword">throws</span> IOException</span>;</span><br><span class="line">    <span class="comment">//返回文件</span></span><br><span class="line">    <span class="function">File <span class="title">getFile</span><span class="params">()</span> <span class="keyword">throws</span> IOException</span>;</span><br><span class="line">    <span class="comment">//文件最后修改时间</span></span><br><span class="line">    <span class="function"><span class="keyword">long</span> <span class="title">lastModified</span><span class="params">()</span> <span class="keyword">throws</span> IOException</span>;</span><br><span class="line">    <span class="comment">//文件文件相对路径</span></span><br><span class="line">    <span class="function">Resource <span class="title">createRelative</span><span class="params">(String var1)</span> <span class="keyword">throws</span> IOException</span>;</span><br><span class="line">    <span class="comment">//返回文件名称</span></span><br><span class="line">    <span class="function">String <span class="title">getFilename</span><span class="params">()</span></span>;</span><br><span class="line">    <span class="comment">//返回文件描述</span></span><br><span class="line">    <span class="function">String <span class="title">getDescription</span><span class="params">()</span></span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="子类"><a href="#子类" class="headerlink" title="子类"></a>子类</h3><table>
+<thead>
+<tr>
+<th>类名</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>FileSystemResource</td>
+<td>对 java.io.File 类型资源的封装</td>
+</tr>
+<tr>
+<td>ByteArrayResource</td>
+<td>对字节数组提供的数据的封装</td>
+</tr>
+<tr>
+<td>UrlResource</td>
+<td>对 java.net.URL类型资源的封装</td>
+</tr>
+<tr>
+<td>ClassPathResource</td>
+<td>class path 类型资源的实现。使用给定的 ClassLoader 或者给定的 Class 来加载资源</td>
+</tr>
+<tr>
+<td>InputStreamResource</td>
+<td>将给定的 InputStream 作为一种资源的 Resource 的实现类</td>
+</tr>
+</tbody></table>
+<h3 id="AbstractResource"><a href="#AbstractResource" class="headerlink" title="AbstractResource"></a>AbstractResource</h3><p><strong>AbstractResource</strong>是Resource的默认抽象类，实现了大部分公共方法；</p>
+<h2 id="ResourceLoader"><a href="#ResourceLoader" class="headerlink" title="ResourceLoader"></a>ResourceLoader</h2><p><strong>ResourceLoader</strong>定义如何加载Resource的接口</p>
+<h3 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">ResourceLoader</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">/** Pseudo URL prefix for loading from the class path: "classpath:". */</span></span><br><span class="line">	String CLASSPATH_URL_PREFIX = ResourceUtils.CLASSPATH_URL_PREFIX;</span><br><span class="line"></span><br><span class="line">	<span class="function">Resource <span class="title">getResource</span><span class="params">(String location)</span></span>;</span><br><span class="line"></span><br><span class="line">	<span class="meta">@Nullable</span></span><br><span class="line">	<span class="function">ClassLoader <span class="title">getClassLoader</span><span class="params">()</span></span>;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>Resource getResource(String location)<br>根据地址返回Resource,不保证文件是否存在，因此需要调用<strong>exists()</strong>进行判断</p>
+</li>
+<li><p>getClassLoader()<br>getClassLoader() 方法，返回 ClassLoader 实例</p>
+</li>
+</ul>
+<h3 id="DefaultResourceLoader-java"><a href="#DefaultResourceLoader-java" class="headerlink" title="DefaultResourceLoader.java"></a>DefaultResourceLoader.java</h3><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> Resource <span class="title">getResource</span><span class="params">(String location)</span> </span>&#123;</span><br><span class="line">		Assert.notNull(location, <span class="string">"Location must not be null"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="comment">//1. 首先通过ProtocolResolver来加载</span></span><br><span class="line">		<span class="keyword">for</span> (ProtocolResolver protocolResolver : <span class="keyword">this</span>.protocolResolvers) &#123;</span><br><span class="line">			Resource resource = protocolResolver.resolve(location, <span class="keyword">this</span>);</span><br><span class="line">			<span class="keyword">if</span> (resource != <span class="keyword">null</span>) &#123;</span><br><span class="line">				<span class="keyword">return</span> resource;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//2. 用ClassPathResource加载</span></span><br><span class="line">		<span class="keyword">if</span> (location.startsWith(<span class="string">"/"</span>)) &#123;</span><br><span class="line">			<span class="keyword">return</span> getResourceByPath(location);</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> <span class="keyword">if</span> (location.startsWith(CLASSPATH_URL_PREFIX)) &#123;</span><br><span class="line">			<span class="keyword">return</span> <span class="keyword">new</span> ClassPathResource(location.substring(CLASSPATH_URL_PREFIX.length()), getClassLoader());</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">else</span> &#123;</span><br><span class="line">			<span class="keyword">try</span> &#123;</span><br><span class="line">                <span class="comment">//3. 尝试用FileUrlResource或UrlResource进行加载</span></span><br><span class="line">				URL url = <span class="keyword">new</span> URL(location);</span><br><span class="line">				<span class="keyword">return</span> (ResourceUtils.isFileURL(url) ? <span class="keyword">new</span> FileUrlResource(url) : <span class="keyword">new</span> UrlResource(url));</span><br><span class="line">			&#125;</span><br><span class="line">            <span class="comment">//4. url类型加载不到，继续使用ClassPathResource方式进行加载</span></span><br><span class="line">			<span class="keyword">catch</span> (MalformedURLException ex) &#123;</span><br><span class="line">				<span class="comment">// No URL -&gt; resolve as resource path.</span></span><br><span class="line">				<span class="keyword">return</span> getResourceByPath(location);</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="ProtocolResolver"><a href="#ProtocolResolver" class="headerlink" title="ProtocolResolver"></a>ProtocolResolver</h4><p><strong>ProtocolResolver</strong>用户自定义协议资源解决策略</p>
+<h4 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h4><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">ResourceLoader loader = <span class="keyword">new</span> DefaultResourceLoader();</span><br><span class="line"></span><br><span class="line">Resource fileResource1 = loader.getResource(<span class="string">"D:/text.txt"</span>);</span><br><span class="line">Resource fileResource2 = loader.getResource(<span class="string">"/text.txt"</span>);</span><br><span class="line"></span><br><span class="line">Resource urlResource1 = loader.getResource(<span class="string">"file:/Users/text.txt"</span>);</span><br><span class="line">Resource urlResource2 = loader.getResource(<span class="string">"http://www.baidu.com"</span>);</span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">"fileResource1.class = "</span> + fileResource1.getClass().getSimpleName());</span><br><span class="line">System.out.println(<span class="string">"fileResource2.class = "</span> + fileResource1.getClass().getSimpleName());</span><br><span class="line"></span><br><span class="line">System.out.println(<span class="string">"urlResource1.class = "</span> + urlResource1.getClass().getSimpleName());</span><br><span class="line">System.out.println(<span class="string">"urlResource2.class = "</span> + urlResource2.getClass().getSimpleName());</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>运行结果</p>
+</blockquote>
+<p><img src="https://s1.ax1x.com/2020/03/18/8dJXjg.png" alt="8dJXjg.png"></p>
+<p>由于fileResource1资源不存在，因此抛出异常，使用<strong>ClassPathResource</strong>来加载资源</p>
+<h3 id="FileSystemResourceLoader"><a href="#FileSystemResourceLoader" class="headerlink" title="FileSystemResourceLoader"></a>FileSystemResourceLoader</h3><p><strong>FileSystemResourceLoader</strong>是对file文件的加载的优化</p>
+<ul>
+<li>getResourceByPath(String path)</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">protected</span> Resource <span class="title">getResourceByPath</span><span class="params">(String path)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (path != <span class="keyword">null</span> &amp;&amp; path.startsWith(<span class="string">"/"</span>)) &#123;</span><br><span class="line">        path = path.substring(<span class="number">1</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> FileSystemResourceLoader.FileSystemContextResource(path);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>对<strong>getResourceByPath</strong>方法针对file的<strong>重写</strong>,自然返回的都是<strong>FileSystemContextResource</strong>类型的Resource</p>
+<h3 id="ClassRelativeResourceLoader"><a href="#ClassRelativeResourceLoader" class="headerlink" title="ClassRelativeResourceLoader"></a>ClassRelativeResourceLoader</h3><ul>
+<li>getResourceByPath(String path)</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> Resource <span class="title">getResourceByPath</span><span class="params">(String path)</span> </span>&#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="keyword">new</span> ClassRelativeContextResource(path, <span class="keyword">this</span>.clazz);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>ClassRelativeResourceLoader</strong>是针对加载ClassPathResource子类ClassRelativeContextResource文件的重写</p>
+<h3 id="ResourcePatternResolver"><a href="#ResourcePatternResolver" class="headerlink" title="ResourcePatternResolver"></a>ResourcePatternResolver</h3><p><strong>ResourcePatternResolver</strong>是针对ResourceLoader的增强，定义返回多个Resource的方法</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
+<li>srping通过设计出抽象的资源(Resource)和资源加载器(ResourceLoader)让加载资源这个业务场景，变的更加的边界清晰和松耦合</li>
+<li><strong>AbstrctResource</strong>是Resource的抽象实现类，实现了Resource大部分接口，使用模板方法</li>
+<li><strong>DefaultResourceLoader</strong>是ResourceLoader默认实现，实现了最级别的方法资源的方法，并提供了一些公共接口为子类的扩展提供便利。</li>
+<li><strong>PathMatchingResourcePatternResolver</strong>实现了<strong>ResourcePatternResolver</strong>（一个允许返回多个资源文件的ResourceLoder接口）,是一个比较完整的ResourceLoader</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/spring%E6%BA%90%E4%BB%A3%E7%A0%81/" rel="tag"># spring源代码</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/17/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/9.spring%E6%BA%90%E4%BB%A3%E7%A0%81%E5%9F%BA%E7%A1%80%E5%92%8C%E7%BB%84%E4%BB%B6/" rel="next" title="spring源代码基础和组件">
+                <i class="fa fa-chevron-left"></i> spring源代码基础和组件
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/18/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/11.spring%E7%9A%84BeanDefinition%E4%BD%93%E7%B3%BB/" rel="prev" title="spring的BeanDefinition体系">
+                spring的BeanDefinition体系 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://lh3.googleusercontent.com/a-/AOh14GgpoPhwzcSUZRZB6lHH_maq8ImUPog4tGdED1r5=s96-cc-rg"
+                alt="agmtopy" />
+            
+              <p class="site-author-name" itemprop="name">agmtopy</p>
+              <p class="site-description motion-element" itemprop="description">你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">108</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">63</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#spring中资源的加载"><span class="nav-number">1.</span> <span class="nav-text">spring中资源的加载</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Resource接口"><span class="nav-number">1.1.</span> <span class="nav-text">Resource接口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#定义"><span class="nav-number">1.1.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#子类"><span class="nav-number">1.1.2.</span> <span class="nav-text">子类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#AbstractResource"><span class="nav-number">1.1.3.</span> <span class="nav-text">AbstractResource</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#ResourceLoader"><span class="nav-number">1.2.</span> <span class="nav-text">ResourceLoader</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#定义-1"><span class="nav-number">1.2.1.</span> <span class="nav-text">定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#DefaultResourceLoader-java"><span class="nav-number">1.2.2.</span> <span class="nav-text">DefaultResourceLoader.java</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#ProtocolResolver"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">ProtocolResolver</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#代码演示"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">代码演示</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#FileSystemResourceLoader"><span class="nav-number">1.2.3.</span> <span class="nav-text">FileSystemResourceLoader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ClassRelativeResourceLoader"><span class="nav-number">1.2.4.</span> <span class="nav-text">ClassRelativeResourceLoader</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#ResourcePatternResolver"><span class="nav-number">1.2.5.</span> <span class="nav-text">ResourcePatternResolver</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">1.3.</span> <span class="nav-text">总结</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">agmtopy</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">网站总字数&#58;</span>
+    
+    <span title="网站总字数">95.9k</span>
+  
+</div>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

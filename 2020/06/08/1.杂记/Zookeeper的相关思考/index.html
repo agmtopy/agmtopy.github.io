@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Zookeeper," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Zookeeper的相关思考相信大部分同学第一次接触到ZooKeeper(后文中简称为zk)都是和Dubbo一起接触到的，在Dubbo开源时将阿里内部的注册中心进行剥离，用zk作为服务发现的注册中心进行使用的。在大规模的微服务化一段时间后，有越来越多的声音提醒我们zk并不适用于作为服务发现的注册中心进行使用。从下面三个问题出发，探寻一下zk为什么不适用作为注册中心。  zk是什么，以及由来和想要解">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Zookeeper的相关思考">
+<meta property="og:url" content="http://yoursite.com/2020/06/08/1.%E6%9D%82%E8%AE%B0/Zookeeper%E7%9A%84%E7%9B%B8%E5%85%B3%E6%80%9D%E8%80%83/index.html">
+<meta property="og:site_name" content="agmtopy博客">
+<meta property="og:description" content="Zookeeper的相关思考相信大部分同学第一次接触到ZooKeeper(后文中简称为zk)都是和Dubbo一起接触到的，在Dubbo开源时将阿里内部的注册中心进行剥离，用zk作为服务发现的注册中心进行使用的。在大规模的微服务化一段时间后，有越来越多的声音提醒我们zk并不适用于作为服务发现的注册中心进行使用。从下面三个问题出发，探寻一下zk为什么不适用作为注册中心。  zk是什么，以及由来和想要解">
+<meta property="article:published_time" content="2020-06-08T02:13:35.000Z">
+<meta property="article:modified_time" content="2020-11-30T15:52:16.925Z">
+<meta property="article:author" content="agmtopy">
+<meta property="article:tag" content="Zookeeper">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/06/08/1.杂记/Zookeeper的相关思考/"/>
+
+
+
+
+
+  <title>Zookeeper的相关思考 | agmtopy博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">agmtopy博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">agmtopy</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/06/08/1.%E6%9D%82%E8%AE%B0/Zookeeper%E7%9A%84%E7%9B%B8%E5%85%B3%E6%80%9D%E8%80%83/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="agmtopy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://lh3.googleusercontent.com/a-/AOh14GgpoPhwzcSUZRZB6lHH_maq8ImUPog4tGdED1r5=s96-cc-rg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="agmtopy博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Zookeeper的相关思考</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-06-08T10:13:35+08:00">
+                2020-06-08
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%9D%82%E8%AE%B0/" itemprop="url" rel="index">
+                    <span itemprop="name">杂记</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.4k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  8
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Zookeeper的相关思考"><a href="#Zookeeper的相关思考" class="headerlink" title="Zookeeper的相关思考"></a>Zookeeper的相关思考</h1><p>相信大部分同学第一次接触到ZooKeeper(后文中简称为zk)都是和Dubbo一起接触到的，在Dubbo开源时将阿里内部的注册中心进行剥离，用zk作为服务发现的注册中心进行使用的。在大规模的微服务化一段时间后，有越来越多的声音提醒我们zk并不适用于作为服务发现的注册中心进行使用。从下面三个问题出发，探寻一下zk为什么不适用作为注册中心。</p>
+<ol>
+<li>zk是什么，以及由来和想要解决的问题？</li>
+<li>zk为什么不适用作为注册中心？</li>
+<li>zk迁移eurka的方案</li>
+</ol>
+<h2 id="zk的由来"><a href="#zk的由来" class="headerlink" title="zk的由来"></a>zk的由来</h2><ul>
+<li><p>维基百科的简介</p>
+<blockquote>
+<p>Apache ZooKeeper是Apache软件基金会的一个软件项目，它为大型分布式计算提供开源的分布式配置服务、同步服务和命名注册。ZooKeeper曾经是Hadoop的一个子项目，但现在是一个独立的顶级项目。</p>
+</blockquote>
+</li>
+<li><p>zk的由来</p>
+</li>
+</ul>
+<p>下面这段内容摘自《从Paxos到Zookeeper 》 ，本文中很多的名词介绍也来自本书。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Zookeeper 最早起源于雅虎研究院的一个研究小组。</span><br><span class="line">在当时，研究人员发现，在雅虎内部很多大型系统基本都需要依赖一个类似的系统来进行分布式协调，但是这些系统往往都存在分布式单点问题。</span><br><span class="line">所以，雅虎的开发人员就试图开发一个通用的无单点问题的分布式协调框架，以便让开发人员将精力集中在处理业务逻辑上。</span><br><span class="line">关于“ZooKeeper”这个项目的名字，其实也有一段趣闻。在立项初期，考虑到之前内部很多项目都是使用动物的名字来命名的（例如著名的Pig项目),雅虎的工程师希望给这个项目也取一个动物的名字。</span><br><span class="line">时任研究院的首席科学家 RaghuRamakrishnan 开玩笑地说：“在这样下去，我们这儿就变成动物园了！”</span><br><span class="line">此话一出，大家纷纷表示就叫动物园管理员吧一一一因为各个以动物命名的分布式组件放在一起，雅虎的整个分布式系统看上去就像一个大型的动物园了</span><br><span class="line">而 Zookeeper 正好要用来进行分布式环境的协调一一于是，Zookeeper 的名字也就由此诞生了。</span><br></pre></td></tr></table></figure>
+
+<p>zk的诞生是为了解决在分布式环境下不同系统之间进行分布式协调的场景。在分布式环境下需要将同一个系统分布式化后对外提供出像一个系统一样的服务，这样就需要引入分布式协调工具，将这种原来是由应用系统解决的事情剥离开的工具。因此zk就诞生了。</p>
+<p>总的来说，zk提供了一个可靠的分布式的工具，可以对外提供一下几种功能(API中的方法):</p>
+<ol>
+<li>创建节点</li>
+<li>读节点数据</li>
+<li>更新节点数据</li>
+<li>删除节点</li>
+<li>监控节点变化</li>
+</ol>
+<ul>
+<li>zk解决的问题</li>
+</ul>
+<ol>
+<li>元数据配置：kafka中存储元数据</li>
+<li>注册中心：应用于充当注册中心</li>
+<li>作为分布式锁：Curator分布式锁</li>
+</ol>
+<h2 id="zk不适用作为注册中心"><a href="#zk不适用作为注册中心" class="headerlink" title="zk不适用作为注册中心"></a>zk不适用作为注册中心</h2><p>网上大部分都在说zk不适合作为注册中心其根据主要是<a href="https://medium.com/knerd/eureka-why-you-shouldnt-use-zookeeper-for-service-discovery-4932c5c7e764" target="_blank" rel="noopener"> Eureka! Why You Shouldn’t Use ZooKeeper for Service Discovery</a>一文，分析其原因主要是说zk是基于cp的，而注册中心的业务更适用于ap。</p>
+<p>下面根据<a href="https://yq.aliyun.com/articles/601745?scm=20140722.184.2.173" target="_blank" rel="noopener">阿里巴巴为什么不用 ZooKeeper 做服务发现</a>一文整理而来</p>
+<h3 id="数据的一致性需求分析"><a href="#数据的一致性需求分析" class="headerlink" title="数据的一致性需求分析"></a>数据的一致性需求分析</h3><p>注册中心最本质的功能就是一个Query函数Si = F(service-name),以service-name作为查询参数，返回服务对应的地址；</p>
+<blockquote>
+<p>如果注册中心满足ap的情况：<br>每次返回的结果都不一样，这样会导致不同的服务提供者接收到的流量都不一样，在短时间内流量的不一致会因为多次调用根据大数理论这点流量差异会被抹消掉。</p>
+</blockquote>
+<blockquote>
+<p>如果注册中心是基于cp的情况：<br>在不保证可用性的情况下，如果一个zk节点与leader节点失联的情况下为了保证zk中数据的一致性，该节点不会对外提供服务。<br>对于和该zk节点在同一分区中的服务来说，由于zk的异常导致本身业务也不能进行同区调用是不能接受的。<strong>可以说在实践中，注册中心不能因为自身的任何原因破坏服务之间本身的可连通性，这是注册中心设计应该遵循的铁律！</strong></p>
+</blockquote>
+<blockquote>
+<p>在 CAP 的权衡中，注册中心的可用性比数据强一致性更宝贵，所以整体设计更应该偏向 AP，而非 CP，数据不一致在可接受范围，而P下舍弃A却完全违反了注册中心不能因为自身的任何原因破坏服务本身的可连通性的原则。</p>
+</blockquote>
+<p>ps:总的来说就是注册中心在面临CAP的问题上，可以接受数据的不一致，但是不能接受业务的不可用。</p>
+<h3 id="服务规模、容量、服务联通性"><a href="#服务规模、容量、服务联通性" class="headerlink" title="服务规模、容量、服务联通性"></a>服务规模、容量、服务联通性</h3><p>从服务的规模、容量、服务联通性来分析</p>
+<p>由于zk为了保证数据的一致性，因此在进行写入的时候必须又Leader发起，在向其他节点分发写入操作，因此写入操作不能进行横向扩展。这样就无法解决zk的服务规模增长问题，或者将注册节点根据业务进行划分，不同的业务注册到不同的zk上去，但是注册中心作为基础服务，不能由于自身的限制去影响业务，让业务按照业务服务进行划分。</p>
+<h3 id="注册中心需要持久存储和事务日志"><a href="#注册中心需要持久存储和事务日志" class="headerlink" title="注册中心需要持久存储和事务日志"></a>注册中心需要持久存储和事务日志</h3><p>注册中心需要进行持久化存储和事务日志嘛？我认为是需要的，但是不用像zk一样把每一次变更的日志记录下来。<br>例如：</p>
+<ol>
+<li><p>serviceA=》{ip1:0001,ip1:0002}</p>
+</li>
+<li><p>serviceA=》{ip1:0001}</p>
+</li>
+<li><p>serviceA=》{ip1:0001,ip1:0002}</p>
+</li>
+</ol>
+<p>这样的ABA的持久化连续记录，对于服务的调用方来说并没有什么意义，服务调用发起方更关注的是其要调用的服务的实时的地址列表和实时健康状态，每次发起调用时，并不关心要调用的服务的历史服务地址列表、过去的健康状态。</p>
+<p>需要进行持久化记录的应该是服务的元数据信息：服务的版本，分组，所在的数据中心，权重，鉴权策略信息，service label等</p>
+<h3 id="Service-Health-Check"><a href="#Service-Health-Check" class="headerlink" title="Service Health Check"></a>Service Health Check</h3><p>使用zk作为服务注册中心时，服务的健康监测是用Zookeeper的Seesion机制可以理解为绑定TCP长连接的监测。这种监测只是能证明client的网络通路是畅通的，并不能代变服务是可用。</p>
+<p>健康检测的一大基本设计原则就是尽可能真实的反馈服务本身的真实健康状态，否则一个不敢被服务调用者相信的健康状态判定结果还不如没有健康检测。</p>
+<h3 id="注册中心的容灾考虑"><a href="#注册中心的容灾考虑" class="headerlink" title="注册中心的容灾考虑"></a>注册中心的容灾考虑</h3><p><strong>在实践中，注册中心不能因为自身的任何原因破坏服务之间本身的可连通性</strong>，这句话说的是就算zk服务宕机的情况下也不能影响已有服务的功能。zk的client端并没有提供这样的功能，dubbo使用zk作为注册中心时候的时候，是在dubbo消费者缓存了生产者的地址。</p>
+<h3 id="阿里对于zk的总结"><a href="#阿里对于zk的总结" class="headerlink" title="阿里对于zk的总结"></a>阿里对于zk的总结</h3><p><strong>The King Of Coordination for Big Data!</strong> </p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">在粗粒度分布式锁，分布式选主，主备高可用切换等不需要高TPS 支持的场景下有不可替代的作用，</span><br><span class="line">而这些需求往往多集中在大数据、离线任务等相关的业务领域，因为大数据领域，讲究分割数据集，</span><br><span class="line">并且大部分时间分任务多进程&#x2F;线程并行处理这些数据集，但是总是有一些点上需要将这些任务和进程统一协调，</span><br><span class="line">这时候就是 ZooKeeper 发挥巨大作用的用武之地。</span><br><span class="line"></span><br><span class="line">但是在交易场景交易链路上，在主业务数据存取，大规模服务发现、大规模健康监测等方面有天然的短板，应该竭力避免在这些场</span><br><span class="line">景下引入 ZooKeeper，在阿里巴巴的生产实践中，应用对ZooKeeper申请使用的时候要进行严格的场景、容量、SLA需求的评估。</span><br><span class="line"></span><br><span class="line">所以可以使用 ZooKeeper，但是大数据请向左，而交易则向右，分布式协调向左，服务发现向右。</span><br></pre></td></tr></table></figure>
+
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>zk在业务领域作为服务发现的注册中心是越来越不适用了，在以前没有专门的工具的情况下，一个可靠、易用的工具就是作为服务发现的最好选择，但是在当下zk作为注册中心确显得不合适宜。目前注册中心的选择有很多</p>
+<ul>
+<li><a href="http://www.heartthinkdo.com/?p=1933" target="_blank" rel="noopener">Eureka</a></li>
+<li><a href="https://nacos.io/zh-cn/index.html" target="_blank" rel="noopener">Nacos</a></li>
+<li><a href="https://github.com/etcd-io/etcd" target="_blank" rel="noopener">etcd</a></li>
+</ul>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://www.cnblogs.com/ailiuzhe/p/11678043.html" target="_blank" rel="noopener">ZooKeeper的详细介绍以及底层原理</a><br><a href="https://zhuanlan.zhihu.com/p/69114539?utm_source=wechat_session" target="_blank" rel="noopener">为什么需要 Zookeeper</a><br><a href="https://zhuanlan.zhihu.com/p/134549250" target="_blank" rel="noopener">腾讯 ZooKeeper 源码和实践揭秘</a></p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Zookeeper/" rel="tag"># Zookeeper</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/06/03/13.LeetCode/7.%E7%BD%97%E9%A9%AC%E6%95%B0%E5%AD%97%E8%BD%AC%E6%95%B4%E6%95%B0-LeetCode07/" rel="next" title="罗马数字转整数_LeetCode07">
+                <i class="fa fa-chevron-left"></i> 罗马数字转整数_LeetCode07
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/06/09/14.%E6%94%B6%E8%97%8F%E6%96%87%E7%AB%A0/6.%E6%B7%B1%E5%85%A5%E5%AD%A6%E4%B9%A0Java%E7%BA%BF%E7%A8%8B%E6%B1%A0/" rel="prev" title="深入学习Java线程池">
+                深入学习Java线程池 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://lh3.googleusercontent.com/a-/AOh14GgpoPhwzcSUZRZB6lHH_maq8ImUPog4tGdED1r5=s96-cc-rg"
+                alt="agmtopy" />
+            
+              <p class="site-author-name" itemprop="name">agmtopy</p>
+              <p class="site-description motion-element" itemprop="description">你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">108</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">63</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Zookeeper的相关思考"><span class="nav-number">1.</span> <span class="nav-text">Zookeeper的相关思考</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#zk的由来"><span class="nav-number">1.1.</span> <span class="nav-text">zk的由来</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#zk不适用作为注册中心"><span class="nav-number">1.2.</span> <span class="nav-text">zk不适用作为注册中心</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#数据的一致性需求分析"><span class="nav-number">1.2.1.</span> <span class="nav-text">数据的一致性需求分析</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#服务规模、容量、服务联通性"><span class="nav-number">1.2.2.</span> <span class="nav-text">服务规模、容量、服务联通性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注册中心需要持久存储和事务日志"><span class="nav-number">1.2.3.</span> <span class="nav-text">注册中心需要持久存储和事务日志</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Service-Health-Check"><span class="nav-number">1.2.4.</span> <span class="nav-text">Service Health Check</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#注册中心的容灾考虑"><span class="nav-number">1.2.5.</span> <span class="nav-text">注册中心的容灾考虑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#阿里对于zk的总结"><span class="nav-number">1.2.6.</span> <span class="nav-text">阿里对于zk的总结</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#总结"><span class="nav-number">1.2.7.</span> <span class="nav-text">总结</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#参考资料"><span class="nav-number">1.3.</span> <span class="nav-text">参考资料</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">agmtopy</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">网站总字数&#58;</span>
+    
+    <span title="网站总字数">95.9k</span>
+  
+</div>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

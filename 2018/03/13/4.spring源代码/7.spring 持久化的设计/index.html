@@ -1,0 +1,857 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="持久化," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="spring持久化的设计spring中大量运用到模板模式，简单回顾一下模板模式就是  抽象类中定义好产品的步骤，不同的之类去实现相同的步骤方法，客户端调用抽象类的方法，执行统一的产品步骤，从而返回结果有点类似于桥接模式的一半，将建造过程抽象出来，形成统一的模板方法。可以使用钩子方法改造模板方法流程，从而增加健壮性。  JdbcTemplate分析使用代码123456789101112server:">
+<meta property="og:type" content="article">
+<meta property="og:title" content="spring 持久化的设计">
+<meta property="og:url" content="http://yoursite.com/2018/03/13/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/7.spring%20%E6%8C%81%E4%B9%85%E5%8C%96%E7%9A%84%E8%AE%BE%E8%AE%A1/index.html">
+<meta property="og:site_name" content="agmtopy博客">
+<meta property="og:description" content="spring持久化的设计spring中大量运用到模板模式，简单回顾一下模板模式就是  抽象类中定义好产品的步骤，不同的之类去实现相同的步骤方法，客户端调用抽象类的方法，执行统一的产品步骤，从而返回结果有点类似于桥接模式的一半，将建造过程抽象出来，形成统一的模板方法。可以使用钩子方法改造模板方法流程，从而增加健壮性。  JdbcTemplate分析使用代码123456789101112server:">
+<meta property="og:image" content="https://s1.ax1x.com/2020/03/16/8Yb6aR.png">
+<meta property="article:published_time" content="2018-03-12T17:02:45.000Z">
+<meta property="article:modified_time" content="2020-11-30T15:52:16.987Z">
+<meta property="article:author" content="agmtopy">
+<meta property="article:tag" content="持久化">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1.ax1x.com/2020/03/16/8Yb6aR.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2018/03/13/4.spring源代码/7.spring 持久化的设计/"/>
+
+
+
+
+
+  <title>spring 持久化的设计 | agmtopy博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">agmtopy博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">agmtopy</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/03/13/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/7.spring%20%E6%8C%81%E4%B9%85%E5%8C%96%E7%9A%84%E8%AE%BE%E8%AE%A1/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="agmtopy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://lh3.googleusercontent.com/a-/AOh14GgpoPhwzcSUZRZB6lHH_maq8ImUPog4tGdED1r5=s96-cc-rg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="agmtopy博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">spring 持久化的设计</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2018-03-13T01:02:45+08:00">
+                2018-03-13
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/spring/" itemprop="url" rel="index">
+                    <span itemprop="name">spring</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  8
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="spring持久化的设计"><a href="#spring持久化的设计" class="headerlink" title="spring持久化的设计"></a>spring持久化的设计</h1><p>spring中大量运用到<strong>模板模式</strong>，简单回顾一下模板模式就是</p>
+<blockquote>
+<p>抽象类中定义好产品的步骤，不同的之类去实现相同的步骤方法，客户端调用抽象类的方法，执行统一的产品步骤，从而返回结果有点类似于桥接模式的一半，将建造过程抽象出来，形成统一的模板方法。可以使用钩子方法改造模板方法流程，从而增加健壮性。</p>
+</blockquote>
+<h2 id="JdbcTemplate分析"><a href="#JdbcTemplate分析" class="headerlink" title="JdbcTemplate分析"></a>JdbcTemplate分析</h2><h3 id="使用代码"><a href="#使用代码" class="headerlink" title="使用代码"></a>使用代码</h3><figure class="highlight yml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">server:</span></span><br><span class="line">  <span class="attr">port:</span> <span class="number">8080</span></span><br><span class="line"></span><br><span class="line"><span class="attr">spring:</span></span><br><span class="line">  <span class="attr">profiles:</span></span><br><span class="line">  <span class="attr">active:</span> <span class="string">dev</span></span><br><span class="line"></span><br><span class="line">  <span class="attr">datasource:</span></span><br><span class="line">    <span class="attr">username:</span> <span class="string">root</span></span><br><span class="line">    <span class="attr">password:</span> <span class="number">111111</span></span><br><span class="line">    <span class="attr">url:</span> <span class="string">jdbc:mysql://127.0.0.1:3306/tables?useUnicode=true&amp;characterEncoding=utf-8&amp;serverTimezone=GMT</span></span><br><span class="line">    <span class="attr">driver-class-name:</span> <span class="string">com.mysql.jdbc.Driver</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>UserDO.java<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Data</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserDO</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Integer id;</span><br><span class="line">    <span class="keyword">private</span> String userName;</span><br><span class="line">    <span class="keyword">private</span> String password;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>UserRowMapper.java</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserRowMapper</span> <span class="keyword">implements</span> <span class="title">RowMapper</span>&lt;<span class="title">UserDO</span>&gt; </span>&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> UserDO <span class="title">mapRow</span><span class="params">(ResultSet rs, <span class="keyword">int</span> rowNum)</span> <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line">        UserDO userDO = <span class="keyword">new</span> UserDO();</span><br><span class="line">        userDO.setId(rs.getInt(<span class="string">"id"</span>));</span><br><span class="line">        userDO.setUserName(rs.getString(<span class="string">"user_name"</span>));</span><br><span class="line">        userDO.setPassword(rs.getString(<span class="string">"pass_word"</span>));</span><br><span class="line">        <span class="keyword">return</span> userDO;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><p>UserServiceImpl.java</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">@Service</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserServiceImpl</span> <span class="keyword">implements</span> <span class="title">UserService</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Autowired</span></span><br><span class="line">    <span class="keyword">private</span> JdbcTemplate jdbcTemplate;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> UserDO <span class="title">getById</span><span class="params">(<span class="keyword">int</span> id)</span> </span>&#123;</span><br><span class="line">        String sql = <span class="string">"select * from t_user where id = ? "</span>;</span><br><span class="line">        List&lt;UserDO&gt; stu = jdbcTemplate.query(sql,<span class="keyword">new</span> Object[]&#123;id&#125;, <span class="keyword">new</span> UserRowMapper());</span><br><span class="line">        UserDO student = <span class="keyword">null</span>;</span><br><span class="line">        <span class="keyword">if</span>(!stu.isEmpty())&#123;</span><br><span class="line">            student = stu.get(<span class="number">0</span>);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> student;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">add</span><span class="params">(UserDO userDO)</span> </span>&#123;</span><br><span class="line">        String sql =<span class="string">"insert into student(id,user_name,pass_word) values(null,?,?)"</span>;</span><br><span class="line">        KeyHolder keyHolder = <span class="keyword">new</span> GeneratedKeyHolder();</span><br><span class="line">        <span class="keyword">int</span> resRow = jdbcTemplate.update(<span class="keyword">new</span> PreparedStatementCreator() &#123;</span><br><span class="line">            <span class="meta">@Override</span></span><br><span class="line">            <span class="function"><span class="keyword">public</span> PreparedStatement <span class="title">createPreparedStatement</span><span class="params">(Connection connection)</span> <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line">                PreparedStatement ps = connection.prepareStatement(sql,<span class="keyword">new</span> String[]&#123;<span class="string">"id"</span>&#125;);</span><br><span class="line">                ps.setString(<span class="number">1</span>,userDO.getUserName());</span><br><span class="line">                ps.setString(<span class="number">2</span>,userDO.getPassword());</span><br><span class="line">                <span class="keyword">return</span> ps;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,keyHolder);</span><br><span class="line">        <span class="keyword">return</span> Integer.parseInt(keyHolder.getKey().toString());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>Test.java</p>
+</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Resource</span></span><br><span class="line">    <span class="keyword">private</span> UserService service;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">selectTest</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        UserDO user = service.getById(<span class="number">2</span>);</span><br><span class="line">        System.out.println(user);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="meta">@Test</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">addTest</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        UserDO userDO = <span class="keyword">new</span> UserDO();</span><br><span class="line">        userDO.setUserName(<span class="string">"add"</span>);</span><br><span class="line">        userDO.setPassword(<span class="string">"password"</span>);</span><br><span class="line">        Integer userId = service.add(userDO);</span><br><span class="line">        System.out.println(userId);</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>private JdbcTemplate jdbcTemplate;</strong>是由JdbcTemplateAutoConfiguration加载到容器中的；</p>
+<ul>
+<li><strong>JdbcTemplate</strong>实现了JdbcAccessor、JdbcOperations接口<br><img src="https://s1.ax1x.com/2020/03/16/8Yb6aR.png" alt="8Yb6aR.png"></li>
+</ul>
+<ul>
+<li>query</li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Nullable</span></span><br><span class="line">	<span class="keyword">public</span> &lt;T&gt; <span class="function">T <span class="title">query</span><span class="params">(</span></span></span><br><span class="line"><span class="function"><span class="params">			PreparedStatementCreator psc, @Nullable <span class="keyword">final</span> PreparedStatementSetter pss, <span class="keyword">final</span> ResultSetExtractor&lt;T&gt; rse)</span></span></span><br><span class="line"><span class="function">			<span class="keyword">throws</span> DataAccessException </span>&#123;</span><br><span class="line"></span><br><span class="line">		Assert.notNull(rse, <span class="string">"ResultSetExtractor must not be null"</span>);</span><br><span class="line">		logger.debug(<span class="string">"Executing prepared SQL query"</span>);</span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> execute(psc, <span class="keyword">new</span> PreparedStatementCallback&lt;T&gt;() &#123;</span><br><span class="line">			<span class="meta">@Override</span></span><br><span class="line">			<span class="meta">@Nullable</span></span><br><span class="line">			<span class="function"><span class="keyword">public</span> T <span class="title">doInPreparedStatement</span><span class="params">(PreparedStatement ps)</span> <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line">				ResultSet rs = <span class="keyword">null</span>;</span><br><span class="line">				<span class="keyword">try</span> &#123;</span><br><span class="line">					<span class="keyword">if</span> (pss != <span class="keyword">null</span>) &#123;</span><br><span class="line">						pss.setValues(ps);</span><br><span class="line">					&#125;</span><br><span class="line">					rs = ps.executeQuery();</span><br><span class="line">					<span class="keyword">return</span> rse.extractData(rs);</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">finally</span> &#123;</span><br><span class="line">					JdbcUtils.closeResultSet(rs);</span><br><span class="line">					<span class="keyword">if</span> (pss <span class="keyword">instanceof</span> ParameterDisposer) &#123;</span><br><span class="line">						((ParameterDisposer) pss).cleanupParameters();</span><br><span class="line">					&#125;</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;);</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>execute<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> &lt;T&gt; <span class="function">T <span class="title">execute</span><span class="params">(PreparedStatementCreator psc, PreparedStatementCallback&lt;T&gt; action)</span></span></span><br><span class="line"><span class="function">			<span class="keyword">throws</span> DataAccessException </span>&#123;</span><br><span class="line">		Connection con = DataSourceUtils.getConnection(obtainDataSource());</span><br><span class="line">		PreparedStatement ps = <span class="keyword">null</span>;</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			ps = psc.createPreparedStatement(con);</span><br><span class="line">			applyStatementSettings(ps);</span><br><span class="line">			T result = action.doInPreparedStatement(ps);</span><br><span class="line">			handleWarnings(ps);</span><br><span class="line">			<span class="keyword">return</span> result;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">catch</span> (SQLException ex) &#123;</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="keyword">finally</span> &#123;</span><br><span class="line">			<span class="keyword">if</span> (psc <span class="keyword">instanceof</span> ParameterDisposer) &#123;</span><br><span class="line">				((ParameterDisposer) psc).cleanupParameters();</span><br><span class="line">			&#125;</span><br><span class="line">			JdbcUtils.closeStatement(ps);</span><br><span class="line">			DataSourceUtils.releaseConnection(con, getDataSource());</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p><strong>execute</strong>是一个模板方法，将<strong>connection</strong>的获取和关闭抽象出来作为执行，传入的action作为扩展实现的方法。</p>
+<h2 id="Connection"><a href="#Connection" class="headerlink" title="Connection"></a>Connection</h2><p><strong>Connection</strong>是通过DataSourceUtils.getConnection(DataSource dataSource)来获取的</p>
+<ul>
+<li><p>doGetConnection</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> Connection <span class="title">doGetConnection</span><span class="params">(DataSource dataSource)</span> <span class="keyword">throws</span> SQLException </span>&#123;</span><br><span class="line">		Assert.notNull(dataSource, <span class="string">"No DataSource specified"</span>);</span><br><span class="line"></span><br><span class="line">		ConnectionHolder conHolder = (ConnectionHolder) TransactionSynchronizationManager.getResource(dataSource);</span><br><span class="line">		<span class="keyword">if</span> (conHolder != <span class="keyword">null</span> &amp;&amp; (conHolder.hasConnection() || conHolder.isSynchronizedWithTransaction())) &#123;</span><br><span class="line">			conHolder.requested();</span><br><span class="line">			<span class="keyword">if</span> (!conHolder.hasConnection()) &#123;</span><br><span class="line">				logger.debug(<span class="string">"Fetching resumed JDBC Connection from DataSource"</span>);</span><br><span class="line">				conHolder.setConnection(fetchConnection(dataSource));</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">return</span> conHolder.getConnection();</span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// Else we either got no holder or an empty thread-bound holder here.</span></span><br><span class="line"></span><br><span class="line">		logger.debug(<span class="string">"Fetching JDBC Connection from DataSource"</span>);</span><br><span class="line">		Connection con = fetchConnection(dataSource);</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> (TransactionSynchronizationManager.isSynchronizationActive()) &#123;</span><br><span class="line">			<span class="keyword">try</span> &#123;</span><br><span class="line">				<span class="comment">// Use same Connection for further JDBC actions within the transaction.</span></span><br><span class="line">				<span class="comment">// Thread-bound object will get removed by synchronization at transaction completion.</span></span><br><span class="line">				ConnectionHolder holderToUse = conHolder;</span><br><span class="line">				<span class="keyword">if</span> (holderToUse == <span class="keyword">null</span>) &#123;</span><br><span class="line">					holderToUse = <span class="keyword">new</span> ConnectionHolder(con);</span><br><span class="line">				&#125;</span><br><span class="line">				<span class="keyword">else</span> &#123;</span><br><span class="line">					holderToUse.setConnection(con);</span><br><span class="line">				&#125;</span><br><span class="line">				holderToUse.requested();</span><br><span class="line">				TransactionSynchronizationManager.registerSynchronization(</span><br><span class="line">						<span class="keyword">new</span> ConnectionSynchronization(holderToUse, dataSource));</span><br><span class="line">				holderToUse.setSynchronizedWithTransaction(<span class="keyword">true</span>);</span><br><span class="line">				<span class="keyword">if</span> (holderToUse != conHolder) &#123;</span><br><span class="line">					TransactionSynchronizationManager.bindResource(dataSource, holderToUse);</span><br><span class="line">				&#125;</span><br><span class="line">			&#125;</span><br><span class="line">			<span class="keyword">catch</span> (RuntimeException ex) &#123;</span><br><span class="line">				<span class="comment">// Unexpected exception from external delegation call -&gt; close Connection and rethrow.</span></span><br><span class="line">				releaseConnection(con, dataSource);</span><br><span class="line">				<span class="keyword">throw</span> ex;</span><br><span class="line">			&#125;</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="keyword">return</span> con;</span><br><span class="line">	&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>TransactionSynchronizationManager.resource</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ThreadLocal&lt;Map&lt;Object, Object&gt;&gt; resources = <span class="keyword">new</span> NamedThreadLocal&lt;&gt;(<span class="string">"Transactional resources"</span>);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p>resource是一个线程变量,当同一个线程尝试获取jdbc Connection时返回的是同一个Connection<br>当Connection获取不到时就会从DataSource中获取新的jdbc连接，并放到resource中</p>
+<h2 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h2><p>spring中<strong>事务传播级别</strong>分为</p>
+<p>支持当前事务的情况:</p>
+<ul>
+<li><strong>TransactionDefinition.PROPAGATION_REQUIRED</strong>: 如果当前存在事务,则加入该事务;如果当前没有事务,则创建一个新的事务。</li>
+<li><strong>TransactionDefinition.PROPAGATION_SUPPORTS</strong>: 如果当前存在事务,则加入该事务;如果当前没有事务,则以非事务的方式继续运行。</li>
+<li><strong>TransactionDefinition.PROPAGATION_MANDATORY</strong>: 如果当前存在事务,则加入该事务;如果当前没有事务,则抛出异常。(mandatory:强制性)</li>
+</ul>
+<p>不支持当前事务的情况:</p>
+<ul>
+<li><strong>TransactionDefinition.PROPAGATION_REQUIRES_NEW</strong>: 创建一个新的事务,如果当前存在事务,则把当前事务挂起。</li>
+<li><strong>TransactionDefinition.PROPAGATION_NOT_SUPPORTED</strong>: 以非事务方式运行,如果当前存在事务,则把当前事务挂起。</li>
+<li><strong>TransactionDefinition.PROPAGATION_NEVER</strong>: 以非事务方式运行,如果当前存在事务,则抛出异常。</li>
+</ul>
+<p>其他情况:</p>
+<ul>
+<li><strong>TransactionDefinition.PROPAGATION_NESTED</strong>: 如果当前存在事务,则创建一个事务作为当前事务的嵌套事务来运行;如果当前没有事务,则该取值等价于TransactionDefinition.PROPAGATION_REQUIRED。</li>
+</ul>
+<p>spring中<strong>事务隔离级别</strong>分为</p>
+<ul>
+<li><strong>TransactionDefinition.ISOLATION_DEFAULT</strong>: 使用后端数据库默认的隔离级别,Mysql 默认采用的<strong>REPEATABLE_READ</strong>隔离级别 Oracle 默认采用的 <strong>READ_COMMITTED</strong>隔离级别。</li>
+<li><strong>TransactionDefinition.ISOLATION_READ_UNCOMMITTED</strong>: 最低的隔离级别,允许读取尚未提交的数据变更,可能会导致脏读、幻读或不可重复读。</li>
+<li><strong>TransactionDefinition.ISOLATION_READ_COMMITTED</strong>: 允许读取并发事务已经提交的数据,可以阻止脏读,但是幻读或不可重复读仍有可能发生。</li>
+<li><strong>TransactionDefinition.ISOLATION_REPEATABLE_READ</strong>: 对同一字段的多次读取结果都是一致的,除非数据是被本身事务自己所修改,可以阻止脏读和不可重复读,但幻读仍有可能发生。</li>
+<li><strong>TransactionDefinition.ISOLATION_SERIALIZABLE</strong>: 最高的隔离级别,完全服从ACID的隔离级别。所有的事务依次逐个执行,这样事务之间就完全不可能产生干扰,也就是说,该级别可以防止脏读、不可重复读以及幻读。但是这将严重影响程序的性能。通常情况下也不会用到该级别。</li>
+</ul>
+<h2 id="事务的远行原理"><a href="#事务的远行原理" class="headerlink" title="事务的远行原理"></a>事务的远行原理</h2><ul>
+<li>TransactionAspectSupport</li>
+</ul>
+<p><strong>TransactionAspectSupport</strong> implements BeanFactoryAware, InitializingBean<br>这里有两个比较重要的方法</p>
+<ul>
+<li>TransactionInfo txInfo = createTransactionIfNecessary(tm, txAttr, joinpointIdentification);<br>createTransactionIfNecessary() -&gt; AbstractPlatformTransactionManager.getTransaction(txAttr) -&gt; doBegin(transaction, definition) </li>
+</ul>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">con = txObject.getConnectionHolder().getConnection();</span><br><span class="line"><span class="keyword">if</span> (con.getAutoCommit()) &#123;</span><br><span class="line">  txObject.setMustRestoreAutoCommit(<span class="keyword">true</span>);</span><br><span class="line">  <span class="keyword">if</span> (logger.isDebugEnabled()) &#123;</span><br><span class="line">    logger.debug(<span class="string">"Switching JDBC Connection ["</span> + con + <span class="string">"] to manual commit"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">  con.setAutoCommit(<span class="keyword">false</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在doBegin方法中获取到设置一个<strong>con.setAutoCommit(false);</strong></p>
+<ul>
+<li>completeTransactionAfterThrowing(txInfo, ex);</li>
+</ul>
+<p><strong>completeTransactionAfterThrowing(txInfo, ex)</strong> -&gt; <strong>txInfo.getTransactionManager().rollback(txInfo.getTransactionStatus())</strong> -&gt;<strong>processRollback(defStatus, false)</strong> -&gt;<strong>doRollback</strong></p>
+<p>调用<strong>AbstractPlatformTransactionManager</strong>的doRollback方法执行的回滚，这里使用的也是模板模式不同的连接方式有不同的回滚逻辑，例如<strong>DataSourceTransactionManager</strong>的回滚方法就是调用<strong>con.rollback()</strong>（数据库驱动程序的rollback）</p>
+<h2 id="如何织入的？"><a href="#如何织入的？" class="headerlink" title="如何织入的？"></a>如何织入的？</h2><p>spring容器在启动的时候会将 @Transactional注解标注的方法先进行一个配置解析，再进行一个aop的增强，当执行这个方法时候会先执行aop的方法开启事务，通过反射将目标方法执行完毕后在通过结过进行对应的一个处理</p>
+<h1 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h1><ul>
+<li><p>Spring基于ThreadLocal解决有状态的Connetion的并发问题，事务同步管理器org.springframework.transaction.support.TransactionSynchronizationManager使用ThreadLocal为不同事务线程提供独立的资源副本</p>
+</li>
+<li><p>Spring事务管理基于3个接口：TransactionDefinition，TransactionStatus和PlatformTransactionManager</p>
+</li>
+</ul>
+<p><strong>TransactionDefinition</strong>定义了传播级别和隔离级别</p>
+<p><strong>TransactionStatus</strong>定义了事务的状态</p>
+<p><strong>PlatformTransactionManager</strong>实现了事务的执行方法</p>
+<ul>
+<li>注意点</li>
+</ul>
+<ol>
+<li>注解不能被继承，所以业务接口中的@Transactional注解不会被业务实现类继承；方法处的注解会覆盖类定义处的注解</li>
+<li>对于基于接口动态代理的AOP事务，由于接口方法都是public的，实现类的实现方法必须是public的，同时不能使用static修饰符。因此，可以通过接口动态代理实施AOP增强、实现Spring事务的方法只能是public或public final的</li>
+<li>基于CGLib动态代理实施AOP的时候，由于使用final、static、private的方法不能被子类覆盖，相应的，这些方法不能实施AOP增强，实现事务</li>
+<li>不能被Spring进行AOP事务增强的方法不能启动事务，但是外层方法的事务上下文仍然可以传播到这些方法中</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E6%8C%81%E4%B9%85%E5%8C%96/" rel="tag"># 持久化</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2018/03/12/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/6.spring%20MVC%E5%88%86%E6%9E%90/" rel="next" title="spring MVC分析">
+                <i class="fa fa-chevron-left"></i> spring MVC分析
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2018/03/17/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/8.spring%E8%B0%83%E8%AF%95%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/" rel="prev" title="spring调试环境搭建">
+                spring调试环境搭建 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://lh3.googleusercontent.com/a-/AOh14GgpoPhwzcSUZRZB6lHH_maq8ImUPog4tGdED1r5=s96-cc-rg"
+                alt="agmtopy" />
+            
+              <p class="site-author-name" itemprop="name">agmtopy</p>
+              <p class="site-description motion-element" itemprop="description">你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">108</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">63</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#spring持久化的设计"><span class="nav-number">1.</span> <span class="nav-text">spring持久化的设计</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#JdbcTemplate分析"><span class="nav-number">1.1.</span> <span class="nav-text">JdbcTemplate分析</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#使用代码"><span class="nav-number">1.1.1.</span> <span class="nav-text">使用代码</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Connection"><span class="nav-number">1.2.</span> <span class="nav-text">Connection</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事务"><span class="nav-number">1.3.</span> <span class="nav-text">事务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事务的远行原理"><span class="nav-number">1.4.</span> <span class="nav-text">事务的远行原理</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#如何织入的？"><span class="nav-number">1.5.</span> <span class="nav-text">如何织入的？</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#总结："><span class="nav-number">2.</span> <span class="nav-text">总结：</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">agmtopy</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">网站总字数&#58;</span>
+    
+    <span title="网站总字数">95.9k</span>
+  
+</div>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

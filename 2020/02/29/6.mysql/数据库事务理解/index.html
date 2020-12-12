@@ -1,0 +1,936 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="数据库事务," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="数据库事务理解数据库事务是一种本地的刚性事务，支持ACID ACID理论   名称 描述    原子性(Atomicity) 指的是在事务是最小的不可分割的执行单元，事务内的操作要么都成功，要么都失败   一致性(Consistency) 指的是在事务执行前后数据上的完整性保存一致，不会因为数据库事务的执行而改变数据在业务模型上的完整性   隔离性(isolation) 指的是每个事务都有单独的操">
+<meta property="og:type" content="article">
+<meta property="og:title" content="数据库事务理解">
+<meta property="og:url" content="http://yoursite.com/2020/02/29/6.mysql/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%E7%90%86%E8%A7%A3/index.html">
+<meta property="og:site_name" content="agmtopy博客">
+<meta property="og:description" content="数据库事务理解数据库事务是一种本地的刚性事务，支持ACID ACID理论   名称 描述    原子性(Atomicity) 指的是在事务是最小的不可分割的执行单元，事务内的操作要么都成功，要么都失败   一致性(Consistency) 指的是在事务执行前后数据上的完整性保存一致，不会因为数据库事务的执行而改变数据在业务模型上的完整性   隔离性(isolation) 指的是每个事务都有单独的操">
+<meta property="og:image" content="https://s2.ax1x.com/2020/03/01/3c8EEq.png">
+<meta property="og:image" content="https://s2.ax1x.com/2020/03/01/3cOI29.png">
+<meta property="og:image" content="https://s2.ax1x.com/2020/03/01/3gxwH1.png">
+<meta property="og:image" content="https://s2.ax1x.com/2020/03/01/32Kr5T.png">
+<meta property="og:image" content="https://s2.ax1x.com/2020/03/01/32lyPf.png">
+<meta property="og:image" content="https://s2.ax1x.com/2020/03/01/321bkt.png">
+<meta property="og:image" content="https://s2.ax1x.com/2020/03/01/32tbkj.png">
+<meta property="article:published_time" content="2020-02-29T13:00:59.000Z">
+<meta property="article:modified_time" content="2020-11-30T15:52:16.990Z">
+<meta property="article:author" content="agmtopy">
+<meta property="article:tag" content="数据库事务">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s2.ax1x.com/2020/03/01/3c8EEq.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/02/29/6.mysql/数据库事务理解/"/>
+
+
+
+
+
+  <title>数据库事务理解 | agmtopy博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">agmtopy博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">agmtopy</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/02/29/6.mysql/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%E7%90%86%E8%A7%A3/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="agmtopy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://lh3.googleusercontent.com/a-/AOh14GgpoPhwzcSUZRZB6lHH_maq8ImUPog4tGdED1r5=s96-cc-rg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="agmtopy博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">数据库事务理解</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-02-29T21:00:59+08:00">
+                2020-02-29
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  752
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  2
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="数据库事务理解"><a href="#数据库事务理解" class="headerlink" title="数据库事务理解"></a>数据库事务理解</h1><p>数据库事务是一种本地的刚性事务，支持ACID</p>
+<h2 id="ACID理论"><a href="#ACID理论" class="headerlink" title="ACID理论"></a><strong>ACID</strong>理论</h2><table>
+<thead>
+<tr>
+<th>名称</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>原子性(Atomicity)</td>
+<td>指的是在事务是最小的不可分割的执行单元，事务内的操作要么<strong>都</strong>成功，要么<strong>都</strong>失败</td>
+</tr>
+<tr>
+<td>一致性(Consistency)</td>
+<td>指的是在事务执行前后数据上的完整性保存一致，不会因为数据库事务的执行而改变数据在业务模型上的完整性</td>
+</tr>
+<tr>
+<td>隔离性(isolation)</td>
+<td>指的是每个事务都有单独的操作空间，不能在事务期间相互影响</td>
+</tr>
+<tr>
+<td>持久性(Durability)</td>
+<td>指的是事务完成后对数据库的改变是以落盘结束的</td>
+</tr>
+</tbody></table>
+<h2 id="数据库的隔离级别"><a href="#数据库的隔离级别" class="headerlink" title="数据库的隔离级别"></a>数据库的隔离级别</h2><table>
+<thead>
+<tr>
+<th>隔离级别</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>Read Uncommitted(未提交读)</td>
+<td>能够读取到其他事务尚未提交的数据</td>
+</tr>
+<tr>
+<td>Read committed(读取已提交内容)</td>
+<td>只能读取事务已提交的数据，</td>
+</tr>
+<tr>
+<td>Repeatable Read(可重读)</td>
+<td>指的是在同一个事务中任意时间节点读取到的内容一致</td>
+</tr>
+<tr>
+<td>Serializable(串行化)</td>
+<td>指的是事务是以串行化执行</td>
+</tr>
+</tbody></table>
+<h2 id="事务异常"><a href="#事务异常" class="headerlink" title="事务异常"></a>事务异常</h2><table>
+<thead>
+<tr>
+<th>异常</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>脏读（Dirty Read）</td>
+<td>指的是读到了未提交的数据</td>
+</tr>
+<tr>
+<td>不可重复读（Not Repeatable Read）</td>
+<td>指的是在一个事务的过程中，前后读取到的数据行不一致</td>
+</tr>
+<tr>
+<td>幻读</td>
+<td>指的是在一个事务中读取到的数据行不一致</td>
+</tr>
+</tbody></table>
+<ul>
+<li>不可重复读指的是对数据的<strong>删除</strong>、<strong>更新</strong>操作</li>
+<li>幻读指的是对数据的<strong>inster</strong>操作</li>
+</ul>
+<h2 id="数据库的隔离级别-1"><a href="#数据库的隔离级别-1" class="headerlink" title="数据库的隔离级别"></a>数据库的隔离级别</h2><ul>
+<li>√为会发生，×为不会发生</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>隔离级别</th>
+<th>脏读</th>
+<th>不可重复读</th>
+<th>幻读</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>read uncommitted（未提交读）</td>
+<td>√</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>read committed（提交读）</td>
+<td>x</td>
+<td>√</td>
+<td>√</td>
+</tr>
+<tr>
+<td>repeatable read（可重复读）</td>
+<td>x</td>
+<td>x</td>
+<td>√</td>
+</tr>
+<tr>
+<td>serialization（可串行化）</td>
+<td>x</td>
+<td>x</td>
+<td>x</td>
+</tr>
+</tbody></table>
+<h2 id="mysql实际操作"><a href="#mysql实际操作" class="headerlink" title="mysql实际操作"></a>mysql实际操作</h2><ul>
+<li><p>初始化语句</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`test`</span> (</span><br><span class="line"><span class="string">`id`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line"><span class="string">`num`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">'0'</span>,</span><br><span class="line">PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8mb4 <span class="keyword">COLLATE</span>=utf8mb4_general_ci</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>mysql8之前版本</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> @@tx_isolation;</span><br></pre></td></tr></table></figure></li>
+<li><p>mysql8</p>
+</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> @@transaction_isolation;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查询结果<br><img src="https://s2.ax1x.com/2020/03/01/3c8EEq.png" alt="查询结果"></li>
+</ul>
+<p>mysql的默认事务是<strong>REPEATABLE-READ</strong></p>
+<h3 id="脏读"><a href="#脏读" class="headerlink" title="脏读"></a>脏读</h3><ul>
+<li>设置隔离级别为<strong>读未提交</strong>(read uncommitted)</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SET</span> <span class="keyword">SESSION</span> <span class="keyword">TRANSACTION</span> <span class="keyword">ISOLATION</span> <span class="keyword">LEVEL</span> <span class="keyword">READ</span> UNCOMMITTED;</span><br></pre></td></tr></table></figure>
+
+<p><strong>A事务</strong></p>
+<ul>
+<li><p>查询数据</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">test</span>;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>结果</p>
+</li>
+</ul>
+<p><img src="https://s2.ax1x.com/2020/03/01/3cOI29.png" alt="查询结果"></p>
+<p><strong>B事务</strong></p>
+<ul>
+<li>插入数据<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">START</span> <span class="keyword">TRANSACTION</span> ;</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">test</span> <span class="keyword">VALUE</span>(<span class="number">1</span>,<span class="number">10</span>);</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p><strong>A事务</strong></p>
+<ul>
+<li>查询数据</li>
+</ul>
+<p><img src="https://s2.ax1x.com/2020/03/01/3gxwH1.png" alt="查询结果"></p>
+<p><strong>此时就读取到了未提交的数据</strong></p>
+<p><strong>B事务</strong></p>
+<ul>
+<li>回滚事务<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ROLLBACK</span>;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<p><strong>A事务</strong></p>
+<ul>
+<li>查询数据<br><img src="https://s2.ax1x.com/2020/03/01/32Kr5T.png" alt="查询结果"></li>
+</ul>
+<h3 id="不可重复读"><a href="#不可重复读" class="headerlink" title="不可重复读"></a>不可重复读</h3><ul>
+<li>结果<br><img src="https://s2.ax1x.com/2020/03/01/32lyPf.png" alt="查询结果"></li>
+</ul>
+<p>线程不能读取到其他线程尚未提交的数据</p>
+<h3 id="可重复读"><a href="#可重复读" class="headerlink" title="可重复读"></a>可重复读</h3><p><img src="https://s2.ax1x.com/2020/03/01/321bkt.png" alt="可重复读查询结果"></p>
+<p>上图展示了在同一个事务中读取不管B事务是否提交，A事务读取的数据都是一样的。</p>
+<ul>
+<li>幻读展示<br><img src="https://s2.ax1x.com/2020/03/01/32tbkj.png" alt="可重复读查询结果"></li>
+</ul>
+<p>可重复读的隔离级别虽然保证了在同一个事务中，前后读取数据一致，当时在插入时，由于是<strong>表级锁</strong>因此数据会等待之前的事务提交完成后再执行，因此出现异常。</p>
+<blockquote>
+<p>参考文档</p>
+</blockquote>
+<ul>
+<li><a href="https://blog.csdn.net/Vincent2014Linux/article/details/89669762" target="_blank" rel="noopener">快速理解脏读，不可重复读，幻读</a></li>
+<li><a href="https://blog.csdn.net/qq_22115231/article/details/80767069" target="_blank" rel="noopener">数据库的四种事物隔离级别</a></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1/" rel="tag"># 数据库事务</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/21/git%E5%A4%9A%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/" rel="next" title="git多环境配置">
+                <i class="fa fa-chevron-left"></i> git多环境配置
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/04/24/8.duboo%E7%AC%94%E8%AE%B0/99.dubbo%E5%B8%B8%E8%A7%81%E9%97%AE%E9%A2%98%E5%BD%92%E7%BA%B3/" rel="prev" title="dubbo常见问题归纳">
+                dubbo常见问题归纳 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://lh3.googleusercontent.com/a-/AOh14GgpoPhwzcSUZRZB6lHH_maq8ImUPog4tGdED1r5=s96-cc-rg"
+                alt="agmtopy" />
+            
+              <p class="site-author-name" itemprop="name">agmtopy</p>
+              <p class="site-description motion-element" itemprop="description">你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">108</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">63</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#数据库事务理解"><span class="nav-number">1.</span> <span class="nav-text">数据库事务理解</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ACID理论"><span class="nav-number">1.1.</span> <span class="nav-text">ACID理论</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库的隔离级别"><span class="nav-number">1.2.</span> <span class="nav-text">数据库的隔离级别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#事务异常"><span class="nav-number">1.3.</span> <span class="nav-text">事务异常</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#数据库的隔离级别-1"><span class="nav-number">1.4.</span> <span class="nav-text">数据库的隔离级别</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mysql实际操作"><span class="nav-number">1.5.</span> <span class="nav-text">mysql实际操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#脏读"><span class="nav-number">1.5.1.</span> <span class="nav-text">脏读</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#不可重复读"><span class="nav-number">1.5.2.</span> <span class="nav-text">不可重复读</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可重复读"><span class="nav-number">1.5.3.</span> <span class="nav-text">可重复读</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">agmtopy</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">网站总字数&#58;</span>
+    
+    <span title="网站总字数">95.9k</span>
+  
+</div>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

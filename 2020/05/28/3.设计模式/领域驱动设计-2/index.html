@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="领域驱动," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="领域驱动设计入门流程主要是从围绕组织的业务模型定位到编码域模型的过程。 基础流程 对齐：业务模型对齐需求 发现：对领域实现可视化和协作 解耦：将领域分为子域 连接：将子域形成为一种松耦合架构 战略：专攻业务差异化的核心子域 组织：按照有界上下文组织团队 定义：定义每个有界上下文的角色和职责 编码：使用战术模式实现有界上下文  基础划分领域驱动设计将软件系统的设计分为两个部分：战略设计和战术设计。在">
+<meta property="og:type" content="article">
+<meta property="og:title" content="领域驱动设计_2">
+<meta property="og:url" content="http://yoursite.com/2020/05/28/3.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1-2/index.html">
+<meta property="og:site_name" content="agmtopy博客">
+<meta property="og:description" content="领域驱动设计入门流程主要是从围绕组织的业务模型定位到编码域模型的过程。 基础流程 对齐：业务模型对齐需求 发现：对领域实现可视化和协作 解耦：将领域分为子域 连接：将子域形成为一种松耦合架构 战略：专攻业务差异化的核心子域 组织：按照有界上下文组织团队 定义：定义每个有界上下文的角色和职责 编码：使用战术模式实现有界上下文  基础划分领域驱动设计将软件系统的设计分为两个部分：战略设计和战术设计。在">
+<meta property="article:published_time" content="2020-05-28T14:08:00.000Z">
+<meta property="article:modified_time" content="2020-11-30T15:52:16.974Z">
+<meta property="article:author" content="agmtopy">
+<meta property="article:tag" content="领域驱动">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2020/05/28/3.设计模式/领域驱动设计-2/"/>
+
+
+
+
+
+  <title>领域驱动设计_2 | agmtopy博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">agmtopy博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">agmtopy</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2020/05/28/3.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1-2/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="agmtopy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://lh3.googleusercontent.com/a-/AOh14GgpoPhwzcSUZRZB6lHH_maq8ImUPog4tGdED1r5=s96-cc-rg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="agmtopy博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">领域驱动设计_2</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-05-28T22:08:00+08:00">
+                2020-05-28
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8/" itemprop="url" rel="index">
+                    <span itemprop="name">领域驱动</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  2.4k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  8
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="领域驱动设计入门流程"><a href="#领域驱动设计入门流程" class="headerlink" title="领域驱动设计入门流程"></a>领域驱动设计入门流程</h1><p>主要是从围绕组织的业务模型定位到编码域模型的过程。</p>
+<h2 id="基础流程"><a href="#基础流程" class="headerlink" title="基础流程"></a>基础流程</h2><ul>
+<li>对齐：业务模型对齐需求</li>
+<li>发现：对领域实现可视化和协作</li>
+<li>解耦：将领域分为子域</li>
+<li>连接：将子域形成为一种松耦合架构</li>
+<li>战略：专攻业务差异化的核心子域</li>
+<li>组织：按照有界上下文组织团队</li>
+<li>定义：定义每个有界上下文的角色和职责</li>
+<li>编码：使用战术模式实现有界上下文</li>
+</ul>
+<h2 id="基础划分"><a href="#基础划分" class="headerlink" title="基础划分"></a>基础划分</h2><p>领域驱动设计将软件系统的设计分为两个部分：战略设计和战术设计。在战略设计层面提出域、子域、限界上下文等概念;在战术设计层<br>面提出了实体、值对象、领域服务、领域事件、聚合、工厂、资源等重要概念</p>
+<p>战略设计部分指导我们如何按照领域驱动的模型将一个复杂系统进行拆分；战术设计部分指导我们将拆分出来的模块落地以及落地过程<br>中应遵循的原则。</p>
+<p>领域驱动设计在微服务时代大行其道的主要原因是因为领域设计的战略部分将将系统划分为不同的’域’，这与微服务架构体系中将一个<br>单体应用拆分为不同的微服务解决的是同一个问题。<br>‘域’解决的是空间问题;限定上下文解决的是解决空间方案(ps:可以将域理解成为一个具体的车间，限定上下文可以理解为车间中进行某<br>一步生产活动的生产资料)</p>
+<h2 id="传统的分层架构"><a href="#传统的分层架构" class="headerlink" title="传统的分层架构"></a>传统的分层架构</h2><hr>
+<h2 id="终端显示层-开放接口"><a href="#终端显示层-开放接口" class="headerlink" title="|  终端显示层  | 开放接口 |"></a>|  终端显示层  | 开放接口 |</h2><table>
+<thead>
+<tr>
+<th>web层</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>service</td>
+</tr>
+<tr>
+<td>—————————</td>
+</tr>
+<tr>
+<td>manager层</td>
+</tr>
+<tr>
+<td>—————————</td>
+</tr>
+<tr>
+<td>DAO层</td>
+</tr>
+<tr>
+<td>—————————</td>
+</tr>
+<tr>
+<td>DB</td>
+</tr>
+</tbody></table>
+<p>在传统分层架构中</p>
+<ul>
+<li><p>service层<br>业务逻辑服务层:承担的是具体的业务逻辑服务</p>
+</li>
+<li><p>manager层<br>通用业务处理层,承担的是</p>
+</li>
+<li><p>对第三方接口进行封装,预处理返回结果及转换异常信息</p>
+</li>
+<li><p>对service层中的通用能力的下沉(ps:也就是说将通用的service中的能力下沉到manager层)</p>
+</li>
+<li><p>与DAO层的封装,对DAO层的组合复用(ps:可以将事务放到manager层来控制)</p>
+</li>
+</ul>
+<p>缺陷或不足：</p>
+<ol>
+<li>service层和manager层在实际开发中没有明显的特征，容易将manager层演化成为一个特殊的业务属性淡化的service层</li>
+</ol>
+<p>根据六边形架构的指导思想，将一个实际的应用划分为四层：<br>1.用户接口层：负责用户展现相关的逻辑<br>2.应用层：将一个用例进行流程编排(将接口用例分成若干步骤，但是不负责每步的具体实施)(ps:定义流程接口)<br>3.领域层：负责实现核心的领域逻辑(业务逻辑)<br>4.基础设施层：所以依赖的具体实现</p>
+<p>倒置的分层架构</p>
+<h2 id="领域模型的特定"><a href="#领域模型的特定" class="headerlink" title="领域模型的特定"></a>领域模型的特定</h2><ol>
+<li>对业务领域进行建模<ul>
+<li>细粒度的类，易于扩展和复用</li>
+<li>可应对复杂的业务逻辑</li>
+<li>需要经验才能掌握</li>
+</ul>
+</li>
+<li>简单领域模型<ul>
+<li>几乎和数据库实体一一对应</li>
+</ul>
+</li>
+<li>复杂领域模型<ul>
+<li>使用继承、组合、设计模式各种手段</li>
+</ul>
+</li>
+</ol>
+<blockquote>
+<p>在整个软件开发的周期中尽量使用领域名称来进行沟通、在代码中尽量让命名贴近于领域对象。</p>
+</blockquote>
+<h2 id="DDD分层架构"><a href="#DDD分层架构" class="headerlink" title="DDD分层架构"></a>DDD分层架构</h2><table>
+<thead>
+<tr>
+<th>名称</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>用户界面/展示层</td>
+<td>负责向用户展现信息以及解释用户命令</td>
+</tr>
+<tr>
+<td>应用层</td>
+<td>很薄的一层，用来协调应用的活动。不包含业务代码逻辑，不保留业务对象状态，但应保留应用任务进度状态</td>
+</tr>
+<tr>
+<td>领域层</td>
+<td>本层包含关于领域的所有信息，是业务软件的核心所在，在这里保留业务对象的状态和行为。</td>
+</tr>
+<tr>
+<td>基础设施层</td>
+<td>作为底层基础层，提供其他层的基础功能，例如持久化、通用功能等</td>
+</tr>
+</tbody></table>
+<h3 id="领域层"><a href="#领域层" class="headerlink" title="领域层"></a>领域层</h3><ul>
+<li><p>实体</p>
+<ol>
+<li>对象不是由属性定义的，而值标识定义的</li>
+<li>对象内容的变化不会影响标志符(ps:可以理解为对象内容的变化本身就是对象的一种合理行为)</li>
+<li>持久化不会影响标志</li>
+<li>实体属性的选择<blockquote>
+<p>实体对象属性应是标识、查找、匹配对象的最基本特征;只添加哪些对实体这个概念至关重要的<strong>行为</strong>和<strong>属性</strong></p>
+</blockquote>
+</li>
+</ol>
+</li>
+<li><p>值标识(可以理解为id)</p>
+<ol>
+<li>对象是根据值来确定的</li>
+<li>可以在不同的实体中使用</li>
+<li>值对象通常是不可变的</li>
+</ol>
+</li>
+<li><p>领域服务</p>
+<ol>
+<li>领域服务指的是就是实体的某种行为</li>
+</ol>
+</li>
+<li><p>特征</p>
+<ol>
+<li>服务执行的操作涉及一个领域概念，这个概念通常不属于一个实体或对象</li>
+<li>被执行的操作涉及到领域中的其他对象</li>
+<li>操作是无状态的</li>
+</ol>
+</li>
+<li><p>聚合的特定</p>
+<ol>
+<li>根对象具有值标识</li>
+<li>外部对象不能直接调用根对象的内部引用对象<blockquote>
+<p>聚合的定义有点像是门面模式，将内部功能封装起来</p>
+</blockquote>
+</li>
+</ol>
+</li>
+</ul>
+<h2 id="领域对象的管理"><a href="#领域对象的管理" class="headerlink" title="领域对象的管理"></a>领域对象的管理</h2><blockquote>
+<p>创建管理领域对象的生命周期是一个复杂且敏感的功能，介绍3个模式来进行分解</p>
+</blockquote>
+<p><strong>聚合模式</strong></p>
+<ul>
+<li>聚合是一个用来定义对象<strong>所有权</strong>和<strong>边界</strong>的领域模式。工厂和资源库是另外的两个设计模式，用来帮助我们处理对象的创建和存储问题</li>
+</ul>
+<p>由于模型间的相互关系依赖，导致实例与实例存在相互引用，在这种情况下很难梳理清楚一个领域对象的关系。<br>什么是聚合模式？</p>
+<blockquote>
+<p>通过一个实体根对象持有聚合对象的引用，聚合对象之间可以相互依赖。对外只暴露实体根对象，形成以实体根对象为核心内聚的领域对象</p>
+</blockquote>
+<p>聚合是如何保持数据一致性和强化不变量的呢？</p>
+<blockquote>
+<p>因为其他对象只能持有对根对象的引用，这意味着它们不能直接变更聚合内的其他的对象。它们所能做的就是对根做变更，或者让请求根来执行某些动作</p>
+</blockquote>
+<p><strong>工厂模式</strong></p>
+<blockquote>
+<p>领域模式中重点强调使用工厂模式来创建复杂对象</p>
+</blockquote>
+<ul>
+<li>工厂被用来封装对象创建所必需的知识，它们对创建聚合特别有用。当聚合的根被创建后，所有聚合包含的对象将随之创建，所有的不变量得到了强化。</li>
+</ul>
+<p>因此，为复杂对象和聚合创建实例的职责，应该转交给一个单独的对象。虽然这个对象本身在领域模型中没有职责，但它仍是领域设计的一部分。提供一个接口来封装所有复杂的组装过程，客户不需要引用正在初始化的对象所对应的具体类。将整个聚合当作一个单元来创建，强化它们的不变量。</p>
+<p>一个聚合包含了一系列密切相关的对象。根的构建与聚合内的其他对象的创建是相关的。会有一些逻辑一同放到聚合中，这些逻辑并不天然属于任何一个对象，因为它总是跟其他对象的构建有关。看起来比较合适的做法是，使用一个专用的工厂类来负责创建整个聚合，在这个工厂类中将包含应该为聚合强化的规则、约束和不变量。这个对象会保持简单，并将完成特定的目的，不会使复杂的构建逻辑混乱不堪。</p>
+<p>ps:也就是有对象创建工厂来专门负责聚合对象的创建工作，将对象的聚合关系的创建全部放到对象创建工厂中去</p>
+<p>不使用工厂使用实体构造器的条件</p>
+<ol>
+<li>构造过程并不复杂。</li>
+<li>一个对象的创建不涉及到其他对象的创建，可以将所有需要的属性传递给构<br>造器</li>
+<li>客户对实现很感兴趣，可能希望选择使用策略（Strategy）模式。</li>
+<li>类是特定的类型，不存在到层级，所以不用在一系列的具体实现中进行选<br>择。</li>
+</ol>
+<p>第三点，客户端对实体的创建很感兴趣，也就是说对象的创建非常依赖于客户端的行为，此时可以考虑使用策略模式。工厂也可以达到这样的效果，但是需要有标识符传入</p>
+<p><strong>资源库</strong></p>
+<blockquote>
+<p>资源库：访问实体的工具，位于领域层和基础实施层之间。作用是通过基础设施层的工具先领域层输出实体对象。</p>
+</blockquote>
+<p>资源库与工厂的区别：资源库关注的是如何将已存在的实体重新载入到领域层中；工厂关心的是如何创建一个新的实体对象。两者一个关注的是已有对象一个关注的是如何创建新对象。</p>
+<h3 id="面向深层理解的重构"><a href="#面向深层理解的重构" class="headerlink" title="面向深层理解的重构"></a>面向深层理解的重构</h3><ol>
+<li>持续重构</li>
+<li>关注核心模型</li>
+</ol>
+<h3 id="模型的一致性"><a href="#模型的一致性" class="headerlink" title="模型的一致性"></a>模型的一致性</h3><ol>
+<li>边界上下文</li>
+<li>持续集成</li>
+<li>上下文映射</li>
+<li>共享内核</li>
+<li>客户-供应商</li>
+<li>顺从者</li>
+<li>防崩溃层</li>
+<li>隔离通道</li>
+<li>开发主机服务</li>
+<li>提炼</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8/" rel="tag"># 领域驱动</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/05/28/3.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1-1/" rel="next" title="领域驱动设计(简介)">
+                <i class="fa fa-chevron-left"></i> 领域驱动设计(简介)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/05/29/13.LeetCode/4.%E5%AF%BB%E6%89%BE%E4%B8%A4%E4%B8%AA%E6%AD%A3%E5%BA%8F%E6%95%B0%E7%BB%84%E7%9A%84%E4%B8%AD%E4%BD%8D%E6%95%B0_LeetCode05/" rel="prev" title="寻找两个正序数组的中位数">
+                寻找两个正序数组的中位数 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://lh3.googleusercontent.com/a-/AOh14GgpoPhwzcSUZRZB6lHH_maq8ImUPog4tGdED1r5=s96-cc-rg"
+                alt="agmtopy" />
+            
+              <p class="site-author-name" itemprop="name">agmtopy</p>
+              <p class="site-description motion-element" itemprop="description">你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">108</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">63</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#领域驱动设计入门流程"><span class="nav-number">1.</span> <span class="nav-text">领域驱动设计入门流程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#基础流程"><span class="nav-number">1.1.</span> <span class="nav-text">基础流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#基础划分"><span class="nav-number">1.2.</span> <span class="nav-text">基础划分</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#传统的分层架构"><span class="nav-number">1.3.</span> <span class="nav-text">传统的分层架构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#终端显示层-开放接口"><span class="nav-number">1.4.</span> <span class="nav-text">|  终端显示层  | 开放接口 |</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#领域模型的特定"><span class="nav-number">1.5.</span> <span class="nav-text">领域模型的特定</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#DDD分层架构"><span class="nav-number">1.6.</span> <span class="nav-text">DDD分层架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#领域层"><span class="nav-number">1.6.1.</span> <span class="nav-text">领域层</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#领域对象的管理"><span class="nav-number">1.7.</span> <span class="nav-text">领域对象的管理</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#面向深层理解的重构"><span class="nav-number">1.7.1.</span> <span class="nav-text">面向深层理解的重构</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#模型的一致性"><span class="nav-number">1.7.2.</span> <span class="nav-text">模型的一致性</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">agmtopy</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">网站总字数&#58;</span>
+    
+    <span title="网站总字数">95.9k</span>
+  
+</div>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
