@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="agmtopy博客">
 <meta property="og:description" content="碎碎念 TimerTask  123456789101112Timer timer &#x3D; new Timer(false);timer.schedule(new RefreshTask(), 10*1000L, 30*1000L);private class RefreshTask extends TimerTask &amp;#123;    @Override    public void run()">
 <meta property="article:published_time" content="2020-08-23T14:28:20.000Z">
-<meta property="article:modified_time" content="2020-11-30T15:52:16.933Z">
+<meta property="article:modified_time" content="2020-12-30T17:05:16.333Z">
 <meta property="article:author" content="agmtopy">
 <meta property="article:tag" content="碎碎念">
 <meta name="twitter:card" content="summary">
@@ -325,7 +325,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  315
+                  345
                 </span>
               
 
@@ -381,6 +381,11 @@
 <ul>
 <li>对重复数据的不同处理在1.6.x上对于重复数据是直接抛出异常，最新的版本则是返回修改值</li>
 </ul>
+<ol start="3">
+<li>查询端口占用情况<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 端口占用情况</span></span><br><span class="line">netstat -nap |grep 2181</span><br><span class="line"></span><br><span class="line"><span class="comment"># 端口连接数</span></span><br><span class="line">netstat -na | grep 2181 | wc -l</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
 
       
     </div>
@@ -579,7 +584,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
   <span class="with-love">
     <i class="fa fa-user"></i>
   </span>
@@ -593,7 +598,7 @@
     
       <span class="post-meta-item-text">网站总字数&#58;</span>
     
-    <span title="网站总字数">96.4k</span>
+    <span title="网站总字数">97.1k</span>
   
 </div>
 
