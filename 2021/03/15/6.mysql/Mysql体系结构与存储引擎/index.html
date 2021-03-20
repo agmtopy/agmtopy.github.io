@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="Mysql," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="主要介绍MySql的整体体系结构和存储引擎  体系结构概念上’数据库’是文件的集合,是依照某种数据模型组织起来并存放与存储器中的数据;’数据库实列’是程序是一个用户进程,是用户对’数据库’操作的软件.MySql主要由以下几部分组成  连接池组件 管理服务和工具组件 SQL接口组件 查询分析器组件 优化器组件 缓冲组件 插件式存储引擎(存储引擎是基于表的 ,而不是基于数据库的) 物理文件  存储引">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mysql体系结构与存储引擎">
+<meta property="og:url" content="http://yoursite.com/2021/03/15/6.mysql/Mysql%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B8%8E%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/index.html">
+<meta property="og:site_name" content="agmtopy博客">
+<meta property="og:description" content="主要介绍MySql的整体体系结构和存储引擎  体系结构概念上’数据库’是文件的集合,是依照某种数据模型组织起来并存放与存储器中的数据;’数据库实列’是程序是一个用户进程,是用户对’数据库’操作的软件.MySql主要由以下几部分组成  连接池组件 管理服务和工具组件 SQL接口组件 查询分析器组件 优化器组件 缓冲组件 插件式存储引擎(存储引擎是基于表的 ,而不是基于数据库的) 物理文件  存储引">
+<meta property="og:image" content="https://s3.ax1x.com/2021/03/15/6r8Q7q.png">
+<meta property="og:image" content="https://dev.mysql.com/doc/refman/8.0/en/images/innodb-architecture.png">
+<meta property="article:published_time" content="2021-03-15T13:54:51.000Z">
+<meta property="article:modified_time" content="2021-03-20T03:20:35.460Z">
+<meta property="article:author" content="agmtopy">
+<meta property="article:tag" content="Mysql">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s3.ax1x.com/2021/03/15/6r8Q7q.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2021/03/15/6.mysql/Mysql体系结构与存储引擎/"/>
+
+
+
+
+
+  <title>Mysql体系结构与存储引擎 | agmtopy博客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">agmtopy博客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">agmtopy</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2021/03/15/6.mysql/Mysql%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B8%8E%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="agmtopy">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars3.githubusercontent.com/u/11427071?s=460&u=efb49b426d8fec1bb88b8884bc74eb9c30e37663&v=4">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="agmtopy博客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Mysql体系结构与存储引擎</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-03-15T21:54:51+08:00">
+                2021-03-15
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" itemprop="url" rel="index">
+                    <span itemprop="name">数据库</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+            <div class="post-wordcount">
+              
+                
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">字数统计&#58;</span>
+                
+                <span title="字数统计">
+                  1.7k
+                </span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">
+                  6
+                </span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>主要介绍MySql的整体体系结构和存储引擎</p>
+</blockquote>
+<h2 id="体系结构"><a href="#体系结构" class="headerlink" title="体系结构"></a>体系结构</h2><p>概念上’数据库’是文件的集合,是依照某种数据模型组织起来并存放与存储器中的数据;’数据库实列’是程序是一个用户进程,是用户对’数据库’操作的软件.<br>MySql主要由以下几部分组成</p>
+<ol>
+<li>连接池组件</li>
+<li>管理服务和工具组件</li>
+<li>SQL接口组件</li>
+<li>查询分析器组件</li>
+<li>优化器组件</li>
+<li>缓冲组件</li>
+<li>插件式存储引擎(存储引擎是基于表的 ,而不是基于数据库的)</li>
+<li>物理文件</li>
+</ol>
+<h2 id="存储引擎"><a href="#存储引擎" class="headerlink" title="存储引擎"></a>存储引擎</h2><ul>
+<li><p>概述<br>存储引擎是与MySql物理文件进行交互的一种插件,存储引擎的底部是物理存储层,包括二进制日志文件,数据文件,错误文件,慢查询日志,undo/redo日志等</p>
+</li>
+<li><p>一次select的过程<br>下图是一次select的过程,从图中得知存储引擎位于是物理文件和程序数据之间<br><a href="https://imgtu.com/i/6r8Q7q" target="_blank" rel="noopener"><img src="https://s3.ax1x.com/2021/03/15/6r8Q7q.png" alt="6r8Q7q.png"></a></p>
+</li>
+<li><p>InnoDB的体系架构</p>
+</li>
+</ul>
+<p><a href="https://dev.mysql.com/doc/refman/8.0/en/innodb-architecture.html" target="_blank" rel="noopener"><img src="https://dev.mysql.com/doc/refman/8.0/en/images/innodb-architecture.png" alt="InnoDB架构"></a></p>
+<ol>
+<li>实列层<br>实列层主要包括’线程’和’内存’两个部分<br>a. 后台线程主要有</li>
+</ol>
+<ul>
+<li>Master Thread<br>主线程主要负责将缓冲池中的数据异步刷新到磁盘中,保证数据的一致性</li>
+<li>I/O Thread<br>I/O Thread 主要是负责AIO(Async IO)请求的回调</li>
+<li>Purge Thread<br>Purge Thread的作用是事物在被提交后undolog就可能不在被使用了,因此需要Purge Thread线程来回收并分配的undo页</li>
+<li>Page Cleaner Thread<br>Page Cleaner Thread的作用是回收分配脏页</li>
+</ul>
+<p>小结:Master Thread和I/O Thread一个负责异步刷新数据一个负责AIO的回调,Purge Thread和Page Cleaner Thread一个负责回收分配undolog一个负责回收分配脏页</p>
+<p>b. 内存</p>
+<ul>
+<li>缓冲池<br>InnoDB存储引擎是基于磁盘存储,其中的数据是按照页的方式进行管理.由于CPU和磁盘速度中的差异因此用缓冲池技术来提高数据库的整体性能<br>缓冲池是一块内存区域,在数据库进行读取页操作时,会首先将从内存中的数据放到缓冲池中,在下一次读取相同页时,会直接读取缓冲池中的页数据.<br>对于数据库中的页的修改,首先会修改缓冲池中的页,然后以一定的频率刷新到磁盘,这种机制被称为CheckPoint<br>缓冲池中的数据页类型分为:</li>
+</ul>
+<ol>
+<li>索引页</li>
+<li>数据页</li>
+<li>undo页</li>
+<li>插入缓冲</li>
+<li>自适应哈希索引</li>
+<li>InnoDB存储的锁信息</li>
+<li>数据字典</li>
+</ol>
+<ul>
+<li><p>LRU list,Freen lst,Flush list<br>数据库中的缓冲池是通过LRU算法来进行管理,但是InnoDB中的LRU算法是经过优化的,将新数据放到列表3/8处</p>
+</li>
+<li><p>重做日志缓冲<br>重做日志首先会放到缓冲区,然后按照一定的频率刷新到日志文件上,有三种情况会刷新重做日志:1.Master Thread每一秒都会将日志缓冲刷新到日志文件,2.每个事务提交时都会将重做日志刷新到文件,3.当重做日志缓冲池剩余空间小于1/2时,会将日志刷新到文件上</p>
+</li>
+<li><p>额外的内存池<br>额外的内存池作为缓冲池的备用,但缓冲池不够的时候,就会从额外的内存池中申请</p>
+</li>
+<li><p>Checkpoint技术<br>Mysql中数据的持久性是通过Write Ahead Log策略来保证,也就是先写日志文件,在修改数据文件.当宕机导致数据丢失时,会通过重做日志来进行数据恢复.<br>如果重做日志太大会导致数据恢复的很慢,因此mysql使用CheckPoint的技术来保证,CheckPoint是将缓冲池中的内存页刷新到磁盘的动作</p>
+</li>
+</ul>
+<h2 id="Master-Thread"><a href="#Master-Thread" class="headerlink" title="Master Thread"></a>Master Thread</h2><p>Master Thread具有最高级别的线程优先级,内部有多个循环组成:主循环,后台循环,刷新循环,暂停循环.<br>Master Thread主要分为1s执行一次的操作:</p>
+<ol>
+<li>日志缓冲刷新到磁盘,即使这个事务还没提交</li>
+<li>合并插入缓冲</li>
+<li>最多刷新100个InnoDB的缓冲池中的脏页到磁盘</li>
+<li>如果当前没有用户活动,就切换到backgroud loop<br>10s执行一次的操作:</li>
+<li>刷新100个脏页到磁盘</li>
+<li>合并至多5个插入缓冲</li>
+<li>将日志缓冲刷新到磁盘</li>
+<li>删除无用的Undo页</li>
+<li>刷新100个或者10个脏页</li>
+</ol>
+<h2 id="InnoDB特点"><a href="#InnoDB特点" class="headerlink" title="InnoDB特点"></a>InnoDB特点</h2><ol>
+<li>插入缓冲(Insert Buffer)</li>
+<li>两次写(Double Write)</li>
+<li>自适应哈希索引(Adaptive Hash Index)</li>
+<li>异步IO(Async IO)</li>
+<li>刷新邻接页(Flush Neighbor Page)</li>
+</ol>
+<h2 id="插入缓冲"><a href="#插入缓冲" class="headerlink" title="插入缓冲"></a>插入缓冲</h2><ol>
+<li>Insert Buffer<br>Insert Buffer是在插入数据时将辅助索引先放到Insert Buffer中,然后在按照一定的频率将Insert Buffer中的数据和辅助索引页的子节点进行合并,这样能够提高非聚集索引的插入性能</li>
+<li>Change Buffer<br>Change Buffer作为Insert Buffer的升级,会将所有对非聚集索引的操作进行缓冲</li>
+<li>Insert Buffer的内部结构<br>Insert Buffer的数据结构是B+树,在Mysql4.1之前每张表都有一颗B+树;在现在的版本中全局只有一颗B+树,负责对所有表的辅助索引进行Insert Buffer,默认为ibdata1<br>Insert Buffer的非叶子节点是由space(待插入记录表的表空间id),offer(偏移量)构成;叶子节点是由space,offer,metadata(操作辅助索引的元数据-顺序,标识,类型)</li>
+<li>merge Insert Buffer的过程<br>在三种情况下,MySql会将Insert Buffer刷新到辅助索引文件中,并且虽然Insert Buffer是有序的,但是在刷新时,是随机选取Insert Buffer中的一个页进行刷新,做这个的目的是为了保证公平性而舍弃顺序性.以下的三种情况会进行Inser Buffer的刷新</li>
+<li>辅助索引页被读取到缓冲池中</li>
+<li>Insert Buffer BitMap记录Insert Buffer可用空间不足时</li>
+<li>Master Thread线程对Insert Buffer的刷新</li>
+</ol>
+<h2 id="两次写"><a href="#两次写" class="headerlink" title="两次写"></a>两次写</h2><p>两次写指的是当在直接写入某页时发生宕机,会有丢失数据的风险.通过向将脏页的数据转移到内存中的doublewrite buffer中,在将doublewrite中的数据同步写到共享表空间的物理磁盘文件上,第二次才将doublewrite buffer中的文件刷新到数据文件(.ibd)中,这样可以尽量保证重做日志文件的完整性</p>
+<h2 id="自适应哈希索引"><a href="#自适应哈希索引" class="headerlink" title="自适应哈希索引"></a>自适应哈希索引</h2><p>自适应哈希索引指的是连续对热点数据的多次查询后会根据B+树索引生成对应的哈希索引,加快查询性能</p>
+<h2 id="异步IO"><a href="#异步IO" class="headerlink" title="异步IO"></a>异步IO</h2><p>异步IO可以提高操作磁盘的效率,</p>
+<h2 id="刷新邻接页"><a href="#刷新邻接页" class="headerlink" title="刷新邻接页"></a>刷新邻接页</h2><p>刷新邻接页指的是对脏页所在区的页进行检测,发现是脏页一并进行刷新.</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Mysql/" rel="tag"># Mysql</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/03/08/16.%E7%BD%91%E7%BB%9C%E5%8D%8F%E8%AE%AE/1.HTTP%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/" rel="next" title="计算机网络基础知识(一)">
+                <i class="fa fa-chevron-left"></i> 计算机网络基础知识(一)
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/03/20/6.mysql/MySql%E6%96%87%E4%BB%B6%E4%BD%93%E7%B3%BB/" rel="prev" title="MySql文件体系">
+                MySql文件体系 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="https://avatars3.githubusercontent.com/u/11427071?s=460&u=efb49b426d8fec1bb88b8884bc74eb9c30e37663&v=4"
+                alt="agmtopy" />
+            
+              <p class="site-author-name" itemprop="name">agmtopy</p>
+              <p class="site-description motion-element" itemprop="description">你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯</p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives">
+              
+                  <span class="site-state-item-count">114</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">22</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">66</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#体系结构"><span class="nav-number">1.</span> <span class="nav-text">体系结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#存储引擎"><span class="nav-number">2.</span> <span class="nav-text">存储引擎</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Master-Thread"><span class="nav-number">3.</span> <span class="nav-text">Master Thread</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#InnoDB特点"><span class="nav-number">4.</span> <span class="nav-text">InnoDB特点</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#插入缓冲"><span class="nav-number">5.</span> <span class="nav-text">插入缓冲</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#两次写"><span class="nav-number">6.</span> <span class="nav-text">两次写</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#自适应哈希索引"><span class="nav-number">7.</span> <span class="nav-text">自适应哈希索引</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#异步IO"><span class="nav-number">8.</span> <span class="nav-text">异步IO</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#刷新邻接页"><span class="nav-number">9.</span> <span class="nav-text">刷新邻接页</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">agmtopy</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+      <span class="post-meta-item-text">网站总字数&#58;</span>
+    
+    <span title="网站总字数">100.6k</span>
+  
+</div>
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
