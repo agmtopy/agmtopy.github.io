@@ -88,7 +88,7 @@
 <meta property="og:image" content="https://s3.ax1x.com/2021/03/15/6r8Q7q.png">
 <meta property="og:image" content="https://dev.mysql.com/doc/refman/8.0/en/images/innodb-architecture.png">
 <meta property="article:published_time" content="2021-03-15T13:54:51.000Z">
-<meta property="article:modified_time" content="2021-03-20T03:20:35.460Z">
+<meta property="article:modified_time" content="2021-03-20T11:46:23.826Z">
 <meta property="article:author" content="agmtopy">
 <meta property="article:tag" content="Mysql">
 <meta name="twitter:card" content="summary">
@@ -449,7 +449,7 @@
 <li>Insert Buffer BitMap记录Insert Buffer可用空间不足时</li>
 <li>Master Thread线程对Insert Buffer的刷新</li>
 </ol>
-<h2 id="两次写"><a href="#两次写" class="headerlink" title="两次写"></a>两次写</h2><p>两次写指的是当在直接写入某页时发生宕机,会有丢失数据的风险.通过向将脏页的数据转移到内存中的doublewrite buffer中,在将doublewrite中的数据同步写到共享表空间的物理磁盘文件上,第二次才将doublewrite buffer中的文件刷新到数据文件(.ibd)中,这样可以尽量保证重做日志文件的完整性</p>
+<h2 id="两次写"><a href="#两次写" class="headerlink" title="两次写"></a>两次写</h2><p>两次写指的是当在直接写入某页时发生宕机,会有丢失数据的风险.通过向将脏页的数据转移到内存中的doublewrite buffer中,在将doublewrite中的数据同步写到共享表空间的物理磁盘文件上,第二次才将doublewrite buffer中的文件刷新到数据文件(.ibd)中,这样可以尽量保证数据文件的完整性</p>
 <h2 id="自适应哈希索引"><a href="#自适应哈希索引" class="headerlink" title="自适应哈希索引"></a>自适应哈希索引</h2><p>自适应哈希索引指的是连续对热点数据的多次查询后会根据B+树索引生成对应的哈希索引,加快查询性能</p>
 <h2 id="异步IO"><a href="#异步IO" class="headerlink" title="异步IO"></a>异步IO</h2><p>异步IO可以提高操作磁盘的效率,</p>
 <h2 id="刷新邻接页"><a href="#刷新邻接页" class="headerlink" title="刷新邻接页"></a>刷新邻接页</h2><p>刷新邻接页指的是对脏页所在区的页进行检测,发现是脏页一并进行刷新.</p>
@@ -493,8 +493,8 @@
 
           <div class="post-nav-prev post-nav-item">
             
-              <a href="/2021/03/20/6.mysql/MySql%E6%96%87%E4%BB%B6%E4%BD%93%E7%B3%BB/" rel="prev" title="MySql文件体系">
-                MySql文件体系 <i class="fa fa-chevron-right"></i>
+              <a href="/2021/03/20/6.mysql/MySql%E6%96%87%E4%BB%B6%E5%92%8C%E8%A1%A8%E7%BB%93%E6%9E%84/" rel="prev" title="MySql文件和表结构">
+                MySql文件和表结构 <i class="fa fa-chevron-right"></i>
               </a>
             
           </div>
@@ -576,7 +576,7 @@
               
                 <a href="/archives">
               
-                  <span class="site-state-item-count">114</span>
+                  <span class="site-state-item-count">116</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -665,7 +665,7 @@
     
       <span class="post-meta-item-text">网站总字数&#58;</span>
     
-    <span title="网站总字数">100.6k</span>
+    <span title="网站总字数">103.1k</span>
   
 </div>
 
