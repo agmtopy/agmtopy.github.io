@@ -86,7 +86,7 @@
 <meta property="og:site_name" content="agmtopy博客">
 <meta property="og:description" content="记录&lt;&lt;MySQL技术内幕-InnoDB存储引擎&gt;&gt;阅读中存在的疑问点   P77 日志文件 如果使用RC隔离级别会出现类似数据丢失更新的现象,从而出现主从数据库上的数据不一致    bin_log的记录格式为’STATENEBT’是,会出现这样的情况为什么喃? 原因:   bin_log的记录顺序是commit的顺序,而不是执行顺序 RC中SQL的执行是立即执行的这样如">
 <meta property="article:published_time" content="2021-03-20T10:12:31.000Z">
-<meta property="article:modified_time" content="2021-03-20T11:18:42.852Z">
+<meta property="article:modified_time" content="2021-03-25T17:12:25.082Z">
 <meta property="article:author" content="agmtopy">
 <meta property="article:tag" content="Mysql">
 <meta name="twitter:card" content="summary">
@@ -325,7 +325,7 @@
                   <span class="post-meta-item-text">字数统计&#58;</span>
                 
                 <span title="字数统计">
-                  142
+                  178
                 </span>
               
 
@@ -380,6 +380,9 @@
 </ol>
 </blockquote>
 <hr>
+<ul>
+<li>P268 锁<br>InnoDB对于Insert的操作会检查插入记录的下一条记录是否被锁定,如果锁定则不允许操作</li>
+</ul>
 
       
     </div>
@@ -567,7 +570,7 @@
     
       <span class="post-meta-item-text">网站总字数&#58;</span>
     
-    <span title="网站总字数">103.1k</span>
+    <span title="网站总字数">103.4k</span>
   
 </div>
 
