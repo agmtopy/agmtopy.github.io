@@ -1,0 +1,20 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+      {
+        "type": "java",
+        "name": "Debug (Launch)",
+        "request": "launch",
+        "cwd": "${workspaceFolder}/bin",
+        "sourcePaths": [
+          "$(workspaceRoot)/src"
+        ],
+        "classPaths": [
+          "",
+          "$(workspaceRoot)/bin"
+        ],
+        "mainClass": "${fileBasenameNoExtension}",
+        "args": ""
+      }
+    ]
+  }
