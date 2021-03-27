@@ -1,0 +1,1195 @@
+<!DOCTYPE HTML>
+<html lang="zh-Hans">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="深入学习Java线程池, agmtopy博客">
+    <meta name="description" content="你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>深入学习Java线程池 | agmtopy博客</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 4.2.1"></head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">agmtopy博客</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>主页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="Search" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">agmtopy博客</div>
+        <div class="logo-desc">
+            
+            你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			主页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/blinkfox/hexo-theme-matery" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/blinkfox/hexo-theme-matery" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/20.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">深入学习Java线程池</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/">
+                                <span class="chip bg-color">线程池</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E6%96%87%E7%AB%A0%E6%94%B6%E8%97%8F/" class="post-category">
+                                文章收藏
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2020-06-09
+                </div>
+                
+
+                
+
+                
+
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h1 id="深入学习Java线程池"><a href="#深入学习Java线程池" class="headerlink" title="深入学习Java线程池"></a>深入学习Java线程池</h1><p>转载自:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">原文链接： stackify 翻译： ImportNew.com - 一杯哈希不加盐</span><br><span class="line">译文链接： http:&#x2F;&#x2F;www.importnew.com&#x2F;29212.html</span><br></pre></td></tr></table></figure>
+<h2 id="导语"><a href="#导语" class="headerlink" title="导语"></a>导语</h2><p>线程池是多线程编程中的核心概念，简单来说就是一组可以执行任务的空闲线程。<br>首先，我们了解一下多线程框架模型，明白为什么需要线程池。</p>
+<p>线程是在一个进程中可以执行一系列指令的执行环境，或称运行程序。多线程编程指的是用多个线程并行执行多个任务。当然，JVM 对多线程有良好的支持。</p>
+<p><strong>PS:进程可以简单的理解为程序，线程可以理解为进程下实际做事的小兵甲乙丙丁</strong></p>
+<p>尽管这带来了诸多优势，首当其冲的就是程序性能提高，但多线程编程也有缺点 —— 增加了代码复杂度、同步问题、非预期结果和增加创建线程的开销。</p>
+<p><strong>在这篇文章中，我们来了解一下如何使用 Java 线程池来缓解这些问题。</strong></p>
+<h2 id="java线程池"><a href="#java线程池" class="headerlink" title="java线程池"></a>java线程池</h2><p>Java 通过 executor 对象来实现自己的线程池模型。可以使用 executor 接口或其他线程池的实现，它们都允许细粒度的控制。</p>
+<p>java.util.concurrent 包中有以下接口：</p>
+<ul>
+<li>Executor —— 执行任务的简单接口</li>
+<li>ExecutorService —— 一个较复杂的接口，包含额外方法来管理任务和 executor 本身</li>
+<li>ScheduledExecutorService —— 扩展自 ExecutorService，增加了执行任务的调度方法</li>
+</ul>
+<p>除了这些接口，这个包中也提供了 Executors 类直接获取实现了这些接口的 executor 实例。一般来说，一个Java线程池包含以下部分：</p>
+<ul>
+<li>工作线程的池子，负责管理线程</li>
+<li>线程工厂，负责创建新线程</li>
+<li>等待执行的任务队列</li>
+</ul>
+<p>在下面的章节，让我们仔细看一看Java类和接口如何为线程池提供支持。</p>
+<h3 id="Executors-类和-Executor-接口"><a href="#Executors-类和-Executor-接口" class="headerlink" title="Executors 类和 Executor 接口"></a>Executors 类和 Executor 接口</h3><p>Executors 类包含工厂方法创建不同类型的线程池，Executor是个简单的线程池接口，只有一个execute() 方法。<br>我们通过一个例子来结合使用这两个类(接口)，首先创建一个单线程的线程池，然后用它执行一个简单的语句：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Executor executor = Executors.newSingleThreadExecutor();</span><br><span class="line">executor.execute(() -&gt; System.out.println(<span class="string">"Single thread pool test"</span>));</span><br></pre></td></tr></table></figure>
+
+<p>注意语句写成了lambda表达式，会被自动推断成Runnable类型。<br>如果有工作线程可用，execute() 方法将执行语句，否则就把Runnable任务放进队列，等待线程可用。</p>
+<p>基本上，executor 代替了显式创建和管理线程。</p>
+<p>Executors 类里的工厂方法可以创建很多类型的线程池：</p>
+<ul>
+<li>newSingleThreadExecutor()：包含单个线程和无界队列的线程池，同一时间只能执行一个任务</li>
+<li>newFixedThreadPool()：包含固定数量线程并共享无界队列的线程池；当所有线程处于工作状态，有新任务提交时，任务在队列中等待，直到一个线程变为可用状态</li>
+<li>newCachedThreadPool()：只有需要时创建新线程的线程池</li>
+<li>newWorkStealingThreadPool()：基于工作窃取（work-stealing）算法的线程池，后面章节详细说明</li>
+</ul>
+<p>ps:<strong>newWorkStealingThreadPool()</strong>的源代码是这样的</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> ExecutorService <span class="title">newWorkStealingPool</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">new</span> ForkJoinPool</span><br><span class="line">        (Runtime.getRuntime().availableProcessors(),</span><br><span class="line">            ForkJoinPool.defaultForkJoinWorkerThreadFactory,</span><br><span class="line">            <span class="keyword">null</span>, <span class="keyword">true</span>);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<blockquote>
+<p>Runtime.getRuntime().availableProcessors()返回的是机器的<strong>逻辑处理器数量</strong><br>默认的<strong>newWorkStealingPool</strong>会返回一个期望并行度为当前逻辑处理器数量的Fork/Join线程池</p>
+</blockquote>
+<p><strong>接下来，让我们看一下 ExecutorService 接口提供了哪些新功能？</strong></p>
+<ul>
+<li>ExecutorService</li>
+</ul>
+<p>创建 ExecutorService 方式之一便是通过 Excutors 类的工厂方法</p>
+<blockquote>
+<p>ExecutorService executor = Executors.newFixedThreadPool(10);</p>
+</blockquote>
+<p>除了execute()方法，接口也定义了相似的submit()方法，这个方法可以返回一个Future对象。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ExecutorService executor = Executors.newWorkStealingPool();</span><br><span class="line">Callable&lt;Double&gt; callableTask = () -&gt; &#123;</span><br><span class="line">    <span class="comment">//业务操作</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">0.02</span>d;</span><br><span class="line">&#125;;</span><br><span class="line">Future&lt;Double&gt; future = executor.submit(callableTask);</span><br><span class="line"><span class="comment">// 判断是否执行完毕</span></span><br><span class="line"><span class="keyword">if</span> (future.isDone()) &#123;</span><br><span class="line">    <span class="keyword">double</span> result = future.get();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>从上面的例子可以看到Future接口可以返回Callable类型任务的结果，而且能显示任务的执行状态。</p>
+<p>当没有任务等待执行时，ExecutorService并不会自动销毁，所以你可以使用shutdown()或shutdownNow()来显式关闭它。</p>
+<blockquote>
+<p>executor.shutdown();</p>
+</blockquote>
+<p><strong>ScheduledExecutorService</strong></p>
+<p>这是ExecutorService的一个子接口，增加了调度任务的方法</p>
+<blockquote>
+<p>ScheduledExecutorService executor = Executors.newScheduledThreadPool(10);</p>
+</blockquote>
+<p>schedule() 方法的参数指定执行的方法、延时和 TimeUnit</p>
+<blockquote>
+<p>Future<Double> future = executor.schedule(callableTask, 2, TimeUnit.MILLISECONDS);</p>
+</blockquote>
+<p>另外，这个接口定义了其他两个方法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">xecutor.scheduleAtFixedRate(</span><br><span class="line">() -&gt; System.out.println(<span class="string">"Fixed Rate Scheduled"</span>), <span class="number">2</span>, <span class="number">2000</span>, TimeUnit.MILLISECONDS);</span><br><span class="line">executor.scheduleWithFixedDelay(</span><br><span class="line">() -&gt; System.out.println(<span class="string">"Fixed Delay Scheduled"</span>), <span class="number">2</span>, <span class="number">2000</span>, TimeUnit.MILLISECONDS);</span><br></pre></td></tr></table></figure>
+
+<p>scheduleAtFixedRate() 方法延时 2 毫秒执行任务，然后每 2 秒重复一次。相似的，scheduleWithFixedDelay() 方法延时 2毫秒后执行第一次，然后在上一次执行完成 2 秒后再次重复执行。</p>
+<p>在下面的章节，我们来看一下 ExecutorService 接口的两个实现：ThreadPoolExecutor 和ForkJoinPool。</p>
+<p>ps:ScheduledExecutorService具有延迟功能的线程池</p>
+<p><strong>ThreadPoolExecutor</strong><br>这个线程池的实现增加了配置参数的能力。创建 ThreadPoolExecutor 对象最方便的方式就是通过Executors 工厂方法：</p>
+<blockquote>
+<p>ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);</p>
+</blockquote>
+<p>这种情况下，线程池按照默认值预配置了参数。线程数量由以下参数控制：</p>
+<ul>
+<li>corePoolSize 和 maximumPoolSize：表示线程数量的范围</li>
+<li>keepAliveTime：决定了额外线程存活时间</li>
+</ul>
+<p>我们深入了解一下这些参数如何使用。<br>当一个任务被提交时，如果执行中的线程数量小于 corePoolSize，一个新的线程被创建。如果运行的线程数量大于 corePoolSize，但小于 maximumPoolSize，并且任务队列已满时，依然会创建新的线程。如果多于 corePoolSize 的线程空闲时间超过 keepAliveTime，它们会被终止。<br>上面那个例子中，newFixedThreadPool() 方法创建的线程池，corePoolSize=maximumPoolSize=10 并且 keepAliveTime 为 0 秒。<br>如果你使用 newCachedThreadPool() 方法，创建的线程池 maximumPoolSize 为Integer.MAX_VALUE，并且 keepAliveTime 为 60 秒。</p>
+<blockquote>
+<p>ThreadPoolExecutor cachedPoolExecutor = (ThreadPoolExecutor) Executors.newCachedThreadPool();</p>
+</blockquote>
+<p>The parameters can also be set through a constructor or through setter methods:<br>这些参数也可以通过构造函数或setter方法设置：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ThreadPoolExecutor executor = <span class="keyword">new</span> ThreadPoolExecutor(<span class="number">24</span>, <span class="number">6</span>, <span class="number">60</span>, TimeUnit.SECONDS, <span class="keyword">new</span> LinkedBlockingQueue&lt;Runnable&gt;());</span><br><span class="line">executor.setMaximumPoolSize(<span class="number">8</span>);</span><br></pre></td></tr></table></figure>
+
+<p>ThreadPoolExecutor 的一个子类便是 ScheduledThreadPoolExecutor，它实现了ScheduledExecutorService 接口。你可以通过 newScheduledThreadPool() 工厂方法来创建这种类型的线程池。</p>
+<blockquote>
+<p>ScheduledThreadPoolExecutor executor = (ScheduledThreadPoolExecutor) Executors.newScheduledThreadPool(5);</p>
+</blockquote>
+<p>上面语句创建了一个线程池，corePoolSize 为 5，maximumPoolSize 无限制，keepAliveTime 为 0 秒。</p>
+<p><strong>ForkJoinPool</strong></p>
+<p>另一个线程池的实现是 ForkJoinPool 类。它实现了 ExecutorService 接口，并且是 Java 7 中 fork/join 框架的重要组件。</p>
+<p><strong>fork/join 框架基于“工作窃取算法”。简而言之，意思就是执行完任务的线程可以从其他运行中的线程“窃取”工作。</strong></p>
+<p><strong>ForkJoinPool 适用于任务创建子任务的情况，或者外部客户端创建大量小任务到线程池。</strong></p>
+<p>这种线程池的工作流程如下：</p>
+<ul>
+<li>创建 ForkJoinTask 子类</li>
+<li>根据某种条件将任务切分成子任务</li>
+<li>调用执行任务</li>
+<li>将任务结果合并</li>
+<li>实例化对象并添加到池中</li>
+</ul>
+<p>创建一个<strong>ForkJoinTask</strong>，你可以选择<strong>RecursiveAction</strong>或<strong>RecursiveTask</strong>这两个子类，后者有返回值。<br>我们来实现一个继承<strong>RecursiveTask</strong>的类，计算阶乘，并把任务根据阈值划分成子任务。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FactorialTask</span> <span class="keyword">extends</span> <span class="title">RecursiveTask</span>&lt;<span class="title">BigInteger</span>&gt; </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> start = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> n;</span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> THRESHOLD = <span class="number">20</span>;</span><br><span class="line"> </span><br><span class="line">    <span class="comment">// standard constructors</span></span><br><span class="line"> </span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">protected</span> BigInteger <span class="title">compute</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> ((n - start) &gt;= THRESHOLD) &#123;</span><br><span class="line">            <span class="keyword">return</span> ForkJoinTask.invokeAll(createSubtasks())</span><br><span class="line">              .stream()</span><br><span class="line">              .map(ForkJoinTask::join)</span><br><span class="line">              .reduce(BigInteger.ONE, BigInteger::multiply);</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> calculate(start, n);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个类需要实现的主要方法就是重写 compute() 方法，用于合并每个子任务的结果。</p>
+<p>具体划分任务逻辑在 createSubtasks() 方法中：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> Collection&lt;FactorialTask&gt; <span class="title">createSubtasks</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    List&lt;FactorialTask&gt; dividedTasks = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line">    <span class="keyword">int</span> mid = (start + n) / <span class="number">2</span>;</span><br><span class="line">    dividedTasks.add(<span class="keyword">new</span> FactorialTask(start, mid));</span><br><span class="line">    dividedTasks.add(<span class="keyword">new</span> FactorialTask(mid + <span class="number">1</span>, n));</span><br><span class="line">    <span class="keyword">return</span> dividedTasks;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>最后，calculate() 方法包含一定范围内的乘数。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> BigInteger <span class="title">calculate</span><span class="params">(<span class="keyword">int</span> start, <span class="keyword">int</span> n)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">return</span> IntStream.rangeClosed(start, n)</span><br><span class="line">      .mapToObj(BigInteger::valueOf)</span><br><span class="line">      .reduce(BigInteger.ONE, BigInteger::multiply);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>接下来，任务可以添加到线程池：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ForkJoinPool pool = ForkJoinPool.commonPool();</span><br><span class="line">BigInteger result = pool.invoke(<span class="keyword">new</span> FactorialTask(<span class="number">100</span>));</span><br></pre></td></tr></table></figure>
+
+<p><strong>ThreadPoolExecutor 与 ForkJoinPool 对比</strong></p>
+<p>初看上去，似乎 fork/join 框架带来性能提升。但是这取决于你所解决问题的类型。<br>当选择线程池时，非常重要的一点是牢记创建、管理线程以及线程间切换执行会带来的开销。</p>
+<ul>
+<li><p><strong>ThreadPoolExecutor可以控制线程数量和每个线程执行的任务,这很适合你需要在不同的线程上执行少量巨大的任务</strong></p>
+</li>
+<li><p><strong>相比较而言，ForkJoinPool 基于线程从其他线程“窃取”任务。正因如此，当任务可以分割成小任务时可以提高效率。</strong></p>
+</li>
+</ul>
+<p>为了实现工作窃取算法，fork/join 框架使用两种队列：</p>
+<ul>
+<li>包含所有任务的主要队列</li>
+<li>每个线程的任务队列</li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">当线程执行完自己任务队列中的任务，它们试图从其他队列获取任务。为了使这一过程更加高效，线程任务队列使用双端队列（double ended queue）数据结构，一端与线程交互，另一端用于“窃取”任务。</span><br></pre></td></tr></table></figure>
+
+<p>来自The H Developer的图很好的表现出了这一过程：</p>
+<p><img src="https://s1.ax1x.com/2020/06/09/t5ffI0.png" alt="t5ffI0.png"></p>
+<p>和这种模型相比，ThreadPoolExecutor 只使用一个主要队列。<br>最后要注意的一点 ForkJoinPool 只适用于任务可以创建子任务。否则它和 ThreadPoolExecutor没区别，甚至开销更大。</p>
+<p><strong>ps:每个工作线程都维持着一个双端的任务队列，当一个工作线程执行完成对应工作队列中的任务时，会去其他线程对应的任务队列尾端去获取待执行的任务来进行执行。</strong></p>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>线程池有很大优势，简单来说就是可以将任务的执行从线程的创建和管理中分离。另外，如果使用得当，它们可以极大提高应用的性能。<br>如果你学会充分利用线程池，Java 生态系统好处便是其中有很多成熟稳定的线程池实现。</p>
+<h2 id="收藏笔记"><a href="#收藏笔记" class="headerlink" title="收藏笔记"></a>收藏笔记</h2><p>展示了由<strong>Executors</strong>提供的几种常用的线程池：</p>
+<ol>
+<li>ScheduledExecutorService</li>
+<li>ThreadPoolExecutor</li>
+<li>ForkJoinPool</li>
+</ol>
+<p>前两种都是基于<strong>ThreadPoolExecutor</strong>的封装，最后一种是基于<strong>ForkJoinPool</strong>的封装。</p>
+<p><strong>ThreadPoolExecutor</strong>适合于执行少量耗时的任务，线程数可估。</p>
+<p><strong>ForkJoinPool</strong>适合于可分解的任务</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">final</span> ForkJoinTask&lt;V&gt; <span class="title">fork</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    Thread t;</span><br><span class="line">    <span class="keyword">if</span> ((t = Thread.currentThread()) <span class="keyword">instanceof</span> ForkJoinWorkerThread)</span><br><span class="line">        ((ForkJoinWorkerThread)t).workQueue.push(<span class="keyword">this</span>);</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">        ForkJoinPool.common.externalPush(<span class="keyword">this</span>);</span><br><span class="line">    <span class="keyword">return</span> <span class="keyword">this</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>RecursiveTask 提交任务时如果提交线程是ForkJoinWorkerThread就向线程所属于的任务队列进行提交;<br>如果不是就说明是业务线程第一次向ForkJoinThreadPool提交任务，就调用ForkJoinPool的通用线程池进行任务的提交</p>
+<ul>
+<li>初始化<strong>ForkJoinPool.common</strong><br><img src="https://s1.ax1x.com/2020/06/10/tTxzF0.png" alt="tTxzF0.png"></li>
+</ul>
+<blockquote>
+<p>4个逻辑处理器-1，得到forkJoin的并行度为3</p>
+</blockquote>
+<p>CPU逻辑核数（CPU线程数，Thread）：通过超线程技术，能将一个物理核分成多个逻辑核<br>一般情况，一颗物理CPU可以有多个物理内核，加上intel的超线程技术（HT, Hyper-Threading）能够把一个物理处理器（核心，内核）在软件层变成两个逻辑处理器，可以使处理器在某一时刻，同步并行处理更多指令和数据（即有多个线程并行工作）。</p>
+<p>逻辑核心数指的就是线程数</p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        Author:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">agmtopy</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        Link:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://agmtopy.gitee.io/2020/06/09/14.%E6%94%B6%E8%97%8F%E6%96%87%E7%AB%A0/6.%E6%B7%B1%E5%85%A5%E5%AD%A6%E4%B9%A0Java%E7%BA%BF%E7%A8%8B%E6%B1%A0/">https://agmtopy.gitee.io/2020/06/09/14.%E6%94%B6%E8%97%8F%E6%96%87%E7%AB%A0/6.%E6%B7%B1%E5%85%A5%E5%AD%A6%E4%B9%A0Java%E7%BA%BF%E7%A8%8B%E6%B1%A0/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        Reprint policy:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    All articles in this blog are used except for special statements
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    reprint policy. If reproduced, please indicate source
+                    <a href="/about" target="_blank">agmtopy</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>Copied successfully, please follow the reprint policy of this article</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">more</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/%E7%BA%BF%E7%A8%8B%E6%B1%A0/">
+                                    <span class="chip bg-color">线程池</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+            <div class="card">
+                <a href="/2020/06/10/12.JVM/3.JDK%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="JDK类加载机制">
+                        
+                        <span class="card-title">JDK类加载机制</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-06-10
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/jvm/" class="post-category">
+                                    jvm
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E7%B1%BB%E5%8A%A0%E8%BD%BD/">
+                        <span class="chip bg-color">类加载</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2020/06/08/1.%E6%9D%82%E8%AE%B0/Zookeeper%E7%9A%84%E7%9B%B8%E5%85%B3%E6%80%9D%E8%80%83/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="Zookeeper的相关思考">
+                        
+                        <span class="card-title">Zookeeper的相关思考</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-06-08
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%9D%82%E8%AE%B0/" class="post-category">
+                                    杂记
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Zookeeper/">
+                        <span class="chip bg-color">Zookeeper</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='false'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/meting@2/dist/Meting.min.js"></script>
+
+    
+    <div class="container row center-align" style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2021</span>
+            
+            <span id="year">2019</span>
+            <a href="/about" target="_blank">agmtopy</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            
+            
+            
+            
+            
+
+            
+            
+
+            
+            <br>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+
+
+    <a href="mailto:zjytian@gmail.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;Search</span>
+            <input type="search" id="searchInput" name="s" placeholder="Please enter a search keyword"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
