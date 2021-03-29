@@ -706,7 +706,7 @@
 <li>AbstractXmlApplicationContext类图</li>
 </ul>
 <p><img src="https://s2.ax1x.com/2020/03/04/3ohgJO.png" alt="3ohgJO.png"><br>从类图可以看得出ApplicationContxt主要还是实现BeanFactory的子类，并且也继承了实现Spring容器其他特性的功能，例如事件监听、资源文件、国际化等接口</p>
-<p>以下截取☞<a href="https://segmentfault.com/a/1190000008291174" target="_blank" rel="noopener">Learn Spring - Spring IoC</a>的总结</p>
+<p>以下截取☞<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000008291174">Learn Spring - Spring IoC</a>的总结</p>
 <ul>
 <li><p><strong>ApplicationEventPublisher</strong>：让容器拥有发布应用上下文事件的功能，包括容器启动事件、关闭事件等。实现了ApplicationListener事件监听接口的Bean 可以接收到容器事件，并对事件进行响应处理。在ApplicationContext抽象实现类AbstractApplicationContext中，我们可以发现存在一个ApplicationEventMulticaster，它负责保存所有监听器，以便在容器产生上下文事件时通知这些事件监听者。</p>
 </li>
@@ -720,17 +720,17 @@
 </li>
 </ul>
 <h3 id="WebApplicantContext组件类"><a href="#WebApplicantContext组件类" class="headerlink" title="WebApplicantContext组件类"></a>WebApplicantContext组件类</h3><p><strong>WebApplicationContext</strong>是一个专门为Web应用准备的，它允许从Web根目录根据相对路径进行装载配置文件完成初始化。从WebApplicationContext中可以获取ServletContext引用，整个Web应用上下文对象将作为属性放置在ServletContext中，以便Web应用环境可以访问spring上下文。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>主要介绍了Spring容器和组件，Spring组件主要是分为BeanFactory组件和ApplicationContext组件。这两个组件下面有分别派生出其他的组件例如BeanFactory下又有<strong>AutowireCapableBeanFactory</strong>实现了自动装配和应用InstantiationAwareBeanPostProcessor接口的方法、<strong>ConfigurableBeanFactory</strong>可配置化的BeanFactory增强了BeanFactory的能力；Application下的<strong>ApplicationEventPublisher</strong>让容器拥有发布应用上下文事件的功能(启动和关闭)、<strong>ConfigurableApplicationContext</strong>扩展于ApplicationContext，它新增加了两个主要的方法：<strong>refresh()</strong>和close()，让ApplicationContext具有启动、刷新和关闭应用上下文的能力。</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>主要介绍了Spring容器和组件，Spring组件主要是分为BeanFactory组件和ApplicationContext组件。这两个组件下面有分别派生出其他的组件例如BeanFactory下又有<strong>AutowireCapableBeanFactory</strong>实现了自动装配和应用InstantiationAwareBeanPostProcessor接口的方法、<strong>ConfigurableBeanFactory</strong>可配置化的BeanFactory增强了BeanFactory的能力；Application下的<strong>ApplicationEventPublisher</strong>让容器拥有发布应用上下文事件的功能(启动和关闭)、<strong>ConfigurableApplicationContext</strong>扩展于ApplicationContext，它新增加了两个主要的方法：**refresh()**和close()，让ApplicationContext具有启动、刷新和关闭应用上下文的能力。</p>
 <blockquote>
 <p>参考资料</p>
 </blockquote>
 <ul>
-<li><a href="https://blog.csdn.net/qq_34598667/article/details/83245753" target="_blank" rel="noopener">Spring容器是什么(浅显易懂)？</a></li>
-<li><a href="https://www.jianshu.com/p/6a2100dd6532" target="_blank" rel="noopener">Spring 容器是什么？</a></li>
-<li><a href="https://segmentfault.com/a/1190000008291174" target="_blank" rel="noopener">Learn Spring - Spring IoC</a></li>
-<li><a href="https://blog.csdn.net/xiao__jia__jia/article/details/102470325" target="_blank" rel="noopener">ConfigurableApplicationContext</a></li>
-<li><a href="https://www.jianshu.com/p/2854d8984dfc" target="_blank" rel="noopener">理解Spring容器、BeanFactory和ApplicationContext</a></li>
-<li><a href="https://www.cnblogs.com/zrtqsk/p/4028453.html" target="_blank" rel="noopener">Spring源码分析——BeanFactory体系之接口详细分析</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_34598667/article/details/83245753">Spring容器是什么(浅显易懂)？</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/6a2100dd6532">Spring 容器是什么？</a></li>
+<li><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000008291174">Learn Spring - Spring IoC</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/xiao__jia__jia/article/details/102470325">ConfigurableApplicationContext</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/2854d8984dfc">理解Spring容器、BeanFactory和ApplicationContext</a></li>
+<li><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zrtqsk/p/4028453.html">Spring源码分析——BeanFactory体系之接口详细分析</a></li>
 </ul>
 
                 

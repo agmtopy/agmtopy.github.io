@@ -523,10 +523,14 @@
 </li>
 </ol>
 <ul>
-<li>反面例子<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">ADD http://pyropus.ca/software/memtester/old-versions/memtester-4.3.0.tar.gz /tmp/</span><br><span class="line">RUN tar -xvf /tmp/memtester-4.3.0.tar.gz -C /tmp</span><br><span class="line">RUN make -C /tmp/memtester-4.3.0 &amp;&amp; make -C /tmp/memtester-4.3.0 install</span><br></pre></td></tr></table></figure></li>
+<li>反面例子<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ADD http://pyropus.ca/software/memtester/old-versions/memtester-4.3.0.tar.gz /tmp/
+RUN <span class="token function">tar</span> -xvf /tmp/memtester-4.3.0.tar.gz -C /tmp
+RUN <span class="token function">make</span> -C /tmp/memtester-4.3.0 <span class="token operator">&amp;&amp;</span> <span class="token function">make</span> -C /tmp/memtester-4.3.0 <span class="token function">install</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></li>
 <li>替代例子</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">RUN wget -O /tmp/memtester-4.3.0.tar.gz http://pyropus.ca/software/memtester/old-versions/memtester-4.3.0.tar.gz \</span><br><span class="line">&amp;&amp; tar -xvf /tmp/memtester-4.3.0.tar.gz -C /tmp \</span><br><span class="line">&amp;&amp; make -C /tmp/memtester-4.3.0 &amp;&amp; make -C /tmp/memtester-4.3.0 install</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">RUN <span class="token function">wget</span> -O /tmp/memtester-4.3.0.tar.gz http://pyropus.ca/software/memtester/old-versions/memtester-4.3.0.tar.gz <span class="token punctuation">\</span>
+<span class="token operator">&amp;&amp;</span> <span class="token function">tar</span> -xvf /tmp/memtester-4.3.0.tar.gz -C /tmp <span class="token punctuation">\</span>
+<span class="token operator">&amp;&amp;</span> <span class="token function">make</span> -C /tmp/memtester-4.3.0 <span class="token operator">&amp;&amp;</span> <span class="token function">make</span> -C /tmp/memtester-4.3.0 <span class="token function">install</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 
 
@@ -622,7 +626,7 @@
 </ol>
 <ul>
 <li>小结<blockquote>
-<p>当Docker新建一个容器时,会创建这6种Namespace，来进行资源隔离。Namespace是Linux内核提供的特性，该特性可以实现在同一个主机上对<strong>进程ID</strong>、<strong>主机名</strong>、用户ID、<strong>文件名</strong>、<strong>网络和进程间通信等资源的隔离</strong></p>
+<p>当Docker新建一个容器时,会创建这6种Namespace，来进行资源隔离。Namespace是Linux内核提供的特性，该特性可以实现在同一个主机上对<strong>进程ID__、__主机名__、用户ID、__文件名__、__网络和进程间通信等资源的隔离</strong></p>
 </blockquote>
 </li>
 </ul>
@@ -651,7 +655,7 @@
 </li>
 </ol>
 <blockquote>
-<p>Docker 创建容器时，Docker 会根据启动容器的参数，在对应的 cgroups 子系统下创建以<strong>容器ID</strong>为名称的目录, 然后根据容器启动时设置的资源限制参数, 修改对应的 cgroups 子系统资源限制文件, 从而达到资源限制的效果。</p>
+<p>Docker 创建容器时，Docker 会根据启动容器的参数，在对应的 cgroups 子系统下创建以__容器ID__为名称的目录, 然后根据容器启动时设置的资源限制参数, 修改对应的 cgroups 子系统资源限制文件, 从而达到资源限制的效果。</p>
 </blockquote>
 <h4 id="Docker组件的构成"><a href="#Docker组件的构成" class="headerlink" title="Docker组件的构成"></a>Docker组件的构成</h4><p>Docker整体架构采用C/S架构，主要由客户端/服务端两大部分组成。客户端负责发送指令，服务端负责执行指令。</p>
 <ul>

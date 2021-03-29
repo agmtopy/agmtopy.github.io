@@ -433,7 +433,7 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="jdk的类加载机制"><a href="#jdk的类加载机制" class="headerlink" title="jdk的类加载机制"></a>jdk的类加载机制</h1><h2 id="类加载的过程"><a href="#类加载的过程" class="headerlink" title="类加载的过程"></a>类加载的过程</h2><p><a href="https://imgchr.com/i/t7kEid" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/06/10/t7kEid.png" alt="t7kEid.png"></a></p>
+                <h1 id="jdk的类加载机制"><a href="#jdk的类加载机制" class="headerlink" title="jdk的类加载机制"></a>jdk的类加载机制</h1><h2 id="类加载的过程"><a href="#类加载的过程" class="headerlink" title="类加载的过程"></a>类加载的过程</h2><p><a target="_blank" rel="noopener" href="https://imgchr.com/i/t7kEid"><img src="https://s1.ax1x.com/2020/06/10/t7kEid.png" alt="t7kEid.png"></a></p>
 <p>类加载主要分为：</p>
 <p><strong>加载</strong> -&gt; <strong>验证</strong> -&gt; <strong>准备</strong> -&gt; <strong>解析</strong> -&gt; <strong>初始化</strong></p>
 <ul>
@@ -470,7 +470,20 @@
 </ul>
 <p>解析过程保证了相互引用的完整性，把继承与组合推进到运行时</p>
 <ul>
-<li>初始化<br>先来看一端代码<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">A</span> </span>&#123;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> a = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">static</span> &#123;</span><br><span class="line">        a = <span class="number">1</span>;</span><br><span class="line">        b = <span class="number">1</span>;</span><br><span class="line">        b = b + <span class="number">1</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">int</span> b = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        System.out.println(a);</span><br><span class="line">        System.out.println(b);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<li>初始化<br>先来看一端代码<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">A</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">static</span> <span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">static</span> <span class="token punctuation">&#123;</span>
+        a <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        b <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+        b <span class="token operator">=</span> b <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">static</span> <span class="token keyword">int</span> b <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 </li>
 </ul>
@@ -501,7 +514,7 @@
 </ul>
 <p><strong>WebAppClassLoader</strong>的类加载器优先加载。等它加载不到的时候，再交给上层的 ClassLoader 进行加载。这个加载器用来隔绝不同应用的 .class 文件，比如你的两个应用，可能会依赖同一个第三方的不同版本，它们是相互没有影响的。</p>
 <ul>
-<li>SPI机制<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">SPI 实际上是“基于接口的编程＋策略模式＋配置文件”组合实现的动态加载机制，主要使用 java.util.ServiceLoader 类进行动态装载。</span><br></pre></td></tr></table></figure>
+<li>SPI机制<pre class="line-numbers language-none"><code class="language-none">SPI 实际上是“基于接口的编程＋策略模式＋配置文件”组合实现的动态加载机制，主要使用 java.util.ServiceLoader 类进行动态装载。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 </li>
 </ul>

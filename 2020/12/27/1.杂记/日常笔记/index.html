@@ -439,28 +439,33 @@
 <h2 id="docker-command"><a href="#docker-command" class="headerlink" title="docker command"></a>docker command</h2><ol>
 <li>mysql 启动命令</li>
 </ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -p 3306:3306 --name mysql_1 -e MYSQL_ROOT_PASSWORD=123456 -d mysql:5.7.2</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker run -p <span class="token number">3306</span>:3306 --name mysql_1 -e <span class="token assign-left variable">MYSQL_ROOT_PASSWORD</span><span class="token operator">=</span><span class="token number">123456</span> -d mysql:5.7.2<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <ol start="2">
 <li>mongo 启动命令</li>
 </ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -itd --name mongo -p 27017:27017 mongo --auth</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker run -itd --name mongo -p <span class="token number">27017</span>:27017 mongo --auth<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <ol start="3">
 <li>设置账户</li>
 </ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"> //创建用户并授权</span><br><span class="line"> db.createUser(&#123;user: <span class="string">"axonUser"</span>, <span class="built_in">pwd</span>: <span class="string">"123456"</span>, roles : [&#123;role: <span class="string">"readWrite"</span>, db: <span class="string">"interviewTest"</span>&#125;]&#125;);</span><br><span class="line"></span><br><span class="line"> //更新用户权限</span><br><span class="line">db.grantRolesToUser(<span class="string">"axonUser"</span>,[&#123;role:<span class="string">"readWrite"</span>, db:<span class="string">"axon"</span>&#125;]);</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"> //创建用户并授权
+ db.createUser<span class="token punctuation">(</span><span class="token punctuation">&#123;</span>user: <span class="token string">"axonUser"</span>, pwd: <span class="token string">"123456"</span>, roles <span class="token builtin class-name">:</span> <span class="token punctuation">[</span><span class="token punctuation">&#123;</span>role: <span class="token string">"readWrite"</span>, db: <span class="token string">"interviewTest"</span><span class="token punctuation">&#125;</span><span class="token punctuation">]</span><span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+ //更新用户权限
+db.grantRolesToUser<span class="token punctuation">(</span><span class="token string">"axonUser"</span>,<span class="token punctuation">[</span><span class="token punctuation">&#123;</span>role:<span class="token string">"readWrite"</span>, db:<span class="token string">"axon"</span><span class="token punctuation">&#125;</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>4.RabbitMQ 启动命令</p>
 <ul>
 <li>windows cmd</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d --name rabbitmq -p 5672:5672 -p 15672:15672 -v E:\dockerfile\RabbitMQ:/var/lib/rabbitmq --hostname myRabbit -e RABBITMQ_DEFAULT_VHOST=my_vhost  -e RABBITMQ_DEFAULT_USER=admin -e RABBITMQ_DEFAULT_PASS=admin rabbitmq:latest</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker run -d --name rabbitmq -p <span class="token number">5672</span>:5672 -p <span class="token number">15672</span>:15672 -v E:<span class="token punctuation">\</span>dockerfile<span class="token punctuation">\</span>RabbitMQ:/var/lib/rabbitmq --hostname myRabbit -e <span class="token assign-left variable">RABBITMQ_DEFAULT_VHOST</span><span class="token operator">=</span>my_vhost  -e <span class="token assign-left variable">RABBITMQ_DEFAULT_USER</span><span class="token operator">=</span>admin -e <span class="token assign-left variable">RABBITMQ_DEFAULT_PASS</span><span class="token operator">=</span>admin rabbitmq:latest<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <ol start="5">
 <li>启动RabbitMQ admin命令</li>
 </ol>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec -it rabbitmq rabbitmq-plugins enable rabbitmq_management</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">docker exec <span class="token operator">-</span>it rabbitmq rabbitmq<span class="token operator">-</span>plugins enable rabbitmq_management<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
                 
             </div>
             <hr/>

@@ -692,7 +692,7 @@ Git
 JDK1.8+
 
 clone跳过，下载后导入idea会自动使用Gradle来Build项目
-1gradlew :spring-oxm:compileTestJava
+gradlew :spring-oxm:compileTestJava
 
                                 
                             </div>
@@ -1076,8 +1076,10 @@ spring MVC概述如果要在web环境中使用IOC容器，需要spring IOC设计
                         <div class="card-content article-content">
                             <div class="summary block-with-text">
                                 
-                                    bean的生命周期bean的生命周期可以通过AbstrctApplicationContext.refresh()方法进行加载普通bean可以得出。
-refresh()123456789101112131415161718192021222
+                                    bean的生命周期bean的生命周期可以通过**AbstrctApplicationContext.refresh()**方法进行加载普通bean可以得出。
+refresh()
+@Override
+	public void refresh(
                                 
                             </div>
                             <div class="publish-info">

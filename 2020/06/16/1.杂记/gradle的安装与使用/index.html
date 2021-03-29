@@ -463,7 +463,19 @@
 <ol>
 <li>初始化阶段<br>此阶段读取根目录下的<strong>setting.gradle</strong>中的include信息，来决定构建哪些工程。以spring为例</li>
 </ol>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">## 省略若干项目</span><br><span class="line">include <span class="string">"spring-websocket"</span></span><br><span class="line">include <span class="string">"spring-framework-bom"</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// Exposes gradle buildSrc for IDE support</span></span><br><span class="line">include <span class="string">"buildSrc"</span></span><br><span class="line">rootProject.children.find&#123; it.name == <span class="string">"buildSrc"</span> &#125;.name = <span class="string">"spring-build-src"</span></span><br><span class="line"></span><br><span class="line">rootProject.name = <span class="string">"spring"</span></span><br><span class="line">rootProject.children.each &#123;project -&gt;</span><br><span class="line">	project.buildFileName = <span class="string">"$&#123;project.name&#125;.gradle"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-Groovy" data-language="Groovy"><code class="language-Groovy">
+## 省略若干项目
+include &quot;spring-websocket&quot;
+include &quot;spring-framework-bom&quot;
+
+&#x2F;&#x2F; Exposes gradle buildSrc for IDE support
+include &quot;buildSrc&quot;
+rootProject.children.find&#123; it.name &#x3D;&#x3D; &quot;buildSrc&quot; &#125;.name &#x3D; &quot;spring-build-src&quot;
+
+rootProject.name &#x3D; &quot;spring&quot;
+rootProject.children.each &#123;project -&gt;
+	project.buildFileName &#x3D; &quot;$&#123;project.name&#125;.gradle&quot;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 <ol start="2">
@@ -472,10 +484,45 @@
 <ul>
 <li><strong>spring-beans</strong>的gradle文件</li>
 </ul>
-<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//本项目的描述</span></span><br><span class="line">description = <span class="string">"Spring Beans"</span></span><br><span class="line"><span class="comment">//插件</span></span><br><span class="line">apply <span class="string">plugin:</span> <span class="string">"groovy"</span></span><br><span class="line"><span class="comment">//依赖关系</span></span><br><span class="line">dependencies &#123;</span><br><span class="line">    <span class="comment">//依赖同一个项目下的spring-core模块</span></span><br><span class="line">	compile(project(<span class="string">":spring-core"</span>))</span><br><span class="line">    <span class="comment">//"javax.inject:javax.inject:1"等同与pom文件</span></span><br><span class="line">    <span class="comment">//&lt;dependency&gt;</span></span><br><span class="line">    <span class="comment">// &lt;groupId&gt;javax.inject&lt;/groupId&gt;</span></span><br><span class="line">    <span class="comment">// &lt;artifactId&gt;javax.inject&lt;/artifactId&gt;</span></span><br><span class="line">    <span class="comment">// &lt;version&gt;1&lt;/version&gt;</span></span><br><span class="line">    <span class="comment">// &lt;scope&gt;compile&lt;/scope&gt;</span></span><br><span class="line">    <span class="comment">//&lt;/dependency&gt;</span></span><br><span class="line">	optional(<span class="string">"javax.inject:javax.inject:1"</span>)</span><br><span class="line">	optional(<span class="string">"org.yaml:snakeyaml:1.20"</span>)</span><br><span class="line">    optional(<span class="string">"org.codehaus.groovy:groovy-all:$&#123;groovyVersion&#125;"</span>)</span><br><span class="line">	optional(<span class="string">"org.jetbrains.kotlin:kotlin-reflect:$&#123;kotlinVersion&#125;"</span>)</span><br><span class="line">	optional(<span class="string">"org.jetbrains.kotlin:kotlin-stdlib:$&#123;kotlinVersion&#125;"</span>)</span><br><span class="line">    <span class="comment">//只会在测试期间存在</span></span><br><span class="line">	testCompile(<span class="string">"org.apache.tomcat.embed:tomcat-embed-core:$&#123;tomcatVersion&#125;"</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-Groovy" data-language="Groovy"><code class="language-Groovy">&#x2F;&#x2F;本项目的描述
+description &#x3D; &quot;Spring Beans&quot;
+&#x2F;&#x2F;插件
+apply plugin: &quot;groovy&quot;
+&#x2F;&#x2F;依赖关系
+dependencies &#123;
+    &#x2F;&#x2F;依赖同一个项目下的spring-core模块
+	compile(project(&quot;:spring-core&quot;))
+    &#x2F;&#x2F;&quot;javax.inject:javax.inject:1&quot;等同与pom文件
+    &#x2F;&#x2F;&lt;dependency&gt;
+    &#x2F;&#x2F; &lt;groupId&gt;javax.inject&lt;&#x2F;groupId&gt;
+    &#x2F;&#x2F; &lt;artifactId&gt;javax.inject&lt;&#x2F;artifactId&gt;
+    &#x2F;&#x2F; &lt;version&gt;1&lt;&#x2F;version&gt;
+    &#x2F;&#x2F; &lt;scope&gt;compile&lt;&#x2F;scope&gt;
+    &#x2F;&#x2F;&lt;&#x2F;dependency&gt;
+	optional(&quot;javax.inject:javax.inject:1&quot;)
+	optional(&quot;org.yaml:snakeyaml:1.20&quot;)
+    optional(&quot;org.codehaus.groovy:groovy-all:$&#123;groovyVersion&#125;&quot;)
+	optional(&quot;org.jetbrains.kotlin:kotlin-reflect:$&#123;kotlinVersion&#125;&quot;)
+	optional(&quot;org.jetbrains.kotlin:kotlin-stdlib:$&#123;kotlinVersion&#125;&quot;)
+    &#x2F;&#x2F;只会在测试期间存在
+	testCompile(&quot;org.apache.tomcat.embed:tomcat-embed-core:$&#123;tomcatVersion&#125;&quot;)
+&#125;
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <ul>
-<li><strong>spring-core</strong>的gradle文件<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">dependencies &#123;</span><br><span class="line">    <span class="comment">//省略...</span></span><br><span class="line">	cglib(<span class="string">"cglib:cglib:$&#123;cglibVersion&#125;@jar"</span>)</span><br><span class="line">	objenesis(<span class="string">"org.objenesis:objenesis:$&#123;objenesisVersion&#125;@jar"</span>)</span><br><span class="line">	jarjar(<span class="string">"com.googlecode.jarjar:jarjar:1.3"</span>)</span><br><span class="line">    <span class="comment">//省略...</span></span><br><span class="line">	compile(files(cglibRepackJar))</span><br><span class="line">	compile(project(<span class="string">":spring-jcl"</span>))</span><br><span class="line">	optional(<span class="string">"io.netty:netty-buffer"</span>)</span><br><span class="line">	testCompile(<span class="string">"com.fasterxml.woodstox:woodstox-core:5.0.3"</span>) &#123;</span><br><span class="line">		exclude <span class="string">group:</span> <span class="string">"stax"</span>, <span class="string">module:</span> <span class="string">"stax-api"</span></span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<li><strong>spring-core</strong>的gradle文件<pre class="line-numbers language-Groovy" data-language="Groovy"><code class="language-Groovy">dependencies &#123;
+    &#x2F;&#x2F;省略...
+	cglib(&quot;cglib:cglib:$&#123;cglibVersion&#125;@jar&quot;)
+	objenesis(&quot;org.objenesis:objenesis:$&#123;objenesisVersion&#125;@jar&quot;)
+	jarjar(&quot;com.googlecode.jarjar:jarjar:1.3&quot;)
+    &#x2F;&#x2F;省略...
+	compile(files(cglibRepackJar))
+	compile(project(&quot;:spring-jcl&quot;))
+	optional(&quot;io.netty:netty-buffer&quot;)
+	testCompile(&quot;com.fasterxml.woodstox:woodstox-core:5.0.3&quot;) &#123;
+		exclude group: &quot;stax&quot;, module: &quot;stax-api&quot;
+	&#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 </li>
 </ul>
 <ol start="3">
@@ -488,20 +535,48 @@
 <ul>
 <li>task定义示例</li>
 </ul>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">task</span> helloword &#123;</span><br><span class="line">    <span class="keyword">println</span> <span class="string">'hello word!'</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-gradle" data-language="gradle"><code class="language-gradle">task helloword &#123;
+    println &#39;hello word!&#39;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <ul>
 <li>task依赖示例</li>
 </ul>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment">//task显式调用</span></span><br><span class="line"> <span class="keyword">task</span> task1 &#123;</span><br><span class="line">       <span class="keyword">println</span> <span class="string">'hello word!'</span></span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="keyword">task</span> task2 &#123;</span><br><span class="line">     <span class="keyword">println</span> <span class="string">'hello task2!'</span></span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> task1.dependsOn task2</span><br><span class="line"></span><br><span class="line"> <span class="comment">//task内依赖</span></span><br><span class="line"> <span class="keyword">task</span> task3(dependsOn: task2) &#123;</span><br><span class="line">     <span class="keyword">println</span> <span class="string">'hello task3!'</span></span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-gradle" data-language="gradle"><code class="language-gradle">
+&#x2F;&#x2F;task显式调用
+ task task1 &#123;
+       println &#39;hello word!&#39;
+ &#125;
+
+ task task2 &#123;
+     println &#39;hello task2!&#39;
+ &#125;
+
+ task1.dependsOn task2
+
+ &#x2F;&#x2F;task内依赖
+ task task3(dependsOn: task2) &#123;
+     println &#39;hello task3!&#39;
+ &#125;
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 <ul>
 <li>跳过依赖</li>
 </ul>
-<figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">compile</span>.<span class="keyword">doFirst</span> &#123;</span><br><span class="line">    <span class="comment">// Here you would put arbitrary conditions in real life.</span></span><br><span class="line">    <span class="comment">// But this is used in an integration test so we want defined behavior.</span></span><br><span class="line">    <span class="keyword">if</span> (<span class="keyword">true</span>) &#123; <span class="keyword">throw</span> <span class="keyword">new</span> StopExecutionException() &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-Gradle" data-language="Gradle"><code class="language-Gradle">
+compile.doFirst &#123;
+    &#x2F;&#x2F; Here you would put arbitrary conditions in real life.
+    &#x2F;&#x2F; But this is used in an integration test so we want defined behavior.
+    if (true) &#123; throw new StopExecutionException() &#125;
+&#125;
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h3 id="Gradle申明依赖"><a href="#Gradle申明依赖" class="headerlink" title="Gradle申明依赖"></a>Gradle申明依赖</h3><h3 id="配置远程仓库"><a href="#配置远程仓库" class="headerlink" title="配置远程仓库"></a>配置远程仓库</h3><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">repositories</span> &#123;</span><br><span class="line">   maven &#123;</span><br><span class="line">      url <span class="string">"http://repo.mycompany.com/maven2"</span></span><br><span class="line">   &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="Gradle申明依赖"><a href="#Gradle申明依赖" class="headerlink" title="Gradle申明依赖"></a>Gradle申明依赖</h3><h3 id="配置远程仓库"><a href="#配置远程仓库" class="headerlink" title="配置远程仓库"></a>配置远程仓库</h3><pre class="line-numbers language-gradle" data-language="gradle"><code class="language-gradle">repositories &#123;
+   maven &#123;
+      url &quot;http:&#x2F;&#x2F;repo.mycompany.com&#x2F;maven2&quot;
+   &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
 
@@ -544,7 +619,84 @@
 </blockquote>
 </li>
 </ul>
-<h2 id="build-gradle模板"><a href="#build-gradle模板" class="headerlink" title="build.gradle模板"></a>build.gradle模板</h2><figure class="highlight gradle"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 创建Java项目插件，提供了所有构建和测试Java程序所需项目结构</span></span><br><span class="line">apply plugin: <span class="string">'java'</span></span><br><span class="line"><span class="comment">// 引入Maven插件，以便Gradle可以引用Maven仓库的Jar包</span></span><br><span class="line">apply plugin: <span class="string">'maven'</span></span><br><span class="line"><span class="comment">// 进行打包插件</span></span><br><span class="line">apply plugin: <span class="string">'war'</span></span><br><span class="line"><span class="comment">// Web项目服务器插件,此处配置后，不需再单独配置Web服务器</span></span><br><span class="line">apply plugin: <span class="string">'jetty'</span></span><br><span class="line"><span class="comment">// Web项目开发插件</span></span><br><span class="line">apply plugin: <span class="string">'eclipse'</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">group</span> = <span class="string">"com.suneee"</span></span><br><span class="line"><span class="comment">// 指定编译*.java文件的JDK版本</span></span><br><span class="line"><span class="keyword">sourceCompatibility</span> = <span class="number">1.8</span></span><br><span class="line">version = <span class="string">'1.0'</span></span><br><span class="line"><span class="comment">// Web项目示例工程</span></span><br><span class="line">jar &#123;</span><br><span class="line">    manifest &#123;</span><br><span class="line">        attributes <span class="string">'Implementation-Title'</span>: <span class="string">'Gradle Quickstart'</span>, <span class="string">'Implementation-Version'</span>: version</span><br><span class="line">        <span class="comment">// 题外话：Java项目，此处可以用来配置程序入口点</span></span><br><span class="line">        <span class="comment">// attributes 'Main-Class':'com.suneee.**'</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 默认情况，Gradle没有定义任何资源库</span></span><br><span class="line"><span class="keyword">repositories</span> &#123;</span><br><span class="line">    <span class="comment">// 使用Maven的中央存储库</span></span><br><span class="line">    mavenCentral()</span><br><span class="line">    <span class="comment">// 使用Maven的本地存储库</span></span><br><span class="line">    mavenLocal()</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 增加自定义的库</span></span><br><span class="line"><span class="keyword">repositories</span> &#123;</span><br><span class="line">    <span class="keyword">flatDir</span>&#123;</span><br><span class="line">            <span class="comment">// 项目目录下的lib文件夹</span></span><br><span class="line">            dirs <span class="string">'lib'</span> </span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 解决Gradle编译时出现： 编码GBK的不可映射字符</span></span><br><span class="line">[compileJava, compileTestJava]*.<span class="keyword">options</span>*.encoding = <span class="string">'UTF-8'</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 解决项目Jar包依赖问题</span></span><br><span class="line"><span class="keyword">dependencies</span> &#123;</span><br><span class="line">    <span class="comment">// 编译时，加入项目目录下lib文件</span></span><br><span class="line">    <span class="keyword">compile</span> <span class="keyword">fileTree</span>(dir:<span class="string">'lib'</span>,<span class="keyword">include</span>:<span class="string">'*.jar'</span>)</span><br><span class="line">    <span class="keyword">compile</span> <span class="string">'c3p0:c3p0:0.9.1.2'</span></span><br><span class="line">    <span class="keyword">compile</span> <span class="string">'mysql:mysql-connector-java:5.1.31'</span> </span><br><span class="line">    <span class="keyword">compile</span> <span class="string">'org.springframework.data:spring-data-redis:1.3.4.RELEASE'</span></span><br><span class="line">    <span class="keyword">compile</span> <span class="keyword">group</span>: <span class="string">'com.google.code.gson'</span>, name: <span class="string">'gson'</span>, version: <span class="string">'2.7'</span></span><br><span class="line">    <span class="keyword">compile</span> <span class="keyword">group</span>: <span class="string">'commons-collections'</span>, name: <span class="string">'commons-collections'</span>, version: <span class="string">'3.2'</span></span><br><span class="line">    testCompile <span class="string">"org.springframework:spring-test:4.1.0.RELEASE"</span></span><br><span class="line">    testCompile <span class="keyword">group</span>: <span class="string">'junit'</span>, name: <span class="string">'junit'</span>, version: <span class="string">'4.+'</span></span><br><span class="line">    <span class="keyword">compile</span> <span class="string">'com.alibaba:dubbo:2.8.4a'</span></span><br><span class="line">    <span class="keyword">compile</span> <span class="string">'org.apache.zookeeper:zookeeper:3.4.8'</span></span><br><span class="line">    <span class="keyword">compile</span> <span class="string">'com.101tec:zkclient:0.8'</span></span><br><span class="line">    <span class="keyword">compile</span> <span class="string">'log4j:log4j:1.2.17'</span></span><br><span class="line">    <span class="keyword">compile</span> <span class="keyword">group</span>: <span class="string">'javax.activation'</span>, name: <span class="string">'activation'</span>, version: <span class="string">'1.1.1'</span></span><br><span class="line">    <span class="keyword">compile</span> <span class="keyword">group</span>: <span class="string">'javax.mail'</span>, name: <span class="string">'mail'</span>, version: <span class="string">'1.4.7'</span></span><br><span class="line">    <span class="keyword">compile</span> <span class="keyword">group</span>: <span class="string">'org.quartz-scheduler'</span>, name: <span class="string">'quartz'</span>, version: <span class="string">'1.7.2'</span></span><br><span class="line">    <span class="keyword">compile</span> <span class="keyword">group</span>: <span class="string">'aspectj'</span>, name: <span class="string">'aspectjweaver'</span>, version: <span class="string">'1.5.4'</span></span><br><span class="line">    <span class="keyword">compile</span> <span class="keyword">group</span>: <span class="string">'org.hibernate'</span>, name: <span class="string">'hibernate-core'</span>, version: <span class="string">'5.1.0.Final'</span></span><br><span class="line">    <span class="keyword">compile</span> <span class="keyword">group</span>: <span class="string">'org.hibernate'</span>, name: <span class="string">'hibernate-entitymanager'</span>, version: <span class="string">'5.1.0.Final'</span></span><br><span class="line">    <span class="keyword">compile</span> <span class="keyword">group</span>: <span class="string">'org.springframework'</span>, name: <span class="string">'spring-orm'</span>, version: <span class="string">'4.2.4.RELEASE'</span></span><br><span class="line">    </span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">test &#123;</span><br><span class="line">    systemProperties <span class="string">'property'</span>: <span class="string">'value'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发布项目导出的Jar包到指定仓库</span></span><br><span class="line">uploadArchives &#123;</span><br><span class="line">    <span class="keyword">repositories</span> &#123;</span><br><span class="line">       <span class="keyword">flatDir</span> &#123;</span><br><span class="line">           dirs <span class="string">'repos'</span></span><br><span class="line">       &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="build-gradle模板"><a href="#build-gradle模板" class="headerlink" title="build.gradle模板"></a>build.gradle模板</h2><pre class="line-numbers language-gradle" data-language="gradle"><code class="language-gradle">&#x2F;&#x2F; 创建Java项目插件，提供了所有构建和测试Java程序所需项目结构
+apply plugin: &#39;java&#39;
+&#x2F;&#x2F; 引入Maven插件，以便Gradle可以引用Maven仓库的Jar包
+apply plugin: &#39;maven&#39;
+&#x2F;&#x2F; 进行打包插件
+apply plugin: &#39;war&#39;
+&#x2F;&#x2F; Web项目服务器插件,此处配置后，不需再单独配置Web服务器
+apply plugin: &#39;jetty&#39;
+&#x2F;&#x2F; Web项目开发插件
+apply plugin: &#39;eclipse&#39;
+
+group &#x3D; &quot;com.suneee&quot;
+&#x2F;&#x2F; 指定编译*.java文件的JDK版本
+sourceCompatibility &#x3D; 1.8
+version &#x3D; &#39;1.0&#39;
+&#x2F;&#x2F; Web项目示例工程
+jar &#123;
+    manifest &#123;
+        attributes &#39;Implementation-Title&#39;: &#39;Gradle Quickstart&#39;, &#39;Implementation-Version&#39;: version
+        &#x2F;&#x2F; 题外话：Java项目，此处可以用来配置程序入口点
+        &#x2F;&#x2F; attributes &#39;Main-Class&#39;:&#39;com.suneee.**&#39;
+    &#125;
+&#125;
+&#x2F;&#x2F; 默认情况，Gradle没有定义任何资源库
+repositories &#123;
+    &#x2F;&#x2F; 使用Maven的中央存储库
+    mavenCentral()
+    &#x2F;&#x2F; 使用Maven的本地存储库
+    mavenLocal()
+&#125;
+&#x2F;&#x2F; 增加自定义的库
+repositories &#123;
+    flatDir&#123;
+            &#x2F;&#x2F; 项目目录下的lib文件夹
+            dirs &#39;lib&#39; 
+        &#125;
+&#125;
+&#x2F;&#x2F; 解决Gradle编译时出现： 编码GBK的不可映射字符
+[compileJava, compileTestJava]*.options*.encoding &#x3D; &#39;UTF-8&#39;
+
+&#x2F;&#x2F; 解决项目Jar包依赖问题
+dependencies &#123;
+    &#x2F;&#x2F; 编译时，加入项目目录下lib文件
+    compile fileTree(dir:&#39;lib&#39;,include:&#39;*.jar&#39;)
+    compile &#39;c3p0:c3p0:0.9.1.2&#39;
+    compile &#39;mysql:mysql-connector-java:5.1.31&#39; 
+    compile &#39;org.springframework.data:spring-data-redis:1.3.4.RELEASE&#39;
+    compile group: &#39;com.google.code.gson&#39;, name: &#39;gson&#39;, version: &#39;2.7&#39;
+    compile group: &#39;commons-collections&#39;, name: &#39;commons-collections&#39;, version: &#39;3.2&#39;
+    testCompile &quot;org.springframework:spring-test:4.1.0.RELEASE&quot;
+    testCompile group: &#39;junit&#39;, name: &#39;junit&#39;, version: &#39;4.+&#39;
+    compile &#39;com.alibaba:dubbo:2.8.4a&#39;
+    compile &#39;org.apache.zookeeper:zookeeper:3.4.8&#39;
+    compile &#39;com.101tec:zkclient:0.8&#39;
+    compile &#39;log4j:log4j:1.2.17&#39;
+    compile group: &#39;javax.activation&#39;, name: &#39;activation&#39;, version: &#39;1.1.1&#39;
+    compile group: &#39;javax.mail&#39;, name: &#39;mail&#39;, version: &#39;1.4.7&#39;
+    compile group: &#39;org.quartz-scheduler&#39;, name: &#39;quartz&#39;, version: &#39;1.7.2&#39;
+    compile group: &#39;aspectj&#39;, name: &#39;aspectjweaver&#39;, version: &#39;1.5.4&#39;
+    compile group: &#39;org.hibernate&#39;, name: &#39;hibernate-core&#39;, version: &#39;5.1.0.Final&#39;
+    compile group: &#39;org.hibernate&#39;, name: &#39;hibernate-entitymanager&#39;, version: &#39;5.1.0.Final&#39;
+    compile group: &#39;org.springframework&#39;, name: &#39;spring-orm&#39;, version: &#39;4.2.4.RELEASE&#39;
+    
+&#125;
+
+test &#123;
+    systemProperties &#39;property&#39;: &#39;value&#39;
+&#125;
+
+&#x2F;&#x2F; 发布项目导出的Jar包到指定仓库
+uploadArchives &#123;
+    repositories &#123;
+       flatDir &#123;
+           dirs &#39;repos&#39;
+       &#125;
+    &#125;
+&#125;
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
 <li><p>查看task</p>
@@ -583,7 +735,7 @@
 </blockquote>
 </li>
 </ul>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://gradle.org/release-candidate/" target="_blank" rel="noopener">官方下载地址</a><br><a href="https://www.cnblogs.com/shaloo/p/6096277.html" target="_blank" rel="noopener">Gradle学习笔记</a><br><a href="https://www.cnblogs.com/NyanKoSenSei/p/11458953.html" target="_blank" rel="noopener">Gradle的安装与配置</a><br><a href="https://www.cnblogs.com/lucas1024/p/9533566.html" target="_blank" rel="noopener">【入门】Gradle的基本使用、在IDEA中的配置、常用命令</a></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://gradle.org/release-candidate/">官方下载地址</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/shaloo/p/6096277.html">Gradle学习笔记</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/NyanKoSenSei/p/11458953.html">Gradle的安装与配置</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/lucas1024/p/9533566.html">【入门】Gradle的基本使用、在IDEA中的配置、常用命令</a></p>
 
                 
             </div>

@@ -474,24 +474,16 @@
 <li>dubbo的调用流程</li>
 </ol>
 <ul>
-<li>Provider<ul>
+<li>Provider</li>
 <li>第0步： 启动service服务</li>
 <li>第1步： 将服务注册到注册中心</li>
-</ul>
-</li>
-<li>Consumer<ul>
+<li>Consumer</li>
 <li>第2步： 向注册中心获取服务列表并保持连接以获取最新的服务列表（还会将服务列表保存在本地）</li>
-</ul>
-</li>
-<li>invoke<ul>
+<li>invoke</li>
 <li>第3步: Consumer通过服务端负载均衡后向Provider发起远程异步调用</li>
 <li>第4步: provide接受到请求后执行，并且将执行结果返回</li>
-</ul>
-</li>
-<li>monitor<ul>
+<li>monitor</li>
 <li>第5步: provide/consumer会将调用信息发送给monitor进行统计</li>
-</ul>
-</li>
 </ul>
 <ol start="5">
 <li>dubbo调用链？</li>

@@ -439,20 +439,23 @@
 <ul>
 <li>BeanPostProcessor.java</li>
 </ul>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">BeanPostProcessor&#123;</span><br><span class="line">    <span class="function">Object <span class="title">postProcessBeforeInitialization</span><span class="params">(Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException</span>;</span><br><span class="line">    <span class="function">Object <span class="title">postProcessAfterInitialization</span><span class="params">(Object bean, String beanName)</span> <span class="keyword">throws</span> BeansException</span></span><br><span class="line"><span class="function">&#125;</span></span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">BeanPostProcessor</span><span class="token punctuation">&#123;</span>
+    <span class="token class-name">Object</span> <span class="token function">postProcessBeforeInitialization</span><span class="token punctuation">(</span><span class="token class-name">Object</span> bean<span class="token punctuation">,</span> <span class="token class-name">String</span> beanName<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">BeansException</span><span class="token punctuation">;</span>
+    <span class="token class-name">Object</span> <span class="token function">postProcessAfterInitialization</span><span class="token punctuation">(</span><span class="token class-name">Object</span> bean<span class="token punctuation">,</span> <span class="token class-name">String</span> beanName<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">BeansException</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
 <ul>
 <li>执行结果</li>
 </ul>
-<p><a href="https://imgchr.com/i/8RTugf" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/03/21/8RTugf.png" alt="8RTugf.png"></a></p>
+<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/8RTugf"><img src="https://s1.ax1x.com/2020/03/21/8RTugf.png" alt="8RTugf.png"></a></p>
 <p>可以看出<strong>BeanPostprocessor</strong>会对每一个bean在初始化前后进行处理</p>
 <h2 id="处理机制"><a href="#处理机制" class="headerlink" title="处理机制"></a>处理机制</h2><p><img src="https://s1.ax1x.com/2020/03/21/8RvFDx.png" alt="8RvFDx.png"></p>
 <blockquote>
 <p>在完成属性装配之后执行<strong>initializeBean</strong>方法</p>
 </blockquote>
-<p><a href="https://imgchr.com/i/8RvtPg" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/03/21/8RvtPg.md.png" alt="8RvtPg.md.png"></a></p>
-<p>注意在这里的<strong>getBeanPostProcessors()</strong>并没有选择某些特定的BeanPostProcessor来执行；<br>在装配属性的<strong>populateBean</strong>方法中会指定执行接口，如下所示：<br><img src="https://s1.ax1x.com/2020/03/21/8RzUun.png" alt="8RzUun.png"></p>
-<h2 id="BeanPostProcessor加载时机"><a href="#BeanPostProcessor加载时机" class="headerlink" title="BeanPostProcessor加载时机"></a>BeanPostProcessor加载时机</h2><p>在<strong>AbstractApplicationContext</strong>刷新容器的过程中会执行<strong>registerBeanPostProcessors</strong>方法.这个方法的目的就是将<strong>BeanPostProcessors</strong>子类注册到BeanFactory中，其中还会实现<strong>priority</strong>、<strong>order</strong>等功能进行排序<br><a href="https://s1.ax1x.com/2020/03/21/8WSfMj.png" target="_blank" rel="noopener">8WSfMj.png</a></p>
+<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/8RvtPg"><img src="https://s1.ax1x.com/2020/03/21/8RvtPg.md.png" alt="8RvtPg.md.png"></a></p>
+<p>注意在这里的<strong>getBeanPostProcessors()**并没有选择某些特定的BeanPostProcessor来执行；<br>在装配属性的</strong>populateBean**方法中会指定执行接口，如下所示：<br><img src="https://s1.ax1x.com/2020/03/21/8RzUun.png" alt="8RzUun.png"></p>
+<h2 id="BeanPostProcessor加载时机"><a href="#BeanPostProcessor加载时机" class="headerlink" title="BeanPostProcessor加载时机"></a>BeanPostProcessor加载时机</h2><p>在<strong>AbstractApplicationContext</strong>刷新容器的过程中会执行<strong>registerBeanPostProcessors</strong>方法.这个方法的目的就是将<strong>BeanPostProcessors</strong>子类注册到BeanFactory中，其中还会实现<strong>priority</strong>、<strong>order</strong>等功能进行排序<br><a target="_blank" rel="noopener" href="https://s1.ax1x.com/2020/03/21/8WSfMj.png">8WSfMj.png</a></p>
 <h2 id="常用的BeanPostProcessor子类"><a href="#常用的BeanPostProcessor子类" class="headerlink" title="常用的BeanPostProcessor子类"></a>常用的BeanPostProcessor子类</h2><table>
 <thead>
 <tr>

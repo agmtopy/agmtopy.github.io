@@ -464,7 +464,7 @@
 <li>方法返回地址</li>
 </ul>
 <h2 id="程序计数器"><a href="#程序计数器" class="headerlink" title="程序计数器"></a>程序计数器</h2><p>程序计数器是用来标记当前线程正在执行的程序运行到哪了一行。</p>
-<h2 id="元数据空间"><a href="#元数据空间" class="headerlink" title="元数据空间"></a>元数据空间</h2><p><strong>元数据空间</strong>是JDK8中划分出来的，用于替代JDK7已经之前的<strong>Perm区(永久代)</strong>。<br><strong>元数据空间</strong>存储<strong>class信息</strong>、<strong>常量池</strong>、<strong>方法数据</strong>、<strong>方法代码</strong>等等</p>
+<h2 id="元数据空间"><a href="#元数据空间" class="headerlink" title="元数据空间"></a>元数据空间</h2><p><strong>元数据空间</strong>是JDK8中划分出来的，用于替代JDK7已经之前的<strong>Perm区(永久代)**。<br>**元数据空间</strong>存储<strong>class信息</strong>、<strong>常量池</strong>、<strong>方法数据</strong>、<strong>方法代码</strong>等等</p>
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>jvm中运行的参数是在<strong>栈</strong>上的信息，栈上保存的引用指向的是<strong>堆</strong>中的对象，<strong>类信息</strong>、<strong>常量</strong>等信息则是放在元数据空间中。</p>
 <h1 id="类的加载机制"><a href="#类的加载机制" class="headerlink" title="类的加载机制"></a>类的加载机制</h1><h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><blockquote>
 <p>加载 &gt; 验证 &gt; 准备 &gt; 解析 &gt; 初始化</p>

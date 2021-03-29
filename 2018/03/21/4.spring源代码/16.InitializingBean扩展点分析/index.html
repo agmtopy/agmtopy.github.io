@@ -434,7 +434,9 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h1 id="InitializingBean扩展点分析"><a href="#InitializingBean扩展点分析" class="headerlink" title="InitializingBean扩展点分析"></a>InitializingBean扩展点分析</h1><p>上面两篇分别分析了扩展点<strong>aware</strong>、<strong>BreaProcessesor</strong>，接下来继续分析<strong>InitializingBean</strong></p>
-<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">interface</span> <span class="title">InitializingBean</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">afterPropertiesSet</span><span class="params">()</span> <span class="keyword">throws</span> Exception</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">InitializingBean</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">void</span> <span class="token function">afterPropertiesSet</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <ul>
 <li>代码演示<br><img src="https://s1.ax1x.com/2020/03/21/8W8Ptf.png" alt="8W8Ptf.png"></li>

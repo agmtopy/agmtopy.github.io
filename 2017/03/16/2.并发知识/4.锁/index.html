@@ -453,7 +453,7 @@
 <h3 id="乐观锁-悲观锁"><a href="#乐观锁-悲观锁" class="headerlink" title="乐观锁/悲观锁"></a>乐观锁/悲观锁</h3><p>乐观锁：不独占资源，利用CAS思想来完成操作<br>悲观锁：先独占资源，在进行操作</p>
 <h3 id="自旋锁-非自旋锁"><a href="#自旋锁-非自旋锁" class="headerlink" title="自旋锁/非自旋锁"></a>自旋锁/非自旋锁</h3><p>自旋锁：不出让cpu,通过空转不停的去获取资源<br>非自旋锁：尝试获取锁失败，就进入等待</p>
 <h3 id="可中断锁-不可中断锁"><a href="#可中断锁-不可中断锁" class="headerlink" title="可中断锁/不可中断锁"></a>可中断锁/不可中断锁</h3><p>可中断锁：可响应线程中断的的锁<br>不可中断锁：必须等待执行线程释放锁，才能响应中断操作</p>
-<h2 id="synchronized底层的实现方法"><a href="#synchronized底层的实现方法" class="headerlink" title="synchronized底层的实现方法"></a>synchronized底层的实现方法</h2><p>synchronized修饰<strong>代码块</strong>时，是通过<strong>monitorenter</strong>、<strong>monitorexit</strong>指令来实现的</p>
+<h2 id="synchronized底层的实现方法"><a href="#synchronized底层的实现方法" class="headerlink" title="synchronized底层的实现方法"></a>synchronized底层的实现方法</h2><p>synchronized修饰__代码块__时，是通过<strong>monitorenter</strong>、<strong>monitorexit</strong>指令来实现的</p>
 <p><strong>monitorenter</strong>指令的执行过程是</p>
 <ul>
 <li>如果执行线程尝试获取对象的monitor的计数值是0，那么就加1，标记该线程持有锁对象</li>
@@ -464,7 +464,7 @@
 <ul>
 <li>将锁对象的monitor计数减1操作</li>
 </ul>
-<p>synchronized修饰方法时，是通过==ACC_SYNCHRONIZED==标记位来实现的，<strong>ACC_SYNCHRONIZED</strong>标记位标记的方法会在尝试获取到monitor锁后才执行，执行完毕后就释放。</p>
+<p>synchronized修饰方法时，是通过==ACC_SYNCHRONIZED==标记位来实现的，__ACC_SYNCHRONIZED__标记位标记的方法会在尝试获取到monitor锁后才执行，执行完毕后就释放。</p>
 <h2 id="RLock的常用方法"><a href="#RLock的常用方法" class="headerlink" title="RLock的常用方法"></a>RLock的常用方法</h2><table>
 <thead>
 <tr>
@@ -505,7 +505,9 @@
 <li><strong>ReadWriteLock</strong></li>
 </ul>
 <h3 id="特点"><a href="#特点" class="headerlink" title="特点"></a>特点</h3><p>要么是一个线程或多个线程占用了读锁，要么是一个线程占用了写锁。两者不会同时出现</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ReentrantReadWriteLock readWriteLock = <span class="keyword">new</span> ReentrantReadWriteLock();</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ReentrantReadWriteLock.ReadLock readLock = readWriteLock.readLock();</span><br><span class="line"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ReentrantReadWriteLock.WriteLock writeLock = readWriteLock.writeLock();</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">ReentrantReadWriteLock</span> readWriteLock <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ReentrantReadWriteLock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">ReentrantReadWriteLock<span class="token punctuation">.</span>ReadLock</span> readLock <span class="token operator">=</span> readWriteLock<span class="token punctuation">.</span><span class="token function">readLock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">ReentrantReadWriteLock<span class="token punctuation">.</span>WriteLock</span> writeLock <span class="token operator">=</span> readWriteLock<span class="token punctuation">.</span><span class="token function">writeLock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p>ReentrantReadWriteLock是ReadWrite接口的一个具体实现，通过readLock()获取读锁，通过writeLock()可以获取写锁<br>在获取读写锁的时候，可以多个线程同时获取到readLock锁，但是在获取写锁的时候只能单个写获取到写锁并且该锁只能独占在使用到写锁的时候</p>
 <h3 id="获取锁的方式和读写锁升降级策略"><a href="#获取锁的方式和读写锁升降级策略" class="headerlink" title="获取锁的方式和读写锁升降级策略"></a>获取锁的方式和读写锁升降级策略</h3><p>公平的读写锁时，都不允许插队，读锁和写锁都要按照等待队列的顺序依次进行排队在获取锁</p>
 <p>非公平锁的时候？读锁在等待队列中的第一个线程不是竞争写锁的时候可以允许插队，但是第一个是竞争写锁的线程时不允许插队<br>写锁竞争时，允许插队，插队如果失败的话进入等待队列中</p>

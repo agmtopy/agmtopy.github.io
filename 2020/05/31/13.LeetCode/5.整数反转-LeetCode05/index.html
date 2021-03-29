@@ -437,23 +437,40 @@
 <ul>
 <li>示例1:</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: 123</span><br><span class="line">输出: 321</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">输入: 123
+输出: 321<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <ul>
 <li>示例2:</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: -123</span><br><span class="line">输出: -321</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">输入: -123
+输出: -321<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <ul>
 <li>示例3:</li>
 </ul>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">输入: 120</span><br><span class="line">输出: 21</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">输入: 120
+输出: 21<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><blockquote>
 <p><strong>%10</strong>模除可以得到数字的最后一位;<strong>/10</strong>可以得到数字的前n位</p>
 </blockquote>
 <p>根据前面两个原理，可以将给定的数字依次进行模除运算得到最后一位，然后根据上一次的结果在进行<strong>乘</strong>10操作后相加得到新的结果</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">reverse</span><span class="params">(<span class="keyword">int</span> x)</span></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> rev = <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">while</span>(x!=<span class="number">0</span>)&#123;</span><br><span class="line">        <span class="keyword">int</span> lastNum = x%<span class="number">10</span>;</span><br><span class="line">        <span class="keyword">if</span>(rev&gt;Integer.MAX_VALUE/<span class="number">10</span> ||rev==Integer.MAX_VALUE/<span class="number">10</span> &amp;&amp; lastNum &gt; <span class="number">7</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">if</span>(rev&lt;Integer.MIN_VALUE/<span class="number">10</span> ||rev==Integer.MIN_VALUE/<span class="number">10</span> &amp;&amp; lastNum &lt; -<span class="number">8</span>)&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">        rev = rev*<span class="number">10</span> + lastNum;</span><br><span class="line">        x = x/<span class="number">10</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> rev;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">reverse</span><span class="token punctuation">(</span><span class="token keyword">int</span> x<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token keyword">int</span> rev <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token keyword">while</span><span class="token punctuation">(</span>x<span class="token operator">!=</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+        <span class="token keyword">int</span> lastNum <span class="token operator">=</span> x<span class="token operator">%</span><span class="token number">10</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span>rev<span class="token operator">></span><span class="token class-name">Integer</span><span class="token punctuation">.</span>MAX_VALUE<span class="token operator">/</span><span class="token number">10</span> <span class="token operator">||</span>rev<span class="token operator">==</span><span class="token class-name">Integer</span><span class="token punctuation">.</span>MAX_VALUE<span class="token operator">/</span><span class="token number">10</span> <span class="token operator">&amp;&amp;</span> lastNum <span class="token operator">></span> <span class="token number">7</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+            <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">if</span><span class="token punctuation">(</span>rev<span class="token operator">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">.</span>MIN_VALUE<span class="token operator">/</span><span class="token number">10</span> <span class="token operator">||</span>rev<span class="token operator">==</span><span class="token class-name">Integer</span><span class="token punctuation">.</span>MIN_VALUE<span class="token operator">/</span><span class="token number">10</span> <span class="token operator">&amp;&amp;</span> lastNum <span class="token operator">&lt;</span> <span class="token operator">-</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+            <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        rev <span class="token operator">=</span> rev<span class="token operator">*</span><span class="token number">10</span> <span class="token operator">+</span> lastNum<span class="token punctuation">;</span>
+        x <span class="token operator">=</span> x<span class="token operator">/</span><span class="token number">10</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span> rev<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
                 
             </div>

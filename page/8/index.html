@@ -436,7 +436,7 @@
                         <div class="summary block-with-text">
                             
                                 分析BeanFactoryPostProcessorBeanFactoryPostProcessor是在注册完成BeanDifinition后执行的接口，该接口就只有一个方法postProcessBeanFactory
-123public 
+public int
                             
                         </div>
                         <div class="publish-info">
@@ -540,7 +540,7 @@ bean自己的init方法
                         <div class="summary block-with-text">
                             
                                 InitializingBean扩展点分析上面两篇分别分析了扩展点aware、BreaProcessesor，接下来继续分析InitializingBean
-代码示例123public interface InitializingBean 
+代码示例public interface InitializingBean &#1
                             
                         </div>
                         <div class="publish-info">
@@ -593,7 +593,7 @@ BeanPostProcess接口是在Bean完成实例化后，如果我们要对所有的�
 
 BeanPostProcessor.java
 
-1234BeanPos
+BeanPostPro
                             
                         </div>
                         <div class="publish-info">
@@ -699,7 +699,8 @@ LoadTimeWeaverAware
                         <div class="summary block-with-text">
                             
                                 创建bean的流程通过上面几个流程的分析，终于来到了spring初始化bean的流程了。在这个过程中主要的功能有实列化bean对象、加载到缓存、前后置处理;
-创建流程1234567891011121314151617181920@Overr
+创建流程@Override
+	protected Object createBea
                             
                         </div>
                         <div class="publish-info">

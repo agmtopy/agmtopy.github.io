@@ -437,17 +437,24 @@
 <blockquote>
 <p>示例 1:</p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: &quot;abcabcbb&quot;</span><br><span class="line">输出: 3 </span><br><span class="line">解释: 因为无重复字符的最长子串是 &quot;abc&quot;，所以其长度为 3。</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">输入: &quot;abcabcbb&quot;
+输出: 3 
+解释: 因为无重复字符的最长子串是 &quot;abc&quot;，所以其长度为 3。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <blockquote>
 <p>示例 2:</p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">输入: &quot;bbbbb&quot;</span><br><span class="line">输出: 1</span><br><span class="line">解释: 因为无重复字符的最长子串是&quot;b&quot;，所以其长度为 1。</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">输入: &quot;bbbbb&quot;
+输出: 1
+解释: 因为无重复字符的最长子串是&quot;b&quot;，所以其长度为 1。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
 <blockquote>
 <p>示例 3:</p>
 </blockquote>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">输入: &quot;pwwkew&quot;</span><br><span class="line">输出: 3</span><br><span class="line">解释: 因为无重复字符的最长子串是 &quot;wke&quot;，所以其长度为 3。</span><br><span class="line">    请注意，你的答案必须是子串的长度，&quot;pwke&quot; 是一个子序列，不是子串。</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">输入: &quot;pwwkew&quot;
+输出: 3
+解释: 因为无重复字符的最长子串是 &quot;wke&quot;，所以其长度为 3。
+    请注意，你的答案必须是子串的长度，&quot;pwke&quot; 是一个子序列，不是子串。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>最开始想到的解法就是用str.substring(0,str.length-2)和str.substring(str.length-2,str.length-2)去判断前一个是否存在后一个元素中的值。如果存在递归，说明后一个元素重复。后一个元素重复也不能证明出什么结论，并且递归的去判断并不能推导出最长的子串。<br><img src="https://s1.ax1x.com/2020/05/27/tE2Qv4.jpg" alt="tE2Qv4.jpg"></p>
 <h2 id="官方思路"><a href="#官方思路" class="headerlink" title="官方思路"></a>官方思路</h2><blockquote>
@@ -455,7 +462,37 @@
 </blockquote>
 <p>用图来表示就是：</p>
 <p><img src="https://s1.ax1x.com/2020/05/27/tEWggS.jpg" alt="tEWggS.jpg"></p>
-<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">int</span> <span class="title">lengthOfLongestSubstring</span><span class="params">(String s)</span></span>&#123;</span><br><span class="line">        <span class="comment">//表示最长子串的长度</span></span><br><span class="line">        <span class="keyword">int</span> maxLength = <span class="number">0</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//索引</span></span><br><span class="line">        <span class="keyword">int</span> firstIndex = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">int</span> lastIndex = <span class="number">0</span>;</span><br><span class="line">        HashMap&lt;Character,Integer&gt; map = <span class="keyword">new</span> HashMap&lt;&gt;();</span><br><span class="line">        <span class="comment">//firstIndex、lastIndex都必须小于字符串长度</span></span><br><span class="line">        <span class="keyword">while</span>(firstIndex &lt; s.length() &amp;&amp; lastIndex&lt; s.length())&#123;</span><br><span class="line">            <span class="comment">//获取lastIndex指向的字符</span></span><br><span class="line">            Character key = s.charAt(lastIndex);</span><br><span class="line">            <span class="comment">//判断字符是否存在map中</span></span><br><span class="line">            <span class="keyword">if</span>(map.containsKey(key))&#123;</span><br><span class="line">                <span class="comment">//存在map中表明key元素已经和前面的字符串重复</span></span><br><span class="line">                Character rKey = s.charAt(firstIndex);</span><br><span class="line">                <span class="comment">//移除当前字符串中的第一个元素</span></span><br><span class="line">                map.remove(rKey);</span><br><span class="line">                <span class="comment">//起始点+1</span></span><br><span class="line">                firstIndex++;</span><br><span class="line">            &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">                <span class="comment">//如果不存在就将元素放到map中</span></span><br><span class="line">                map.put(key,lastIndex);</span><br><span class="line">                <span class="comment">//lastIndex继续向前</span></span><br><span class="line">                lastIndex++;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="comment">//最后如果本次得到的子串长度大于maxLength就进行替代</span></span><br><span class="line">            maxLength = lastIndex -firstIndex&gt;maxLength?lastIndex-firstIndex:maxLength;</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">return</span> maxLength;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">lengthOfLongestSubstring</span><span class="token punctuation">(</span><span class="token class-name">String</span> s<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+        <span class="token comment">//表示最长子串的长度</span>
+        <span class="token keyword">int</span> maxLength <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+        <span class="token comment">//索引</span>
+        <span class="token keyword">int</span> firstIndex <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token keyword">int</span> lastIndex <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+        <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Character</span><span class="token punctuation">,</span><span class="token class-name">Integer</span><span class="token punctuation">></span></span> map <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">HashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//firstIndex、lastIndex都必须小于字符串长度</span>
+        <span class="token keyword">while</span><span class="token punctuation">(</span>firstIndex <span class="token operator">&lt;</span> s<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> lastIndex<span class="token operator">&lt;</span> s<span class="token punctuation">.</span><span class="token function">length</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+            <span class="token comment">//获取lastIndex指向的字符</span>
+            <span class="token class-name">Character</span> key <span class="token operator">=</span> s<span class="token punctuation">.</span><span class="token function">charAt</span><span class="token punctuation">(</span>lastIndex<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">//判断字符是否存在map中</span>
+            <span class="token keyword">if</span><span class="token punctuation">(</span>map<span class="token punctuation">.</span><span class="token function">containsKey</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+                <span class="token comment">//存在map中表明key元素已经和前面的字符串重复</span>
+                <span class="token class-name">Character</span> rKey <span class="token operator">=</span> s<span class="token punctuation">.</span><span class="token function">charAt</span><span class="token punctuation">(</span>firstIndex<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token comment">//移除当前字符串中的第一个元素</span>
+                map<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span>rKey<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token comment">//起始点+1</span>
+                firstIndex<span class="token operator">++</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span><span class="token keyword">else</span><span class="token punctuation">&#123;</span>
+                <span class="token comment">//如果不存在就将元素放到map中</span>
+                map<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span>lastIndex<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token comment">//lastIndex继续向前</span>
+                lastIndex<span class="token operator">++</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+            <span class="token comment">//最后如果本次得到的子串长度大于maxLength就进行替代</span>
+            maxLength <span class="token operator">=</span> lastIndex <span class="token operator">-</span>firstIndex<span class="token operator">></span>maxLength<span class="token operator">?</span>lastIndex<span class="token operator">-</span>firstIndex<span class="token operator">:</span>maxLength<span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token keyword">return</span> maxLength<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>无重复字符的最大子串问题主要用到了一个查找范围中的技巧<strong>滑动窗口</strong>的概念，将一个范围作为一个窗口，如果下一个元素不存在与这个范围中就加入这个窗口，如果下一个元素存在这个范围中就将这个窗口的范围从前递减的减少直到排除了这个元素。</p>
 

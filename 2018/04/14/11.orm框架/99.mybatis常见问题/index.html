@@ -442,8 +442,8 @@
 <li>最后返回连接</li>
 </ol>
 <h2 id="和-的区别是什么？"><a href="#和-的区别是什么？" class="headerlink" title="#{} 和 ${} 的区别是什么？"></a><strong>#{}</strong> 和 <strong>${}</strong> 的区别是什么？</h2><ol>
-<li><strong>#{}</strong>属性替换</li>
-<li><strong>${}</strong>参数占位符，采用的是预编译的方式</li>
+<li>**#{}**属性替换</li>
+<li>**${}**参数占位符，采用的是预编译的方式</li>
 </ol>
 <h2 id="当实体类中的属性名和表中的字段名不一样-，怎么办？"><a href="#当实体类中的属性名和表中的字段名不一样-，怎么办？" class="headerlink" title="当实体类中的属性名和表中的字段名不一样 ，怎么办？"></a>当实体类中的属性名和表中的字段名不一样 ，怎么办？</h2><ol>
 <li>aslias 别名</li>
@@ -473,7 +473,7 @@
 <h2 id="在-Mapper-中如何传递多个参数"><a href="#在-Mapper-中如何传递多个参数" class="headerlink" title="在 Mapper 中如何传递多个参数?"></a>在 Mapper 中如何传递多个参数?</h2><ol>
 <li>用对象传参</li>
 <li>用map穿参</li>
-<li>用<strong>@Param</strong></li>
+<li>用**@Param**</li>
 </ol>
 <h2 id="Mybatis-是否可以映射-Enum-枚举类？"><a href="#Mybatis-是否可以映射-Enum-枚举类？" class="headerlink" title="Mybatis 是否可以映射 Enum 枚举类？"></a>Mybatis 是否可以映射 Enum 枚举类？</h2><p>可，使用<strong>TypeHandler</strong></p>
 <h2 id="Mybatis-都有哪些-Executor-执行器？它们之间的区别是什么？"><a href="#Mybatis-都有哪些-Executor-执行器？它们之间的区别是什么？" class="headerlink" title="Mybatis 都有哪些 Executor 执行器？它们之间的区别是什么？"></a>Mybatis 都有哪些 Executor 执行器？它们之间的区别是什么？</h2><ol>
@@ -484,7 +484,13 @@
 </ol>
 <h2 id="MyBatis-如何执行批量插入"><a href="#MyBatis-如何执行批量插入" class="headerlink" title="MyBatis 如何执行批量插入?"></a>MyBatis 如何执行批量插入?</h2><ol>
 <li><p>使用batch进行插入</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">SqlSession session = sqlSessionFactory.openSession(ExecutorType.BATCH,<span class="keyword">false</span>);</span><br><span class="line">Mapper mapper = session.getMapper(Mapper<span class="class">.<span class="keyword">class</span>)</span>;</span><br><span class="line">forEach()&#123;</span><br><span class="line">    mapper.insert(itemDO);</span><br><span class="line">&#125;</span><br><span class="line">session.commit();</span><br><span class="line">session.clearCache();</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">SqlSession</span> session <span class="token operator">=</span> sqlSessionFactory<span class="token punctuation">.</span><span class="token function">openSession</span><span class="token punctuation">(</span><span class="token class-name">ExecutorType</span><span class="token punctuation">.</span>BATCH<span class="token punctuation">,</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token class-name">Mapper</span> mapper <span class="token operator">=</span> session<span class="token punctuation">.</span><span class="token function">getMapper</span><span class="token punctuation">(</span><span class="token class-name">Mapper</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">forEach</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    mapper<span class="token punctuation">.</span><span class="token function">insert</span><span class="token punctuation">(</span>itemDO<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+session<span class="token punctuation">.</span><span class="token function">commit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+session<span class="token punctuation">.</span><span class="token function">clearCache</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 </li>
 <li><p>使用<xml>标签进行拼接的方式<br><forEach></forEach></p>
 </li>

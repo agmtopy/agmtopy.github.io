@@ -440,14 +440,14 @@
 <li>构造器注入</li>
 <li>setter方法注入</li>
 </ol>
-<h1 id="spring的组件"><a href="#spring的组件" class="headerlink" title="spring的组件"></a>spring的组件</h1><p>（图自:<a href="http://singleant.iteye.com/blog/1177358）" target="_blank" rel="noopener">http://singleant.iteye.com/blog/1177358）</a></p>
+<h1 id="spring的组件"><a href="#spring的组件" class="headerlink" title="spring的组件"></a>spring的组件</h1><p>（图自:<a target="_blank" rel="noopener" href="http://singleant.iteye.com/blog/1177358%EF%BC%89">http://singleant.iteye.com/blog/1177358）</a></p>
 <p><img src="https://s1.ax1x.com/2020/03/17/8dekeU.jpg" alt="8dekeU.jpg"></p>
 <h2 id="Resource-体系"><a href="#Resource-体系" class="headerlink" title="Resource 体系"></a>Resource 体系</h2><p><img src="https://s1.ax1x.com/2020/03/17/8defXV.jpg" alt="8defXV.jpg"></p>
 <p>org.springframework.core.io.Resource，<strong>对资源的抽象</strong>。它的每一个实现类都代表了一种资源的访问策略，如 ClassPathResource、RLResource、FileSystemResource等</p>
 <h2 id="ResourceLoader-体系"><a href="#ResourceLoader-体系" class="headerlink" title="ResourceLoader 体系"></a>ResourceLoader 体系</h2><p><img src="https://s1.ax1x.com/2020/03/17/8devnK.png" alt="8devnK.png"></p>
 <p>org.springframework.core.io.ResourceLoader定义了<strong>统一资源加载</strong>的方法</p>
 <h2 id="BeanFactory-体系"><a href="#BeanFactory-体系" class="headerlink" title="BeanFactory 体系"></a>BeanFactory 体系</h2><p>org.springframework.beans.factory.BeanFactory是spring最底层定义如何操作bean的接口,<strong>AbstractBeanFactory</strong>内部持有一个<strong>ConcurrentHashMap</strong>来保存name和BeanDefinition之间的映射</p>
-<h2 id="BeanDefinition-体系"><a href="#BeanDefinition-体系" class="headerlink" title="BeanDefinition 体系"></a>BeanDefinition 体系</h2><p><a href="https://imgchr.com/i/8dnjoD" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/03/17/8dnjoD.png" alt="8dnjoD.png"></a><br><strong>BeanDefinition</strong>用于描述bean的元数据</p>
+<h2 id="BeanDefinition-体系"><a href="#BeanDefinition-体系" class="headerlink" title="BeanDefinition 体系"></a>BeanDefinition 体系</h2><p><a target="_blank" rel="noopener" href="https://imgchr.com/i/8dnjoD"><img src="https://s1.ax1x.com/2020/03/17/8dnjoD.png" alt="8dnjoD.png"></a><br><strong>BeanDefinition</strong>用于描述bean的元数据</p>
 <h2 id="BeanDefinitionReader-体系"><a href="#BeanDefinitionReader-体系" class="headerlink" title="BeanDefinitionReader 体系"></a>BeanDefinitionReader 体系</h2><p><img src="https://s1.ax1x.com/2020/03/17/8duKln.png" alt="8duKln.png"></p>
 <p>org.springframework.beans.factory.support.BeanDefinitionReader 的作用是读取 Spring 的配置文件的内容，并将其转换成 Ioc 容器内部的数据结构 ：BeanDefinition</p>
 

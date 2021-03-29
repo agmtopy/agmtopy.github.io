@@ -464,7 +464,7 @@
 <p>Tag和Key的主要差别是使用场景不同，Tag用在Consumer的代码中，用来进行服务端消息过滤，Key主要用于通过命令行查询消息。“</p>
 <ul>
 <li><strong>Tag</strong>过滤是在broker从<strong>Consume Queue</strong>中取数据的时候就进行比较，在这一过程中通过比较tag的<strong>hashCode值</strong>和<strong>内容</strong>进行双重过滤</li>
-<li><strong>SQL过滤</strong>，通过在producer向消息中插入自定义属性和值的方式,在comsumer中使用<strong>MessageSelect.bySql()</strong>的方法进行过滤</li>
+<li><strong>SQL过滤</strong>，通过在producer向消息中插入自定义属性和值的方式,在comsumer中使用**MessageSelect.bySql()**的方法进行过滤</li>
 </ul>
 <h2 id="提高消费速度"><a href="#提高消费速度" class="headerlink" title="提高消费速度"></a>提高消费速度</h2><ul>
 <li>提高消费并行度<ol>

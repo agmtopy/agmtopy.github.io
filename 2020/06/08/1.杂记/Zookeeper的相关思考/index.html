@@ -449,7 +449,13 @@
 </li>
 </ul>
 <p>下面这段内容摘自《从Paxos到Zookeeper 》 ，本文中很多的名词介绍也来自本书。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Zookeeper 最早起源于雅虎研究院的一个研究小组。</span><br><span class="line">在当时，研究人员发现，在雅虎内部很多大型系统基本都需要依赖一个类似的系统来进行分布式协调，但是这些系统往往都存在分布式单点问题。</span><br><span class="line">所以，雅虎的开发人员就试图开发一个通用的无单点问题的分布式协调框架，以便让开发人员将精力集中在处理业务逻辑上。</span><br><span class="line">关于“ZooKeeper”这个项目的名字，其实也有一段趣闻。在立项初期，考虑到之前内部很多项目都是使用动物的名字来命名的（例如著名的Pig项目),雅虎的工程师希望给这个项目也取一个动物的名字。</span><br><span class="line">时任研究院的首席科学家 RaghuRamakrishnan 开玩笑地说：“在这样下去，我们这儿就变成动物园了！”</span><br><span class="line">此话一出，大家纷纷表示就叫动物园管理员吧一一一因为各个以动物命名的分布式组件放在一起，雅虎的整个分布式系统看上去就像一个大型的动物园了</span><br><span class="line">而 Zookeeper 正好要用来进行分布式环境的协调一一于是，Zookeeper 的名字也就由此诞生了。</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">Zookeeper 最早起源于雅虎研究院的一个研究小组。
+在当时，研究人员发现，在雅虎内部很多大型系统基本都需要依赖一个类似的系统来进行分布式协调，但是这些系统往往都存在分布式单点问题。
+所以，雅虎的开发人员就试图开发一个通用的无单点问题的分布式协调框架，以便让开发人员将精力集中在处理业务逻辑上。
+关于“ZooKeeper”这个项目的名字，其实也有一段趣闻。在立项初期，考虑到之前内部很多项目都是使用动物的名字来命名的（例如著名的Pig项目),雅虎的工程师希望给这个项目也取一个动物的名字。
+时任研究院的首席科学家 RaghuRamakrishnan 开玩笑地说：“在这样下去，我们这儿就变成动物园了！”
+此话一出，大家纷纷表示就叫动物园管理员吧一一一因为各个以动物命名的分布式组件放在一起，雅虎的整个分布式系统看上去就像一个大型的动物园了
+而 Zookeeper 正好要用来进行分布式环境的协调一一于是，Zookeeper 的名字也就由此诞生了。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>zk的诞生是为了解决在分布式环境下不同系统之间进行分布式协调的场景。在分布式环境下需要将同一个系统分布式化后对外提供出像一个系统一样的服务，这样就需要引入分布式协调工具，将这种原来是由应用系统解决的事情剥离开的工具。因此zk就诞生了。</p>
 <p>总的来说，zk提供了一个可靠的分布式的工具，可以对外提供一下几种功能(API中的方法):</p>
@@ -468,8 +474,8 @@
 <li>注册中心：应用于充当注册中心</li>
 <li>作为分布式锁：Curator分布式锁</li>
 </ol>
-<h2 id="zk不适用作为注册中心"><a href="#zk不适用作为注册中心" class="headerlink" title="zk不适用作为注册中心"></a>zk不适用作为注册中心</h2><p>网上大部分都在说zk不适合作为注册中心其根据主要是<a href="https://medium.com/knerd/eureka-why-you-shouldnt-use-zookeeper-for-service-discovery-4932c5c7e764" target="_blank" rel="noopener"> Eureka! Why You Shouldn’t Use ZooKeeper for Service Discovery</a>一文，分析其原因主要是说zk是基于cp的，而注册中心的业务更适用于ap。</p>
-<p>下面根据<a href="https://yq.aliyun.com/articles/601745?scm=20140722.184.2.173" target="_blank" rel="noopener">阿里巴巴为什么不用 ZooKeeper 做服务发现</a>一文整理而来</p>
+<h2 id="zk不适用作为注册中心"><a href="#zk不适用作为注册中心" class="headerlink" title="zk不适用作为注册中心"></a>zk不适用作为注册中心</h2><p>网上大部分都在说zk不适合作为注册中心其根据主要是<a target="_blank" rel="noopener" href="https://medium.com/knerd/eureka-why-you-shouldnt-use-zookeeper-for-service-discovery-4932c5c7e764"> Eureka! Why You Shouldn’t Use ZooKeeper for Service Discovery</a>一文，分析其原因主要是说zk是基于cp的，而注册中心的业务更适用于ap。</p>
+<p>下面根据<a target="_blank" rel="noopener" href="https://yq.aliyun.com/articles/601745?scm=20140722.184.2.173">阿里巴巴为什么不用 ZooKeeper 做服务发现</a>一文整理而来</p>
 <h3 id="数据的一致性需求分析"><a href="#数据的一致性需求分析" class="headerlink" title="数据的一致性需求分析"></a>数据的一致性需求分析</h3><p>注册中心最本质的功能就是一个Query函数Si = F(service-name),以service-name作为查询参数，返回服务对应的地址；</p>
 <blockquote>
 <p>如果注册中心满足ap的情况：<br>每次返回的结果都不一样，这样会导致不同的服务提供者接收到的流量都不一样，在短时间内流量的不一致会因为多次调用根据大数理论这点流量差异会被抹消掉。</p>
@@ -498,15 +504,23 @@
 <p>健康检测的一大基本设计原则就是尽可能真实的反馈服务本身的真实健康状态，否则一个不敢被服务调用者相信的健康状态判定结果还不如没有健康检测。</p>
 <h3 id="注册中心的容灾考虑"><a href="#注册中心的容灾考虑" class="headerlink" title="注册中心的容灾考虑"></a>注册中心的容灾考虑</h3><p><strong>在实践中，注册中心不能因为自身的任何原因破坏服务之间本身的可连通性</strong>，这句话说的是就算zk服务宕机的情况下也不能影响已有服务的功能。zk的client端并没有提供这样的功能，dubbo使用zk作为注册中心时候的时候，是在dubbo消费者缓存了生产者的地址。</p>
 <h3 id="阿里对于zk的总结"><a href="#阿里对于zk的总结" class="headerlink" title="阿里对于zk的总结"></a>阿里对于zk的总结</h3><p><strong>The King Of Coordination for Big Data!</strong> </p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">在粗粒度分布式锁，分布式选主，主备高可用切换等不需要高TPS 支持的场景下有不可替代的作用，</span><br><span class="line">而这些需求往往多集中在大数据、离线任务等相关的业务领域，因为大数据领域，讲究分割数据集，</span><br><span class="line">并且大部分时间分任务多进程&#x2F;线程并行处理这些数据集，但是总是有一些点上需要将这些任务和进程统一协调，</span><br><span class="line">这时候就是 ZooKeeper 发挥巨大作用的用武之地。</span><br><span class="line"></span><br><span class="line">但是在交易场景交易链路上，在主业务数据存取，大规模服务发现、大规模健康监测等方面有天然的短板，应该竭力避免在这些场</span><br><span class="line">景下引入 ZooKeeper，在阿里巴巴的生产实践中，应用对ZooKeeper申请使用的时候要进行严格的场景、容量、SLA需求的评估。</span><br><span class="line"></span><br><span class="line">所以可以使用 ZooKeeper，但是大数据请向左，而交易则向右，分布式协调向左，服务发现向右。</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-none"><code class="language-none">在粗粒度分布式锁，分布式选主，主备高可用切换等不需要高TPS 支持的场景下有不可替代的作用，
+而这些需求往往多集中在大数据、离线任务等相关的业务领域，因为大数据领域，讲究分割数据集，
+并且大部分时间分任务多进程&#x2F;线程并行处理这些数据集，但是总是有一些点上需要将这些任务和进程统一协调，
+这时候就是 ZooKeeper 发挥巨大作用的用武之地。
+
+但是在交易场景交易链路上，在主业务数据存取，大规模服务发现、大规模健康监测等方面有天然的短板，应该竭力避免在这些场
+景下引入 ZooKeeper，在阿里巴巴的生产实践中，应用对ZooKeeper申请使用的时候要进行严格的场景、容量、SLA需求的评估。
+
+所以可以使用 ZooKeeper，但是大数据请向左，而交易则向右，分布式协调向左，服务发现向右。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>zk在业务领域作为服务发现的注册中心是越来越不适用了，在以前没有专门的工具的情况下，一个可靠、易用的工具就是作为服务发现的最好选择，但是在当下zk作为注册中心确显得不合适宜。目前注册中心的选择有很多</p>
 <ul>
-<li><a href="http://www.heartthinkdo.com/?p=1933" target="_blank" rel="noopener">Eureka</a></li>
-<li><a href="https://nacos.io/zh-cn/index.html" target="_blank" rel="noopener">Nacos</a></li>
-<li><a href="https://github.com/etcd-io/etcd" target="_blank" rel="noopener">etcd</a></li>
+<li><a target="_blank" rel="noopener" href="http://www.heartthinkdo.com/?p=1933">Eureka</a></li>
+<li><a target="_blank" rel="noopener" href="https://nacos.io/zh-cn/index.html">Nacos</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/etcd-io/etcd">etcd</a></li>
 </ul>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a href="https://www.cnblogs.com/ailiuzhe/p/11678043.html" target="_blank" rel="noopener">ZooKeeper的详细介绍以及底层原理</a><br><a href="https://zhuanlan.zhihu.com/p/69114539?utm_source=wechat_session" target="_blank" rel="noopener">为什么需要 Zookeeper</a><br><a href="https://zhuanlan.zhihu.com/p/134549250" target="_blank" rel="noopener">腾讯 ZooKeeper 源码和实践揭秘</a></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/ailiuzhe/p/11678043.html">ZooKeeper的详细介绍以及底层原理</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/69114539?utm_source=wechat_session">为什么需要 Zookeeper</a><br><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/134549250">腾讯 ZooKeeper 源码和实践揭秘</a></p>
 
                 
             </div>

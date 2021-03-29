@@ -443,7 +443,7 @@
 </thead>
 <tbody><tr>
 <td>原子性(Atomicity)</td>
-<td>指的是在事务是最小的不可分割的执行单元，事务内的操作要么<strong>都</strong>成功，要么<strong>都</strong>失败</td>
+<td>指的是在事务是最小的不可分割的执行单元，事务内的操作要么__都__成功，要么__都__失败</td>
 </tr>
 <tr>
 <td>一致性(Consistency)</td>
@@ -545,14 +545,18 @@
 </tbody></table>
 <h2 id="mysql实际操作"><a href="#mysql实际操作" class="headerlink" title="mysql实际操作"></a>mysql实际操作</h2><ul>
 <li><p>初始化语句</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> <span class="string">`test`</span> (</span><br><span class="line"><span class="string">`id`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span>,</span><br><span class="line"><span class="string">`num`</span> <span class="built_in">int</span>(<span class="number">11</span>) <span class="keyword">NOT</span> <span class="literal">NULL</span> <span class="keyword">DEFAULT</span> <span class="string">'0'</span>,</span><br><span class="line">PRIMARY <span class="keyword">KEY</span> (<span class="string">`id`</span>)</span><br><span class="line">) <span class="keyword">ENGINE</span>=<span class="keyword">InnoDB</span> <span class="keyword">DEFAULT</span> <span class="keyword">CHARSET</span>=utf8mb4 <span class="keyword">COLLATE</span>=utf8mb4_general_ci</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> <span class="token punctuation">`</span>test<span class="token punctuation">`</span> <span class="token punctuation">(</span>
+<span class="token punctuation">`</span>id<span class="token punctuation">`</span> <span class="token keyword">int</span><span class="token punctuation">(</span><span class="token number">11</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span>
+<span class="token punctuation">`</span>num<span class="token punctuation">`</span> <span class="token keyword">int</span><span class="token punctuation">(</span><span class="token number">11</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">DEFAULT</span> <span class="token string">'0'</span><span class="token punctuation">,</span>
+<span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span><span class="token punctuation">`</span>id<span class="token punctuation">`</span><span class="token punctuation">)</span>
+<span class="token punctuation">)</span> <span class="token keyword">ENGINE</span><span class="token operator">=</span><span class="token keyword">InnoDB</span> <span class="token keyword">DEFAULT</span> <span class="token keyword">CHARSET</span><span class="token operator">=</span>utf8mb4 <span class="token keyword">COLLATE</span><span class="token operator">=</span>utf8mb4_general_ci<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 </li>
 <li><p>mysql8之前版本</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> @@tx_isolation;</span><br></pre></td></tr></table></figure></li>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> @<span class="token variable">@tx_isolation</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
 <li><p>mysql8</p>
 </li>
 </ul>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> @@transaction_isolation;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> @<span class="token variable">@transaction_isolation</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <ul>
 <li>查询结果<br><img src="https://s2.ax1x.com/2020/03/01/3c8EEq.png" alt="查询结果"></li>
 </ul>
@@ -560,12 +564,12 @@
 <h3 id="脏读"><a href="#脏读" class="headerlink" title="脏读"></a>脏读</h3><ul>
 <li>设置隔离级别为<strong>读未提交</strong>(read uncommitted)</li>
 </ul>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SET</span> <span class="keyword">SESSION</span> <span class="keyword">TRANSACTION</span> <span class="keyword">ISOLATION</span> <span class="keyword">LEVEL</span> <span class="keyword">READ</span> UNCOMMITTED;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SET</span> <span class="token keyword">SESSION</span> <span class="token keyword">TRANSACTION</span> <span class="token keyword">ISOLATION</span> <span class="token keyword">LEVEL</span> <span class="token keyword">READ</span> <span class="token keyword">UNCOMMITTED</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p><strong>A事务</strong></p>
 <ul>
 <li><p>查询数据</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> * <span class="keyword">FROM</span> <span class="keyword">test</span>;</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> test<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 </li>
 <li><p>结果</p>
 </li>
@@ -573,7 +577,8 @@
 <p><img src="https://s2.ax1x.com/2020/03/01/3cOI29.png" alt="查询结果"></p>
 <p><strong>B事务</strong></p>
 <ul>
-<li>插入数据<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">START</span> <span class="keyword">TRANSACTION</span> ;</span><br><span class="line"><span class="keyword">INSERT</span> <span class="keyword">test</span> <span class="keyword">VALUE</span>(<span class="number">1</span>,<span class="number">10</span>);</span><br></pre></td></tr></table></figure>
+<li>插入数据<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">START</span> <span class="token keyword">TRANSACTION</span> <span class="token punctuation">;</span>
+<span class="token keyword">INSERT</span> test <span class="token keyword">VALUE</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 </li>
 </ul>
@@ -585,7 +590,7 @@
 <p><strong>此时就读取到了未提交的数据</strong></p>
 <p><strong>B事务</strong></p>
 <ul>
-<li>回滚事务<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ROLLBACK</span>;</span><br></pre></td></tr></table></figure>
+<li>回滚事务<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">ROLLBACK</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 </li>
 </ul>
@@ -607,8 +612,8 @@
 <p>参考文档</p>
 </blockquote>
 <ul>
-<li><a href="https://blog.csdn.net/Vincent2014Linux/article/details/89669762" target="_blank" rel="noopener">快速理解脏读，不可重复读，幻读</a></li>
-<li><a href="https://blog.csdn.net/qq_22115231/article/details/80767069" target="_blank" rel="noopener">数据库的四种事物隔离级别</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/Vincent2014Linux/article/details/89669762">快速理解脏读，不可重复读，幻读</a></li>
+<li><a target="_blank" rel="noopener" href="https://blog.csdn.net/qq_22115231/article/details/80767069">数据库的四种事物隔离级别</a></li>
 </ul>
 
                 

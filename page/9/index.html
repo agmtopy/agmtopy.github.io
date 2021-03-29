@@ -342,7 +342,7 @@ Git
 JDK1.8+
 
 clone跳过，下载后导入idea会自动使用Gradle来Build项目
-1gradlew :spring-oxm:compileTestJava
+gradlew :spring-oxm:compileTestJava
 
                             
                         </div>
@@ -654,8 +654,10 @@ spring MVC概述如果要在web环境中使用IOC容器，需要spring IOC设计
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                bean的生命周期bean的生命周期可以通过AbstrctApplicationContext.refresh()方法进行加载普通bean可以得出。
-refresh()123456789101112131415161718192021222
+                                bean的生命周期bean的生命周期可以通过**AbstrctApplicationContext.refresh()**方法进行加载普通bean可以得出。
+refresh()
+@Override
+	public void refresh(
                             
                         </div>
                         <div class="publish-info">
@@ -750,7 +752,13 @@ refresh()123456789101112131415161718192021222
                         <div class="summary block-with-text">
                             
                                 Markdown 基本要素这篇文件意在简要介绍 GitHub Flavored Markdown 写作。
-语法说明标题1234567891011# 这是 &lt;h1&gt; 一级标题## 这是 &lt;h2&gt; 二级标题### 这是 
+语法说明标题# 这是 &lt;h1> 一级标题
+
+## 这是 &lt;h2> 二级标题
+
+### 这是 &lt;h3> 三级标题
+
+#
                             
                         </div>
                         <div class="publish-info">

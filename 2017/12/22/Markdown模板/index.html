@@ -433,64 +433,125 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="Markdown-基本要素"><a href="#Markdown-基本要素" class="headerlink" title="Markdown 基本要素"></a>Markdown 基本要素</h1><p>这篇文件意在简要介绍 <a href="https://guides.github.com/features/mastering-markdown/" target="_blank" rel="noopener">GitHub Flavored Markdown 写作</a>。</p>
-<h2 id="语法说明"><a href="#语法说明" class="headerlink" title="语法说明"></a>语法说明</h2><h3 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="section"># 这是 &lt;h1&gt; 一级标题</span></span><br><span class="line"></span><br><span class="line"><span class="section">## 这是 &lt;h2&gt; 二级标题</span></span><br><span class="line"></span><br><span class="line"><span class="section">### 这是 &lt;h3&gt; 三级标题</span></span><br><span class="line"></span><br><span class="line"><span class="section">#### 这是 &lt;h4&gt; 四级标题</span></span><br><span class="line"></span><br><span class="line"><span class="section">##### 这是 &lt;h5&gt; 五级标题</span></span><br><span class="line"></span><br><span class="line"><span class="section">###### 这是 &lt;h6&gt; 六级标题</span></span><br></pre></td></tr></table></figure>
+                <h1 id="Markdown-基本要素"><a href="#Markdown-基本要素" class="headerlink" title="Markdown 基本要素"></a>Markdown 基本要素</h1><p>这篇文件意在简要介绍 <a target="_blank" rel="noopener" href="https://guides.github.com/features/mastering-markdown/">GitHub Flavored Markdown 写作</a>。</p>
+<h2 id="语法说明"><a href="#语法说明" class="headerlink" title="语法说明"></a>语法说明</h2><h3 id="标题"><a href="#标题" class="headerlink" title="标题"></a>标题</h3><pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown"><span class="token title important"><span class="token punctuation">#</span> 这是 &lt;h1> 一级标题</span>
+
+<span class="token title important"><span class="token punctuation">##</span> 这是 &lt;h2> 二级标题</span>
+
+<span class="token title important"><span class="token punctuation">###</span> 这是 &lt;h3> 三级标题</span>
+
+<span class="token title important"><span class="token punctuation">####</span> 这是 &lt;h4> 四级标题</span>
+
+<span class="token title important"><span class="token punctuation">#####</span> 这是 &lt;h5> 五级标题</span>
+
+<span class="token title important"><span class="token punctuation">######</span> 这是 &lt;h6> 六级标题</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h3 id="强调"><a href="#强调" class="headerlink" title="强调"></a>强调</h3><!-- prettier-ignore -->
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="emphasis">*这会是 斜体 的文字*</span></span><br><span class="line"><span class="emphasis">_这会是 斜体 的文字_</span></span><br><span class="line"></span><br><span class="line"><span class="strong">**这会是 粗体 的文字**</span></span><br><span class="line"><span class="strong">__这会是 粗体 的文字__</span></span><br><span class="line"></span><br><span class="line"><span class="emphasis">_你也 **组合** 这些符号_</span></span><br><span class="line"></span><br><span class="line">~~这个文字将会被横线删除~~</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown"><span class="token italic"><span class="token punctuation">*</span><span class="token content">这会是 斜体 的文字</span><span class="token punctuation">*</span></span>
+<span class="token italic"><span class="token punctuation">_</span><span class="token content">这会是 斜体 的文字</span><span class="token punctuation">_</span></span>
 
-<h3 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h3><h4 id="无序列表"><a href="#无序列表" class="headerlink" title="无序列表"></a>无序列表</h4><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">- </span>Item 1</span><br><span class="line"><span class="bullet">- </span>Item 2</span><br><span class="line"><span class="bullet">  - </span>Item 2a</span><br><span class="line"><span class="bullet">  - </span>Item 2b</span><br></pre></td></tr></table></figure>
+<span class="token bold"><span class="token punctuation">**</span><span class="token content">这会是 粗体 的文字</span><span class="token punctuation">**</span></span>
+<span class="token bold"><span class="token punctuation">__</span><span class="token content">这会是 粗体 的文字</span><span class="token punctuation">__</span></span>
 
-<h4 id="有序列表"><a href="#有序列表" class="headerlink" title="有序列表"></a>有序列表</h4><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">1. </span>Item 1</span><br><span class="line"><span class="bullet">1. </span>Item 2</span><br><span class="line"><span class="bullet">1. </span>Item 3</span><br><span class="line"><span class="bullet">   1. </span>Item 3a</span><br><span class="line"><span class="bullet">   1. </span>Item 3b</span><br></pre></td></tr></table></figure>
+<span class="token italic"><span class="token punctuation">_</span><span class="token content">你也 <span class="token bold"><span class="token punctuation">**</span><span class="token content">组合</span><span class="token punctuation">**</span></span> 这些符号</span><span class="token punctuation">_</span></span>
 
-<h3 id="添加图片"><a href="#添加图片" class="headerlink" title="添加图片"></a>添加图片</h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">![<span class="string">GitHub Logo</span>](<span class="link">/images/logo.png</span>)</span><br><span class="line">Format: ![<span class="string">Alt Text</span>](<span class="link">url</span>)</span><br></pre></td></tr></table></figure>
+<span class="token strike"><span class="token punctuation">~~</span><span class="token content">这个文字将会被横线删除</span><span class="token punctuation">~~</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h3 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">http://github.com - 自动生成！</span><br><span class="line">[<span class="string">GitHub</span>](<span class="link">http://github.com</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="列表"><a href="#列表" class="headerlink" title="列表"></a>列表</h3><h4 id="无序列表"><a href="#无序列表" class="headerlink" title="无序列表"></a>无序列表</h4><pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown"><span class="token list punctuation">-</span> Item 1
+<span class="token list punctuation">-</span> Item 2
+  <span class="token list punctuation">-</span> Item 2a
+  <span class="token list punctuation">-</span> Item 2b<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h3 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">正如 Kanye West 所说：</span><br><span class="line"></span><br><span class="line"><span class="quote">&gt; We're living the future so</span></span><br><span class="line"><span class="quote">&gt; the present is our past.</span></span><br></pre></td></tr></table></figure>
+<h4 id="有序列表"><a href="#有序列表" class="headerlink" title="有序列表"></a>有序列表</h4><pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown"><span class="token list punctuation">1.</span> Item 1
+<span class="token list punctuation">1.</span> Item 2
+<span class="token list punctuation">1.</span> Item 3
+   <span class="token list punctuation">1.</span> Item 3a
+   <span class="token list punctuation">1.</span> Item 3b<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h3 id="分割线"><a href="#分割线" class="headerlink" title="分割线"></a>分割线</h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">如下，三个或者更多的</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">连字符</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">星号</span><br><span class="line"></span><br><span class="line">---</span><br><span class="line"></span><br><span class="line">下划线</span><br></pre></td></tr></table></figure>
+<h3 id="添加图片"><a href="#添加图片" class="headerlink" title="添加图片"></a>添加图片</h3><pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown"><span class="token url"><span class="token operator">!</span>[<span class="token content">GitHub Logo</span>](<span class="token url">/images/logo.png</span>)</span>
+Format: <span class="token url"><span class="token operator">!</span>[<span class="token content">Alt Text</span>](<span class="token url">url</span>)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
-<h3 id="行内代码"><a href="#行内代码" class="headerlink" title="行内代码"></a>行内代码</h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">我觉得你应该在这里使用</span><br><span class="line"><span class="code">`&lt;addr&gt;`</span> 才对。</span><br></pre></td></tr></table></figure>
+<h3 id="链接"><a href="#链接" class="headerlink" title="链接"></a>链接</h3><pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown">http://github.com - 自动生成！
+<span class="token url">[<span class="token content">GitHub</span>](<span class="token url">http://github.com</span>)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h3 id="引用"><a href="#引用" class="headerlink" title="引用"></a>引用</h3><pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown">正如 Kanye West 所说：
+
+<span class="token blockquote punctuation">></span> We're living the future so
+<span class="token blockquote punctuation">></span> the present is our past.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="分割线"><a href="#分割线" class="headerlink" title="分割线"></a>分割线</h3><pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown">如下，三个或者更多的
+
+<span class="token hr punctuation">---</span>
+
+连字符
+
+<span class="token hr punctuation">---</span>
+
+星号
+
+<span class="token hr punctuation">---</span>
+
+下划线<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="行内代码"><a href="#行内代码" class="headerlink" title="行内代码"></a>行内代码</h3><pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown">我觉得你应该在这里使用
+<span class="token code keyword">`&lt;addr>`</span> 才对。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
 <h3 id="代码块"><a href="#代码块" class="headerlink" title="代码块"></a>代码块</h3><p>你可以在你的代码上面和下面添加 <code>```</code> 来表示代码块。</p>
 <h4 id="语法高亮"><a href="#语法高亮" class="headerlink" title="语法高亮"></a>语法高亮</h4><p>你可以给你的代码块添加任何一种语言的语法高亮</p>
 <p>例如，给 ruby 代码添加语法高亮：</p>
-<pre><code><figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">require</span> <span class="string">'redcarpet'</span></span><br><span class="line">markdown = Redcarpet.new(<span class="string">"Hello World!"</span>)</span><br><span class="line">puts markdown.to_html</span><br></pre></td></tr></table></figure></code></pre><p>会得到下面的效果：</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">require</span> <span class="string">'redcarpet'</span></span><br><span class="line">markdown = Redcarpet.new(<span class="string">"Hello World!"</span>)</span><br><span class="line">puts markdown.to_html</span><br></pre></td></tr></table></figure>
+<pre><code><pre class="line-numbers language-ruby" data-language="ruby"><code class="language-ruby"><span class="token keyword">require</span> <span class="token string">'redcarpet'</span>
+markdown <span class="token operator">=</span> <span class="token constant">Redcarpet</span><span class="token punctuation">.</span><span class="token keyword">new</span><span class="token punctuation">(</span><span class="token string">"Hello World!"</span><span class="token punctuation">)</span>
+puts markdown<span class="token punctuation">.</span>to_html<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+</code></pre>
+<p>会得到下面的效果：</p>
+<pre class="line-numbers language-ruby" data-language="ruby"><code class="language-ruby"><span class="token keyword">require</span> <span class="token string">'redcarpet'</span>
+markdown <span class="token operator">=</span> <span class="token constant">Redcarpet</span><span class="token punctuation">.</span><span class="token keyword">new</span><span class="token punctuation">(</span><span class="token string">"Hello World!"</span><span class="token punctuation">)</span>
+puts markdown<span class="token punctuation">.</span>to_html<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
-<h3 id="任务列表"><a href="#任务列表" class="headerlink" title="任务列表"></a>任务列表</h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">- </span>[<span class="string">x</span>] @mentions, #refs, [<span class="string">links</span>](<span class="link"></span>), <span class="strong">**formatting**</span>, and <span class="xml"><span class="tag">&lt;<span class="name">del</span>&gt;</span></span>tags<span class="xml"><span class="tag">&lt;/<span class="name">del</span>&gt;</span></span> supported</span><br><span class="line"><span class="bullet">- </span>[x] list syntax required (any unordered or ordered list supported)</span><br><span class="line"><span class="bullet">- </span>[x] this is a complete item</span><br><span class="line"><span class="bullet">- </span>[ ] this is an incomplete item</span><br></pre></td></tr></table></figure>
+<h3 id="任务列表"><a href="#任务列表" class="headerlink" title="任务列表"></a>任务列表</h3><pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown"><span class="token list punctuation">-</span> [x] @mentions, #refs, [links](), <span class="token bold"><span class="token punctuation">**</span><span class="token content">formatting</span><span class="token punctuation">**</span></span>, and <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>del</span><span class="token punctuation">></span></span>tags<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>del</span><span class="token punctuation">></span></span> supported
+<span class="token list punctuation">-</span> [x] list syntax required (any unordered or ordered list supported)
+<span class="token list punctuation">-</span> [x] this is a complete item
+<span class="token list punctuation">-</span> [ ] this is an incomplete item<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h3 id="表格"><a href="#表格" class="headerlink" title="表格"></a>表格</h3><!-- prettier-ignore -->
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">First Header | Second Header</span><br><span class="line">------------ | -------------</span><br><span class="line">Content from cell 1 | Content from cell 2</span><br><span class="line">Content in the first column | Content in the second column</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown"><span class="token table"><span class="token table-header-row"><span class="token table-header important">First Header </span><span class="token punctuation">|</span><span class="token table-header important"> Second Header</span>
+</span><span class="token table-line"><span class="token punctuation">------------</span> <span class="token punctuation">|</span> <span class="token punctuation">-------------</span>
+</span><span class="token table-data-rows"><span class="token table-data">Content from cell 1 </span><span class="token punctuation">|</span><span class="token table-data"> Content from cell 2</span>
+<span class="token table-data">Content in the first column </span><span class="token punctuation">|</span><span class="token table-data"> Content in the second column</span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h2 id="扩展的语法"><a href="#扩展的语法" class="headerlink" title="扩展的语法"></a>扩展的语法</h2><h3 id="上标"><a href="#上标" class="headerlink" title="上标"></a>上标</h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">30^th^</span><br></pre></td></tr></table></figure>
+<h2 id="扩展的语法"><a href="#扩展的语法" class="headerlink" title="扩展的语法"></a>扩展的语法</h2><h3 id="上标"><a href="#上标" class="headerlink" title="上标"></a>上标</h3><pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown">30^th^<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<h3 id="下标"><a href="#下标" class="headerlink" title="下标"></a>下标</h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">H~2~O</span><br></pre></td></tr></table></figure>
+<h3 id="下标"><a href="#下标" class="headerlink" title="下标"></a>下标</h3><pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown">H<span class="token strike"><span class="token punctuation">~</span><span class="token content">2</span><span class="token punctuation">~</span></span>O<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<h3 id="脚注"><a href="#脚注" class="headerlink" title="脚注"></a>脚注</h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Content [^1]</span><br><span class="line"></span><br><span class="line">[<span class="symbol">^1</span>]: <span class="link">Hi! This is a footnote</span></span><br></pre></td></tr></table></figure>
+<h3 id="脚注"><a href="#脚注" class="headerlink" title="脚注"></a>脚注</h3><pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown">Content [^1]
 
-<h3 id="缩略"><a href="#缩略" class="headerlink" title="缩略"></a>缩略</h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">_[HTML]: Hyper Text Markup Language</span><br><span class="line">_[W3C]: World Wide Web Consortium</span><br><span class="line">The HTML specification</span><br><span class="line">is maintained by the W3C.</span><br></pre></td></tr></table></figure>
+<span class="token url-reference url"><span class="token punctuation">[</span><span class="token variable">^1</span><span class="token punctuation">]</span><span class="token punctuation">:</span> Hi!</span> This is a footnote<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
-<h3 id="标记"><a href="#标记" class="headerlink" title="标记"></a>标记</h3><figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">==marked==</span><br></pre></td></tr></table></figure>
+<h3 id="缩略"><a href="#缩略" class="headerlink" title="缩略"></a>缩略</h3><pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown"><span class="token italic"><span class="token punctuation">_</span><span class="token content">[HTML]: Hyper Text Markup Language
+</span><span class="token punctuation">_</span></span><span class="token url-reference url"><span class="token punctuation">[</span><span class="token variable">W3C</span><span class="token punctuation">]</span><span class="token punctuation">:</span> World</span> Wide Web Consortium
+The HTML specification
+is maintained by the W3C.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h3 id="CriticMarkup"><a href="#CriticMarkup" class="headerlink" title="CriticMarkup"></a>CriticMarkup</h3><p>CriticMarkup 缺省是禁用的，你可以通过插件设置来启动它。<br>有关 CriticMarkup 的更多信息，请查看 <a href="http://criticmarkup.com/users-guide.php" target="_blank" rel="noopener">CriticMarkup 用户指南</a>.</p>
+<h3 id="标记"><a href="#标记" class="headerlink" title="标记"></a>标记</h3><pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown">==marked==<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="CriticMarkup"><a href="#CriticMarkup" class="headerlink" title="CriticMarkup"></a>CriticMarkup</h3><p>CriticMarkup 缺省是禁用的，你可以通过插件设置来启动它。<br>有关 CriticMarkup 的更多信息，请查看 <a target="_blank" rel="noopener" href="http://criticmarkup.com/users-guide.php">CriticMarkup 用户指南</a>.</p>
 <p>这里有 5 种基本语法：</p>
 <ul>
-<li>添加 <code>{++ ++}</code></li>
-<li>删除 <code>{-- --}</code></li>
-<li>替换 <code>{~~ ~&gt; ~~}</code></li>
-<li>注释 <code>{&gt;&gt; &lt;&lt;}</code></li>
-<li>高亮 <code>{== ==}{&gt;&gt; &lt;&lt;}</code></li>
+<li>添加 <code>&#123;++ ++&#125;</code></li>
+<li>删除 <code>&#123;-- --&#125;</code></li>
+<li>替换 <code>&#123;~~ ~&gt; ~~&#125;</code></li>
+<li>注释 <code>&#123;&gt;&gt; &lt;&lt;&#125;</code></li>
+<li>高亮 <code>&#123;== ==&#125;&#123;&gt;&gt; &lt;&lt;&#125;</code></li>
 </ul>
 <blockquote>
 <p>CriticMarkup 仅可用于 markdown-it parser，不与 pandoc parser 兼容。</p>
 </blockquote>
 <h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><ul>
-<li><a href="https://guides.github.com/features/mastering-markdown/" target="_blank" rel="noopener">Mastering Markdown</a></li>
-<li><a href="https://daringfireball.net/projects/markdown/basics" target="_blank" rel="noopener">Daring Fireball: Markdown Basics</a></li>
+<li><a target="_blank" rel="noopener" href="https://guides.github.com/features/mastering-markdown/">Mastering Markdown</a></li>
+<li><a target="_blank" rel="noopener" href="https://daringfireball.net/projects/markdown/basics">Daring Fireball: Markdown Basics</a></li>
 </ul>
-<figure class="highlight markdown"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="bullet">- </span>[<span class="string">Mastering Markdown</span>](<span class="link">https://guides.github.com/features/mastering-markdown/</span>)</span><br><span class="line"><span class="bullet">- </span>[<span class="string">Daring Fireball: Markdown Basics</span>](<span class="link">https://daringfireball.net/projects/markdown/basics</span>)</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown"><span class="token list punctuation">-</span> <span class="token url">[<span class="token content">Mastering Markdown</span>](<span class="token url">https://guides.github.com/features/mastering-markdown/</span>)</span>
+<span class="token list punctuation">-</span> <span class="token url">[<span class="token content">Daring Fireball: Markdown Basics</span>](<span class="token url">https://daringfireball.net/projects/markdown/basics</span>)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <blockquote>
 <p>参考文档</p>
 </blockquote>

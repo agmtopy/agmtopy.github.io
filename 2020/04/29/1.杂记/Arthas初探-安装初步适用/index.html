@@ -438,9 +438,10 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h1 id="Arthas初探–安装初步适用"><a href="#Arthas初探–安装初步适用" class="headerlink" title="Arthas初探–安装初步适用"></a>Arthas初探–安装初步适用</h1><p>由于在项目中遇到一种情况，某段代码在进行单元测试和在tomcat容器中运行的性能相差数百倍，因此需要分析在不同环境下某个方法执行的具体时间，从而确定问题。Arthas可以做到无侵入的监控应用远行情况。</p>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>githup项目地址：<strong><a href="https://github.com/alibaba/arthas" target="_blank" rel="noopener">https://github.com/alibaba/arthas</a></strong><br>文档地址：<strong><a href="https://alibaba.github.io/arthas/" target="_blank" rel="noopener">https://alibaba.github.io/arthas/</a></strong></p>
+<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>githup项目地址：<strong><a target="_blank" rel="noopener" href="https://github.com/alibaba/arthas">https://github.com/alibaba/arthas</a></strong><br>文档地址：<strong><a target="_blank" rel="noopener" href="https://alibaba.github.io/arthas/">https://alibaba.github.io/arthas/</a></strong></p>
 <p>安装</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wget https://alibaba.github.io/arthas/arthas-boot.jar</span><br><span class="line">java -jar arthas-boot.jar</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">wget</span> https://alibaba.github.io/arthas/arthas-boot.jar
+java -jar arthas-boot.jar<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>linux下直接执行，window下载文件后执行</p>
 <p><img src="https://img-blog.csdnimg.cn/20190630153613103.png" alt="在这里插入图片描述"><br>执行完成后，显示当前path中指定的JDK中正在运行的java进程<br>输入相应序号,进入sh命令，表示已连接成功<br><img src="https://img-blog.csdnimg.cn/2019063015385964.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAwMjk0Mzc=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
 <h2 id="初步使用"><a href="#初步使用" class="headerlink" title="初步使用"></a>初步使用</h2><p>Arthas命令初步使用，大概分为5类：</p>
@@ -489,13 +490,13 @@
 <li>trace 分析每个方法的具体执行时间<br><img src="https://img-blog.csdnimg.cn/20190630154629460.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAwMjk0Mzc=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>通过图示表明调用MongoTemplate.executeFindMultiInternal()方法时，最耗时的方法是在doWith()方法，总共执行10000次，耗时==252.3064ms==,最少一次调用耗时==0.0132ms==，最大一次耗时==38.4329ms==，分析原因还是在于数据量太大，MongoTemplate通过循环遍历出结果在进行序列化。</li>
 </ul>
 <ul>
-<li>jad 反编译代码工具<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">jad com.sankuai.inf.leaf.common.ZeroIDGen</span><br></pre></td></tr></table></figure>
+<li>jad 反编译代码工具<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">jad com.sankuai.inf.leaf.common.ZeroIDGen<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 </li>
 </ul>
 <p><img src="https://s1.ax1x.com/2020/07/28/aVeudO.png" alt="aVeudO.png"></p>
 <ul>
-<li>watch 查看输入参数与输出参数<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">watch com.sankuai.inf.leaf.server.service.SegmentService getId <span class="string">'&#123;params, target, returnObj&#125;'</span> -x 2</span><br></pre></td></tr></table></figure>
+<li>watch 查看输入参数与输出参数<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">watch</span> com.sankuai.inf.leaf.server.service.SegmentService getId <span class="token string">'&#123;params, target, returnObj&#125;'</span> -x <span class="token number">2</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 </li>
 </ul>
@@ -506,17 +507,17 @@
 <ul>
 <li>stack 查看被调用的路径(向上)</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stack com.sankuai.inf.leaf.server.service.SegmentService getId</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">stack com.sankuai.inf.leaf.server.service.SegmentService getId<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p><img src="https://s1.ax1x.com/2020/07/28/aVKIUK.png" alt="aVKIUK.png"></p>
 <ul>
 <li>sc 查看JVM已加载的类信息</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sc -d com.sankuai.inf.leaf.server.service.SegmentService getId</span><br></pre></td></tr></table></figure>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">sc -d com.sankuai.inf.leaf.server.service.SegmentService getId<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <p><img src="https://s1.ax1x.com/2020/07/28/aVMArn.png" alt="aVMArn.png"></p>
 <ul>
-<li>thread 分析死锁<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">thread b</span><br></pre></td></tr></table></figure>
+<li>thread 分析死锁<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">thread b<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 </li>
 </ul>
@@ -527,7 +528,7 @@
 <li>thread 分析CPU占用</li>
 </ul>
 <p><img src="https://s1.ax1x.com/2020/04/30/JH0HQx.png" alt="JH0HQx.png"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p> 先放一张官方的总结大图<br> <a href="https://imgchr.com/i/JHBSfA" target="_blank" rel="noopener"><img src="https://s1.ax1x.com/2020/04/30/JHBSfA.png" alt="JHBSfA.png"></a></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p> 先放一张官方的总结大图<br> <a target="_blank" rel="noopener" href="https://imgchr.com/i/JHBSfA"><img src="https://s1.ax1x.com/2020/04/30/JHBSfA.png" alt="JHBSfA.png"></a></p>
 <p>总结：Arthas是一个很优秀的java诊断工具，无论是安装还是使用都很简洁，并且使用文档全面、清晰明了，值得好好研究一番。</p>
 
                 
