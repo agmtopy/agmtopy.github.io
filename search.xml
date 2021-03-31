@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>MySQL总结</title>
+      <link href="2021/03/30/6.mysql/MySQL%E6%80%BB%E7%BB%93/"/>
+      <url>2021/03/30/6.mysql/MySQL%E6%80%BB%E7%BB%93/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p>通过以上几篇文章分别介绍了MySQL的文件系统/索引/锁/事务等功能点,这篇文章将对这些知识点进行汇总,描述出MySQL大概的架构</p></blockquote><h2 id="文件数据"><a href="#文件数据" class="headerlink" title="文件数据"></a>文件数据</h2><p> MySQL在文件数据上可以划分为<strong>MySQL系统数据</strong>/<strong>存储引擎数据</strong></p><ul><li>文件数据<ul><li>系统文件</li><li>参数文件<br>参数文件指的是系统运行时的参数,主要分为’静态参数’和’动态参数’</li><li>日志文件</li><li>系统错误日志文件</li><li>二进制(binlog)<br>binlog目前有三种记录格式分别是STATEMENT/ROW/MIXED;RC和STATEMENT格式不兼容,因为binlog的是在事务进行提交时写入</li><li>慢查询日志</li><li>查询日志</li><li>套接字文件<br>套接字文件是UNIX下使用套接字链接方式打开的socket文件</li><li>pid文件</li><li>表结构文件<br>定义表结构的文件,每个表都有一个frm的表结构文件</li></ul></li><li>InnoDB存储引擎文件<ul><li>表空间文件<br>实际存储数据的文件,名称为ibdata1的文件作为共享表空间文件,MySQL也支持为每个表单独设置表空间文件,后缀名为.ibd</li><li>redolog<br>redoLog又称为重做日志,文件名称为ib_logfile0/ib_logfile1</li></ul></li></ul><p><a href="https://imgtu.com/i/cESwqK"><img src="https://z3.ax1x.com/2021/04/01/cESwqK.png" alt="cESwqK.png"></a></p><h2 id="索引系统"><a href="#索引系统" class="headerlink" title="索引系统"></a>索引系统</h2><p>MySQL的索引系统主要是由于B+ Tree索引作为底层数据结构,也有采用Hash自适应索引场景.</p><ul><li>索引<ul><li>分类<ul><li>B+Tree索引<br>B+ TREE索引作为MySQL底层数据结构的好处是在于B+TREE平衡且层级不高并且叶子节点可以作为聚集索引</li><li>全文索引<br>MySQL的全文索引也是采用倒排算法,通过关键字来进行文档映射,现实工作中未涉及到,因此未详细研究</li><li>Hash索引<br>InnoDB只支持自适应的Hash索引,不能显示的去创建并且要满足Hash索引自动创建的条件(等值查询/命中范围/查询频率)</li></ul></li></ul></li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 数据库 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> MySQL </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>MySQL事务</title>
       <link href="2021/03/27/6.mysql/MySQL%E4%BA%8B%E5%8A%A1/"/>
       <url>2021/03/27/6.mysql/MySQL%E4%BA%8B%E5%8A%A1/</url>
@@ -20,7 +45,7 @@
       
         <tags>
             
-            <tag> Mysql </tag>
+            <tag> MySQL </tag>
             
         </tags>
       
@@ -45,7 +70,7 @@
       
         <tags>
             
-            <tag> Mysql </tag>
+            <tag> MySQL </tag>
             
         </tags>
       
@@ -54,9 +79,9 @@
     
     
     <entry>
-      <title>Mysql技术疑问</title>
-      <link href="2021/03/20/6.mysql/Mysql%E6%8A%80%E6%9C%AF%E7%96%91%E9%97%AE/"/>
-      <url>2021/03/20/6.mysql/Mysql%E6%8A%80%E6%9C%AF%E7%96%91%E9%97%AE/</url>
+      <title>MySQL技术疑问</title>
+      <link href="2021/03/20/6.mysql/MySQL%E6%8A%80%E6%9C%AF%E7%96%91%E9%97%AE/"/>
+      <url>2021/03/20/6.mysql/MySQL%E6%8A%80%E6%9C%AF%E7%96%91%E9%97%AE/</url>
       
         <content type="html"><![CDATA[<blockquote><p>记录&lt;&lt;MySQL技术内幕-InnoDB存储引擎&gt;&gt;阅读中存在的疑问点</p></blockquote><ul><li>P77 日志文件<blockquote><p>如果使用RC隔离级别会出现类似数据丢失更新的现象,从而出现主从数据库上的数据不一致</p></blockquote></li></ul><p>bin_log的记录格式为’STATENEBT’是,会出现这样的情况为什么喃?</p><p>原因:</p><blockquote><ol><li>bin_log的记录顺序是commit的顺序,而不是执行顺序</li><li>RC中SQL的执行是立即执行的<br>这样如果bin_log记录格式如果是sql,就会出现丢失数据的场景</li></ol></blockquote><hr><ul><li><p>P268 锁</p><blockquote><p>InnoDB对于Insert的操作会检查插入记录的下一条记录是否被锁定,如果锁定则不允许操作</p></blockquote></li><li><p>P269 解决幻读</p><blockquote><p>在RR模式下通过Next-Key Locking机制来解决幻读,既然MVVC是读取快照,为什么还需要Next-Key Locking机制来解决幻读问题</p></blockquote></li></ul><p>InnoDB实际上是把读取拆分成两种类型</p><ul><li>快照读<br>通过读取undo log,并且对比版本号得到事务开始时的数据,这种主要是select 操作,对数据加s锁</li><li>当前读<br>当前读指的是通过Next-Key Locking 机制将对数据的读取操作序列化,解决幻读问题</li></ul><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul><li><a href="https://www.zhihu.com/question/334408495">知乎MVCC的解答</a></li></ul>]]></content>
       
@@ -70,7 +95,7 @@
       
         <tags>
             
-            <tag> Mysql </tag>
+            <tag> MySQL </tag>
             
         </tags>
       
@@ -79,9 +104,9 @@
     
     
     <entry>
-      <title>MySql文件和表结构</title>
-      <link href="2021/03/20/6.mysql/MySql%E6%96%87%E4%BB%B6%E5%92%8C%E8%A1%A8%E7%BB%93%E6%9E%84/"/>
-      <url>2021/03/20/6.mysql/MySql%E6%96%87%E4%BB%B6%E5%92%8C%E8%A1%A8%E7%BB%93%E6%9E%84/</url>
+      <title>MySQL文件和表结构</title>
+      <link href="2021/03/20/6.mysql/MySQL%E6%96%87%E4%BB%B6%E5%92%8C%E8%A1%A8%E7%BB%93%E6%9E%84/"/>
+      <url>2021/03/20/6.mysql/MySQL%E6%96%87%E4%BB%B6%E5%92%8C%E8%A1%A8%E7%BB%93%E6%9E%84/</url>
       
         <content type="html"><![CDATA[<h2 id="MySQL文件体系"><a href="#MySQL文件体系" class="headerlink" title="MySQL文件体系"></a>MySQL文件体系</h2><p>MySql文件体系主要分为:</p><ol><li>参数文件<br>参数文件的定义是作为存储MySql初始化参数的作用,负责记录各种参数</li><li>日志文件:<br>这里的日志文件主要是系统操作日志,主要有错误日志文件,二进制日志文件,慢查询日志文件等</li><li>socket文件:<br>UNIX域套接字所需文件</li><li>pid文件<br>MySql实例进程的ID文件</li><li>MySQL表结构文件<br>用来存放MySQL表结构定义文件</li><li>存储引擎文件<br>存储引擎文件存放了真正的记录和索引数据</li></ol><p>主要关心的是日志文件和存储引擎文件</p><h3 id="日志文件"><a href="#日志文件" class="headerlink" title="日志文件"></a>日志文件</h3><p>日志文件主要有错误日志,二进制日志,慢查询日志,查询日志文件<br>二进制日志就是bin_log文件,会记录所有对MySql数据库执行更新的操作,就算最后数据未发生改变;<br>当使用支持事务的存储引擎时,所有未提交的二进制日志会被记录到一个缓存中(当超过缓存大小时会记录到临时文件中),等待该事务提交时直接将缓存刷新到bin_log中<br>bin_log的记录格式有三种(记录执行SQL,记录更新数据,混合模式),在’记录执行SQL’的模式下主从复制不能使用RC模式</p><h3 id="存储引擎文件"><a href="#存储引擎文件" class="headerlink" title="存储引擎文件"></a>存储引擎文件</h3><p>存储引擎文件主要有’表空间文件’,重做日志文件(redo log)</p><h4 id="表空间文件"><a href="#表空间文件" class="headerlink" title="表空间文件"></a>表空间文件</h4><p>表空间文件指的是实际存储数据的文件,分为两种类型默认的表空间,这种表空间是共享数据存储的模式,另外一种是独自的表空间,为每一张表单独生产独立的表空间文件存放数据/索引/插入缓冲BITMAP,但是该表其余的数据还是放到默认的表空间中</p><h4 id="重做日志文件"><a href="#重做日志文件" class="headerlink" title="重做日志文件"></a>重做日志文件</h4><p>重做日志文件是innoDB用来保证数据完整性的关键,默认采用一个重做日志组下面有两个镜像重做日志文件的架构.<br>redo_log是在sql执行过程中不断的进行写入和复制,这里和bin_log有所差异,bin_log是在事务提交后进行的写入.<br>redo_log的记录对象是对每个页的更改的物理记录,redo_log记录的是向前的更新记录.</p><h2 id="MySQL表结构"><a href="#MySQL表结构" class="headerlink" title="MySQL表结构"></a>MySQL表结构</h2><p>MySQL的文件结构是如何数据如何在物理上的结构,MySQL对于数据在逻辑上的结构可以划分为索引组织表,InnoDO的存储结构,行记录结构,页记录结构以及视图等</p><h3 id="数据存储的方式"><a href="#数据存储的方式" class="headerlink" title="数据存储的方式"></a>数据存储的方式</h3><p>数据存储格式可以分为’堆表’/‘索引组织表’</p><ul><li>堆表指的是数据的存放是无序的,是根据空闲磁盘空间来决定存放位置;</li><li>索引组织表指的是在存放数据时是按照主键索引来进行存放的.InnoDB的B+树索引结构就是一种索引组织表的形式.</li></ul><h3 id="InnoDB逻辑存储结构"><a href="#InnoDB逻辑存储结构" class="headerlink" title="InnoDB逻辑存储结构"></a>InnoDB逻辑存储结构</h3><p>InnoDB的逻辑存储结构划分为4级,分别是表空间-段空间-区空间-页空间,页空间上存储的就是一行一行的数据了</p><h3 id="表空间"><a href="#表空间" class="headerlink" title="表空间"></a>表空间</h3><p>表空间是InnoDB逻辑存储上最上层的操作单位,一个表空间存储了所属该表的全部数据(data,index)</p><h3 id="段空间"><a href="#段空间" class="headerlink" title="段空间"></a>段空间</h3><p>对表空间内的数据按照类型进行划分,又可以划分为数据段/索引段/回滚段等,这些不同的类型数据,被称为段空间</p><p>——逻辑-物理分割层——</p><h3 id="区空间"><a href="#区空间" class="headerlink" title="区空间"></a>区空间</h3><p>区空间是由连续的磁盘空间组成,默认区空间大小为1MB,为了保证区空间的连续性还会一次向磁盘申请多个区空间.区空间实际存储了段空间内的数据.</p><h3 id="页空间"><a href="#页空间" class="headerlink" title="页空间"></a>页空间</h3><p>页空间是InnoDB最小的磁盘管理单位,在InnoDB中每个页的大小为16KB,因此一个区可以存储64个页.页按照类型可以划分为</p><ol><li>数据页</li><li>undo页</li><li>系统页</li><li>事务数据页</li><li>插入缓冲页(BitMap/Free List)</li><li>二进制大对象页</li></ol><h3 id="行"><a href="#行" class="headerlink" title="行"></a>行</h3><p>InnoDB中的数据是按照行来进行存储的,行数据的记录格式按照类型可以分为两类.Compact和Redundant两种类型.</p><ul><li><p>Redundant<br>Redundant类型是为了兼容之前版本而设计的</p></li><li><p>Compact<br>Compact格式是MySQL5.0中引入的,目的是高效的存储数据.</p></li><li><p>数据结构</p></li></ul><table><thead><tr><th>变长字段长度列表</th><th>NULL标志位</th><th>记录头信息</th><th>列数据…</th><th>事务ID</th><th>回滚指针</th></tr></thead></table><p>特别要注意’事务ID’和’回滚指针’这两项与隔离级别和事务回滚有关;<br>NULL,在行的数据结构中都不占用任何存储空间,因为在行的数据结构中有NULL标志位来处理NULL</p><ul><li>Varchar类型长度<br>Varchar类型在MySQL中的定义是最大能存储65535个字节,并且是该行所有的Varchar类型长度之和.由于一个页的大小为16KB,因此在Varchar的类型长度实际上是超过一页的大小,这样就会导致一页上不能存储一行数据.这里InnoDB采用了溢出页的方式来进行处理,page上只保留数据头信息,而溢出页上存储溢出的信息(溢出指的是数据大小溢出InnoDB设定的额定大小,而不是page页的大小)</li></ul><h2 id="InnoDB数据页结构"><a href="#InnoDB数据页结构" class="headerlink" title="InnoDB数据页结构"></a>InnoDB数据页结构</h2><p>InnoDB的数据页结构指的是页空间中数据页的结构,主要由数据系统信息和用户记录信息组成</p><ul><li>数据系统结构<br>数据系统结构主要是由文件头/页头/Infimun-Supremum Records/页目录等组成,标记了该块区域的系统信息</li><li>Infimun-Supremum Records指的是一个小于数据主键的区间起始值和终止值.这两个值会在B+树中进行存储</li><li>页目录指的是指的是标记用户数据的相对位置的结构<blockquote><p>在进行数据查找时,会先从B+树中查询到数据对应的页,将页加载到内存中后,根据页目录来对用户数据进行二分查找(重点)</p></blockquote></li></ul><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul><li><a href="https://my.oschina.net/xinxingegeya/blog/474895">MySQL聚簇索引&amp;聚集索引&amp;索引组织表</a></li></ul>]]></content>
       
@@ -95,7 +120,7 @@
       
         <tags>
             
-            <tag> Mysql </tag>
+            <tag> MySQL </tag>
             
         </tags>
       
@@ -104,9 +129,9 @@
     
     
     <entry>
-      <title>Mysql体系结构与存储引擎</title>
-      <link href="2021/03/15/6.mysql/Mysql%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B8%8E%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/"/>
-      <url>2021/03/15/6.mysql/Mysql%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B8%8E%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/</url>
+      <title>MySQL体系结构与存储引擎</title>
+      <link href="2021/03/15/6.mysql/MySQL%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B8%8E%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/"/>
+      <url>2021/03/15/6.mysql/MySQL%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B8%8E%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/</url>
       
         <content type="html"><![CDATA[<blockquote><p>主要介绍MySql的整体体系结构和存储引擎</p></blockquote><h2 id="体系结构"><a href="#体系结构" class="headerlink" title="体系结构"></a>体系结构</h2><p>概念上’数据库’是文件的集合,是依照某种数据模型组织起来并存放与存储器中的数据;’数据库实列’是程序是一个用户进程,是用户对’数据库’操作的软件.<br>MySql主要由以下几部分组成</p><ol><li>连接池组件</li><li>管理服务和工具组件</li><li>SQL接口组件</li><li>查询分析器组件</li><li>优化器组件</li><li>缓冲组件</li><li>插件式存储引擎(存储引擎是基于表的 ,而不是基于数据库的)</li><li>物理文件</li></ol><h2 id="存储引擎"><a href="#存储引擎" class="headerlink" title="存储引擎"></a>存储引擎</h2><ul><li><p>概述<br>存储引擎是与MySql物理文件进行交互的一种插件,存储引擎的底部是物理存储层,包括二进制日志文件,数据文件,错误文件,慢查询日志,undo/redo日志等</p></li><li><p>一次select的过程<br>下图是一次select的过程,从图中得知存储引擎位于是物理文件和程序数据之间<br><a href="https://imgtu.com/i/6r8Q7q"><img src="https://s3.ax1x.com/2021/03/15/6r8Q7q.png" alt="6r8Q7q.png"></a></p></li><li><p>InnoDB的体系架构</p></li></ul><p><a href="https://dev.mysql.com/doc/refman/8.0/en/innodb-architecture.html"><img src="https://dev.mysql.com/doc/refman/8.0/en/images/innodb-architecture.png" alt="InnoDB架构"></a></p><ol><li>实列层<br>实列层主要包括’线程’和’内存’两个部分<br>a. 后台线程主要有</li></ol><ul><li>Master Thread<br>主线程主要负责将缓冲池中的数据异步刷新到磁盘中,保证数据的一致性</li><li>I/O Thread<br>I/O Thread 主要是负责AIO(Async IO)请求的回调</li><li>Purge Thread<br>Purge Thread的作用是事物在被提交后undolog就可能不在被使用了,因此需要Purge Thread线程来回收并分配的undo页</li><li>Page Cleaner Thread<br>Page Cleaner Thread的作用是回收分配脏页</li></ul><p>小结:Master Thread和I/O Thread一个负责异步刷新数据一个负责AIO的回调,Purge Thread和Page Cleaner Thread一个负责回收分配undolog一个负责回收分配脏页</p><p>b. 内存</p><ul><li>缓冲池<br>InnoDB存储引擎是基于磁盘存储,其中的数据是按照页的方式进行管理.由于CPU和磁盘速度中的差异因此用缓冲池技术来提高数据库的整体性能<br>缓冲池是一块内存区域,在数据库进行读取页操作时,会首先将从内存中的数据放到缓冲池中,在下一次读取相同页时,会直接读取缓冲池中的页数据.<br>对于数据库中的页的修改,首先会修改缓冲池中的页,然后以一定的频率刷新到磁盘,这种机制被称为CheckPoint<br>缓冲池中的数据页类型分为:</li></ul><ol><li>索引页</li><li>数据页</li><li>undo页</li><li>插入缓冲</li><li>自适应哈希索引</li><li>InnoDB存储的锁信息</li><li>数据字典</li></ol><ul><li><p>LRU list,Freen lst,Flush list<br>数据库中的缓冲池是通过LRU算法来进行管理,但是InnoDB中的LRU算法是经过优化的,将新数据放到列表3/8处</p></li><li><p>重做日志缓冲<br>重做日志首先会放到缓冲区,然后按照一定的频率刷新到日志文件上,有三种情况会刷新重做日志:1.Master Thread每一秒都会将日志缓冲刷新到日志文件,2.每个事务提交时都会将重做日志刷新到文件,3.当重做日志缓冲池剩余空间小于1/2时,会将日志刷新到文件上</p></li><li><p>额外的内存池<br>额外的内存池作为缓冲池的备用,但缓冲池不够的时候,就会从额外的内存池中申请</p></li><li><p>Checkpoint技术<br>Mysql中数据的持久性是通过Write Ahead Log策略来保证,也就是先写日志文件,在修改数据文件.当宕机导致数据丢失时,会通过重做日志来进行数据恢复.<br>如果重做日志太大会导致数据恢复的很慢,因此mysql使用CheckPoint的技术来保证,CheckPoint是将缓冲池中的内存页刷新到磁盘的动作</p></li></ul><h2 id="Master-Thread"><a href="#Master-Thread" class="headerlink" title="Master Thread"></a>Master Thread</h2><p>Master Thread具有最高级别的线程优先级,内部有多个循环组成:主循环,后台循环,刷新循环,暂停循环.<br>Master Thread主要分为1s执行一次的操作:</p><ol><li>日志缓冲刷新到磁盘,即使这个事务还没提交</li><li>合并插入缓冲</li><li>最多刷新100个InnoDB的缓冲池中的脏页到磁盘</li><li>如果当前没有用户活动,就切换到backgroud loop<br>10s执行一次的操作:</li><li>刷新100个脏页到磁盘</li><li>合并至多5个插入缓冲</li><li>将日志缓冲刷新到磁盘</li><li>删除无用的Undo页</li><li>刷新100个或者10个脏页</li></ol><h2 id="InnoDB特点"><a href="#InnoDB特点" class="headerlink" title="InnoDB特点"></a>InnoDB特点</h2><ol><li>插入缓冲(Insert Buffer)</li><li>两次写(Double Write)</li><li>自适应哈希索引(Adaptive Hash Index)</li><li>异步IO(Async IO)</li><li>刷新邻接页(Flush Neighbor Page)</li></ol><h2 id="插入缓冲"><a href="#插入缓冲" class="headerlink" title="插入缓冲"></a>插入缓冲</h2><ol><li>Insert Buffer<br>Insert Buffer是在插入数据时将辅助索引先放到Insert Buffer中,然后在按照一定的频率将Insert Buffer中的数据和辅助索引页的子节点进行合并,这样能够提高非聚集索引的插入性能</li><li>Change Buffer<br>Change Buffer作为Insert Buffer的升级,会将所有对非聚集索引的操作进行缓冲</li><li>Insert Buffer的内部结构<br>Insert Buffer的数据结构是B+树,在Mysql4.1之前每张表都有一颗B+树;在现在的版本中全局只有一颗B+树,负责对所有表的辅助索引进行Insert Buffer,默认为ibdata1<br>Insert Buffer的非叶子节点是由space(待插入记录表的表空间id),offer(偏移量)构成;叶子节点是由space,offer,metadata(操作辅助索引的元数据-顺序,标识,类型)</li><li>merge Insert Buffer的过程<br>在三种情况下,MySql会将Insert Buffer刷新到辅助索引文件中,并且虽然Insert Buffer是有序的,但是在刷新时,是随机选取Insert Buffer中的一个页进行刷新,做这个的目的是为了保证公平性而舍弃顺序性.以下的三种情况会进行Inser Buffer的刷新</li><li>辅助索引页被读取到缓冲池中</li><li>Insert Buffer BitMap记录Insert Buffer可用空间不足时</li><li>Master Thread线程对Insert Buffer的刷新</li></ol><h2 id="两次写"><a href="#两次写" class="headerlink" title="两次写"></a>两次写</h2><p>两次写指的是当在直接写入某页时发生宕机,会有丢失数据的风险.通过向将脏页的数据转移到内存中的doublewrite buffer中,在将doublewrite中的数据同步写到共享表空间的物理磁盘文件上,第二次才将doublewrite buffer中的文件刷新到数据文件(.ibd)中,这样可以尽量保证数据文件的完整性</p><h2 id="自适应哈希索引"><a href="#自适应哈希索引" class="headerlink" title="自适应哈希索引"></a>自适应哈希索引</h2><p>自适应哈希索引指的是连续对热点数据的多次查询后会根据B+树索引生成对应的哈希索引,加快查询性能</p><h2 id="异步IO"><a href="#异步IO" class="headerlink" title="异步IO"></a>异步IO</h2><p>异步IO可以提高操作磁盘的效率,</p><h2 id="刷新邻接页"><a href="#刷新邻接页" class="headerlink" title="刷新邻接页"></a>刷新邻接页</h2><p>刷新邻接页指的是对脏页所在区的页进行检测,发现是脏页一并进行刷新.</p>]]></content>
       
@@ -120,7 +145,7 @@
       
         <tags>
             
-            <tag> Mysql </tag>
+            <tag> MySQL </tag>
             
         </tags>
       
@@ -1524,9 +1549,9 @@
     
     
     <entry>
-      <title>数据库事务理解</title>
-      <link href="2020/02/29/6.mysql/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%E7%90%86%E8%A7%A3/"/>
-      <url>2020/02/29/6.mysql/%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%E7%90%86%E8%A7%A3/</url>
+      <title>MySQL数据库事务浅析</title>
+      <link href="2020/02/29/6.mysql/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%E6%B5%85%E6%9E%90/"/>
+      <url>2020/02/29/6.mysql/MySQL%E6%95%B0%E6%8D%AE%E5%BA%93%E4%BA%8B%E5%8A%A1%E6%B5%85%E6%9E%90/</url>
       
         <content type="html"><![CDATA[<h1 id="数据库事务理解"><a href="#数据库事务理解" class="headerlink" title="数据库事务理解"></a>数据库事务理解</h1><p>数据库事务是一种本地的刚性事务，支持ACID</p><h2 id="ACID理论"><a href="#ACID理论" class="headerlink" title="ACID理论"></a><strong>ACID</strong>理论</h2><table><thead><tr><th>名称</th><th>描述</th></tr></thead><tbody><tr><td>原子性(Atomicity)</td><td>指的是在事务是最小的不可分割的执行单元，事务内的操作要么__都__成功，要么__都__失败</td></tr><tr><td>一致性(Consistency)</td><td>指的是在事务执行前后数据上的完整性保存一致，不会因为数据库事务的执行而改变数据在业务模型上的完整性</td></tr><tr><td>隔离性(isolation)</td><td>指的是每个事务都有单独的操作空间，不能在事务期间相互影响</td></tr><tr><td>持久性(Durability)</td><td>指的是事务完成后对数据库的改变是以落盘结束的</td></tr></tbody></table><h2 id="数据库的隔离级别"><a href="#数据库的隔离级别" class="headerlink" title="数据库的隔离级别"></a>数据库的隔离级别</h2><table><thead><tr><th>隔离级别</th><th>描述</th></tr></thead><tbody><tr><td>Read Uncommitted(未提交读)</td><td>能够读取到其他事务尚未提交的数据</td></tr><tr><td>Read committed(读取已提交内容)</td><td>只能读取事务已提交的数据，</td></tr><tr><td>Repeatable Read(可重读)</td><td>指的是在同一个事务中任意时间节点读取到的内容一致</td></tr><tr><td>Serializable(串行化)</td><td>指的是事务是以串行化执行</td></tr></tbody></table><h2 id="事务异常"><a href="#事务异常" class="headerlink" title="事务异常"></a>事务异常</h2><table><thead><tr><th>异常</th><th>描述</th></tr></thead><tbody><tr><td>脏读（Dirty Read）</td><td>指的是读到了未提交的数据</td></tr><tr><td>不可重复读（Not Repeatable Read）</td><td>指的是在一个事务的过程中，前后读取到的数据行不一致</td></tr><tr><td>幻读</td><td>指的是在一个事务中读取到的数据行不一致</td></tr></tbody></table><ul><li>不可重复读指的是对数据的<strong>删除</strong>、<strong>更新</strong>操作</li><li>幻读指的是对数据的<strong>inster</strong>操作</li></ul><h2 id="数据库的隔离级别-1"><a href="#数据库的隔离级别-1" class="headerlink" title="数据库的隔离级别"></a>数据库的隔离级别</h2><ul><li>√为会发生，×为不会发生</li></ul><table><thead><tr><th>隔离级别</th><th>脏读</th><th>不可重复读</th><th>幻读</th></tr></thead><tbody><tr><td>read uncommitted（未提交读）</td><td>√</td><td>√</td><td>√</td></tr><tr><td>read committed（提交读）</td><td>x</td><td>√</td><td>√</td></tr><tr><td>repeatable read（可重复读）</td><td>x</td><td>x</td><td>√</td></tr><tr><td>serialization（可串行化）</td><td>x</td><td>x</td><td>x</td></tr></tbody></table><h2 id="mysql实际操作"><a href="#mysql实际操作" class="headerlink" title="mysql实际操作"></a>mysql实际操作</h2><ul><li><p>初始化语句</p><pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> <span class="token punctuation">`</span>test<span class="token punctuation">`</span> <span class="token punctuation">(</span><span class="token punctuation">`</span>id<span class="token punctuation">`</span> <span class="token keyword">int</span><span class="token punctuation">(</span><span class="token number">11</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span><span class="token punctuation">`</span>num<span class="token punctuation">`</span> <span class="token keyword">int</span><span class="token punctuation">(</span><span class="token number">11</span><span class="token punctuation">)</span> <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token keyword">DEFAULT</span> <span class="token string">'0'</span><span class="token punctuation">,</span><span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span><span class="token punctuation">`</span>id<span class="token punctuation">`</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">ENGINE</span><span class="token operator">=</span><span class="token keyword">InnoDB</span> <span class="token keyword">DEFAULT</span> <span class="token keyword">CHARSET</span><span class="token operator">=</span>utf8mb4 <span class="token keyword">COLLATE</span><span class="token operator">=</span>utf8mb4_general_ci<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre></li><li><p>mysql8之前版本</p><pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> @<span class="token variable">@tx_isolation</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li><li><p>mysql8</p></li></ul><pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> @<span class="token variable">@transaction_isolation</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><ul><li>查询结果<br><img src="https://s2.ax1x.com/2020/03/01/3c8EEq.png" alt="查询结果"></li></ul><p>mysql的默认事务是<strong>REPEATABLE-READ</strong></p><h3 id="脏读"><a href="#脏读" class="headerlink" title="脏读"></a>脏读</h3><ul><li>设置隔离级别为<strong>读未提交</strong>(read uncommitted)</li></ul><pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SET</span> <span class="token keyword">SESSION</span> <span class="token keyword">TRANSACTION</span> <span class="token keyword">ISOLATION</span> <span class="token keyword">LEVEL</span> <span class="token keyword">READ</span> <span class="token keyword">UNCOMMITTED</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p><strong>A事务</strong></p><ul><li><p>查询数据</p><pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">SELECT</span> <span class="token operator">*</span> <span class="token keyword">FROM</span> test<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li><li><p>结果</p></li></ul><p><img src="https://s2.ax1x.com/2020/03/01/3cOI29.png" alt="查询结果"></p><p><strong>B事务</strong></p><ul><li>插入数据<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">START</span> <span class="token keyword">TRANSACTION</span> <span class="token punctuation">;</span><span class="token keyword">INSERT</span> test <span class="token keyword">VALUE</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li></ul><p><strong>A事务</strong></p><ul><li>查询数据</li></ul><p><img src="https://s2.ax1x.com/2020/03/01/3gxwH1.png" alt="查询结果"></p><p><strong>此时就读取到了未提交的数据</strong></p><p><strong>B事务</strong></p><ul><li>回滚事务<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">ROLLBACK</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li></ul><p><strong>A事务</strong></p><ul><li>查询数据<br><img src="https://s2.ax1x.com/2020/03/01/32Kr5T.png" alt="查询结果"></li></ul><h3 id="不可重复读"><a href="#不可重复读" class="headerlink" title="不可重复读"></a>不可重复读</h3><ul><li>结果<br><img src="https://s2.ax1x.com/2020/03/01/32lyPf.png" alt="查询结果"></li></ul><p>线程不能读取到其他线程尚未提交的数据</p><h3 id="可重复读"><a href="#可重复读" class="headerlink" title="可重复读"></a>可重复读</h3><p><img src="https://s2.ax1x.com/2020/03/01/321bkt.png" alt="可重复读查询结果"></p><p>上图展示了在同一个事务中读取不管B事务是否提交，A事务读取的数据都是一样的。</p><ul><li>幻读展示<br><img src="https://s2.ax1x.com/2020/03/01/32tbkj.png" alt="可重复读查询结果"></li></ul><p>可重复读的隔离级别虽然保证了在同一个事务中，前后读取数据一致，当时在插入时，由于是<strong>表级锁</strong>因此数据会等待之前的事务提交完成后再执行，因此出现异常。</p><blockquote><p>参考文档</p></blockquote><ul><li><a href="https://blog.csdn.net/Vincent2014Linux/article/details/89669762">快速理解脏读，不可重复读，幻读</a></li><li><a href="https://blog.csdn.net/qq_22115231/article/details/80767069">数据库的四种事物隔离级别</a></li></ul>]]></content>
       
@@ -1540,7 +1565,7 @@
       
         <tags>
             
-            <tag> 数据库事务 </tag>
+            <tag> MySQL </tag>
             
         </tags>
       
