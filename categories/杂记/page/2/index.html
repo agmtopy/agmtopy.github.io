@@ -704,11 +704,35 @@ BA
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                redi分布式锁实现原理redis分布式锁实现的原理是，多个进程同时竞争同一个共享资源，拥有这个资源的线程就可以执行，其他进程等待执行线程释放。
-问题加锁：
+                                基本数据结构
 
-set和get是两个命令，因此要用set nx
-不会自动过期，因此要用px,设定
+
+类型
+特点
+
+
+
+string
+字符串
+
+
+list
+列表
+
+
+set
+不重复列表
+
+
+hash
+哈希
+
+
+zset
+有序集合
+
+
+Redis中的hash是渐进式hash,不会在扩容时暂停，而是会重新创建一个新的hash来
                             
                         </div>
                         <div class="publish-info">
