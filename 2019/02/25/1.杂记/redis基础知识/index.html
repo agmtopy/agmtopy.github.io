@@ -727,8 +727,15 @@
     <span class="token keyword">return</span> <span class="token number">0</span>
 <span class="token keyword">end</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>在只是单机版redis的分布式锁，不适合分布式环境。当redis宕机后，执行线程不会被释放。当线程执行耗时任务时，可能出现redis释放锁，其他线程持有锁。<br>分布式redis锁可以采用Redission实现，底层是redis作者实现的Redlock原理。</p>
-<h4 id="redis八股文"><a href="#redis八股文" class="headerlink" title="redis八股文"></a>redis八股文</h4><ul>
-<li><p>缓存雪崩<br>雪崩指的是大量key在同一时间失效,导致大量请求发送到后端,影响数据库的情况<br>在设计key时就要考虑到失效时间的影响,将时效时间拉成一个时间段将请求进行削峰</p>
+<ul>
+<li>关于RedLock存在的问题</li>
+</ul>
+<ol>
+<li>对获取到锁的进行操作没有保护机制,这里其实可以对比过期时间的方式来处理</li>
+<li>RedLock是建立在时间有序的前提下的<br>一般业务系统可以使用RedLock算法,在严格要求分布式锁正确性的场景下推荐使用ZK(curator已有现成实现)</li>
+</ol>
+<h4 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h4><ul>
+<li><p>缓存雪崩<br>雪崩指的是大量key在同一时间失效,导致大量请求发送到后端,影响数据库的情况<br>在设计key时就要考虑到失效时间的影响,将时效时间拉成一个时间段将请求进行防范</p>
 </li>
 <li><p>缓存穿透/击穿<br>缓存穿透/击穿指的是请求的key不在cache中,导致大量请求发送到后端系统中<br>解决这种问题需要从三个方面进行处理:</p>
 </li>
@@ -738,7 +745,8 @@
 <li>查询步骤<br>user -&gt; cache -&gt; DB</li>
 <li>更新步骤<br>user -&gt; DB(update) -&gt;cache(delete)<br>一般使用cache都是使用这种策略,这种策略可能出现的问题是一个操作持有修改前的数据,但是在另外一个操作对数据进行修改后才将数据放到cache中;这种问题出现的概念较低,可以为缓存设置失效时间来尽可能的避免影响范围.还有的设计方案是让cache直接去维护DB的数据修改核心思想就是将两个写操作入口合并成为一个,从而解决数据不一致问题;</li>
 </ol>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://try.redis.io/">Redis在线教程</a><br><a target="_blank" rel="noopener" href="https://my.oschina.net/u/4283481/blog/4133755">Redis(2)——跳跃表</a><br><a target="_blank" rel="noopener" href="http://redisbook.com/">Redis 设计与实现</a></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/c6a3Jx"><img src="https://z3.ax1x.com/2021/04/14/c6a3Jx.png" alt="总结"></a></p>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://try.redis.io/">Redis在线教程</a><br><a target="_blank" rel="noopener" href="https://my.oschina.net/u/4283481/blog/4133755">Redis(2)——跳跃表</a><br><a target="_blank" rel="noopener" href="http://redisbook.com/">Redis 设计与实现</a><br><a target="_blank" rel="noopener" href="https://www.processon.com/view/link/60767e21f346fb647a4e4ebd">思维导图地址</a><br><a target="_blank" rel="noopener" href="https://martin.kleppmann.com/2016/02/08/how-to-do-distributed-locking.html">关于Redis分布式锁的争论</a><br><a target="_blank" rel="noopener" href="https://redis.io/topics/distlock">使用Redis的分布式锁</a><br><a target="_blank" rel="noopener" href="http://antirez.com/news/101">Redlock安全吗</a></p>
 
                 
             </div>
