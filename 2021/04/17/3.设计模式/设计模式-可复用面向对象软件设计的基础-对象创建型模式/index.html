@@ -474,8 +474,6 @@
 <p>ObjectFactory1作为工厂类继承抽象工厂类，并实现具体的抽象方法生产对象</p>
 </li>
 <li><p>Client</p>
-</li>
-</ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Client</span><span class="token punctuation">&#123;</span>
     <span class="token comment">//1. 生成工厂类</span>
     <span class="token keyword">public</span> <span class="token class-name">AbstractFactory</span> <span class="token function">getObject</span><span class="token punctuation">(</span><span class="token class-name">String</span> classType<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
@@ -489,10 +487,65 @@
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>在客户端中主要有两步，第一个是获取具体的工厂类。第二个是根据工厂类获取对应的产品。从上面的代码中我们可以看到工厂的生成和产品的生成都需要按照不同的类型来选择生成的具体实现。抽象工厂模式管理的是工厂类。</p>
-<h4 id="Spring中的抽象工厂模式"><a href="#Spring中的抽象工厂模式" class="headerlink" title="Spring中的抽象工厂模式"></a>Spring中的抽象工厂模式</h4><ul>
-<li>AbstractBeanFactory</li>
+</li>
 </ul>
+<p>在客户端中主要有两步，第一个是获取具体的工厂类。第二个是根据工厂类获取对应的产品。从上面的代码中我们可以看到工厂的生成和产品的生成都需要按照不同的类型来选择生成的具体实现。抽象工厂模式管理的是工厂类。</p>
+<h4 id="Spring中的抽象工厂模式"><a href="#Spring中的抽象工厂模式" class="headerlink" title="Spring中的抽象工厂模式"></a>Spring中的抽象工厂模式</h4><p><strong>AbstractBeanFactory__主要有三个实现类__XmlBeanFactory(已过时)__、__AbstractAutowireCapableBeanFactory__、__DefaultListableBeanFactory</strong><br>其中主要使用的是作为自动装配的工厂类AbstractAutowireCapableBeanFactory</p>
+<h2 id="build模式"><a href="#build模式" class="headerlink" title="build模式"></a>build模式</h2><h3 id="意图-1"><a href="#意图-1" class="headerlink" title="意图"></a>意图</h3><blockquote>
+<p>将一个复杂对象的构建与它的表示分离,使得同样的构建过程可以创建不同含义的对象。构造者模式要求构造对象足够复杂并且能够按照部分参数进行处理，构造者模式将内部对象初始化的细节封装起来，外部对象之间调用即可</p>
+</blockquote>
+<h3 id="结构-1"><a href="#结构-1" class="headerlink" title="结构"></a>结构</h3><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/cqsLl9"><img src="https://z3.ax1x.com/2021/04/22/cqsLl9.png" alt="构造者模式"></a></p>
+<h3 id="实例-1"><a href="#实例-1" class="headerlink" title="实例"></a>实例</h3><ul>
+<li>lombok中的@Builder</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">UserParam</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">private</span> <span class="token class-name">String</span> userName<span class="token punctuation">;</span>
+        <span class="token keyword">private</span> <span class="token class-name">String</span> password<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">//DELOMBOK之后的代码</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">UserParam</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">private</span> <span class="token class-name">String</span> userName<span class="token punctuation">;</span>
+        <span class="token keyword">private</span> <span class="token class-name">String</span> password<span class="token punctuation">;</span>
+
+        <span class="token class-name">UserParam</span><span class="token punctuation">(</span><span class="token class-name">String</span> userName<span class="token punctuation">,</span> <span class="token class-name">String</span> password<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>userName <span class="token operator">=</span> userName<span class="token punctuation">;</span>
+            <span class="token keyword">this</span><span class="token punctuation">.</span>password <span class="token operator">=</span> password<span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">UserParamBuilder</span> <span class="token function">builder</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">UserParamBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">UserParamBuilder</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">private</span> <span class="token class-name">String</span> userName<span class="token punctuation">;</span>
+            <span class="token keyword">private</span> <span class="token class-name">String</span> password<span class="token punctuation">;</span>
+
+            <span class="token class-name">UserParamBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token punctuation">&#125;</span>
+
+            <span class="token keyword">public</span> <span class="token class-name">UserParamBuilder</span> <span class="token function">userName</span><span class="token punctuation">(</span><span class="token class-name">String</span> userName<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token keyword">this</span><span class="token punctuation">.</span>userName <span class="token operator">=</span> userName<span class="token punctuation">;</span>
+                <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+
+            <span class="token keyword">public</span> <span class="token class-name">UserParamBuilder</span> <span class="token function">password</span><span class="token punctuation">(</span><span class="token class-name">String</span> password<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token keyword">this</span><span class="token punctuation">.</span>password <span class="token operator">=</span> password<span class="token punctuation">;</span>
+                <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+
+            <span class="token keyword">public</span> <span class="token class-name">UserParam</span> <span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">UserParam</span><span class="token punctuation">(</span>userName<span class="token punctuation">,</span> password<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+
+            <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token keyword">return</span> <span class="token string">"UserParam.UserParamBuilder(userName="</span> <span class="token operator">+</span> <span class="token keyword">this</span><span class="token punctuation">.</span>userName <span class="token operator">+</span> <span class="token string">", password="</span> <span class="token operator">+</span> <span class="token keyword">this</span><span class="token punctuation">.</span>password <span class="token operator">+</span> <span class="token string">")"</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>可以看到lombok的@Builder注解只是在内部设置了一个静态方法和静态类来生成build方式，将__Direct__的职责交给类的使用者去处理了。</p>
 
                 
             </div>
