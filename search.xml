@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>设计模式-可复用面向对象软件设计的基础-结构型模式</title>
+      <link href="2021/04/24/3.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8F%AF%E5%A4%8D%E7%94%A8%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%9F%BA%E7%A1%80-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/"/>
+      <url>2021/04/24/3.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8F%AF%E5%A4%8D%E7%94%A8%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%9F%BA%E7%A1%80-%E7%BB%93%E6%9E%84%E5%9E%8B%E6%A8%A1%E5%BC%8F/</url>
+      
+        <content type="html"><![CDATA[<h1 id="设计模式-可复用面向对象软件设计的基础-结构型模式"><a href="#设计模式-可复用面向对象软件设计的基础-结构型模式" class="headerlink" title="设计模式-可复用面向对象软件设计的基础-结构型模式"></a>设计模式-可复用面向对象软件设计的基础-结构型模式</h1><h2 id="结构型模式"><a href="#结构型模式" class="headerlink" title="结构型模式"></a>结构型模式</h2><blockquote><p>结构型模式涉及到的是如何组织类和对象之间的引用关系,以便获得更大的组织结构和更好的可扩展性。结构性模式往往采用继承和组合两种手段来实现，关注的重点在于对象之间相互组合引用的关系上。主要有以下几种具体的模式：</p></blockquote><ol><li>适配器模式</li><li>桥接模式</li><li>组合模式</li><li>装饰模式</li><li>外观模式</li><li>享元模式</li><li>代理模式</li></ol><h2 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h2><h3 id="意图"><a href="#意图" class="headerlink" title="意图"></a>意图</h3><blockquote><p>将一个类的接口转换成客户端所期望能使用的另外一个接口。Adapter模式使原本由于接口不兼容不能在一起使用的类能够通过一个中间适配类从而能一起工作了</p></blockquote><h3 id="别名"><a href="#别名" class="headerlink" title="别名"></a>别名</h3><p>Wrapper</p><h3 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h3><p><img src="https://www.runoob.com/wp-content/uploads/2014/08/20210223-adapter.png" alt="适配器模式"><br>可以看到原本AudioPlayer不能直接引用AdvanceMediaPlayer，但是通过MediaAdapter实现AudioPlayer同样的接口后，在MediaAdapter中引用AdvanceMediaPlayer实现去执行具体的方法，从而迂回实现AdvanceMediaPlayer的调用</p><h2 id="桥接模式"><a href="#桥接模式" class="headerlink" title="桥接模式"></a>桥接模式</h2><h3 id="意图-1"><a href="#意图-1" class="headerlink" title="意图"></a>意图</h3><blockquote><p>将抽象部分和它的实现部分分离，从而使得两者都可以独立的变化。出现桥接模式的原因在因为继承接口-实现方法这种模式下接口定义好的方法子类必须按照定义进行实现，缺乏灵活性(PS:继承方式是一种强约束的关系，适用于强约束的场合)</p></blockquote><h3 id="别名-1"><a href="#别名-1" class="headerlink" title="别名"></a>别名</h3><p>Hadnle/Body</p><h3 id="结构-1"><a href="#结构-1" class="headerlink" title="结构"></a>结构</h3><p><img src="https://www.runoob.com/wp-content/uploads/2018/06/1528771072-8457-5780d2384acdbb60ec07fc3c71a1.png" alt="桥接模式"></p><p>Abstraction和Implementor都是抽象类，由于Abstraction内部持有Implementor抽象类，从而使得这两个抽象类都可以独立的发展，桥接模式的核心应该是将业务上不同的抽象部分单独分离开，独立演化，关注的应该是业务上抽象的功能分离和在抽象对象类的组合。通过分离和组合更好的描述一个类</p><h2 id="组合模式"><a href="#组合模式" class="headerlink" title="组合模式"></a>组合模式</h2><blockquote><p>将对象组合成树形结构以表示”部分-整体”的层次结构。组合模式使得用户对单个对象和组合对象的使用具有一致性。适用于希望忽略组合对象和单个对象的不同，用户将统一的使用组合结构中的所有对象。</p></blockquote><h3 id="结构-2"><a href="#结构-2" class="headerlink" title="结构"></a>结构</h3><p><a href="https://imgtu.com/i/cztr0P"><img src="https://z3.ax1x.com/2021/04/25/cztr0P.png" alt="cztr0P.png"></a><br>提供Component接口(抽象构件)，该接口有两个实现分别是容器构件(Composlte)、叶子构件(Leaf)。客户端通过直接使用Component接口，来忽略具体是单个对象还是组合对象提供的服务。composlte对象实现了Componet所定义的管理叶子节点的方法Add()、Remove()、GetChild()</p><p>组合模式在实现上有两种方法：1.透明组合模式、2.安全组合模式。<br>透明组合模式的特点是叶子节点和容器构件都要实现相同的接口，但是叶子节点和抽象构件节点其实都相互冗余了部分不属于自己的方法。<br>安全组合模式指的是在抽象构件中不会声明任何有关容器构件的方法，而是在容器构件中去声明并实现该方法</p><h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><h4 id="java-awt-Container"><a href="#java-awt-Container" class="headerlink" title="java.awt.Container"></a>java.awt.Container</h4><ul><li>Container.java<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Container</span> <span class="token keyword">extends</span> <span class="token class-name">Component</span> <span class="token punctuation">&#123;</span>    <span class="token keyword">private</span> <span class="token class-name"><span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span>List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Component</span><span class="token punctuation">></span></span> component <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>Container类内部管理一个<b>Component</b>的集合引用</li></ul>]]></content>
+      
+      
+      <categories>
+          
+          <category> 设计模式 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 设计模式 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>设计模式-可复用面向对象软件设计的基础-对象创建型模式</title>
       <link href="2021/04/17/3.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8F%AF%E5%A4%8D%E7%94%A8%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%9F%BA%E7%A1%80-%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/"/>
       <url>2021/04/17/3.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8F%AF%E5%A4%8D%E7%94%A8%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%9F%BA%E7%A1%80-%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/</url>
