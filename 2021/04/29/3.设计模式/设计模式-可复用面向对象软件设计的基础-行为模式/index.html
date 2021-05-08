@@ -601,6 +601,30 @@
 <h3 id="动机-4"><a href="#动机-4" class="headerlink" title="动机"></a>动机</h3><p>备忘录模式针对于那些需要进行暂存的数据或对象，在不破坏封装性的前提下。</p>
 <h3 id="结构-5"><a href="#结构-5" class="headerlink" title="结构"></a>结构</h3><p><img src="https://www.runoob.com/wp-content/uploads/2014/08/memento_pattern_uml_diagram.jpg" alt="备忘录模式"></p>
 <p>CareTaker.java 负责保存每个阶段的对象状态</p>
+<h2 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h2><h3 id="意图-6"><a href="#意图-6" class="headerlink" title="意图"></a>意图</h3><p>定义对象之间的一种一对多的依赖关系，当一个对象的状态发送改变时，所有依赖于它的对象都会得到通知</p>
+<h3 id="别名-2"><a href="#别名-2" class="headerlink" title="别名"></a>别名</h3><p>依赖(Dependents),发布-订阅(Publish-Subscribe)</p>
+<h3 id="动机-5"><a href="#动机-5" class="headerlink" title="动机"></a>动机</h3><p>在一个系统中一个对象的改变会导致引起相关对象的改变，如果要保持这样的一致性会导致对象间强依赖。观察者模式就是通过发布-订阅模式将通知的职责从动作类中强制依赖转换为通知的模式</p>
+<h3 id="结构-6"><a href="#结构-6" class="headerlink" title="结构"></a>结构</h3><p><img src="https://www.runoob.com/wp-content/uploads/2014/08/observer_pattern_uml_diagram.jpg" alt="观察者模式"></p>
+<p>Subject作为被观察者中维护一个所有观察者的引用，Observer作为被观察者维护一个Subject的引用，将自己组成到被观察者中<br>可参考<br><a href="../../../../../2020/05/06/3.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/#more">观察者模式</a></p>
+<h3 id="实例-2"><a href="#实例-2" class="headerlink" title="实例"></a>实例</h3><p>spring中的ApplicationListener和ApplicationEvent、ApplicationEventPublisherAware分别作为被观察者、观察者和客户端</p>
+<h2 id="状态模式"><a href="#状态模式" class="headerlink" title="状态模式"></a>状态模式</h2><h3 id="意图-7"><a href="#意图-7" class="headerlink" title="意图"></a>意图</h3><p>允许一个对象在其内部状态发生改变时改变它的行为。从表象上来看就是对象可以根据内部状态执行不同的业务逻辑。</p>
+<h3 id="动机-6"><a href="#动机-6" class="headerlink" title="动机"></a>动机</h3><p>一个对象的行为取决于内部状态进行驱动时，状态模式可以将状态和行为分离，减少分支的条件语句。</p>
+<h3 id="结构-7"><a href="#结构-7" class="headerlink" title="结构"></a>结构</h3><p><img src="https://www.runoob.com/wp-content/uploads/2014/08/state_pattern_uml_diagram.png" alt="状态模式"></p>
+<p>可以看到doAction()方法中才会执行具体的行为，不同的状态具有不同的行为，通过context维护状态，当状态发生改变时，对应的行为也随之发生改变</p>
+<h2 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h2><h3 id="意图-8"><a href="#意图-8" class="headerlink" title="意图"></a>意图</h3><p>策略模式是将不同的算法单独定义起来，通过不同的场景选择不同的算法。将客户端中的条件分支去掉，并且支持扩展。</p>
+<h3 id="结构-8"><a href="#结构-8" class="headerlink" title="结构"></a>结构</h3><p><img src="https://www.runoob.com/wp-content/uploads/2014/08/strategy_pattern_uml_diagram.jpg" alt="策略模式"></p>
+<p>Context中的strategy类是具体执行的算法，这里有两种设计方案，第一种就是UML图中的写法，将Contetxx作为每次行动的容器，每次执行前都先进行赋值。第二种是Context持有一个Strategy的List根据添加选择算法、</p>
+<p>策略模式在实际工作中大量使用到，因为消除了条件判断减少了分支。通过增加类的方式来减少分支，结构上便于扩展了 </p>
+<h2 id="模板模式"><a href="#模板模式" class="headerlink" title="模板模式"></a>模板模式</h2><h3 id="意图-9"><a href="#意图-9" class="headerlink" title="意图"></a>意图</h3><p>定义一个方法的骨架，通过继承的方式让子类可以改变特点行为，使得不用重新定义算法的顺序就能改变行为。</p>
+<h3 id="动机-7"><a href="#动机-7" class="headerlink" title="动机"></a>动机</h3><p>模板方法的出现主要是为了解决重复定义的算法执行顺序并且具体执行有差异的场景</p>
+<h3 id="结构-9"><a href="#结构-9" class="headerlink" title="结构"></a>结构</h3><p><img src="https://www.runoob.com/wp-content/uploads/2014/08/template_pattern_uml_diagram.jpg" alt="模板模式"></p>
+<p>模板模式与策略模式的区别在于模板模式是通过继承的方式来改变行为，策略模式是通过改变委托对象的方式来改变行为；策略模式针对的场景是相同类在处理不同的业务场景时候算法的选择问题，模板模式针对的是相同的类在处理相同的业务场景下算法细微的差异结构上。</p>
+<h2 id="访问者模式"><a href="#访问者模式" class="headerlink" title="访问者模式"></a>访问者模式</h2><h3 id="意图-10"><a href="#意图-10" class="headerlink" title="意图"></a>意图</h3><p>将数据和数据操作分离</p>
+<h3 id="动机-8"><a href="#动机-8" class="headerlink" title="动机"></a>动机</h3><p>对一个对象需要进行多次操作时，为了避免这些操作将对象污染，可以通过访问者模式将数据和操作进行隔离。实现不同的访问者访问不同的数据。</p>
+<h3 id="结构-10"><a href="#结构-10" class="headerlink" title="结构"></a>结构</h3><p><img src="https://www.runoob.com/wp-content/uploads/2014/08/visitor_pattern_uml_diagram.jpg" alt="访问者模式"></p>
+<p>访问者模式的核心是在于数据对象会针对不同的访问者定义出不同的行为，由于访问者知道被访问的数据对象中的数据结构，因此访问者可以根据不同的对象定义出不同的行为</p>
+<p>访问者的好处在于将数据对象的操作延迟到的访问者那一步中去了，通过定义不同的访问者可以执行不同的动作。</p>
+<h2 id="设计模式思维导图"><a href="#设计模式思维导图" class="headerlink" title="设计模式思维导图"></a>设计模式思维导图</h2><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/gJVn2Q"><img src="https://z3.ax1x.com/2021/05/08/gJVn2Q.png" alt="设计模式思维导图"></a></p>
 
                 
             </div>
