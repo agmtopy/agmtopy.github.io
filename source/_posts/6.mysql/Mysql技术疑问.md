@@ -1,9 +1,9 @@
 ---
-title: Mysql技术疑问
+title: MySQL技术疑问
 date: 2021-03-20 18:12:31
 categories: 数据库
 tags:
-  - Mysql
+  - MySQL
 ---
 > 记录<<MySQL技术内幕-InnoDB存储引擎>>阅读中存在的疑问点
 

@@ -3,7 +3,7 @@ title: MySQL索引与锁
 date: 2021-03-21 14:12:10
 categories: 数据库
 tags:
-  - Mysql
+  - MySQL
 ---
 
 ## 索引

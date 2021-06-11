@@ -1,9 +1,9 @@
 ---
-title: Mysql体系结构与存储引擎
+title: MySQL体系结构与存储引擎
 date: 2021-03-15 21:54:51
 categories: 数据库
 tags:
-  - Mysql
+  - MySQL
 ---
 
 > 主要介绍MySql的整体体系结构和存储引擎

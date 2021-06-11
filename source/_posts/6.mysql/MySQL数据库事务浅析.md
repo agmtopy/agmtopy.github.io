@@ -1,9 +1,9 @@
 ---
-title: 数据库事务理解
+title: MySQL数据库事务浅析
 date: 2020-02-29 21:00:59
 categories: 数据库
 tags:
-  - 数据库事务
+  - MySQL
 ---
 
 

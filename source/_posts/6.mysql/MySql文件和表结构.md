@@ -1,9 +1,9 @@
 ---
-title: MySql文件和表结构
+title: MySQL文件和表结构
 date: 2021-03-20 11:21:19
 categories: 数据库
 tags:
-  - Mysql
+  - MySQL
 ---
 
 ## MySQL文件体系

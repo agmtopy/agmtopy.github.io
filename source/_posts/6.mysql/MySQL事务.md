@@ -3,7 +3,7 @@ title: MySQL事务
 date: 2021-03-27 15:09:33
 categories: 数据库
 tags:
-  - Mysql
+  - MySQL
 ---
 
 ## 事务的定义
