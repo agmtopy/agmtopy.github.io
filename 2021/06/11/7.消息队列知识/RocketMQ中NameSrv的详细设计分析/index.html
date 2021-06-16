@@ -451,12 +451,8 @@
 <li>定时任务</li>
 <li>KV管理模块</li>
 </ol>
-<h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><p>TODO Namesrv 时序图</p>
-<ul>
-<li>NamesrvStartup</li>
-</ul>
-<ol>
-<li>主函数入口<pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token comment">/**
+<h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><h3 id="Namesrv时序图"><a href="#Namesrv时序图" class="headerlink" title="Namesrv时序图"></a>Namesrv时序图</h3><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/2jkklQ"><img src="https://z3.ax1x.com/2021/06/16/2jkklQ.png" alt="Namesrv执行流程"></a></p>
+<h3 id="NamesrvStartup"><a href="#NamesrvStartup" class="headerlink" title="NamesrvStartup"></a>NamesrvStartup</h3><h4 id="main"><a href="#main" class="headerlink" title="main()"></a>main()</h4><pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token comment">/**
  * 主函数入口
  */</span>
 <span class="token keyword">fun</span> <span class="token function">main</span><span class="token punctuation">(</span>args<span class="token operator">:</span> Array<span class="token operator">&lt;</span>String<span class="token operator">></span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
@@ -477,11 +473,39 @@
     <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span>e<span class="token operator">:</span> Throwable<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
 
     <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">/**
+ * 初始化NamesrvController
+ */</span>
+<span class="token keyword">fun</span> <span class="token function">createNamesrvController</span><span class="token punctuation">(</span>args<span class="token operator">:</span> Array<span class="token operator">&lt;</span>String<span class="token operator">></span><span class="token punctuation">)</span><span class="token operator">:</span> NamesrvController <span class="token punctuation">&#123;</span>
+  <span class="token comment">//去除TLS和apache.commons的版本</span>
+  <span class="token keyword">return</span> <span class="token function">NamesrvController</span><span class="token punctuation">(</span><span class="token function">NamesrvConfig</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">NettyServerConfig</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="start"><a href="#start" class="headerlink" title="start()"></a>start()</h4><pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token comment">/**
+  * 启动NamesrvController
+  */</span>
+<span class="token keyword">fun</span> <span class="token function">start</span><span class="token punctuation">(</span>controller<span class="token operator">:</span> NamesrvController<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>controller <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">throw</span> <span class="token function">IllegalArgumentException</span><span class="token punctuation">(</span><span class="token string">"NamesrvController is null"</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">//NamesrvController执行初始化,如果失败时退出进程</span>
+    <span class="token keyword">if</span><span class="token punctuation">(</span>controller<span class="token punctuation">.</span><span class="token function">initialize</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+        controller<span class="token punctuation">.</span><span class="token function">shutdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span>
+    controller<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>NamesrvStartup启动时候主要做了以下几个步骤：</p>
+<ol>
+<li>创建NamesrvController</li>
+<li>处理TLS和加载Namesrv配置文件</li>
+<li>启动NamesrvController</li>
+<li>关闭NamesrvController</li>
 </ol>
 <ul>
-<li>NamesrvStartup</li>
+<li>NamesrvController</li>
 </ul>
 <ol>
 <li><p>总体逻辑</p>
