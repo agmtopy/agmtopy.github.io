@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="RocketMQ中NameSrv的详细设计分析, agmtopy博客">
+    <meta name="keywords" content="通过WSL2编译JDK源码, agmtopy博客">
     <meta name="description" content="你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>RocketMQ中NameSrv的详细设计分析 | agmtopy博客</title>
+    <title>通过WSL2编译JDK源码 | agmtopy博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -267,12 +267,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/22.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/16.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">RocketMQ中NameSrv的详细设计分析</h1>
+                    <h1 class="description center-align post-title">通过WSL2编译JDK源码</h1>
                 </div>
             </div>
         </div>
@@ -388,8 +388,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/RocketMQ/">
-                                <span class="chip bg-color">RocketMQ</span>
+                            <a href="/tags/WSL/">
+                                <span class="chip bg-color">WSL</span>
                             </a>
                         
                     </div>
@@ -400,8 +400,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" class="post-category">
-                                消息队列
+                            <a href="/categories/%E6%9D%82%E8%AE%B0/" class="post-category">
+                                杂记
                             </a>
                         
                     </div>
@@ -413,7 +413,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-06-11
+                    2021-06-19
                 </div>
                 
 
@@ -433,87 +433,56 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="RocketMQ中NameSrv的详细设计分析"><a href="#RocketMQ中NameSrv的详细设计分析" class="headerlink" title="RocketMQ中NameSrv的详细设计分析"></a>RocketMQ中NameSrv的详细设计分析</h1><h2 id="设计目标"><a href="#设计目标" class="headerlink" title="设计目标"></a>设计目标</h2><p>NameSrv是RoctetMQ项目下的一个模块，作为RockerMQ中的轻型注册中心,只负责与Topic有关的功能。<br>使用NameSrv来替代ZK等注册中心主要是有两个好处:</p>
-<ol>
-<li>减少整体复杂性<br>一个分布式系统强依赖另外一个分布式系统，增加了整个系统的复杂性(整体代码复杂性、运维的复杂性);<br>使用内置的轻量级注册中心,就可以消除原来与ZK等第三方注册中心的各种协议适配;<br>Namesrv中只需要开发与Topic有关的业务场景;<br>系统维护时也不用在考虑第三方系统的处理机制;</li>
-<li>扩展能力<br>RocketMQ从设计初就考虑过在嵌入式设备上进行部署的能力,因此采用Namesrv的设计能最大限度的掌握系统</li>
-</ol>
-<p>目前Kafka在这方面做的更好，在V2.8之后不但去掉了ZK，并且采用broker集群中通过选举的方式选出leader节点来管理Topic、broker、consumer</p>
-<h2 id="基础功能"><a href="#基础功能" class="headerlink" title="基础功能"></a>基础功能</h2><ul>
-<li><p>整体架构<br><img src="https://github.com/apache/rocketmq/raw/master/docs/cn/image/rocketmq_architecture_3.png" alt="整体架构"><br>Namesrv集群是无状态的设计,每个组件(Broker、Producer、Consumer)都会向每一个Namesrv进行请求,因此Namesrv是选择了可用性</p>
+                <h1 id="通过WSL2编译JDK源码"><a href="#通过WSL2编译JDK源码" class="headerlink" title="通过WSL2编译JDK源码"></a>通过WSL2编译JDK源码</h1><p>WSL的全称是’Windows Subsystem for Linux’,通过在系统层面对Linux内核进行支持,WSL1只是部分支持Linux内核而WSL2支持完整的Linux内核。不但可以通过WSL运行Linux内核，甚至可以将Windows Docker指定通过WSL2来进行远行</p>
+<h2 id="WSL1-gt-WSL2"><a href="#WSL1-gt-WSL2" class="headerlink" title="WSL1 -&gt; WSL2"></a>WSL1 -&gt; WSL2</h2><ul>
+<li><p>安装Linux发行版<br>WSL1只需要开启Linux子系统并下载linux发行版即可,linux发行版默认是只能通过Windows Store进行下载，也可以通过下载安装包(msi)进行安装,手动选择安装包地址如下(<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/windows/wsl/install-manual">https://docs.microsoft.com/zh-cn/windows/wsl/install-manual</a>)</p>
 </li>
-<li><p>功能解析</p>
+<li><p>切换WSL2</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">wsl --set-default-version <span class="token number">2</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li><p>启动WSL</p>
 </li>
 </ul>
 <ol>
-<li>Topic路由管理</li>
-<li>Remoting远程服务</li>
-<li>定时任务</li>
-<li>KV管理模块</li>
+<li>应用程序直接启动安装Linux发行版</li>
+<li>‘wsl -l -v’ 检查WSL版本,VERSION -&gt; 2即可<br><a target="_blank" rel="noopener" href="https://imgtu.com/i/RPsbr9"><img src="https://z3.ax1x.com/2021/06/19/RPsbr9.png" alt="WSL2"></a></li>
 </ol>
-<h2 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h2><h3 id="Namesrv时序图"><a href="#Namesrv时序图" class="headerlink" title="Namesrv时序图"></a>Namesrv时序图</h3><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/2jkklQ"><img src="https://z3.ax1x.com/2021/06/16/2jkklQ.png" alt="Namesrv执行流程"></a></p>
-<h3 id="NamesrvStartup"><a href="#NamesrvStartup" class="headerlink" title="NamesrvStartup"></a>NamesrvStartup</h3><h4 id="main"><a href="#main" class="headerlink" title="main()"></a>main()</h4><pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token comment">/**
- * 主函数入口
- */</span>
-<span class="token keyword">fun</span> <span class="token function">main</span><span class="token punctuation">(</span>args<span class="token operator">:</span> Array<span class="token operator">&lt;</span>String<span class="token operator">></span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token function">main0</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span>
-
-<span class="token comment">/**
- * 具体执行逻辑:避免在main函数中添加过多的逻辑
- */</span>
-<span class="token keyword">fun</span> <span class="token function">main0</span><span class="token punctuation">(</span>args<span class="token operator">:</span> Array<span class="token operator">&lt;</span>String<span class="token operator">></span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">var</span> controller <span class="token operator">=</span> <span class="token function">createNamesrvController</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span>
-        <span class="token function">start</span><span class="token punctuation">(</span>controller<span class="token punctuation">)</span>
-        <span class="token keyword">val</span> tip <span class="token operator">=</span>
-            <span class="token string">"The Name Server boot success. serializeType="</span> <span class="token operator">+</span> RemotingCommand<span class="token punctuation">.</span><span class="token function">getSerializeTypeConfigInThisServer</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-        log<span class="token operator">!!</span><span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span>tip<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token function">println</span><span class="token punctuation">(</span>tip<span class="token punctuation">)</span>
-    <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span>e<span class="token operator">:</span> Throwable<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-
-<span class="token comment">/**
- * 初始化NamesrvController
- */</span>
-<span class="token keyword">fun</span> <span class="token function">createNamesrvController</span><span class="token punctuation">(</span>args<span class="token operator">:</span> Array<span class="token operator">&lt;</span>String<span class="token operator">></span><span class="token punctuation">)</span><span class="token operator">:</span> NamesrvController <span class="token punctuation">&#123;</span>
-  <span class="token comment">//去除TLS和apache.commons的版本</span>
-  <span class="token keyword">return</span> <span class="token function">NamesrvController</span><span class="token punctuation">(</span><span class="token function">NamesrvConfig</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token function">NettyServerConfig</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h4 id="start"><a href="#start" class="headerlink" title="start()"></a>start()</h4><pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token comment">/**
-  * 启动NamesrvController
-  */</span>
-<span class="token keyword">fun</span> <span class="token function">start</span><span class="token punctuation">(</span>controller<span class="token operator">:</span> NamesrvController<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>controller <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">throw</span> <span class="token function">IllegalArgumentException</span><span class="token punctuation">(</span><span class="token string">"NamesrvController is null"</span><span class="token punctuation">)</span>
-    <span class="token punctuation">&#125;</span>
-
-    <span class="token comment">//NamesrvController执行初始化,如果失败时退出进程</span>
-    <span class="token keyword">if</span><span class="token punctuation">(</span>controller<span class="token punctuation">.</span><span class="token function">initialize</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-        controller<span class="token punctuation">.</span><span class="token function">shutdown</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-    <span class="token punctuation">&#125;</span>
-    controller<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>NamesrvStartup启动时候主要做了以下几个步骤：</p>
-<ol>
-<li>创建NamesrvController</li>
-<li>处理TLS和加载Namesrv配置文件</li>
-<li>启动NamesrvController</li>
-<li>关闭NamesrvController</li>
-</ol>
+<h2 id="编译JDK"><a href="#编译JDK" class="headerlink" title="编译JDK"></a>编译JDK</h2><p>严谨的说法是编译OpenJDK</p>
+<h3 id="下载JDK源代码"><a href="#下载JDK源代码" class="headerlink" title="下载JDK源代码"></a>下载JDK源代码</h3><p>推荐直接下载,下面是JDK11的源代码地址,直接选择zip file进行下载,也可以选择不同的版本<br><a target="_blank" rel="noopener" href="https://jdk.java.net/java-se-ri/11">https://jdk.java.net/java-se-ri/11</a></p>
+<h3 id="准备JDK编译环境"><a href="#准备JDK编译环境" class="headerlink" title="准备JDK编译环境"></a>准备JDK编译环境</h3><h4 id="安装必要程序"><a href="#安装必要程序" class="headerlink" title="安装必要程序"></a>安装必要程序</h4><ul>
+<li>推荐先先切换软件源</li>
+</ul>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">sed</span> -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list
+<span class="token function">sudo</span> <span class="token function">apt</span> update -y<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <ul>
-<li>NamesrvController</li>
+<li>安装必要软件</li>
 </ul>
-<ol>
-<li><p>总体逻辑</p>
-</li>
-<li><p>加载配置文件</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> -y <span class="token function">curl</span> <span class="token function">ssh</span> <span class="token function">zip</span> <span class="token function">unzip</span> ant <span class="token function">git</span> build-essential ccache cpio g++ gcc gdb libx11-dev libxext-dev libxrender-dev libxtst-dev libxt-dev libcups2-dev libfreetype6-dev libasound2-dev libelf-dev ccache libfontconfig1-dev autoconf<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h4 id="安装BootStrap-JDK"><a href="#安装BootStrap-JDK" class="headerlink" title="安装BootStrap JDK"></a>安装BootStrap JDK</h4><p>BootStrap JDK的作用是编译JDK源代码中的java代码,默认要比编译的JDK小一个版本</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> openjdk-10-jdk
+java -version<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h4 id="解压JDK源代码"><a href="#解压JDK源代码" class="headerlink" title="解压JDK源代码"></a>解压JDK源代码</h4><p>由于我比较喜欢使用VS code,VS code中已经集成了连接WSL的插件，因此只需要将JDK源代码直接拖拽到Linux的目录下即可。也可以通过WSL进行复制<br>得到JDK源代码后就可以进行解压</p>
+<h4 id="编译JDK源代码"><a href="#编译JDK源代码" class="headerlink" title="编译JDK源代码"></a>编译JDK源代码</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 准备配置(警告不作为异常抛出)</span>
+<span class="token function">bash</span> ./configure --disable-warnings-as-errors
+
+<span class="token function">make</span> all
+
+<span class="token comment"># 编译失败时推荐先进行clean,在重新进行编译</span>
+<span class="token function">make</span> clean<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h4><ol>
+<li>在构建低版本的JDK时可能出现OS版本不支持<br>修改./hotspot/make/linux/Makefile<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 5% 内核版本</span>
+SUPPORTED_OS_VERSION <span class="token operator">=</span> <span class="token number">2.4</span>% <span class="token number">2.5</span>% <span class="token number">2.6</span>% <span class="token number">2.7</span>% <span class="token number">3</span>% <span class="token number">4</span>%<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+
+
+
+
+
+
 </li>
 </ol>
-<h2 id="扩展思考"><a href="#扩展思考" class="headerlink" title="扩展思考"></a>扩展思考</h2><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://rocketmq.apache.org/">rocketmq</a><br><a target="_blank" rel="noopener" href="https://github.com/apache/rocketmq">rocketmq-github</a><br><a target="_blank" rel="noopener" href="https://www.confluent.io/blog/kafka-without-zookeeper-a-sneak-peek/">Apache Kafka Made Simple: A First Glimpse of a Kafka Without ZooKeeper</a></p>
 
                 
             </div>
@@ -540,7 +509,7 @@
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://agmtopy.gitee.io/2021/06/11/7.%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9F%A5%E8%AF%86/RocketMQ%E4%B8%ADNameSrv%E7%9A%84%E8%AF%A6%E7%BB%86%E8%AE%BE%E8%AE%A1%E5%88%86%E6%9E%90/">https://agmtopy.gitee.io/2021/06/11/7.%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9F%A5%E8%AF%86/RocketMQ%E4%B8%ADNameSrv%E7%9A%84%E8%AF%A6%E7%BB%86%E8%AE%BE%E8%AE%A1%E5%88%86%E6%9E%90/</a>
+                    <a href="https://agmtopy.gitee.io/2021/06/19/1.%E6%9D%82%E8%AE%B0/%E9%80%9A%E8%BF%87WSL2%E7%BC%96%E8%AF%91JDK%E6%BA%90%E7%A0%81/">https://agmtopy.gitee.io/2021/06/19/1.%E6%9D%82%E8%AE%B0/%E9%80%9A%E8%BF%87WSL2%E7%BC%96%E8%AF%91JDK%E6%BA%90%E7%A0%81/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -578,8 +547,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/RocketMQ/">
-                                    <span class="chip bg-color">RocketMQ</span>
+                                <a href="/tags/WSL/">
+                                    <span class="chip bg-color">WSL</span>
                                 </a>
                             
                         </div>
@@ -625,9 +594,10 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
             <div class="card">
                 <a href="/2021/06/19/1.%E6%9D%82%E8%AE%B0/%E9%80%9A%E8%BF%87WSL2%E7%BC%96%E8%AF%91JDK%E6%BA%90%E7%A0%81/">
                     <div class="card-image">
@@ -645,9 +615,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-06-19
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-06-19
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -660,6 +630,7 @@
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -678,13 +649,13 @@
                 Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/05/08/1.%E6%9D%82%E8%AE%B0/%E5%85%B3%E4%BA%8E%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9A%84%E4%B8%80%E4%BA%9B%E5%8E%86%E5%8F%B2/">
+                <a href="/2021/06/11/7.%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9F%A5%E8%AF%86/RocketMQ%E4%B8%ADNameSrv%E7%9A%84%E8%AF%A6%E7%BB%86%E8%AE%BE%E8%AE%A1%E5%88%86%E6%9E%90/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/7.jpg" class="responsive-img" alt="关于消息队列的一些历史">
+                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="RocketMQ中NameSrv的详细设计分析">
                         
-                        <span class="card-title">关于消息队列的一些历史</span>
+                        <span class="card-title">RocketMQ中NameSrv的详细设计分析</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -695,14 +666,14 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-05-08
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-06-11
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E6%9D%82%E8%AE%B0/" class="post-category">
-                                    杂记
+                            <a href="/categories/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" class="post-category">
+                                    消息队列
                                 </a>
                             
                             
@@ -712,8 +683,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">
-                        <span class="chip bg-color">消息队列</span>
+                    <a href="/tags/RocketMQ/">
+                        <span class="chip bg-color">RocketMQ</span>
                     </a>
                     
                 </div>

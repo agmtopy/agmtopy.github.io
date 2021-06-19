@@ -6,7 +6,7 @@
   <link href="https://agmtopy.gitee.io/atom.xml" rel="self"/>
   
   <link href="https://agmtopy.gitee.io/"/>
-  <updated>2021-06-16T16:01:48.085Z</updated>
+  <updated>2021-06-19T16:44:54.486Z</updated>
   <id>https://agmtopy.gitee.io/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>通过WSL2编译JDK源码</title>
+    <link href="https://agmtopy.gitee.io/2021/06/19/1.%E6%9D%82%E8%AE%B0/%E9%80%9A%E8%BF%87WSL2%E7%BC%96%E8%AF%91JDK%E6%BA%90%E7%A0%81/"/>
+    <id>https://agmtopy.gitee.io/2021/06/19/1.%E6%9D%82%E8%AE%B0/%E9%80%9A%E8%BF%87WSL2%E7%BC%96%E8%AF%91JDK%E6%BA%90%E7%A0%81/</id>
+    <published>2021-06-19T11:39:54.000Z</published>
+    <updated>2021-06-19T16:44:54.486Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="通过WSL2编译JDK源码"><a href="#通过WSL2编译JDK源码" class="headerlink" title="通过WSL2编译JDK源码"></a>通过WSL2编译JDK源码</h1><p>WSL的全称是’Windows Subsystem for Linux’,通过在系统层面对Linux内核进行支持,WSL1只是部分支持Linux内核而WSL2支持完整的Linux内核。不但可以通过WSL运行Linux内核，甚至可以将Windows Docker指定通过WSL2来进行远行</p><h2 id="WSL1-gt-WSL2"><a href="#WSL1-gt-WSL2" class="headerlink" title="WSL1 -&gt; WSL2"></a>WSL1 -&gt; WSL2</h2><ul><li><p>安装Linux发行版<br>WSL1只需要开启Linux子系统并下载linux发行版即可,linux发行版默认是只能通过Windows Store进行下载，也可以通过下载安装包(msi)进行安装,手动选择安装包地址如下(<a href="https://docs.microsoft.com/zh-cn/windows/wsl/install-manual">https://docs.microsoft.com/zh-cn/windows/wsl/install-manual</a>)</p></li><li><p>切换WSL2</p><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">wsl --set-default-version <span class="token number">2</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li><li><p>启动WSL</p></li></ul><ol><li>应用程序直接启动安装Linux发行版</li><li>‘wsl -l -v’ 检查WSL版本,VERSION -&gt; 2即可<br><a href="https://imgtu.com/i/RPsbr9"><img src="https://z3.ax1x.com/2021/06/19/RPsbr9.png" alt="WSL2"></a></li></ol><h2 id="编译JDK"><a href="#编译JDK" class="headerlink" title="编译JDK"></a>编译JDK</h2><p>严谨的说法是编译OpenJDK</p><h3 id="下载JDK源代码"><a href="#下载JDK源代码" class="headerlink" title="下载JDK源代码"></a>下载JDK源代码</h3><p>推荐直接下载,下面是JDK11的源代码地址,直接选择zip file进行下载,也可以选择不同的版本<br><a href="https://jdk.java.net/java-se-ri/11">https://jdk.java.net/java-se-ri/11</a></p><h3 id="准备JDK编译环境"><a href="#准备JDK编译环境" class="headerlink" title="准备JDK编译环境"></a>准备JDK编译环境</h3><h4 id="安装必要程序"><a href="#安装必要程序" class="headerlink" title="安装必要程序"></a>安装必要程序</h4><ul><li>推荐先先切换软件源</li></ul><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">sed</span> -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list<span class="token function">sudo</span> <span class="token function">apt</span> update -y<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><ul><li>安装必要软件</li></ul><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> -y <span class="token function">curl</span> <span class="token function">ssh</span> <span class="token function">zip</span> <span class="token function">unzip</span> ant <span class="token function">git</span> build-essential ccache cpio g++ gcc gdb libx11-dev libxext-dev libxrender-dev libxtst-dev libxt-dev libcups2-dev libfreetype6-dev libasound2-dev libelf-dev ccache libfontconfig1-dev autoconf<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h4 id="安装BootStrap-JDK"><a href="#安装BootStrap-JDK" class="headerlink" title="安装BootStrap JDK"></a>安装BootStrap JDK</h4><p>BootStrap JDK的作用是编译JDK源代码中的java代码,默认要比编译的JDK小一个版本</p><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> openjdk-10-jdkjava -version<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><h4 id="解压JDK源代码"><a href="#解压JDK源代码" class="headerlink" title="解压JDK源代码"></a>解压JDK源代码</h4><p>由于我比较喜欢使用VS code,VS code中已经集成了连接WSL的插件，因此只需要将JDK源代码直接拖拽到Linux的目录下即可。也可以通过WSL进行复制<br>得到JDK源代码后就可以进行解压</p><h4 id="编译JDK源代码"><a href="#编译JDK源代码" class="headerlink" title="编译JDK源代码"></a>编译JDK源代码</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 准备配置(警告不作为异常抛出)</span><span class="token function">bash</span> ./configure --disable-warnings-as-errors<span class="token function">make</span> all<span class="token comment"># 编译失败时推荐先进行clean,在重新进行编译</span><span class="token function">make</span> clean<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><h4 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h4><ol><li>在构建低版本的JDK时可能出现OS版本不支持<br>修改./hotspot/make/linux/Makefile<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 5% 内核版本</span>SUPPORTED_OS_VERSION <span class="token operator">=</span> <span class="token number">2.4</span>% <span class="token number">2.5</span>% <span class="token number">2.6</span>% <span class="token number">2.7</span>% <span class="token number">3</span>% <span class="token number">4</span>%<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li></ol>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;通过WSL2编译JDK源码&quot;&gt;&lt;a href=&quot;#通过WSL2编译JDK源码&quot; class=&quot;headerlink&quot; title=&quot;通过WSL2编译JDK源码&quot;&gt;&lt;/a&gt;通过WSL2编译JDK源码&lt;/h1&gt;&lt;p&gt;WSL的全称是’Windows Subsystem </summary>
+      
+    
+    
+    
+    <category term="杂记" scheme="https://agmtopy.gitee.io/categories/%E6%9D%82%E8%AE%B0/"/>
+    
+    
+    <category term="WSL" scheme="https://agmtopy.gitee.io/tags/WSL/"/>
+    
+  </entry>
   
   <entry>
     <title>RocketMQ中NameSrv的详细设计分析</title>
@@ -484,33 +508,6 @@
     
     
     
-    
-  </entry>
-  
-  <entry>
-    <title>如何优化复杂流程分析和建模思考</title>
-    <link href="https://agmtopy.gitee.io/2020/11/08/1.%E6%9D%82%E8%AE%B0/%E5%9F%BA%E4%BA%8E%E5%A4%8D%E6%9D%82%E4%B8%9A%E5%8A%A1%E7%9A%84%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90%E5%92%8C%E5%BB%BA%E6%A8%A1%E6%80%9D%E8%80%83/"/>
-    <id>https://agmtopy.gitee.io/2020/11/08/1.%E6%9D%82%E8%AE%B0/%E5%9F%BA%E4%BA%8E%E5%A4%8D%E6%9D%82%E4%B8%9A%E5%8A%A1%E7%9A%84%E6%B5%81%E7%A8%8B%E5%88%86%E6%9E%90%E5%92%8C%E5%BB%BA%E6%A8%A1%E6%80%9D%E8%80%83/</id>
-    <published>2020-11-07T17:02:10.000Z</published>
-    <updated>2020-11-30T15:52:16.931Z</updated>
-    
-    <content type="html"><![CDATA[<blockquote><p>架构的核心挑战是如何处理当下或未来可能出现的快速增长的软件复杂性，因此越是大型系统在架构设计上越是要简单。</p></blockquote><h2 id="软件的复杂度为什么会增加？"><a href="#软件的复杂度为什么会增加？" class="headerlink" title="软件的复杂度为什么会增加？"></a>软件的复杂度为什么会增加？</h2><p>先阐述观点在实际开发中软件的复杂性是随着时间愈发陡峭的，复杂度的提升近似于y=x^2的曲线。主要是基于以下几个情况得出的结论：</p><ol><li><B>软件的复杂程度是逐渐迭代出来的</B><br>拿我之前的项目举例，最开始业务需求可能只是围绕商品的一个业务，根据这个业务设计流程，后来慢慢的迭代过程中逐渐把商品相关的属性完善从而又能支撑起开展其他的业务流程。随着业务流程的膨胀和交汇，软件的复杂度会不断的增加。</li><li><B>代码迭代过程中的理解和维护</B><br>软件对应的实体即为代码，在相同的架构下不同的理解会有不同的代码实现。由于大型项目往往是多人进行协作开发，需要统一大家的理解。通俗的说法就是多个人写出来的代码就像一个人写出来的一样，要完成这样的合作往往是很困难的。这里在补充阐述一下，并不是反对有着强烈个人代码风格的方式，主要还是想表达的是同一团队在面对同一项目时对软件的架构、技术、业务理解应该是尽量要<B>趋同<B>的。</li></ol><blockquote><p>业务架构师最重要的工作不是设计软件结构，而是应该通过API、团队设计准则、细节的关注把控来控制软件复杂度的增长。</p></blockquote><h2 id="如何定义软件复杂的维度？"><a href="#如何定义软件复杂的维度？" class="headerlink" title="如何定义软件复杂的维度？"></a>如何定义软件复杂的维度？</h2><p>软件的复杂度可以定义为让人理解和维护修改的困难程度，因此我们可以将软件的复杂程度拆分为两个部分</p><ol><li>软件的认知成本：理解软件的接口、设计和实现上的成本，简单说就是看懂代码的时间成本和脑力成本</li><li>软件的协同成本：修改维护软件时，所需要付出的成本<br>举个例子来说，软件的扩展性不好就是协同成本过高，会导致新增功能时需要进行大量修改，并且修改后还会进一步的增加认知负担</li></ol><h3 id="认知负担"><a href="#认知负担" class="headerlink" title="认知负担"></a>认知负担</h3><ol><li>定义新的概念带来的认知负担，这种负担与所定义的概念与现实模型的关联度相关</li><li>逻辑符合思维习惯的程度</li></ol><ul><li>逻辑是否符合思维习惯的程度，这个因人而异，最好在实际的开发过程中有统一的规范，例如强烈建议使用卫语句、使用Optional等</li><li>模型失配：模型的失配指的是定义的模型与现实世界的业务模型存在较大差异所带来的</li></ul><ol start="3"><li>接口设计不当</li></ol><ul><li><p>需要调用者使用初始化才能正常工作的接口。将初始化的职责放到了调用方，但是调用方在面对复杂的初始化参数时，就需要去了解每个参数所代表的动作和意义，承担了本来属于接口实现所承担的职责。这里可以使用工厂模式来进行处理，在接口工厂类中根据接口提供的场景进行处理</p></li><li><p>一个接口中不同的方法提供了相同的功能</p></li></ul><ol start="4"><li><p>违反开闭原则，一个简单的修改需要在多处中进行更新<br>在业务开发中，往往会为了进度或者害怕新的改动会改变已有代码的逻辑因此去copy-past大量类似的逻辑和功能，这样会导致一个简单的修改需要更多的精力在多处中进行去更新，代码的复杂度也会提高</p></li><li><p>命名 尽量要做到通过的命名就知道变量、方法、类、模块等要<B>做什么</B>，重点在于做什么上面而不是是什么上面。</p></li></ol><h3 id="协同成本"><a href="#协同成本" class="headerlink" title="协同成本"></a>协同成本</h3><blockquote><p>协同成本是新增、修改功能所付出的时间成本和脑力成本。</p></blockquote><ol><li><p>在微服务架构下，模块/服务的切分是和团队对齐的，即”组织架构决定系统架构”,组织架构最佳的划分是按照系统架构来进行的，当组织划分不好时，往往会导致重复的工作。</p></li><li><p>服务间相互依赖，服务间相互依赖主要有两种种形式组和、继承。继承会呈现出更强制的关系，因此也会有更大的协同复杂性。</p></li><li><p>可测试性带来的协同成本。这里指的是由于单元测试不完善需要更完善的集成测试来保证软件的正确性。</p></li><li><p>文档  降低协同成本的一个好方法就是完善文档，包括业务文档、设计文档、接口文档等，但是这部分工作并不会直接产生效益，因此积极性都不是很高。</p></li></ol><h2 id="如何应对软件不断增长的复杂度？"><a href="#如何应对软件不断增长的复杂度？" class="headerlink" title="如何应对软件不断增长的复杂度？"></a>如何应对软件不断增长的复杂度？</h2><p> 每一次无意识的代码的改动都会产生依赖/耦合从而增加系统的复杂性，软件的复杂程度恶化到一定程度后就会导致系统不可避免的失败。因此需要我们对复杂度增加采用零容忍的态度。</p><ul><li><p>软件的复杂度带来的影响往往是滞后的，在看到影响时也许已经过去了很久</p></li><li><p>在进行代码review时，每一个额外的复杂度设计在整个系统的角度下都显得微不足道，但是千里之堤以蝼蚁之溃。</p></li><li><p>破窗效应Broken window：一个建筑，当有了一个破窗而不及时修补，这个建筑就会被侵入住认为是无人居住的、风雨更容易进来，更多的窗户被人有意打破，很快整个建筑会加速破败。这就是破窗效应，在软件的质量控制上这个效应非常恰当,所以有问题尽快修补。</p><p>零容忍，并不是不让复杂度增长：我们都知道这是不可能的。我们需要的是尽力控制。因为进度而临时打破窗户也能接受，但是要尽快补上。</p><h2 id="基于复杂业务如何分析？"><a href="#基于复杂业务如何分析？" class="headerlink" title="基于复杂业务如何分析？"></a>基于复杂业务如何分析？</h2></li></ul><h3 id="业务的差异性"><a href="#业务的差异性" class="headerlink" title="业务的差异性"></a>业务的差异性</h3><p> if/else是由于业务上不同的场景会有不同的业务逻辑，这样的差异性可以很方便的用if/else实现，但是不符合开闭原则，在扩展时代码会堆砌的越来越庞大。</p><p> 如何消除if/else？</p><ul><li><p>多态扩展:利用面向对象的多态特性，实现代码的复用和扩展</p></li><li><p>代码分离:对不同的场景用不同的代码流程来实现业务和代码的隔离</p></li><li><p>多态扩展<br>多态扩展有继承和组合两种方式。继承的话不要使用重载特性，重载特性不是继承父类的方法。组合类似于策略模式，也就是把需要扩展的部分进行抽象、封装成需要被组合的对象。用多态的特性来移除业务的差异性，这样也更符合实体之间的关系。</p></li><li><p>代码分离<br>代码分离，代码的冗余和复用性不好，但是同样会达到业务代码彼此独立的状态</p></li></ul><h3 id="多维分析"><a href="#多维分析" class="headerlink" title="多维分析"></a>多维分析</h3><p>根据我们的分析在面对业务的差异时，我们可以用多态扩展和代码分离来实现，但是什么时候来用多态扩展？什么时候用代码分离楠?对于这个问题我们可以采用<B>矩阵分析法</B></p><p>我们可以用一个矩阵，纵轴代表业务场景、横轴代表步骤，里面的内容代表每一个动作，这样我们就可以得到这样的一个表格</p><table><thead><tr><th>-</th><th>step0</th><th>step1</th><th>step2</th></tr></thead><tbody><tr><td>business0</td><td>1.action0<br>2.action1</td><td>1.action1</td><td>1.action1<br>2.action2</td></tr><tr><td>business1</td><td>同上</td><td>同上</td><td>1.action1</td></tr><tr><td>business2</td><td>无</td><td>无</td><td>1.action1</td></tr></tbody></table><p>通过这样一个矩阵我们就可以分析出business0和business1适用于多态扩展，而business2更加适用于代码分离来进行实现。</p><p>这样的矩阵在OOP里被称为分析矩阵，主要是用来分析业务涉及要素过多、信息量太大的场景。</p><h3 id="流程分解"><a href="#流程分解" class="headerlink" title="流程分解"></a>流程分解</h3><p>流程分解是对业务过程进行详细的分解，然后在使用<B>结构化</B>的方法聚合成一个个step，在将step组合成业务，最后形成一个类似于金字塔形状自上而下的流程认知。</p><h3 id="领域模型"><a href="#领域模型" class="headerlink" title="领域模型"></a>领域模型</h3><p>领域模型指的是模型对象避免使用贫血模式，而应该使用充血模式，让模型具有业务逻辑，从而在复用模型的时候就能复用业务逻辑。充血的模型也更符合现实模型中对象的定义。</p><h2 id="分析矩阵"><a href="#分析矩阵" class="headerlink" title="分析矩阵"></a>分析矩阵</h2><h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><p>分析矩阵的定义来源于《设计模式解析》第16章,作者通过以下几个方法步骤完成对系统中变化的分析，从而设计出合适的模式</p><blockquote><p>1.找到某种特定情况下最重要的特性，并用矩阵将他们关联起来<br>2.继续处理其他情况，并且按需扩展矩阵<br>3.用新的概念扩展分析矩阵<br>4.在行维度发现规则<br>5.在列维度发现特定情况<br>6.从分析中确定模式<br>7.得到高层设计</p></blockquote><h3 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h3><p>最开始需求很简单：只处理美国和加拿大的订单。系统必须进行处理的特性清单如下：</p><ul><li>为美国和加拿大构建一个销售订单系统</li><li>根据所在国家计算运费</li><li>运费还应该以所在国家的货币进行支付</li><li>在美国，税额需按当地计算</li><li>使用美国邮政规则验证地址</li><li>在加拿大使用联邦快递发货时，需要同时缴纳联邦政府销售税和地方销售税</li><li>加拿大邮寄包裹有违禁品邮寄限制</li><li>美国的订单号继承于加拿大订单号规则，又有所改变</li></ul><p>从使用场景我们可以得知，需求分为两种：美国、加拿大，因此我们可以根据需求场景分析得出这样的矩阵</p><table><thead><tr><th>情况</th><th>过程</th></tr></thead><tbody><tr><td>美国</td><td>1.使用美元计费<br>2.使用美国邮政规则校验地址<br>3.按照当地计算税额<br>4.美制加拿大规则订单号规则</td></tr><tr><td>加拿大</td><td>1.使用美元计费<br>2.使用美国邮政规则校验地址<br>3.按照加拿大规定计算销售税4. 违禁品邮寄限制5.加拿大规则订单号规则</td></tr></tbody></table><p>通过这样一个具有详细功能的矩阵，我们可以直接提炼出按照步骤进行分解的矩阵</p><table><thead><tr><th>步骤</th><th>美国</th><th>加拿大</th></tr></thead><tbody><tr><td>货币单位</td><td>美元</td><td>加元</td></tr><tr><td>校验规则</td><td>美国邮政规则</td><td>加拿大邮政规则</td></tr><tr><td>计算税额</td><td>美国税额政策</td><td>加拿大税额政策</td></tr><tr><td>邮寄限制</td><td>未知</td><td>加拿大邮寄限制</td></tr><tr><td>订单号规则</td><td>美制加拿大规则</td><td>加拿大规则</td></tr></tbody></table><p>通过这个矩阵我们发现美国的邮寄限制未知，这样我们可以询问业务专家得到答案。通过这样的矩阵我们还可以分析出</p><table><thead><tr><th>步骤</th><th>美国</th><th>加拿大</th></tr></thead><tbody><tr><td>货币单位</td><td>多态扩展</td><td>多态扩展</td></tr><tr><td>校验规则</td><td>代码分离</td><td>代码分离</td></tr><tr><td>计算税额</td><td>代码分离</td><td>代码分离</td></tr><tr><td>邮寄限制</td><td>代码分离</td><td>代码分离</td></tr><tr><td>订单号规则</td><td>多态扩展</td><td>多态扩展</td></tr></tbody></table><blockquote><p>参考文档</p></blockquote><ul><li><a href="https://developer.aliyun.com/article/770886">警惕软件复杂度困局</a></li><li><a href="https://mp.weixin.qq.com/s/u7geoZNpLtfr_crkXVHjAg">面对复杂业务，if-else coder 如何升级</a></li><li><a href="https://developer.aliyun.com/article/712581">如何写复杂业务代码？</a></li></ul>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;blockquote&gt;
-&lt;p&gt;架构的核心挑战是如何处理当下或未来可能出现的快速增长的软件复杂性，因此越是大型系统在架构设计上越是要简单。&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;h2 id=&quot;软件的复杂度为什么会增加？&quot;&gt;&lt;a href=&quot;#软件的复杂度为什么会增加？&quot; clas</summary>
-      
-    
-    
-    
-    <category term="杂记" scheme="https://agmtopy.gitee.io/categories/%E6%9D%82%E8%AE%B0/"/>
-    
-    
-    <category term="领域建模" scheme="https://agmtopy.gitee.io/tags/%E9%A2%86%E5%9F%9F%E5%BB%BA%E6%A8%A1/"/>
     
   </entry>
   
