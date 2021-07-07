@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Arthas初探--安装初步适用, agmtopy博客">
+    <meta name="keywords" content="Linux环境排查问题的思路, agmtopy博客">
     <meta name="description" content="你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Arthas初探--安装初步适用 | agmtopy博客</title>
+    <title>Linux环境排查问题的思路 | agmtopy博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -267,12 +267,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/6.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/9.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Arthas初探--安装初步适用</h1>
+                    <h1 class="description center-align post-title">Linux环境排查问题的思路</h1>
                 </div>
             </div>
         </div>
@@ -417,7 +417,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2020-04-29
+                    2019-03-29
                 </div>
                 
 
@@ -437,99 +437,98 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="Arthas初探–安装初步适用"><a href="#Arthas初探–安装初步适用" class="headerlink" title="Arthas初探–安装初步适用"></a>Arthas初探–安装初步适用</h1><p>由于在项目中遇到一种情况，某段代码在进行单元测试和在tomcat容器中运行的性能相差数百倍，因此需要分析在不同环境下某个方法执行的具体时间，从而确定问题。Arthas可以做到无侵入的监控应用远行情况。</p>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>githup项目地址：<strong><a target="_blank" rel="noopener" href="https://github.com/alibaba/arthas">https://github.com/alibaba/arthas</a></strong><br>文档地址：<strong><a target="_blank" rel="noopener" href="https://alibaba.github.io/arthas/">https://alibaba.github.io/arthas/</a></strong></p>
-<p>安装</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">wget</span> https://alibaba.github.io/arthas/arthas-boot.jar
-java -jar arthas-boot.jar<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p>linux下直接执行，window下载文件后执行</p>
-<p><img src="https://img-blog.csdnimg.cn/20190630153613103.png" alt="在这里插入图片描述"><br>执行完成后，显示当前path中指定的JDK中正在运行的java进程<br>输入相应序号,进入sh命令，表示已连接成功<br><img src="https://img-blog.csdnimg.cn/2019063015385964.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAwMjk0Mzc=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<h2 id="初步使用"><a href="#初步使用" class="headerlink" title="初步使用"></a>初步使用</h2><p>Arthas命令初步使用，大概分为5类：</p>
-<h3 id="基础命令"><a href="#基础命令" class="headerlink" title="基础命令"></a>基础命令</h3><ul>
-<li>help——查看命令帮助信息</li>
-<li>cat——打印文件内容，和linux里的cat命令类似</li>
-<li>pwd——返回当前的工作目录，和linux命令类似</li>
-<li>cls——清空当前屏幕区域</li>
-<li>session——查看当前会话的信息</li>
-<li>reset——重置增强类，将被 Arthas 增强过的类全部还原，Arthas 服务端关闭时会重置所有增强过的类</li>
-<li>version——输出当前目标 Java 进程所加载的 Arthas 版本号</li>
-<li>history——打印命令历史</li>
-<li>quit——退出当前 Arthas 客户端，其他 Arthas 客户端不受影响</li>
-<li>shutdown——关闭 Arthas 服务端，所有 Arthas 客户端全部退出</li>
-<li>keymap——Arthas快捷键列表及自定义快捷键<h3 id="jvm相关"><a href="#jvm相关" class="headerlink" title="jvm相关"></a>jvm相关</h3></li>
-<li>dashboard——当前系统的实时数据面板</li>
-<li>thread——查看当前 JVM 的线程堆栈信息</li>
-<li>jvm——查看当前 JVM 的信息</li>
-<li>sysprop——查看和修改JVM的系统属性</li>
-<li>sysenv——查看JVM的环境变量</li>
-<li>getstatic——查看类的静态属性</li>
-<li>New! ognl——执行ognl表达式</li>
-<li>New! mbean——查看 Mbean 的信息</li>
+                <h1 id="Linux环境排查问题的工具和思路"><a href="#Linux环境排查问题的工具和思路" class="headerlink" title="Linux环境排查问题的工具和思路"></a>Linux环境排查问题的工具和思路</h1><p>将工作中使用到的在Linux下进行排查问题的工具和思路进行一个总结，主要从<strong>CPU</strong>、<strong>内存</strong>、<strong>I/O</strong>、<strong>网络</strong>、<strong>JVM</strong>这五个方面来进行。</p>
+<h2 id="CPU部分"><a href="#CPU部分" class="headerlink" title="CPU部分"></a><strong>CPU</strong>部分</h2><h3 id="CPU的性能指标"><a href="#CPU的性能指标" class="headerlink" title="CPU的性能指标"></a>CPU的性能指标</h3><ul>
+<li>图示<br><a target="_blank" rel="noopener" href="https://imgchr.com/i/JoptbV"><img src="https://s1.ax1x.com/2020/04/29/JoptbV.png" alt="JoptbV.png"></a></li>
 </ul>
-<h3 id="class-classloader相关"><a href="#class-classloader相关" class="headerlink" title="class/classloader相关"></a>class/classloader相关</h3><ul>
-<li>sc——查看JVM已加载的类信息</li>
-<li>sm——查看已加载类的方法信息</li>
-<li>jad——反编译指定已加载类的源码</li>
-<li>mc——内存编绎器，内存编绎.java文件为.class文件</li>
-<li>redefine——加载外部的.class文件，redefine到JVM里</li>
-<li>dump——dump 已加载类的 byte code 到特定目录</li>
-<li>classloader——查看classloader的继承树，urls，类加载信息，使用classloader去getResource</li>
-</ul>
-<h3 id="monitor-watch-trace相关"><a href="#monitor-watch-trace相关" class="headerlink" title="monitor/watch/trace相关"></a>monitor/watch/trace相关</h3><p>请注意，这些命令，都通过字节码增强技术来实现的，会在指定类的方法中插入一些切面来实现数据统计和观测，因此在线上、预发使用时，请尽量明确需要观测的类、方法以及条件，诊断结束要执行 shutdown 或将增强过的类执行 reset 命令。</p>
-<ul>
-<li>monitor——方法执行监控</li>
-<li>watch——方法执行数据观测</li>
-<li>trace——方法内部调用路径，并输出方法路径上的每个节点上耗时</li>
-<li>stack——输出当前方法被调用的调用路径</li>
-<li>tt——方法执行数据的时空隧道，记录下指定方法每次调用的入参和返回信息，并能对这些不同的时间下调用进行观测</li>
-</ul>
-<h3 id="options"><a href="#options" class="headerlink" title="options"></a>options</h3><ul>
-<li>options——查看或设置Arthas全局开关</li>
-</ul>
-<h2 id="使用实列"><a href="#使用实列" class="headerlink" title="使用实列"></a>使用实列</h2><ul>
-<li>trace 分析每个方法的具体执行时间<br><img src="https://img-blog.csdnimg.cn/20190630154629460.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAwMjk0Mzc=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>通过图示表明调用MongoTemplate.executeFindMultiInternal()方法时，最耗时的方法是在doWith()方法，总共执行10000次，耗时==252.3064ms==,最少一次调用耗时==0.0132ms==，最大一次耗时==38.4329ms==，分析原因还是在于数据量太大，MongoTemplate通过循环遍历出结果在进行序列化。</li>
-</ul>
-<ul>
-<li>jad 反编译代码工具<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">jad com.sankuai.inf.leaf.common.ZeroIDGen<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-</li>
-</ul>
-<p><img src="https://s1.ax1x.com/2020/07/28/aVeudO.png" alt="aVeudO.png"></p>
-<ul>
-<li>watch 查看输入参数与输出参数<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">watch</span> com.sankuai.inf.leaf.server.service.SegmentService getId <span class="token string">'&#123;params, target, returnObj&#125;'</span> -x <span class="token number">2</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-</li>
-</ul>
-<blockquote>
-<p><strong>params</strong>表示入参，<strong>target</strong>表示当前的类，<strong>returnObj</strong>表示返回值</p>
+<h3 id="CPU的性能分析工具"><a href="#CPU的性能分析工具" class="headerlink" title="CPU的性能分析工具"></a>CPU的性能分析工具</h3><table>
+<thead>
+<tr>
+<th>性能指标</th>
+<th>性能工具</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>系统CPU使用率</td>
+<td>top、vmstat、mpstat、sar、/proc/stat</td>
+<td>top、vmstat、mpstat作为实时的监控数据;sar可记录历史;/proc/stat</td>
+</tr>
+<tr>
+<td>进程CPU使用率</td>
+<td>top、ps、pidstat、htop、atop</td>
+<td>top和ps可以按照cpu使用率进行查看;pidstat展示实际运行的进程;htop和atop可以以不同颜色进行展示</td>
+</tr>
+<tr>
+<td>平均负载</td>
+<td>uptime、top、/proc/loadavg</td>
+<td>uptime简洁、top全面、/proc/loadavg提供监控数据</td>
+</tr>
+<tr>
+<td>系统上下文切换</td>
+<td>vmstat</td>
+<td>提供系统级的上下文切换次数</td>
+</tr>
+<tr>
+<td>进程上下文切换</td>
+<td>pidstat</td>
+<td>提供进程级的上下文切换次数</td>
+</tr>
+<tr>
+<td>软中断</td>
+<td>top、/proc/softirqs、mpstat</td>
+<td></td>
+</tr>
+<tr>
+<td>硬中断</td>
+<td>vmstat、/proc/interrupts</td>
+<td>vmstat提供总的中断次数、/proc/interrupts提供在每个cpu上的中断次数</td>
+</tr>
+<tr>
+<td>网络</td>
+<td>dstat、sar、tcpdump</td>
+<td>dstat和sar提供总的网络接收情况和发送情况、tcpdump是提供动态抓取正在进行的网络通信</td>
+</tr>
+<tr>
+<td>I/O</td>
+<td>dstat、sar</td>
+<td>都是提供整体的I/O情况</td>
+</tr>
+</tbody></table>
+<h3 id="CPU的分析步骤"><a href="#CPU的分析步骤" class="headerlink" title="CPU的分析步骤"></a>CPU的分析步骤</h3><blockquote>
+<p><strong>top</strong> -&gt; <strong>vmstat</strong> -&gt; <strong>pidstat</strong> -&gt;进程分析工具</p>
 </blockquote>
-<p><img src="https://s1.ax1x.com/2020/07/28/aVmDAO.png" alt="aVmDAO.png"></p>
-<ul>
-<li>stack 查看被调用的路径(向上)</li>
+<p>总的思路就是根据<strong>top</strong>获取到系统当前的一个状态，根据当前的状态在进行对应的分析</p>
+<h2 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h2><h3 id="内存分析工具"><a href="#内存分析工具" class="headerlink" title="内存分析工具"></a>内存分析工具</h3><table>
+<thead>
+<tr>
+<th>性能指标</th>
+<th>性能工具</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>系统已用、可用、剩余内存</td>
+<td>free、vmstat、/proc/meminfo</td>
+<td>获取内存信息</td>
+</tr>
+<tr>
+<td>进程虚拟内存、常驻内存、共享内存</td>
+<td>ps、top</td>
+<td></td>
+</tr>
+<tr>
+<td>进程内存分布</td>
+<td>pmap</td>
+<td></td>
+</tr>
+</tbody></table>
+<h3 id="内存分析流程"><a href="#内存分析流程" class="headerlink" title="内存分析流程"></a>内存分析流程</h3><blockquote>
+<p><strong>free</strong> -&gt; <strong>vmstat和sar</strong> -&gt; 确定内存问题</p>
+</blockquote>
+<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><ul>
+<li>htop<br><a target="_blank" rel="noopener" href="https://imgchr.com/i/Jo9FaT"><img src="https://s1.ax1x.com/2020/04/29/Jo9FaT.png" alt="Jo9FaT.png"></a></li>
 </ul>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">stack com.sankuai.inf.leaf.server.service.SegmentService getId<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p><img src="https://s1.ax1x.com/2020/07/28/aVKIUK.png" alt="aVKIUK.png"></p>
-<ul>
-<li>sc 查看JVM已加载的类信息</li>
-</ul>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">sc -d com.sankuai.inf.leaf.server.service.SegmentService getId<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p><img src="https://s1.ax1x.com/2020/07/28/aVMArn.png" alt="aVMArn.png"></p>
-<ul>
-<li>thread 分析死锁<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">thread b<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-</li>
-</ul>
-<p><img src="https://s1.ax1x.com/2020/04/29/JHNalT.png" alt="JHNalT.png"></p>
-<p><img src="https://s1.ax1x.com/2020/04/30/JHUuNR.png" alt="JHUuNR.png"></p>
-<p>可以看出当前线程正在等待<strong>ReentrantLock$NonfairSync@118f1fb4</strong>，而持有这个对象的线程又在等待当前线程释放，从而形成死锁!</p>
-<ul>
-<li>thread 分析CPU占用</li>
-</ul>
-<p><img src="https://s1.ax1x.com/2020/04/30/JH0HQx.png" alt="JH0HQx.png"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p> 先放一张官方的总结大图<br> <a target="_blank" rel="noopener" href="https://imgchr.com/i/JHBSfA"><img src="https://s1.ax1x.com/2020/04/30/JHBSfA.png" alt="JHBSfA.png"></a></p>
-<p>总结：Arthas是一个很优秀的java诊断工具，无论是安装还是使用都很简洁，并且使用文档全面、清晰明了，值得好好研究一番。</p>
 
                 
             </div>
@@ -556,7 +555,7 @@ java -jar arthas-boot.jar<span aria-hidden="true" class="line-numbers-rows"><spa
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://agmtopy.gitee.io/2020/04/29/1.%E6%9D%82%E8%AE%B0/Arthas%E5%88%9D%E6%8E%A2-%E5%AE%89%E8%A3%85%E5%88%9D%E6%AD%A5%E9%80%82%E7%94%A8/">https://agmtopy.gitee.io/2020/04/29/1.%E6%9D%82%E8%AE%B0/Arthas%E5%88%9D%E6%8E%A2-%E5%AE%89%E8%A3%85%E5%88%9D%E6%AD%A5%E9%80%82%E7%94%A8/</a>
+                    <a href="https://agmtopy.gitee.io/2019/03/29/1.%E6%9D%82%E8%AE%B0/Linux%E7%8E%AF%E5%A2%83%E6%8E%92%E6%9F%A5%E9%97%AE%E9%A2%98%E7%9A%84%E6%80%9D%E8%B7%AF/">https://agmtopy.gitee.io/2019/03/29/1.%E6%9D%82%E8%AE%B0/Linux%E7%8E%AF%E5%A2%83%E6%8E%92%E6%9F%A5%E9%97%AE%E9%A2%98%E7%9A%84%E6%80%9D%E8%B7%AF/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -649,13 +648,13 @@ java -jar arthas-boot.jar<span aria-hidden="true" class="line-numbers-rows"><spa
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
             <div class="card">
-                <a href="/2020/05/04/12.JVM/1.JVM%E5%9F%BA%E7%A1%80%E5%8E%9F%E7%90%86/">
+                <a href="/2019/03/29/7.%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9F%A5%E8%AF%86/9.rocketmq%E7%9A%84%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE%E5%88%86%E6%9E%90/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="JVM基础原理">
+                        <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="rocketmq的通信协议分析">
                         
-                        <span class="card-title">JVM基础原理</span>
+                        <span class="card-title">rocketmq的通信协议分析</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -666,14 +665,14 @@ java -jar arthas-boot.jar<span aria-hidden="true" class="line-numbers-rows"><spa
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2020-05-04
+                            <i class="far fa-clock fa-fw icon-date"></i>2019-03-29
                         </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/jvm/" class="post-category">
-                                    jvm
+                            <a href="/categories/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" class="post-category">
+                                    消息队列
                                 </a>
                             
                             
@@ -683,8 +682,8 @@ java -jar arthas-boot.jar<span aria-hidden="true" class="line-numbers-rows"><spa
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/jvm/">
-                        <span class="chip bg-color">jvm</span>
+                    <a href="/tags/RocketMQ/">
+                        <span class="chip bg-color">RocketMQ</span>
                     </a>
                     
                 </div>
@@ -698,13 +697,13 @@ java -jar arthas-boot.jar<span aria-hidden="true" class="line-numbers-rows"><spa
                 Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/04/29/1.%E6%9D%82%E8%AE%B0/Linux%E7%8E%AF%E5%A2%83%E6%8E%92%E6%9F%A5%E9%97%AE%E9%A2%98%E7%9A%84%E6%80%9D%E8%B7%AF/">
+                <a href="/2019/03/28/7.%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9F%A5%E8%AF%86/8.RocketMQ%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="Linux环境排查问题的思路">
+                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="RocketMQ主从同步机制分析">
                         
-                        <span class="card-title">Linux环境排查问题的思路</span>
+                        <span class="card-title">RocketMQ主从同步机制分析</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -715,14 +714,14 @@ java -jar arthas-boot.jar<span aria-hidden="true" class="line-numbers-rows"><spa
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-04-29
+                                <i class="far fa-clock fa-fw icon-date"></i>2019-03-28
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E6%9D%82%E8%AE%B0/" class="post-category">
-                                    杂记
+                            <a href="/categories/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" class="post-category">
+                                    消息队列
                                 </a>
                             
                             
@@ -732,12 +731,8 @@ java -jar arthas-boot.jar<span aria-hidden="true" class="line-numbers-rows"><spa
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/linux/">
-                        <span class="chip bg-color">linux</span>
-                    </a>
-                    
-                    <a href="/tags/arthas/">
-                        <span class="chip bg-color">arthas</span>
+                    <a href="/tags/RocketMQ/">
+                        <span class="chip bg-color">RocketMQ</span>
                     </a>
                     
                 </div>
