@@ -838,18 +838,95 @@ DEF_Agent_OnAttach(JavaVM *vm, char *args, void *reserved)
 </tr>
 </tbody></table>
 <p>详细的对比可参考byteBuddy官方资料:<a target="_blank" rel="noopener" href="https://bytebuddy.net/#/tutorial">https://bytebuddy.net/#/tutorial</a></p>
-<h3 id="Byte-Buddy"><a href="#Byte-Buddy" class="headerlink" title="Byte Buddy"></a>Byte Buddy</h3><h3 id="Byte-Byddy常见问题"><a href="#Byte-Byddy常见问题" class="headerlink" title="Byte Byddy常见问题"></a>Byte Byddy常见问题</h3><ul>
+<h3 id="Byte-Buddy"><a href="#Byte-Buddy" class="headerlink" title="Byte Buddy"></a>Byte Buddy</h3><h4 id="示例"><a href="#示例" class="headerlink" title="示例"></a>示例</h4><ul>
+<li>gradle</li>
+</ul>
+<pre class="line-numbers language-gradle" data-language="gradle"><code class="language-gradle">&#x2F;&#x2F;目前最新版本为1.11.6
+implementation &quot;net.bytebuddy:byte-buddy:LATEST&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<ul>
+<li>AgentExampleForByteBuddy</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AgentExampleForByteBuddy</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token annotation punctuation">@Advice.OnMethodEnter</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">boolean</span> <span class="token function">before</span><span class="token punctuation">(</span><span class="token annotation punctuation">@Advice.Origin</span> <span class="token class-name">Executable</span> method<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"byte buddy before : "</span> <span class="token operator">+</span> method<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token annotation punctuation">@Advice.OnMethodExit</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">after</span><span class="token punctuation">(</span><span class="token annotation punctuation">@Advice.Origin</span> <span class="token class-name">Executable</span> method<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"byte buddy after : "</span> <span class="token operator">+</span> method<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">premain</span><span class="token punctuation">(</span><span class="token class-name">String</span> arguments<span class="token punctuation">,</span> <span class="token class-name">Instrumentation</span> inst<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"开始执行..."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">new</span> <span class="token class-name">AgentBuilder<span class="token punctuation">.</span>Default</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token keyword">with</span><span class="token punctuation">(</span><span class="token class-name">AgentBuilder<span class="token punctuation">.</span>RedefinitionStrategy</span><span class="token punctuation">.</span>RETRANSFORMATION<span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token keyword">with</span><span class="token punctuation">(</span><span class="token class-name">AgentBuilder<span class="token punctuation">.</span>InstallationListener<span class="token punctuation">.</span>StreamWriting</span><span class="token punctuation">.</span><span class="token function">toSystemError</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">type</span><span class="token punctuation">(</span><span class="token class-name">ElementMatchers</span><span class="token punctuation">.</span><span class="token function">nameContains</span><span class="token punctuation">(</span><span class="token string">"AgentTarget"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">transform</span><span class="token punctuation">(</span><span class="token punctuation">(</span>builder<span class="token punctuation">,</span> td<span class="token punctuation">,</span> cl<span class="token punctuation">,</span> m<span class="token punctuation">)</span> <span class="token operator">-></span> builder<span class="token punctuation">.</span><span class="token function">visit</span><span class="token punctuation">(</span><span class="token class-name">Advice</span><span class="token punctuation">.</span><span class="token keyword">to</span><span class="token punctuation">(</span><span class="token class-name">AgentExampleForByteBuddy</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token class-name">MethodDescription</span><span class="token operator">::</span><span class="token function">isConstructor</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token function">installOn</span><span class="token punctuation">(</span>inst<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+<ul>
+<li>AgentTarget</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">AgentTarget</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"开始打印...."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token class-name">AgentTarget</span> agentTarget <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">AgentTarget</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        agentTarget<span class="token punctuation">.</span><span class="token function">printInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">printInfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"123"</span> <span class="token operator">+</span> <span class="token class-name">LocalTime</span><span class="token punctuation">.</span><span class="token function">now</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+<p>这里演示的是一个重写加载类的示例:</p>
+<ol>
+<li>通过</B>@Advice.OnMethodEnter</B>和<B>@Advice.OnMethodExit</B>定义执行方法前后插入的字节码</li>
+<li>通过<B>AgentBuilder</B>指定要增强的类和类型</li>
+<li><B>AgentBuilder.with</B>可以添加监听，方便输出调试</li>
+</ol>
+<h3 id="Byte-Byddy常见问题"><a href="#Byte-Byddy常见问题" class="headerlink" title="Byte Byddy常见问题"></a>Byte Byddy常见问题</h3><ul>
 <li>依赖冲突</li>
 </ul>
 <p>处理方案：</p>
 <ol>
-<li>构建工具排除</li>
-<li>自定义classLoader<br>自定义classLoader,破坏双亲委派机制 </li>
+<li><p>构建工具排除</p>
+</li>
+<li><p>使用自定义classLoader加载agent所使用的类<br>通过指定agent类的加载器,让</B>BootstrapClassLoader</B>去加载</p>
+</li>
 </ol>
 <ul>
-<li><h2 id="扩展"><a href="#扩展" class="headerlink" title="扩展"></a>扩展</h2></li>
+<li>Byte-Buddy提供的API</li>
 </ul>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://asm.ow2.io/">https://asm.ow2.io/</a><br><a target="_blank" rel="noopener" href="https://www.javassist.org/">https://www.javassist.org/</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/chiangchou/p/javassist.html#_label9">https://www.cnblogs.com/chiangchou/p/javassist.html#_label9</a><br><a target="_blank" rel="noopener" href="https://bytebuddy.net/#/">https://bytebuddy.net/#/</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/old-cha/p/13264114.html">https://www.cnblogs.com/old-cha/p/13264114.html</a><br><a target="_blank" rel="noopener" href="https://tech.meituan.com/2019/11/07/java-dynamic-debugging-technology.html">https://tech.meituan.com/2019/11/07/java-dynamic-debugging-technology.html</a></p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">ClassInjector<span class="token punctuation">.</span>UsingInstrumentation</span>
+         <span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span><span class="token class-name">FileJar</span><span class="token punctuation">,</span> <span class="token class-name">ClassInjector<span class="token punctuation">.</span>UsingInstrumentation<span class="token punctuation">.</span>Target</span><span class="token punctuation">.</span>BOOTSTRAP<span class="token punctuation">,</span> instrumentation<span class="token punctuation">)</span>
+         <span class="token punctuation">.</span><span class="token function">injectRaw</span><span class="token punctuation">(</span><span class="token class-name">Collections</span><span class="token punctuation">.</span><span class="token function">singletonMap</span><span class="token punctuation">(</span>instrumentation<span class="token punctuation">,</span> <span class="token class-name">ClassFileLocator
+                 <span class="token punctuation">.</span>ForClassLoader</span><span class="token punctuation">.</span><span class="token function">ofSystemLoader</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                 <span class="token punctuation">.</span><span class="token function">locate</span><span class="token punctuation">(</span><span class="token string">"com.agmtopy.source.agent.AgentExampleForByteBuddy"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<ul>
+<li>java agent中传参</li>
+</ul>
+<p>处理方案:</p>
+<ol>
+<li>ThreadLocal</li>
+<li>增加临时的成员变量</li>
+</ol>
+<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://asm.ow2.io/">https://asm.ow2.io/</a><br><a target="_blank" rel="noopener" href="https://www.javassist.org/">https://www.javassist.org/</a><br><a target="_blank" rel="noopener" href="https://bytebuddy.net/#/">https://bytebuddy.net/#/</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/wanxiaoderen/article/details/107079741">https://blog.csdn.net/wanxiaoderen/article/details/107079741</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/old-cha/p/13264114.html">https://www.cnblogs.com/old-cha/p/13264114.html</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/chiangchou/p/javassist.html#_label9">https://www.cnblogs.com/chiangchou/p/javassist.html#_label9</a><br><a target="_blank" rel="noopener" href="https://tech.meituan.com/2019/11/07/java-dynamic-debugging-technology.html">https://tech.meituan.com/2019/11/07/java-dynamic-debugging-technology.html</a><br><a target="_blank" rel="noopener" href="https://github.com/gzzchh/de-ag">https://github.com/gzzchh/de-ag</a></p>
 
                 
             </div>
