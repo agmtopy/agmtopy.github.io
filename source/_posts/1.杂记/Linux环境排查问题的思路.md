@@ -1,6 +1,6 @@
 ---
 title: Linux环境排查问题的思路
-date: 2020-04-29 00:28:05
+date: 2019-03-29 00:28:05
 categories: 杂记
 tags:
   - linux

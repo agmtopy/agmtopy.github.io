@@ -1,6 +1,6 @@
 ---
 title: Arthas初探--安装初步适用
-date: 2020-04-29 22:40:08
+date: 2019-07-29 22:40:08
 categories: 杂记
 tags:
   - linux
