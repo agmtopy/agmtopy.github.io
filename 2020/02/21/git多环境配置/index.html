@@ -435,7 +435,7 @@
             <div id="articleContent">
                 <p>疫情期间，需要在家远程办公，因此需要在电脑上配置两套git环境分别是github、gitlab的。在配置过程中遇到了一些阻碍，特此记录下来。</p>
 <h3 id="步骤一：生成SSH-Key"><a href="#步骤一：生成SSH-Key" class="headerlink" title="步骤一：生成SSH-Key"></a>步骤一：生成SSH-Key</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ssh-keygen -t rsa -C <span class="token string">"email@xx.com"</span> -f ~/.ssh/id_rsa <span class="token comment">#(或gitlab_rsa)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>其中<a href="mailto:&#x65;&#109;&#97;&#105;&#108;&#x40;&#x78;&#120;&#x2e;&#99;&#111;&#x6d;">&#x65;&#109;&#97;&#105;&#108;&#x40;&#x78;&#120;&#x2e;&#99;&#111;&#x6d;</a>为github或gitlab注册的邮箱<br>id_rsa或gitlab_rsa为生成key文件的名称，默认为id_rsa，使用别名时需要进行步骤三</p>
+<p>其中<a href="mailto:&#101;&#x6d;&#97;&#105;&#x6c;&#64;&#120;&#120;&#x2e;&#x63;&#111;&#109;">&#101;&#x6d;&#97;&#105;&#x6c;&#64;&#120;&#120;&#x2e;&#x63;&#111;&#109;</a>为github或gitlab注册的邮箱<br>id_rsa或gitlab_rsa为生成key文件的名称，默认为id_rsa，使用别名时需要进行步骤三</p>
 <ul>
 <li>分别生成github和gitla的SSH-key</li>
 </ul>
@@ -460,7 +460,7 @@ Host gitlab.com
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Hi userName<span class="token operator">!</span> You've successfully authenticated, but GitHub does not provide shell access.<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>这样的提示表示成功</p>
 <h3 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h3><ul>
-<li><a href="mailto:&#x67;&#x69;&#x74;&#64;&#x67;&#105;&#x74;&#x68;&#x75;&#98;&#46;&#99;&#111;&#109;">&#x67;&#x69;&#x74;&#64;&#x67;&#105;&#x74;&#x68;&#x75;&#98;&#46;&#99;&#111;&#109;</a>: Permission denied (publickey). </li>
+<li><a href="mailto:&#103;&#x69;&#x74;&#64;&#x67;&#x69;&#x74;&#104;&#117;&#98;&#x2e;&#x63;&#111;&#x6d;">&#103;&#x69;&#x74;&#64;&#x67;&#x69;&#x74;&#104;&#117;&#98;&#x2e;&#x63;&#111;&#x6d;</a>: Permission denied (publickey). </li>
 </ul>
 <p>1.是否修改过github.com的host<br>2.是否添加私钥</p>
 <h3 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h3><p><a target="_blank" rel="noopener" href="https://my.oschina.net/stefanzhlg/blog/529403">git 配置多个SSH-Key</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/lxwphp/p/7884700.html">解决Permission denied (publickey).</a></p>
