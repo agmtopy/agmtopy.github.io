@@ -6,7 +6,7 @@
   <link href="https://agmtopy.gitee.io/atom.xml" rel="self"/>
   
   <link href="https://agmtopy.gitee.io/"/>
-  <updated>2021-09-27T15:59:41.795Z</updated>
+  <updated>2021-10-02T07:15:45.405Z</updated>
   <id>https://agmtopy.gitee.io/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="https://agmtopy.gitee.io/2021/09/26/12.JVM/6.G1GC%E7%9A%84%E7%AE%97%E6%B3%95%E4%B8%8E%E5%AE%9E%E7%8E%B0/"/>
     <id>https://agmtopy.gitee.io/2021/09/26/12.JVM/6.G1GC%E7%9A%84%E7%AE%97%E6%B3%95%E4%B8%8E%E5%AE%9E%E7%8E%B0/</id>
     <published>2021-09-26T14:48:01.000Z</published>
-    <updated>2021-09-27T15:59:41.795Z</updated>
+    <updated>2021-10-02T07:15:45.405Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="G1GC的算法与实现-算法篇"><a href="#G1GC的算法与实现-算法篇" class="headerlink" title="G1GC的算法与实现-算法篇"></a>G1GC的算法与实现-算法篇</h1><p>根据《深入Java虚拟机-JVM G1GC的算法与实现》-算法篇整理而来,该篇主要由以下章节组成</p><ul><li>第一章 G1GC是什么?</li><li>第二章 并发标记</li><li>第三章 转移</li><li>第四章 软实时性</li><li>第五章 分代G1GC模式</li><li>第六章 算法篇总结 </li></ul><h2 id="G1GC是什么"><a href="#G1GC是什么" class="headerlink" title="G1GC是什么?"></a>G1GC是什么?</h2><blockquote><p>Garbage-First (G1) 垃圾收集器是一种服务端的垃圾收集器，针对具有大内存和多处理器的机器。它尝试尽量满足用户设定的垃圾收集 (GC) 暂停时间，同时实现高吞吐量。GC操作（例如全局标记）与应用程序线程同时执行。<br>这是JDK官方对于G1的定义,这里作者提出一个结论G1的特点是非常非常的关注实时性,并且实时性分为<B>软实时性</B>/<B>硬实时性</B><br>硬实时性指的是硬性强制要求的，如果达不到指定时间就会返回失败的处理;<br>软实时性指的是柔性的，对于设定的指定时间只是一个期望，不会做强制的要求限制;<br>额外一点是<B>G1是支持4G以上的堆内存进行垃圾收集</B></p></blockquote><h3 id="G1出现的背景"><a href="#G1出现的背景" class="headerlink" title="G1出现的背景"></a>G1出现的背景</h3><p>在G1出现之前的GC处理器主要是通过增量GC或者是并发GC来提高STW的暂停时间，但是这样缩短时间会造成吞吐量下降。<br>G1的出现是为了解决在期望的暂停时间周围尽量的完成更大的GC吞吐量。目前GC的关注点都是在尽可能的减少暂停时间，而不是增大吞吐量上，这可能是因为堆中的对象大多属于是朝生夕死的类型</p><h3 id="G1的目前的现状"><a href="#G1的目前的现状" class="headerlink" title="G1的目前的现状"></a>G1的目前的现状</h3><p>G1在JDK9中就作为默认的垃圾回收器，现阶段G1的发展情况不</p><h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://tech.meituan.com/2016/09/23/g1.html">https://tech.meituan.com/2016/09/23/g1.html</a><br><a href="https://www.oracle.com/technetwork/tutorials/tutorials-1876574.html">https://www.oracle.com/technetwork/tutorials/tutorials-1876574.html</a></p>]]></content>
+    <content type="html"><![CDATA[<h1 id="G1GC的算法与实现-算法篇"><a href="#G1GC的算法与实现-算法篇" class="headerlink" title="G1GC的算法与实现-算法篇"></a>G1GC的算法与实现-算法篇</h1><p>根据《深入Java虚拟机-JVM G1GC的算法与实现》-算法篇整理而来,该篇主要由以下章节组成</p><ul><li>第一章 G1GC是什么?</li><li>第二章 并发标记</li><li>第三章 转移</li><li>第四章 软实时性</li><li>第五章 分代G1GC模式</li><li>第六章 算法篇总结 </li></ul><h2 id="G1GC是什么"><a href="#G1GC是什么" class="headerlink" title="G1GC是什么?"></a>G1GC是什么?</h2><blockquote><p>Garbage-First (G1) 垃圾收集器是一种服务端的垃圾收集器，针对具有大内存和多处理器的机器。它尝试尽量满足用户设定的垃圾收集 (GC) 暂停时间，同时实现高吞吐量。GC操作（例如全局标记）与应用程序线程同时执行。<br>这是JDK官方对于G1的定义,这里作者提出一个结论G1的特点是非常非常的关注实时性,并且实时性分为<B>软实时性</B>/<B>硬实时性</B><br>硬实时性指的是硬性强制要求的，如果达不到指定时间就会返回失败的处理;<br>软实时性指的是柔性的，对于设定的指定时间只是一个期望，不会做强制的要求限制;<br>额外一点是<B>G1是支持4G以上的堆内存进行垃圾收集</B></p></blockquote><h3 id="G1出现的背景"><a href="#G1出现的背景" class="headerlink" title="G1出现的背景"></a>G1出现的背景</h3><p>在G1出现之前的GC处理器主要是通过增量GC或者是并发GC来提高STW的暂停时间，但是这样缩短时间会造成吞吐量下降。<br>G1的出现是为了解决在期望的暂停时间周围尽量的完成更大的GC吞吐量。目前GC的关注点都是在尽可能的减少暂停时间，而不是增大吞吐量上，这可能是因为堆中的对象大多属于是朝生夕死的类型</p><h3 id="G1的目前的现状"><a href="#G1的目前的现状" class="headerlink" title="G1的目前的现状"></a>G1的目前的现状</h3><p>G1在JDK9中就作为默认的垃圾回收器，现阶段G1在最后一次增强是在JDK14中增加对NUMA(非统一内存访问)的增强。在JDK14中新增了ZGC收集器，并且预计将ZGC在未来的JDK版本中作为默认GC</p><h2 id="G1GC的执行过程"><a href="#G1GC的执行过程" class="headerlink" title="G1GC的执行过程"></a>G1GC的执行过程</h2><p>所有GC在执行过程可以都划分为</B>标记</B>和<B>整理</B>两个大的步骤，不同的是具体的执行过程会有差别</p><h3 id="G1GC的标记过程"><a href="#G1GC的标记过程" class="headerlink" title="G1GC的标记过程"></a>G1GC的标记过程</h3><p>G1GC的标记过程是<B>并发标记</B>,但是目前的GC还做不到全局并发，只能在某些标记步骤中做到并发</p><blockquote><p>并发指的是更多的指的是软件领域的无序执行，不同任务之间没有顺序关系的一种软件启动方式</br>并行更多的指的是在硬件领域不同指令在同一时刻执行的</p></blockquote><h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a href="https://tech.meituan.com/2016/09/23/g1.html">https://tech.meituan.com/2016/09/23/g1.html</a><br><a href="https://www.oracle.com/technetwork/tutorials/tutorials-1876574.html">https://www.oracle.com/technetwork/tutorials/tutorials-1876574.html</a></p>]]></content>
     
     
       
