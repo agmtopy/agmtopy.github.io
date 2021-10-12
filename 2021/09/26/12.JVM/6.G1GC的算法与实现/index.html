@@ -464,9 +464,10 @@
 <ul>
 <li><p>初始化标记阶段<br><b>初始化标记阶段</b>只对<b>根引用对象</b>进行标记这个过程也称为根扫描，由于mutator(用户线程)会修改根对象引用，因此在者一步是需要将mutator暂停下来，这里之所以没有采用读/写屏障的技术来实现并发个人猜测是因为mutator会频繁修改根对象，因此在此处保证并发后的性能损耗远远大于顺序执行所带来的性能损耗。<br>在初始化标记阶段只会对根引用对象进行标记到特定的内存中称为<b>标记位图</b></p>
 </li>
-<li><p>并发标记阶段<br><b>并发标记阶段</b>的特点是GC线程与mutator线程是并发执行的，在mutator线程修改根对象引用时会采用<b>写屏障</b>来记录对象之间引用关系的变化。<br>SATB是记录对象之间逻辑引用关系的结构，全称为Snapshot At The Beginning(初始快照),在并发标记过程中产生的新对象会作为“已完成扫描和标记”的对象，在mutator线程发生对标记对象的修改时，SATB专用写屏障也会将该对象记录到SATB队列中</p>
+<li><p>并发标记阶段<br><b>并发标记阶段</b>的特点是GC线程与mutator线程是并发执行的，在mutator线程修改根对象引用时会采用<b>写屏障</b>来记录对象之间引用关系的变化。<br>SATB是记录对象之间逻辑引用关系的结构，全称为Snapshot At The Beginning(初始快照),在并发标记过程中产生的新对象会作为“已完成扫描和标记”的对象，在mutator线程发生对标记对象的修改时，SATB专用写屏障也会将该对象记录到SATB队列中。SATB队列在实现上采用与线程绑定的形式来进行，当队列装满时，将会添加到全局SATB队列中。</p>
 </li>
 </ul>
+<p>log</p>
 <blockquote>
 <p>并发指的是更多的指的是软件领域的无序执行，不同任务之间没有顺序关系的一种软件启动方式</br>并行更多的指的是在硬件领域不同指令在同一时刻执行的</p>
 </blockquote>
@@ -586,18 +587,17 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;Current
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
             <div class="card">
-                <a href="/2021/09/26/12.JVM/6.G1GC%E7%9A%84%E7%AE%97%E6%B3%95%E4%B8%8E%E5%AE%9E%E7%8E%B0/">
+                <a href="/2021/10/13/7.%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9F%A5%E8%AF%86/15.rocketmq%E7%B4%A2%E5%BC%95%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86%E4%B9%8BIndexService/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="G1GC的算法与实现">
+                        <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="rocketmq索引实现原理之IndexService">
                         
-                        <span class="card-title">G1GC的算法与实现</span>
+                        <span class="card-title">rocketmq索引实现原理之IndexService</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -607,31 +607,26 @@
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-09-26
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-10-13
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/jvm/" class="post-category">
-                                    jvm
+                            <a href="/categories/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" class="post-category">
+                                    消息队列
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/jvm/">
-                        <span class="chip bg-color">jvm</span>
-                    </a>
-                    
-                    <a href="/tags/G1/">
-                        <span class="chip bg-color">G1</span>
+                    <a href="/tags/RocketMQ/">
+                        <span class="chip bg-color">RocketMQ</span>
                     </a>
                     
                 </div>
