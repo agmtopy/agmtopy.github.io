@@ -433,7 +433,45 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="rocketmq索引实现原理之IndexService"><a href="#rocketmq索引实现原理之IndexService" class="headerlink" title="rocketmq索引实现原理之IndexService"></a>rocketmq索引实现原理之IndexService</h1>
+                <h1 id="rocketmq索引实现原理之IndexService"><a href="#rocketmq索引实现原理之IndexService" class="headerlink" title="rocketmq索引实现原理之IndexService"></a>rocketmq索引实现原理之IndexService</h1><p>在之前的文章中分析了消息是如果通过Commitlog的逻辑设计到MappedFile的与文件系统进行交付的过程，这篇文章来分析消息体是如何实现快速查找的以及底层实现<br>RocketMQ的索引相关的工作都是由Store包下的<B>IndexService</B>实现的,是设计上<B>IndexService</B>划分为2个部分</p>
+<ul>
+<li>启动时加载</li>
+<li>插入索引</li>
+</ul>
+<h2 id="IndexService的启动时加载分析"><a href="#IndexService的启动时加载分析" class="headerlink" title="IndexService的启动时加载分析"></a>IndexService的启动时加载分析</h2><p><B>IndexService</B>的加载过程是由<B>load()</B>方法实现的,这个方法的被调用链是由<br><B>BrokerController</B> -&gt; <B>DefaultMessageStore</B> -&gt; <B>IndexService</B></p>
+<p><img src="https://i.loli.net/2021/10/17/KA9awWtHXcfGjRL.jpg" alt="IndexService被调用链"></p>
+<h3 id="load"><a href="#load" class="headerlink" title="load()"></a>load()</h3><p><B>load()</B>构造方法主要是对原有的index文件分析然后生成IndexFile对象的过程</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">load</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token keyword">boolean</span> lastExitOK<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">//1.查找指定文件目录下的文件列表</span>
+    <span class="token class-name">File</span> dir <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">File</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>storeIndexPath<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">File</span><span class="token punctuation">[</span><span class="token punctuation">]</span> files <span class="token operator">=</span> dir<span class="token punctuation">.</span><span class="token function">listFiles</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>files <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">//2.按照文件名称进行升序</span>
+        <span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span>files<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">File</span> file <span class="token operator">:</span> files<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+                <span class="token comment">//3.根据index文件初始化indexFile对象</span>
+                <span class="token class-name">IndexFile</span> f <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">IndexFile</span><span class="token punctuation">(</span>file<span class="token punctuation">.</span><span class="token function">getPath</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>hashSlotNum<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>indexNum<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token comment">//3.初始化indexFile对象的头文件信息</span>
+                f<span class="token punctuation">.</span><span class="token function">load</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token comment">//4.判断上次是否正常退出，未正常退出并且文件记录在日志保存点之后的进行舍弃</span>
+                <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>lastExitOK <span class="token operator">&amp;&amp;</span> f<span class="token punctuation">.</span><span class="token function">getEndTimestamp</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">></span> <span class="token keyword">this</span><span class="token punctuation">.</span>defaultMessageStore<span class="token punctuation">.</span><span class="token function">getStoreCheckpoint</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getIndexMsgTimestamp</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                    <span class="token comment">//4.1 舍弃未到保存点的数据</span>
+                    f<span class="token punctuation">.</span><span class="token function">destroy</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    <span class="token keyword">continue</span><span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span>
+                log<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">"load index file OK, "</span> <span class="token operator">+</span> f<span class="token punctuation">.</span><span class="token function">getFileName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token comment">//5.将文件装载到indexFileList中</span>
+                <span class="token keyword">this</span><span class="token punctuation">.</span>indexFileList<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>f<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">IOException</span> e <span class="token operator">|</span> <span class="token class-name">NumberFormatException</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token comment">//省略...</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这段代码就是对之前的indexFile文件进行加载，并且对在日志保存点之后的数据进行抛弃<br>需要额外注意的是在构造</B>IndexFile</B>对象时会根据文件参数<B>解析</B>、<B>加载</B>头文件信息</p>
+
                 
             </div>
             <hr/>
