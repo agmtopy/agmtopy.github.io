@@ -437,6 +437,7 @@
 <ul>
 <li>启动时加载</li>
 <li>插入索引</li>
+<li>索引文件及内容</li>
 </ul>
 <h2 id="IndexService的启动时加载分析"><a href="#IndexService的启动时加载分析" class="headerlink" title="IndexService的启动时加载分析"></a>IndexService的启动时加载分析</h2><p><B>IndexService</B>的加载过程是由<B>load()</B>方法实现的,这个方法的被调用链是由<br><B>BrokerController</B> -&gt; <B>DefaultMessageStore</B> -&gt; <B>IndexService</B></p>
 <p><img src="https://i.loli.net/2021/10/17/KA9awWtHXcfGjRL.jpg" alt="IndexService被调用链"></p>
@@ -530,7 +531,16 @@
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>在<B>ReputMessageService</B>可以看到是使用一个循环每隔1s去查询一次commitLog文件中需要进行后置处理的消息来进行处理</p>
-
+<h2 id="索引文件及内容"><a href="#索引文件及内容" class="headerlink" title="索引文件及内容"></a>索引文件及内容</h2><p>索引文件是放置在<B>${rootpath}/index</B>目录下的，文件名称按照yyyyMMddhhmmsssss的形式进行生成，默认大小为400MB,由三个部分组成</p>
+<ul>
+<li>header</li>
+<li>slot table</li>
+<li>index linked list<br>结构如下所示:</li>
+</ul>
+<pre class="line-numbers language-none"><code class="language-none">|&lt;-- 40 byte --&gt;|&lt;---   500w   ---&gt;|&lt;---   2000w   ---&gt;|
++---------------+------------------+-------------------+
+|    header     |   slot table     | index linked list |
++---------------+------------------+-------------------+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
                 
             </div>
             <hr/>
