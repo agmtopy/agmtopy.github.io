@@ -531,6 +531,47 @@
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>在<B>ReputMessageService</B>可以看到是使用一个循环每隔1s去查询一次commitLog文件中需要进行后置处理的消息来进行处理</p>
+<h2 id="创建Index索引文件"><a href="#创建Index索引文件" class="headerlink" title="创建Index索引文件"></a>创建Index索引文件</h2><p>创建Index索引文件的过程的触发点是在<B>load()</B>方法中进行触发的,主要是通过<B>IndexService.retryGetAndCreateIndexFile()</B>方法执行的</p>
+<ul>
+<li>IndexService.retryGetAndCreateIndexFile</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">IndexFile</span> <span class="token function">retryGetAndCreateIndexFile</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token class-name">IndexFile</span> indexFile <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+
+    <span class="token comment">//1. 重复尝试创建索引文件</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> times <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> <span class="token keyword">null</span> <span class="token operator">==</span> indexFile <span class="token operator">&amp;&amp;</span> times <span class="token operator">&lt;</span> MAX_TRY_IDX_CREATE<span class="token punctuation">;</span> times<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">//2.获取或创建index文件</span>
+        indexFile <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getAndCreateLastIndexFile</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">null</span> <span class="token operator">!=</span> indexFile<span class="token punctuation">)</span>
+            <span class="token keyword">break</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+            <span class="token comment">//线程休眠1s,重新尝试创建indexFile文件</span>
+            <span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            log<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token string">"Tried to create index file fail. times: %s ,start sleep 1s"</span><span class="token punctuation">,</span> times<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            log<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"Interrupted"</span><span class="token punctuation">,</span> e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">null</span> <span class="token operator">==</span> indexFile<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">this</span><span class="token punctuation">.</span>defaultMessageStore<span class="token punctuation">.</span><span class="token function">getAccessRights</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">makeIndexFileError</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        log<span class="token punctuation">.</span><span class="token function">error</span><span class="token punctuation">(</span><span class="token string">"Mark index file cannot build flag"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">return</span> indexFile<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><B>retryGetAndCreateIndexFile()</B>方法主要是对文件的创建过程有一个重试的机制来尽量保证<B>index文件<B>的成功创建,具体的创建过程就是通过<br><B>getAndCreateLastIndexFile()</B>方法来进行创建</p>
+<ul>
+<li>getAndCreateLastIndexFile()</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+
+
 <h2 id="索引文件及内容"><a href="#索引文件及内容" class="headerlink" title="索引文件及内容"></a>索引文件及内容</h2><p>索引文件是放置在<B>${rootpath}/index</B>目录下的，文件名称按照yyyyMMddhhmmsssss的形式进行生成，默认大小为400MB,由三个部分组成</p>
 <ul>
 <li>header</li>
