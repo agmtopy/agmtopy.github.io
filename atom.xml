@@ -6,7 +6,7 @@
   <link href="https://agmtopy.gitee.io/atom.xml" rel="self"/>
   
   <link href="https://agmtopy.gitee.io/"/>
-  <updated>2021-11-09T01:19:28.536Z</updated>
+  <updated>2021-11-09T14:25:36.843Z</updated>
   <id>https://agmtopy.gitee.io/</id>
   
   <author>
@@ -15,6 +15,30 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>大规模分布式存储系统-基础篇</title>
+    <link href="https://agmtopy.gitee.io/2021/11/09/19.%E5%88%86%E5%B8%83%E5%BC%8F/0.%E5%A4%A7%E8%A7%84%E6%A8%A1%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9F-%E5%9F%BA%E7%A1%80%E7%AF%87/"/>
+    <id>https://agmtopy.gitee.io/2021/11/09/19.%E5%88%86%E5%B8%83%E5%BC%8F/0.%E5%A4%A7%E8%A7%84%E6%A8%A1%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9F-%E5%9F%BA%E7%A1%80%E7%AF%87/</id>
+    <published>2021-11-09T01:45:45.000Z</published>
+    <updated>2021-11-09T14:25:36.843Z</updated>
+    
+    <content type="html"><![CDATA[<h1 id="大规模分布式存储系统-基础篇"><a href="#大规模分布式存储系统-基础篇" class="headerlink" title="大规模分布式存储系统-基础篇"></a>大规模分布式存储系统-基础篇</h1><p> 主要是记录阅读《大规模分布式存储系统：原理解析与架构实战》基础篇中的一些知识和理解。</p><ul><li>书评   </li></ul><p><a href="https://book.douban.com/subject/25723658/">大规模分布式存储系统</a></p><p>基础篇主要是从<B>单机存储系统</B>到<B>分布式存储系统</B>的演化过程以及各自的特点进行分析</p><h2 id="单机存储系统"><a href="#单机存储系统" class="headerlink" title="单机存储系统"></a>单机存储系统</h2><p>单机存储系统最早应该是来源自关系型数据库的理论，根据数据库操作在发展出事务的概念</p><h3 id="硬件基础"><a href="#硬件基础" class="headerlink" title="硬件基础"></a>硬件基础</h3><p>介绍CPU、IO总线、网络拓扑等知识，其中南桥/北桥的作用比较有意思</p><ul><li>南桥负责与低速设备的交互</li><li>北桥负责与高速设备的交互</li></ul><p><img src="https://i.loli.net/2021/11/09/6OIbyw3zZGTFCkc.jpg" alt="南北桥结构"></p><h3 id="存储引擎"><a href="#存储引擎" class="headerlink" title="存储引擎"></a>存储引擎</h3><p>  存储引擎是根据文件系统对存储系统提供底层的CRUD能力的引擎,根据存储引擎底层使用的算法可以大致划分为’hash存储引擎’、’B tree存储引擎’、’LSM存储引擎’这三类</p><ul><li><p>hash存储引擎<br>hash存储引擎底层采用hash算法确定key的位置，value则代表文件的物理位置。使用这种算法的可以参考RocketMQ中的indexFile和commitLog文件之间的关系.<br>hash存储引擎不支持顺序读写</p></li><li><p>B+ tree存储引擎<br>B+ tree存储引擎具体的实现可以参考MySQL中的innodb存储引擎的设计模型，会设计出一个缓存区来对热点数据的缓存。对于缓存数据的替换策略有<B>LRU</B>、<B>LIRS</B>，其中LIRS的设计比较有趣，LIRS是为了解决LRU策略无法处理因全表扫描导致污染缓冲区的场景，底层采用多级缓冲的策略，设置晋升阈值来避免一级缓存受到污染</p></li></ul><ul><li>LSM存储引擎<br>LSM存储引擎的全称是’Log-structured merge-tree’. 将对数据的修改增量保持在内存中，达到指定的大小限制后将这些修改操作批量顺序写入磁盘中。LSM适合于写多读少的场景，通过牺牲读取性能来换写入的性能</li></ul><h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>  关于更多的存储引擎可以参考<br>  <a href="https://dev.to/creativcoder/what-is-a-lsm-tree-3d75">What is a LSM Tree?</a><br>  <a href="ttps://bbs.huaweicloud.com/blogs/detail/197482">存储引擎对比</a><br>  <a href="https://www.cs.umb.edu/~poneil/lsmtree.pdf">LSM Tree 论文</a></p><h2 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h2><p> 数据模型指的是存储引擎用什么格式保存数据常用的数据模型有’文件’、’关系’、’键值对’</p><h2 id="事务于并发控制"><a href="#事务于并发控制" class="headerlink" title="事务于并发控制"></a>事务于并发控制</h2><ul><li>事务的特性</li><li>事务的种类:读事务、写事务、混合事务</li><li>事务的实现:锁、COW、MVCC</li></ul><h2 id="故障恢复"><a href="#故障恢复" class="headerlink" title="故障恢复"></a>故障恢复</h2><p>  数据库需要实现完善的故障恢复机制，一般是采用操作日志来实现的。<br>  操作日志分为</p><ul><li>回滚日志(UNDO log) 用来记录事务修改前的记录</li><li>重做日志(REDO log) 用来记录事务修改后的状态</li><li>操作日志(binlog) 用来记录对物理磁盘的操作</li></ul><h2 id="数据压缩"><a href="#数据压缩" class="headerlink" title="数据压缩"></a>数据压缩</h2><p>  数据压缩是对大量数据进行压缩以节省空间。压缩算法的核心就是查找重复数据，’列式存储技术’是把相同列的数据组织在一起</p><h3 id="压缩算法"><a href="#压缩算法" class="headerlink" title="压缩算法"></a>压缩算法</h3><ul><li><p>Huffman编码</p></li><li><p>LZ系列压缩算法</p><h3 id="列式存储"><a href="#列式存储" class="headerlink" title="列式存储"></a>列式存储</h3><p>列式存储是针对于传统的行式存储的对应，针对的是OLAP的场景。<br>按照列来存储数据就会导致列上重复的值较多，因此就需要使用压缩算法来进行压缩</p></li></ul><h2 id="分布式存储系统特性"><a href="#分布式存储系统特性" class="headerlink" title="分布式存储系统特性"></a>分布式存储系统特性</h2><p>分布式存储系统底层主要依赖两个协议<B>Paxos选举协议</B>、<B>两阶段提交协议</B></p><h3 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h3><ul><li><p>宕机</p></li><li><p>网络异常<br>消息丢失、消息乱序、网络数据包异常</p><blockquote><p>设计分布式系统的一个原则是:网络永远是不可靠的</p></blockquote></li><li><p>磁盘故障</p></li></ul><h3 id="状态"><a href="#状态" class="headerlink" title="状态"></a>状态</h3><p>  分布式系统中定义的系统状态有且只有<B>成功</B>、<B>失败</B>、<B>未知</B></p><h3 id="一致性"><a href="#一致性" class="headerlink" title="一致性"></a>一致性</h3><p>  在分布式环境中由于异常是无法避免的，因此需要冗余多份数据来保证可用性。冗余的多份副本就会存在数据一致性的问题，如何保证副本之间的一致性是关键</p><h2 id="数据分布"><a href="#数据分布" class="headerlink" title="数据分布"></a>数据分布</h2><p>  分布式系统与单机存储系统系统最大的区别在于<B>数据分布</B>上,分布式系统可以将数据按照<B>Hash分布</B>、<B>顺序分布</B>两种方式进行划分。</p><h3 id="Hash分布"><a href="#Hash分布" class="headerlink" title="Hash分布"></a>Hash分布</h3><p>  Hash分布原理比较简单，需要注意的是扩容场景下的处理，有两种处理方法分别是</p><ul><li>元数据区<br>引入元数据区，通过元数据区来管理hash的key与value之间的关系</li><li>一致性hash算法<br>使用一致性hash算法,保证节点的平均分布</li></ul><blockquote><p> 一致性hash算法如何在扩容时保证数据的平均分布?</p></blockquote><p>Hash算法不支持顺序查找</p><h3 id="顺序分布"><a href="#顺序分布" class="headerlink" title="顺序分布"></a>顺序分布</h3><p>  顺序分布指的是数据按照指定的维度顺序的写入数据，多用于分布式表格系统中</p><h2 id="复制"><a href="#复制" class="headerlink" title="复制"></a>复制</h2><p>分布式系统中数据的复制机制决定了这个分布式系统对可用性和一致性的取舍。数据的复制可以分为<B>强同步复制</B>、<B>异步复制</B>两种方向。<br>在工程实践中又可以根据这两个方向做不同的取舍，以Oracle的DataGuard复制组件为例,提供了三种不同的模式</p><ul><li>最大保护模式<br>最大保护模式也就是强同步复制模式</li><li>最大性能模式<br>最大性能模式也就是异步复制模式</li><li>最大可用模式<br>最大可用模式是默认情况下使用强同步复制模式，网络异常时使用异步复制模式</li></ul><p>-</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1 id=&quot;大规模分布式存储系统-基础篇&quot;&gt;&lt;a href=&quot;#大规模分布式存储系统-基础篇&quot; class=&quot;headerlink&quot; title=&quot;大规模分布式存储系统-基础篇&quot;&gt;&lt;/a&gt;大规模分布式存储系统-基础篇&lt;/h1&gt;&lt;p&gt; 主要是记录阅读《大规模分布式存储系统：原理</summary>
+      
+    
+    
+    
+    <category term="笔记" scheme="https://agmtopy.gitee.io/categories/%E7%AC%94%E8%AE%B0/"/>
+    
+    
+    <category term="大规模分布式存储系统" scheme="https://agmtopy.gitee.io/tags/%E5%A4%A7%E8%A7%84%E6%A8%A1%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9F/"/>
+    
+  </entry>
   
   <entry>
     <title>深入剖析Kubernetes之Kubernetes的基础概念</title>
@@ -470,30 +494,6 @@
 &lt;p&gt;通过以上几篇文章分别介绍了MySQL的文件系统/索引/锁/事务等功能点,这篇文章将对这些知识点进行汇总,描述出MySQL大概的架构&lt;/p&gt;
 &lt;/blockquote&gt;
 &lt;h2 id=&quot;文件数据&quot;&gt;&lt;a href=&quot;#文件数据&quot; class=&quot;hea</summary>
-      
-    
-    
-    
-    <category term="数据库" scheme="https://agmtopy.gitee.io/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    
-    
-    <category term="MySQL" scheme="https://agmtopy.gitee.io/tags/MySQL/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>MySQL事务</title>
-    <link href="https://agmtopy.gitee.io/2021/03/27/6.mysql/MySQL%E4%BA%8B%E5%8A%A1/"/>
-    <id>https://agmtopy.gitee.io/2021/03/27/6.mysql/MySQL%E4%BA%8B%E5%8A%A1/</id>
-    <published>2021-03-27T07:09:33.000Z</published>
-    <updated>2021-03-30T14:24:26.000Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="事务的定义"><a href="#事务的定义" class="headerlink" title="事务的定义"></a>事务的定义</h2><p>事务是数据库与文件系统最重要的差异之一,数据库通过事务保证了数据的ACID特性,分别是原子性/一致性/隔离性/持久性</p><h2 id="事务的分类"><a href="#事务的分类" class="headerlink" title="事务的分类"></a>事务的分类</h2><p>事务可以划分为:<br>1.扁平事务以及带有保存点的扁平事务<br>2.链事务<br>3.嵌套事务<br>4.分布式事务</p><h2 id="事务的实现"><a href="#事务的实现" class="headerlink" title="事务的实现"></a>事务的实现</h2><p>InnoDB通过日志系统来实现事务,redo log可以保证事务的原子性/一致性/持久性,undo log可以保证事务的原子性和持久性</p><h3 id="redo-log的作用"><a href="#redo-log的作用" class="headerlink" title="redo log的作用"></a>redo log的作用</h3><p>redo log是重做日志,通过每次事务提交前先修改该事务要修改的页,在提交过程中如果中断,通过redo log就可以继续提交事务</p><h3 id="undo-log的作用"><a href="#undo-log的作用" class="headerlink" title="undo log的作用"></a>undo log的作用</h3><p>undo log是回滚日志,通过记录每个事务开始时的数据,在回滚发生中断时,可以根据undo log 继续进行事务回滚</p><h2 id="redo-log"><a href="#redo-log" class="headerlink" title="redo log"></a>redo log</h2><p>redo log由两部分组成’redo log buffer’和’redo log file’,在进行事务connit之前都会将事务的所有日志写入日志文件中进行持久化<br>InnoDB提供一个参数’innodb_flush_log_at_trx_commit’来控制redo log的刷盘策略,0:由master thread进行控制 1:每次提交后进行同步刷盘 2:每次提交后只是将数据提交给文件系统,不进行主动刷盘操作</p><h2 id="undo-log"><a href="#undo-log" class="headerlink" title="undo log"></a>undo log</h2><p>undo log是回滚日志,是逻辑日志并不是redo log的物理日志,只是在逻辑上保证了数据回滚到原始状态.例如用户执行一个insert操作,在undo log里面就需要一个delete操作</p><h2 id="MVVC"><a href="#MVVC" class="headerlink" title="MVVC"></a>MVVC</h2><p>多版本控制,InnoDB会在行记录上默认增加两个隐藏列来作为MVVC实现的基础,分别是DB_TRX_ID-最新一次事务提交版本号/DB_ROLL_PTR-删除事务的版本号<br>数据行和undo log组成了不同版本之间的数据链,通过对比版本号和undo log日志将所需要的数据还原出来</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;事务的定义&quot;&gt;&lt;a href=&quot;#事务的定义&quot; class=&quot;headerlink&quot; title=&quot;事务的定义&quot;&gt;&lt;/a&gt;事务的定义&lt;/h2&gt;&lt;p&gt;事务是数据库与文件系统最重要的差异之一,数据库通过事务保证了数据的ACID特性,分别是原子性/一致性/隔离性/持久性</summary>
       
     
     

@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>大规模分布式存储系统-基础篇</title>
+      <link href="2021/11/09/19.%E5%88%86%E5%B8%83%E5%BC%8F/0.%E5%A4%A7%E8%A7%84%E6%A8%A1%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9F-%E5%9F%BA%E7%A1%80%E7%AF%87/"/>
+      <url>2021/11/09/19.%E5%88%86%E5%B8%83%E5%BC%8F/0.%E5%A4%A7%E8%A7%84%E6%A8%A1%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9F-%E5%9F%BA%E7%A1%80%E7%AF%87/</url>
+      
+        <content type="html"><![CDATA[<h1 id="大规模分布式存储系统-基础篇"><a href="#大规模分布式存储系统-基础篇" class="headerlink" title="大规模分布式存储系统-基础篇"></a>大规模分布式存储系统-基础篇</h1><p> 主要是记录阅读《大规模分布式存储系统：原理解析与架构实战》基础篇中的一些知识和理解。</p><ul><li>书评   </li></ul><p><a href="https://book.douban.com/subject/25723658/">大规模分布式存储系统</a></p><p>基础篇主要是从<B>单机存储系统</B>到<B>分布式存储系统</B>的演化过程以及各自的特点进行分析</p><h2 id="单机存储系统"><a href="#单机存储系统" class="headerlink" title="单机存储系统"></a>单机存储系统</h2><p>单机存储系统最早应该是来源自关系型数据库的理论，根据数据库操作在发展出事务的概念</p><h3 id="硬件基础"><a href="#硬件基础" class="headerlink" title="硬件基础"></a>硬件基础</h3><p>介绍CPU、IO总线、网络拓扑等知识，其中南桥/北桥的作用比较有意思</p><ul><li>南桥负责与低速设备的交互</li><li>北桥负责与高速设备的交互</li></ul><p><img src="https://i.loli.net/2021/11/09/6OIbyw3zZGTFCkc.jpg" alt="南北桥结构"></p><h3 id="存储引擎"><a href="#存储引擎" class="headerlink" title="存储引擎"></a>存储引擎</h3><p>  存储引擎是根据文件系统对存储系统提供底层的CRUD能力的引擎,根据存储引擎底层使用的算法可以大致划分为’hash存储引擎’、’B tree存储引擎’、’LSM存储引擎’这三类</p><ul><li><p>hash存储引擎<br>hash存储引擎底层采用hash算法确定key的位置，value则代表文件的物理位置。使用这种算法的可以参考RocketMQ中的indexFile和commitLog文件之间的关系.<br>hash存储引擎不支持顺序读写</p></li><li><p>B+ tree存储引擎<br>B+ tree存储引擎具体的实现可以参考MySQL中的innodb存储引擎的设计模型，会设计出一个缓存区来对热点数据的缓存。对于缓存数据的替换策略有<B>LRU</B>、<B>LIRS</B>，其中LIRS的设计比较有趣，LIRS是为了解决LRU策略无法处理因全表扫描导致污染缓冲区的场景，底层采用多级缓冲的策略，设置晋升阈值来避免一级缓存受到污染</p></li></ul><ul><li>LSM存储引擎<br>LSM存储引擎的全称是’Log-structured merge-tree’. 将对数据的修改增量保持在内存中，达到指定的大小限制后将这些修改操作批量顺序写入磁盘中。LSM适合于写多读少的场景，通过牺牲读取性能来换写入的性能</li></ul><h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>  关于更多的存储引擎可以参考<br>  <a href="https://dev.to/creativcoder/what-is-a-lsm-tree-3d75">What is a LSM Tree?</a><br>  <a href="ttps://bbs.huaweicloud.com/blogs/detail/197482">存储引擎对比</a><br>  <a href="https://www.cs.umb.edu/~poneil/lsmtree.pdf">LSM Tree 论文</a></p><h2 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h2><p> 数据模型指的是存储引擎用什么格式保存数据常用的数据模型有’文件’、’关系’、’键值对’</p><h2 id="事务于并发控制"><a href="#事务于并发控制" class="headerlink" title="事务于并发控制"></a>事务于并发控制</h2><ul><li>事务的特性</li><li>事务的种类:读事务、写事务、混合事务</li><li>事务的实现:锁、COW、MVCC</li></ul><h2 id="故障恢复"><a href="#故障恢复" class="headerlink" title="故障恢复"></a>故障恢复</h2><p>  数据库需要实现完善的故障恢复机制，一般是采用操作日志来实现的。<br>  操作日志分为</p><ul><li>回滚日志(UNDO log) 用来记录事务修改前的记录</li><li>重做日志(REDO log) 用来记录事务修改后的状态</li><li>操作日志(binlog) 用来记录对物理磁盘的操作</li></ul><h2 id="数据压缩"><a href="#数据压缩" class="headerlink" title="数据压缩"></a>数据压缩</h2><p>  数据压缩是对大量数据进行压缩以节省空间。压缩算法的核心就是查找重复数据，’列式存储技术’是把相同列的数据组织在一起</p><h3 id="压缩算法"><a href="#压缩算法" class="headerlink" title="压缩算法"></a>压缩算法</h3><ul><li><p>Huffman编码</p></li><li><p>LZ系列压缩算法</p><h3 id="列式存储"><a href="#列式存储" class="headerlink" title="列式存储"></a>列式存储</h3><p>列式存储是针对于传统的行式存储的对应，针对的是OLAP的场景。<br>按照列来存储数据就会导致列上重复的值较多，因此就需要使用压缩算法来进行压缩</p></li></ul><h2 id="分布式存储系统特性"><a href="#分布式存储系统特性" class="headerlink" title="分布式存储系统特性"></a>分布式存储系统特性</h2><p>分布式存储系统底层主要依赖两个协议<B>Paxos选举协议</B>、<B>两阶段提交协议</B></p><h3 id="异常"><a href="#异常" class="headerlink" title="异常"></a>异常</h3><ul><li><p>宕机</p></li><li><p>网络异常<br>消息丢失、消息乱序、网络数据包异常</p><blockquote><p>设计分布式系统的一个原则是:网络永远是不可靠的</p></blockquote></li><li><p>磁盘故障</p></li></ul><h3 id="状态"><a href="#状态" class="headerlink" title="状态"></a>状态</h3><p>  分布式系统中定义的系统状态有且只有<B>成功</B>、<B>失败</B>、<B>未知</B></p><h3 id="一致性"><a href="#一致性" class="headerlink" title="一致性"></a>一致性</h3><p>  在分布式环境中由于异常是无法避免的，因此需要冗余多份数据来保证可用性。冗余的多份副本就会存在数据一致性的问题，如何保证副本之间的一致性是关键</p><h2 id="数据分布"><a href="#数据分布" class="headerlink" title="数据分布"></a>数据分布</h2><p>  分布式系统与单机存储系统系统最大的区别在于<B>数据分布</B>上,分布式系统可以将数据按照<B>Hash分布</B>、<B>顺序分布</B>两种方式进行划分。</p><h3 id="Hash分布"><a href="#Hash分布" class="headerlink" title="Hash分布"></a>Hash分布</h3><p>  Hash分布原理比较简单，需要注意的是扩容场景下的处理，有两种处理方法分别是</p><ul><li>元数据区<br>引入元数据区，通过元数据区来管理hash的key与value之间的关系</li><li>一致性hash算法<br>使用一致性hash算法,保证节点的平均分布</li></ul><blockquote><p> 一致性hash算法如何在扩容时保证数据的平均分布?</p></blockquote><p>Hash算法不支持顺序查找</p><h3 id="顺序分布"><a href="#顺序分布" class="headerlink" title="顺序分布"></a>顺序分布</h3><p>  顺序分布指的是数据按照指定的维度顺序的写入数据，多用于分布式表格系统中</p><h2 id="复制"><a href="#复制" class="headerlink" title="复制"></a>复制</h2><p>分布式系统中数据的复制机制决定了这个分布式系统对可用性和一致性的取舍。数据的复制可以分为<B>强同步复制</B>、<B>异步复制</B>两种方向。<br>在工程实践中又可以根据这两个方向做不同的取舍，以Oracle的DataGuard复制组件为例,提供了三种不同的模式</p><ul><li>最大保护模式<br>最大保护模式也就是强同步复制模式</li><li>最大性能模式<br>最大性能模式也就是异步复制模式</li><li>最大可用模式<br>最大可用模式是默认情况下使用强同步复制模式，网络异常时使用异步复制模式</li></ul><p>-</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 笔记 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 大规模分布式存储系统 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>深入剖析Kubernetes之Kubernetes的基础概念</title>
       <link href="2021/11/08/18.%E5%AE%B9%E5%99%A8%E5%8C%96/1.%E6%B7%B1%E5%85%A5%E5%89%96%E6%9E%90Kubernetes%E4%B9%8BKubernetes%E7%9A%84%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/"/>
       <url>2021/11/08/18.%E5%AE%B9%E5%99%A8%E5%8C%96/1.%E6%B7%B1%E5%85%A5%E5%89%96%E6%9E%90Kubernetes%E4%B9%8BKubernetes%E7%9A%84%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5/</url>
