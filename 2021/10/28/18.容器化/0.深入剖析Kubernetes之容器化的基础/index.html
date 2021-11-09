@@ -461,7 +461,45 @@
 </li>
 </ul>
 <p>通过详细信息可以看到这个目录下有不同的配置文件<B>cgroup.procs</B>,内容如下展示</p>
-<p>[<img src="https://z3.ax1x.com/2021/10/29/5jdCIx.jpg" alt="cgroup.procs内容"><br>可以看到这里记录的就是pid列表</p>
+<p><img src="https://z3.ax1x.com/2021/10/29/5jdCIx.jpg" alt="cgroup.procs内容"><br>可以看到这里记录的就是pid列表,<cgroup>就是通过管理为每个线程分配资源的执行时间来控制不同进程的资源使用情况</p>
+<p>docker就是在创建容器的时候为每一个容器创建一个控制组,在将用户指定的docker容器初始化资源配置写入控制组中就可以了<br><B>cgroups</B>采用的资源限制方式主要是通过控制时间的形式来实现的,因此就会存在容器的进程实际上可以看到整个宿主机的一些状态.这是相较与虚拟机方式的不足</p>
+<blockquote>
+<p><B>容器的本质就是一个特殊的进程</B></p>
+</blockquote>
+<h2 id="容器中镜像的概念"><a href="#容器中镜像的概念" class="headerlink" title="容器中镜像的概念"></a>容器中镜像的概念</h2><blockquote>
+<p>镜像指的是一个由容器识别的只读模板.通常这个模板是基于另外的一个模板并进行一些自定义改动的</p>
+</blockquote>
+<p>以上是docker官网中对镜像概念的描述,镜像在物理上指的是容器进程实际可用的文件<br>通过<B>Namespace</B>和<B>cgroups</B>实现了对进程和操作时间的隔离,但是容器之间没有对文件的隔离,容器进程的可用文件与其他用户进程的可用文件相同.<br>因此需要对容器的可用文件进行限制,在docker上是优先使用<B>pivot_root</B>,其次使用<B>chroot</B></p>
+<h3 id="pivot-root与chroot的区别"><a href="#pivot-root与chroot的区别" class="headerlink" title="pivot_root与chroot的区别"></a>pivot_root与chroot的区别</h3><ul>
+<li><p>pivot_root改变当前mount namespace的rootfs(“/“目录)</p>
+</li>
+<li><p>chroot改变的是当前进程的rootfs(“/“目录)</p>
+</li>
+</ul>
+<p>pivot_root的执行步骤分为三步:</p>
+<ol>
+<li>创建临时目录并将当前所有的root mount移动到临时目录</li>
+<li>创建新目录(“/“)</li>
+<li>清理新目录</li>
+</ol>
+<h3 id="rootfs"><a href="#rootfs" class="headerlink" title="rootfs"></a>rootfs</h3><p><B>rootfs</B>指的是就是镜像中的文件,也就是登录到具体的镜像中看到的文件.<B>rootfs</B>在结构上可以分为三层<B>可读写层</B>、<br><B>init层</B>、<B>只读层</B></p>
+<p>从上到下分别是应用层到系统层的划分,在详细的对这三层进行分析之前需要了解一下为什么镜像文件中分层的文件在使用的时候可以想在同一个文件夹中一样？<br>这是采用了一种被称为联合文件系统(union file System)概念,docker中默认是使用Overlay2的实现，关于联合文件系统的文章看可以参考<br><a target="_blank" rel="noopener" href="https://lwn.net/Articles/324291/">https://lwn.net/Articles/324291/</a> </p>
+<ul>
+<li><p>可读写层<br>  可读写层是rootfs中最上面的一层，是承载容器中文件读写的操作一层,在这一层中的挂载方式是read + write</p>
+</li>
+<li><p>init层<br>  init层指的是Docker项目用来存放对底层操作系统的改动信息例如’etc/hosts’、’etc/resolv.conf’等，因为容器在启动时可以手动指定。init层在挂载时是采用’ro’ + ‘wh’的方式，’ro’指的是read onley,’wh’指的是whiteout,即只读 + ‘whiteout’,whiteout指的是对文件的操作会在通过一定的手段进行隐藏，类似与java中的临时变量的概念，只在当前容器中有效，不会真正的修改底层的文件</p>
+</li>
+<li><p>只读层<br>  只读层指的是镜像中最底层的系统镜像层，它们的挂载方式也是’ro’ + ‘wh’</p>
+</li>
+</ul>
+<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>docker中的镜像通过这种分层构建的方式大大的减少了传统镜像中操作系统的大小，只包含了可读写层中应用的部分。底层支持这种构建方式主要是依赖<B>chroot</B>(切换根目录的能力)和<B>union file System</B>(联合文件系统)</p>
+<h2 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h2><p>docker容器化的基础是三个部分</p>
+<ul>
+<li>Namespace提供的进程隔离能力</li>
+<li>Cgroup提供的资源限制能力</li>
+<li>rootfs的文件分层结构设计</li>
+</ul>
+<p><B>clone(true)/cgroup file/union file System</B></p>
 <h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://tech.meituan.com/2015/03/31/cgroups.html">Linux资源管理之cgroups简介</a><br><a target="_blank" rel="noopener" href="https://www.nginx.com/blog/what-are-namespaces-cgroups-how-do-they-work/">什么是命名空间和cgroup,以及它们是如何工作的？</a></p>
 
                 
