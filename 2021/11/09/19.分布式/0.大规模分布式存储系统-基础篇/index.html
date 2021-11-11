@@ -388,8 +388,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E5%A4%A7%E8%A7%84%E6%A8%A1%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9F/">
-                                <span class="chip bg-color">大规模分布式存储系统</span>
+                            <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">
+                                <span class="chip bg-color">读书笔记</span>
                             </a>
                         
                     </div>
@@ -400,8 +400,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E7%AC%94%E8%AE%B0/" class="post-category">
-                                笔记
+                            <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/" class="post-category">
+                                分布式
                             </a>
                         
                     </div>
@@ -458,8 +458,8 @@
 </ul>
 <h3 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h3><p>  关于更多的存储引擎可以参考<br>  <a target="_blank" rel="noopener" href="https://dev.to/creativcoder/what-is-a-lsm-tree-3d75">What is a LSM Tree?</a><br>  <a href="ttps://bbs.huaweicloud.com/blogs/detail/197482">存储引擎对比</a><br>  <a target="_blank" rel="noopener" href="https://www.cs.umb.edu/~poneil/lsmtree.pdf">LSM Tree 论文</a></p>
 <h2 id="数据模型"><a href="#数据模型" class="headerlink" title="数据模型"></a>数据模型</h2><p> 数据模型指的是存储引擎用什么格式保存数据常用的数据模型有’文件’、’关系’、’键值对’</p>
-<h2 id="事务于并发控制"><a href="#事务于并发控制" class="headerlink" title="事务于并发控制"></a>事务于并发控制</h2><ul>
-<li>事务的特性</li>
+<h2 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h2><ul>
+<li>事务的特性:ACID</li>
 <li>事务的种类:读事务、写事务、混合事务</li>
 <li>事务的实现:锁、COW、MVCC</li>
 </ul>
@@ -508,6 +508,26 @@
 <li>最大性能模式<br>最大性能模式也就是异步复制模式</li>
 <li>最大可用模式<br>最大可用模式是默认情况下使用强同步复制模式，网络异常时使用异步复制模式</li>
 </ul>
+<h2 id="故障检测"><a href="#故障检测" class="headerlink" title="故障检测"></a>故障检测</h2><p>  故障检测常用的方法有心跳、φ-accrual(累计历史故障检测器)、 Gossip故障检测.这几种方式</p>
+<p>  <a target="_blank" rel="noopener" href="https://iswade.github.io/database/db_internals_ch09_failure_detection/#gossip">分布式系统之故障检测</a><br>  <a target="_blank" rel="noopener" href="https://www.serf.io/docs/internals/gossip.html">serf官网</a><br>  <a target="_blank" rel="noopener" href="https://flogx.com/post/using-serf-to-implement-distributed-fault-detection/">使用serf实现分布式故障检测</a></p>
+<h2 id="故障恢复-1"><a href="#故障恢复-1" class="headerlink" title="故障恢复"></a>故障恢复</h2><p>  故障恢复是由于分布式环境下机器或网络的故障，需要通过故障恢复的机制将服务从不可用状态恢复成可用状态。分布式系统的存储方案分为两种结构:<B>单层结构</B>、<B>双层结构</B></p>
+<ul>
+<li>单层结构<br>单层结构指的是服务和存储都作为一个节点，然后按照节点进行分片</li>
+<li>多层结构<br>多层结构指的是存储系统按照服务层和存储层进行分层,在服务层只提供一个一份数据</li>
+</ul>
+<h2 id="分布式协议"><a href="#分布式协议" class="headerlink" title="分布式协议"></a>分布式协议</h2><p>  <B>分布式协议</B>根据不同的作用域可以划分为租约\复制协议\一致性协议等.比较重要的是<B>两阶段提交协议</B>、<B>Paxos选举协议</B></p>
+<ul>
+<li><p>两阶段提交协议<br>两阶段提交协议指的是将分布式事务的操作划分为两个阶段,分别是<B>请求阶段</B>、<B>提交阶段</B><br>两阶段提交协议中的包括的节点有两类，分别是<B>协调者</B>和<B>参与者</B></p>
+<p><img src="https://i.loli.net/2021/11/11/qxE9X3mhKwDJfBg.jpg" alt="两阶段提交过程.jpg"></p>
+</li>
+</ul>
+<ul>
+<li><p>Paxos选举协议<br>Paxos选举协议主要是用于解决多个节点之间的一致性问题。可以参考之前的一篇文章<a target="_blank" rel="noopener" href="https://agmtopy.github.io/2020/06/23/1.%E6%9D%82%E8%AE%B0/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%AD%E7%9A%84%E4%B8%80%E8%87%B4%E6%80%A7paxos%E7%AE%97%E6%B3%95%E4%BB%A5%E5%8F%8A%E5%85%B6%E5%AE%9E%E7%8E%B0zab%E5%8D%8F%E8%AE%AE/">分布式中的一致性paxos算法以及其实现zab协议</a><br>采用’Quorum机制’机制来保证节点作为一个整体对外的一致性,简单的来说就是通过序列号和大多数确认机制来保证集群的一致性</p>
+</li>
+<li><p>Paxos与2PC混合场景<br><img src="https://i.loli.net/2021/11/11/M12yJLwtjePQfnr.jpg" alt="2PC与Paoxs的对比.jpg"></p>
+</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>  基础篇主要是介绍单机存储系统的<B>硬件基础</B>、<B>存储引擎</B>、分布式存储系统<B>数据模型</B>、<B>分布式特性</B>、<B>故障检测/恢复</B>、<B>分布式协议</B>等</p>
 <p>-</p>
 
                 
@@ -522,8 +542,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E5%A4%A7%E8%A7%84%E6%A8%A1%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9F/">
-                                    <span class="chip bg-color">大规模分布式存储系统</span>
+                                <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">
+                                    <span class="chip bg-color">读书笔记</span>
                                 </a>
                             
                         </div>
@@ -597,8 +617,8 @@
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E7%AC%94%E8%AE%B0/" class="post-category">
-                                    笔记
+                            <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/" class="post-category">
+                                    分布式
                                 </a>
                             
                             
@@ -609,8 +629,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E5%A4%A7%E8%A7%84%E6%A8%A1%E5%88%86%E5%B8%83%E5%BC%8F%E5%AD%98%E5%82%A8%E7%B3%BB%E7%BB%9F/">
-                        <span class="chip bg-color">大规模分布式存储系统</span>
+                    <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">
+                        <span class="chip bg-color">读书笔记</span>
                     </a>
                     
                 </div>
