@@ -437,11 +437,16 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="Linux环境排查问题的工具和思路"><a href="#Linux环境排查问题的工具和思路" class="headerlink" title="Linux环境排查问题的工具和思路"></a>Linux环境排查问题的工具和思路</h1><p>将工作中使用到的在Linux下进行排查问题的工具和思路进行一个总结，主要从<strong>CPU</strong>、<strong>内存</strong>、<strong>I/O</strong>、<strong>网络</strong>、<strong>JVM</strong>这五个方面来进行。</p>
-<h2 id="CPU部分"><a href="#CPU部分" class="headerlink" title="CPU部分"></a><strong>CPU</strong>部分</h2><h3 id="CPU的性能指标"><a href="#CPU的性能指标" class="headerlink" title="CPU的性能指标"></a>CPU的性能指标</h3><ul>
-<li>图示<br><a target="_blank" rel="noopener" href="https://imgchr.com/i/JoptbV"><img src="https://s1.ax1x.com/2020/04/29/JoptbV.png" alt="JoptbV.png"></a></li>
+                <h1>Linux环境排查问题的工具和思路</h1>
+<p>将工作中使用到的在Linux下进行排查问题的工具和思路进行一个总结，主要从<strong>CPU</strong>、<strong>内存</strong>、<strong>I/O</strong>、<strong>网络</strong>、<strong>JVM</strong>这五个方面来进行。</p>
+<h2 id="CPU部分"><a class="header-anchor" href="#CPU部分"></a><strong>CPU</strong>部分</h2>
+<h3 id="CPU的性能指标"><a class="header-anchor" href="#CPU的性能指标"></a>CPU的性能指标</h3>
+<ul>
+<li>图示<br>
+<a target="_blank" rel="noopener" href="https://imgchr.com/i/JoptbV"><img src="https://s1.ax1x.com/2020/04/29/JoptbV.png" alt="JoptbV.png"></a></li>
 </ul>
-<h3 id="CPU的性能分析工具"><a href="#CPU的性能分析工具" class="headerlink" title="CPU的性能分析工具"></a>CPU的性能分析工具</h3><table>
+<h3 id="CPU的性能分析工具"><a class="header-anchor" href="#CPU的性能分析工具"></a>CPU的性能分析工具</h3>
+<table>
 <thead>
 <tr>
 <th>性能指标</th>
@@ -449,7 +454,8 @@
 <th>描述</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>系统CPU使用率</td>
 <td>top、vmstat、mpstat、sar、/proc/stat</td>
 <td>top、vmstat、mpstat作为实时的监控数据;sar可记录历史;/proc/stat</td>
@@ -494,12 +500,16 @@
 <td>dstat、sar</td>
 <td>都是提供整体的I/O情况</td>
 </tr>
-</tbody></table>
-<h3 id="CPU的分析步骤"><a href="#CPU的分析步骤" class="headerlink" title="CPU的分析步骤"></a>CPU的分析步骤</h3><blockquote>
+</tbody>
+</table>
+<h3 id="CPU的分析步骤"><a class="header-anchor" href="#CPU的分析步骤"></a>CPU的分析步骤</h3>
+<blockquote>
 <p><strong>top</strong> -&gt; <strong>vmstat</strong> -&gt; <strong>pidstat</strong> -&gt;进程分析工具</p>
 </blockquote>
 <p>总的思路就是根据<strong>top</strong>获取到系统当前的一个状态，根据当前的状态在进行对应的分析</p>
-<h2 id="内存"><a href="#内存" class="headerlink" title="内存"></a>内存</h2><h3 id="内存分析工具"><a href="#内存分析工具" class="headerlink" title="内存分析工具"></a>内存分析工具</h3><table>
+<h2 id="内存"><a class="header-anchor" href="#内存"></a>内存</h2>
+<h3 id="内存分析工具"><a class="header-anchor" href="#内存分析工具"></a>内存分析工具</h3>
+<table>
 <thead>
 <tr>
 <th>性能指标</th>
@@ -507,7 +517,8 @@
 <th>描述</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>系统已用、可用、剩余内存</td>
 <td>free、vmstat、/proc/meminfo</td>
 <td>获取内存信息</td>
@@ -522,12 +533,16 @@
 <td>pmap</td>
 <td></td>
 </tr>
-</tbody></table>
-<h3 id="内存分析流程"><a href="#内存分析流程" class="headerlink" title="内存分析流程"></a>内存分析流程</h3><blockquote>
+</tbody>
+</table>
+<h3 id="内存分析流程"><a class="header-anchor" href="#内存分析流程"></a>内存分析流程</h3>
+<blockquote>
 <p><strong>free</strong> -&gt; <strong>vmstat和sar</strong> -&gt; 确定内存问题</p>
 </blockquote>
-<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><ul>
-<li>htop<br><a target="_blank" rel="noopener" href="https://imgchr.com/i/Jo9FaT"><img src="https://s1.ax1x.com/2020/04/29/Jo9FaT.png" alt="Jo9FaT.png"></a></li>
+<h3 id="实例"><a class="header-anchor" href="#实例"></a>实例</h3>
+<ul>
+<li>htop<br>
+<a target="_blank" rel="noopener" href="https://imgchr.com/i/Jo9FaT"><img src="https://s1.ax1x.com/2020/04/29/Jo9FaT.png" alt="Jo9FaT.png"></a></li>
 </ul>
 
                 

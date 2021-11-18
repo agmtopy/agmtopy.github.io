@@ -433,13 +433,17 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="《java8实战》读书笔记"><a href="#《java8实战》读书笔记" class="headerlink" title="《java8实战》读书笔记"></a>《java8实战》读书笔记</h1><p>主要是关于java8的一些笔记。</p>
-<h2 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h2><h3 id="java8中设计的三个编程概念"><a href="#java8中设计的三个编程概念" class="headerlink" title="java8中设计的三个编程概念"></a>java8中设计的三个编程概念</h3><ol>
+                <h1>《java8实战》读书笔记</h1>
+<p>主要是关于java8的一些笔记。</p>
+<h2 id="基础"><a class="header-anchor" href="#基础"></a>基础</h2>
+<h3 id="java8中设计的三个编程概念"><a class="header-anchor" href="#java8中设计的三个编程概念"></a>java8中设计的三个编程概念</h3>
+<ol>
 <li><strong>流处理</strong></li>
 <li><strong>函数传递</strong></li>
 <li>并行与共享的可变数据</li>
 </ol>
-<h3 id="函数传递"><a href="#函数传递" class="headerlink" title="函数传递"></a>函数传递</h3><blockquote>
+<h3 id="函数传递"><a class="header-anchor" href="#函数传递"></a>函数传递</h3>
+<blockquote>
 <p>行为参数化(函数传递)就是可以帮助你处理频繁变更的需求的一种软件开发模式</p>
 </blockquote>
 <ul>
@@ -449,7 +453,6 @@
 <span class="token comment">//Comparator进行排序</span>
 ls<span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token class-name">Integer</span> i1<span class="token punctuation">,</span><span class="token class-name">Integer</span> i2<span class="token punctuation">)</span> <span class="token operator">-></span> <span class="token operator">-</span>i1<span class="token punctuation">.</span><span class="token function">compareTo</span><span class="token punctuation">(</span>i2<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>ls<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ul>
 <li>例2:用Runable执行代码块</li>
 </ul>
@@ -457,10 +460,11 @@ ls<span class="token punctuation">.</span><span class="token function">sort</spa
 <span class="token comment">//Comparator进行排序</span>
 ls<span class="token punctuation">.</span><span class="token function">sort</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token class-name">Integer</span> i1<span class="token punctuation">,</span><span class="token class-name">Integer</span> i2<span class="token punctuation">)</span> <span class="token operator">-></span> <span class="token operator">-</span>i1<span class="token punctuation">.</span><span class="token function">compareTo</span><span class="token punctuation">(</span>i2<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>ls<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="lambda表达式"><a href="#lambda表达式" class="headerlink" title="lambda表达式"></a>lambda表达式</h3><p>主要记录一下<strong>anyMatch</strong>、<strong>allMatch</strong>、<strong>noneMatch</strong>、<strong>findAny</strong></p>
+<h3 id="lambda表达式"><a class="header-anchor" href="#lambda表达式"></a>lambda表达式</h3>
+<p>主要记录一下<strong>anyMatch</strong>、<strong>allMatch</strong>、<strong>noneMatch</strong>、<strong>findAny</strong></p>
 <ul>
-<li><p><strong>anyMatch</strong></p>
+<li><strong>anyMatch</strong></li>
+</ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">></span></span> intList <span class="token operator">=</span> <span class="token class-name">Lists</span><span class="token punctuation">.</span><span class="token function">newArrayList</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">,</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
 <span class="token comment">//全部大于</span>
@@ -471,26 +475,36 @@ ls<span class="token punctuation">.</span><span class="token function">sort</spa
 <span class="token keyword">if</span><span class="token punctuation">(</span>intList<span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">anyMatch</span><span class="token punctuation">(</span><span class="token punctuation">(</span>item<span class="token punctuation">)</span> <span class="token operator">-></span> item <span class="token operator">></span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
     <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"ls集合存在大于5的数字!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><p><strong>findAny</strong></p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java">
-<span class="token class-name">Optional</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">></span></span> optional <span class="token operator">=</span> intList<span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">findAny</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<ul>
+<li><strong>findAny</strong></li>
 </ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">
+<span class="token class-name">Optional</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">></span></span> optional <span class="token operator">=</span> intList<span class="token punctuation">.</span><span class="token function">stream</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">findAny</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p><strong>findAny</strong>这里有一个需要注意的是返回的是steam流中的某一个元素，并不一定是第一个元素。在串行的情况下可能返回的是第一个元素，但是不保证并行的情况下仍然是第一个元素。</p>
-<h3 id="Optional"><a href="#Optional" class="headerlink" title="Optional"></a>Optional</h3><blockquote>
+<h3 id="Optional"><a class="header-anchor" href="#Optional"></a>Optional</h3>
+<blockquote>
 <p>Optional<T>类（java.util.Optional）是一个容器类，代表一个值存在或不存在。</p>
 </blockquote>
 <ul>
-<li><p>isPresent<br>表示如果元素存在返回true，反之返回false</p>
+<li>
+<p>isPresent<br>
+表示如果元素存在返回true，反之返回false</p>
 </li>
-<li><p>ifPresent<br>表示如果元素存在执行方法,不存在不执行</p>
+<li>
+<p>ifPresent<br>
+表示如果元素存在执行方法,不存在不执行</p>
 </li>
-<li><p>get<br>特别要注意一下，在不存在值的情况下会抛出异常</p>
+<li>
+<p>get<br>
+特别要注意一下，在不存在值的情况下会抛出异常</p>
 </li>
-<li><p>orElse()<br>当值不存在时，返回默认值</p>
+<li>
+<p>orElse()<br>
+当值不存在时，返回默认值</p>
 </li>
 </ul>
-<h3 id="reduce操作"><a href="#reduce操作" class="headerlink" title="reduce操作"></a>reduce操作</h3><blockquote>
+<h3 id="reduce操作"><a class="header-anchor" href="#reduce操作"></a>reduce操作</h3>
+<blockquote>
 <p>合并操作</p>
 </blockquote>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">></span></span> reduceSumls <span class="token operator">=</span> <span class="token class-name">Arrays</span><span class="token punctuation">.</span><span class="token function">asList</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">;</span>

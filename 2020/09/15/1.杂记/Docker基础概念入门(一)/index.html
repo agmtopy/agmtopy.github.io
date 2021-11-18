@@ -433,7 +433,9 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="Docker实战"><a href="#Docker实战" class="headerlink" title="Docker实战"></a>Docker实战</h2><h3 id="基础命令"><a href="#基础命令" class="headerlink" title="基础命令"></a>基础命令</h3><ul>
+                <h2 id="Docker实战"><a class="header-anchor" href="#Docker实战"></a>Docker实战</h2>
+<h3 id="基础命令"><a class="header-anchor" href="#基础命令"></a>基础命令</h3>
+<ul>
 <li>容器使用</li>
 </ul>
 <table>
@@ -444,7 +446,8 @@
 <th>参数</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>获取镜像</td>
 <td>docker pull imageName</td>
 <td></td>
@@ -489,52 +492,66 @@
 <td>docker image prune</td>
 <td>-a:全部</td>
 </tr>
-</tbody></table>
-<h4 id="Dockerfile书写原则"><a href="#Dockerfile书写原则" class="headerlink" title="Dockerfile书写原则"></a>Dockerfile书写原则</h4><blockquote>
+</tbody>
+</table>
+<h4 id="Dockerfile书写原则"><a class="header-anchor" href="#Dockerfile书写原则"></a>Dockerfile书写原则</h4>
+<blockquote>
 <p>Dockerfile是构建docker镜像的一种方式，推荐作为生产环境构建镜像的方式。</p>
 </blockquote>
 <ol>
-<li>单一原则<br>容器的本质是进程，一个容器代表一个进程。因此不同功能的应用应该拆分为不同的容器，每个容器负责单一的业务进程。</li>
+<li>单一原则<br>
+容器的本质是进程，一个容器代表一个进程。因此不同功能的应用应该拆分为不同的容器，每个容器负责单一的业务进程。</li>
 <li>提供注释信息</li>
 <li>保持容器最小化</li>
-<li>合理选择基础镜像<br>容器的核心是应用，因此只要基础镜像能够满足应用的运行环境即可。</li>
-<li>使用.dockerignore文件<br>.dockerignore文件允许我们在构建时忽略一些不需要参与构建的文件，从而提高构建效率。</li>
+<li>合理选择基础镜像<br>
+容器的核心是应用，因此只要基础镜像能够满足应用的运行环境即可。</li>
+<li>使用.dockerignore文件<br>
+.dockerignore文件允许我们在构建时忽略一些不需要参与构建的文件，从而提高构建效率。</li>
 <li>尽量使用构建缓存</li>
 </ol>
 <ul>
 <li>每一条Dockerfile指令都会提交一个镜像层，下一条指令都是基于上一条指令进行构建。如果构建时发现构建的镜像层的父镜像层已经存在，且下一条指令使用了相同的指令即命中缓存。</li>
 </ul>
 <ol start="7">
-<li><p>正确设置时区<br>从Docker Hub拉取的官方操作系统镜像大多数都是UTC时间，如果在容器中需要使用东八区时间，需要进行修改</p>
+<li>
+<p>正确设置时区<br>
+从Docker Hub拉取的官方操作系统镜像大多数都是UTC时间，如果在容器中需要使用东八区时间，需要进行修改</p>
 </li>
-<li><p>使用国内软件源加快镜像构建速度</p>
+<li>
+<p>使用国内软件源加快镜像构建速度</p>
 </li>
-<li><p>最小化镜像层数</p>
+<li>
+<p>最小化镜像层数</p>
 </li>
 </ol>
-<h4 id="Dockerfile编写建议"><a href="#Dockerfile编写建议" class="headerlink" title="Dockerfile编写建议"></a>Dockerfile编写建议</h4><ol>
-<li><p>RUN指令在构建时将会生成一个镜像层并且执行RUN指令后面的内容</p>
+<h4 id="Dockerfile编写建议"><a class="header-anchor" href="#Dockerfile编写建议"></a>Dockerfile编写建议</h4>
+<ol>
+<li>
+<p>RUN指令在构建时将会生成一个镜像层并且执行RUN指令后面的内容</p>
 </li>
-<li><p>CMD和ENTRYPOINT都是容器运行的命令入口；区别在于ENTRYPOINT指令启动容器时，需要用–entrypoint参数才能覆盖Dockerfile中的ENTRYPONT指令；CMD设置的命令则可以被docker run后面的参数直接覆盖</p>
+<li>
+<p>CMD和ENTRYPOINT都是容器运行的命令入口；区别在于ENTRYPOINT指令启动容器时，需要用–entrypoint参数才能覆盖Dockerfile中的ENTRYPONT指令；CMD设置的命令则可以被docker run后面的参数直接覆盖<br>
+3.CMD/ENTRYPOINT的使用有两种格式；1.json数组格式的exec模式 2.command param格式的shell模式。这两种格式的区别在于启动容器后1号进程的区别。exec模式启动的进程即为容器的1号进程，而shell模式启动的进程不是容器的1号进程。</p>
 </li>
-<li><p>CMD/ENTRYPOINT的使用有两种格式；1.json数组格式的exec模式 2.command param格式的shell模式。这两种格式的区别在于启动容器后1号进程的区别。exec模式启动的进程即为容器的1号进程，而shell模式启动的进程不是容器的1号进程。</p>
-</li>
-<li><p>add和copy的区别。add是将外部资源加载到容器中这样会扩大容器体积，copy是将本地文件向容器中拷贝，可以更好的利用构建缓存，有效减小镜像体积。</p>
+<li>
+<p>add和copy的区别。add是将外部资源加载到容器中这样会扩大容器体积，copy是将本地文件向容器中拷贝，可以更好的利用构建缓存，有效减小镜像体积。</p>
 </li>
 </ol>
 <ul>
-<li>反面例子<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ADD http://pyropus.ca/software/memtester/old-versions/memtester-4.3.0.tar.gz /tmp/
+<li>反面例子</li>
+</ul>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ADD http://pyropus.ca/software/memtester/old-versions/memtester-4.3.0.tar.gz /tmp/
 RUN <span class="token function">tar</span> -xvf /tmp/memtester-4.3.0.tar.gz -C /tmp
-RUN <span class="token function">make</span> -C /tmp/memtester-4.3.0 <span class="token operator">&amp;&amp;</span> <span class="token function">make</span> -C /tmp/memtester-4.3.0 <span class="token function">install</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></li>
+RUN <span class="token function">make</span> -C /tmp/memtester-4.3.0 <span class="token operator">&amp;&amp;</span> <span class="token function">make</span> -C /tmp/memtester-4.3.0 <span class="token function">install</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<ul>
 <li>替代例子</li>
 </ul>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">RUN <span class="token function">wget</span> -O /tmp/memtester-4.3.0.tar.gz http://pyropus.ca/software/memtester/old-versions/memtester-4.3.0.tar.gz <span class="token punctuation">\</span>
 <span class="token operator">&amp;&amp;</span> <span class="token function">tar</span> -xvf /tmp/memtester-4.3.0.tar.gz -C /tmp <span class="token punctuation">\</span>
 <span class="token operator">&amp;&amp;</span> <span class="token function">make</span> -C /tmp/memtester-4.3.0 <span class="token operator">&amp;&amp;</span> <span class="token function">make</span> -C /tmp/memtester-4.3.0 <span class="token function">install</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-
-
-<h3 id="基础概念"><a href="#基础概念" class="headerlink" title="基础概念"></a>基础概念</h3><h4 id="Namespace"><a href="#Namespace" class="headerlink" title="Namespace"></a>Namespace</h4><blockquote>
+<h3 id="基础概念"><a class="header-anchor" href="#基础概念"></a>基础概念</h3>
+<h4 id="Namespace"><a class="header-anchor" href="#Namespace"></a>Namespace</h4>
+<blockquote>
 <p>Docker是使用Linux的Namespace技术实现各种资源隔离；Namespace是Linux内核的一项功能，该功能对内核资源进行分区，使一组进程只能看到一组资源，而另一组进程看到另外一组资源。</p>
 </blockquote>
 <ul>
@@ -548,7 +565,8 @@ RUN <span class="token function">make</span> -C /tmp/memtester-4.3.0 <span class
 <th>内核版本</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>Mount(mnt)</td>
 <td>隔离挂载点</td>
 <td>2.4.19</td>
@@ -588,117 +606,139 @@ RUN <span class="token function">make</span> -C /tmp/memtester-4.3.0 <span class
 <td>隔离系统时间</td>
 <td>5.6</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <ul>
 <li>Namespace功能</li>
 </ul>
 <ol>
-<li><p>Mount Namespace</p>
+<li>Mount Namespace</li>
+</ol>
 <blockquote>
 <p>Mount Namespace是Linux内核实现的第一个Namespace,可以用来隔离不同的进程或进程组看到的挂载点。通俗地说，就是可以实现在不同的进程中看到不同的挂载目录。</p>
 </blockquote>
-</li>
-<li><p>PID Namespace</p>
+<ol start="2">
+<li>PID Namespace</li>
+</ol>
 <blockquote>
 <p>PID Namespace的作用是用来隔离进程。在不同的 PID Namespace 中，进程可以拥有相同的 PID 号，利用 PID Namespace 可以实现每个容器的主进程为 1 号进程，而容器内的进程在主机上却拥有不同的PID。</p>
 </blockquote>
-</li>
-<li><p>UTS Namespace</p>
+<ol start="3">
+<li>UTS Namespace</li>
+</ol>
 <blockquote>
 <p>UTS Namespace 主要是用来隔离主机名的，它允许每个 UTS Namespace 拥有一个独立的主机名。</p>
 </blockquote>
-</li>
-<li><p>IPC Namespace</p>
+<ol start="4">
+<li>IPC Namespace</li>
+</ol>
 <blockquote>
 <p>IPC Namespace 主要是用来隔离进程间通信的。例如 PID Namespace 和 IPC Namespace 一起使用可以实现同一 IPC Namespace 内的进程彼此可以通信，不同 IPC Namespace 的进程却不能通信。</p>
 </blockquote>
-</li>
-<li><p>User Namespace</p>
+<ol start="5">
+<li>User Namespace</li>
+</ol>
 <blockquote>
 <p>User Namespace 主要是用来隔离用户和用户组的。一个比较典型的应用场景就是在主机上以非 root 用户运行的进程可以在一个单独的 User Namespace 中映射成 root 用户。使用 User Namespace 可以实现进程在容器内拥有 root 权限，而在主机上却只是普通用户。</p>
 </blockquote>
-</li>
-<li><p>Net Namespace</p>
+<ol start="6">
+<li>Net Namespace</li>
+</ol>
 <blockquote>
 <p>Net Namespace是用来隔离网络设备、IP地址和端口等信息的</p>
 </blockquote>
-</li>
-</ol>
 <ul>
-<li>小结<blockquote>
-<p>当Docker新建一个容器时,会创建这6种Namespace，来进行资源隔离。Namespace是Linux内核提供的特性，该特性可以实现在同一个主机上对<strong>进程ID__、__主机名__、用户ID、__文件名__、__网络和进程间通信等资源的隔离</strong></p>
-</blockquote>
-</li>
+<li>小结</li>
 </ul>
-<h4 id="cgrops"><a href="#cgrops" class="headerlink" title="cgrops"></a>cgrops</h4><blockquote>
+<blockquote>
+<p>当Docker新建一个容器时,会创建这6种Namespace，来进行资源隔离。Namespace是Linux内核提供的特性，该特性可以实现在同一个主机上对__进程ID__、<strong>主机名</strong>、用户ID、<strong>文件名</strong>、<strong>网络和进程间通信等资源的隔离</strong></p>
+</blockquote>
+<h4 id="cgrops"><a class="header-anchor" href="#cgrops"></a>cgrops</h4>
+<blockquote>
 <p>cgrops是linux内核提供限制进程或进程组使用资源(如CPU、内存、磁盘IO)的功能</p>
 </blockquote>
 <ul>
 <li>cgrops功能</li>
 </ul>
 <ol>
-<li>资源限制<blockquote>
+<li>资源限制</li>
+</ol>
+<blockquote>
 <p>限制资源的使用量，例如我们可以通过限制某个业务的内存上限，从而保护主机其他业务的安全运行。</p>
 </blockquote>
-</li>
-<li>优先级控制<blockquote>
+<ol start="2">
+<li>优先级控制</li>
+</ol>
+<blockquote>
 <p>不同的组可以有不同的资源（ CPU 、磁盘 IO 等）使用优先级</p>
 </blockquote>
-</li>
-<li>审计<blockquote>
+<ol start="3">
+<li>审计</li>
+</ol>
+<blockquote>
 <p>计算控制组的资源使用情况</p>
 </blockquote>
-</li>
-<li>控制<blockquote>
+<ol start="4">
+<li>控制</li>
+</ol>
+<blockquote>
 <p>控制进程的挂起或恢复</p>
 </blockquote>
-</li>
-</ol>
 <blockquote>
 <p>Docker 创建容器时，Docker 会根据启动容器的参数，在对应的 cgroups 子系统下创建以__容器ID__为名称的目录, 然后根据容器启动时设置的资源限制参数, 修改对应的 cgroups 子系统资源限制文件, 从而达到资源限制的效果。</p>
 </blockquote>
-<h4 id="Docker组件的构成"><a href="#Docker组件的构成" class="headerlink" title="Docker组件的构成"></a>Docker组件的构成</h4><p>Docker整体架构采用C/S架构，主要由客户端/服务端两大部分组成。客户端负责发送指令，服务端负责执行指令。</p>
+<h4 id="Docker组件的构成"><a class="header-anchor" href="#Docker组件的构成"></a>Docker组件的构成</h4>
+<p>Docker整体架构采用C/S架构，主要由客户端/服务端两大部分组成。客户端负责发送指令，服务端负责执行指令。</p>
 <ul>
 <li>Docker组件</li>
 </ul>
 <ol>
-<li><p>docker</p>
+<li>docker</li>
+</ol>
 <blockquote>
 <p>docker是Docker客户端的一个完整实现，docker 组件向服务端发送请求后，服务端根据请求执行具体的动作并将结果返回给 docker，docker 解析服务端的返回结果，并将结果通过命令行标准输出展示给用户。</p>
 </blockquote>
-</li>
-<li><p>dockerd</p>
+<ol start="2">
+<li>dockerd</li>
+</ol>
 <blockquote>
 <p>dockerd 是 Docker 服务端的后台常驻进程，用来接收客户端发送的请求，执行具体的处理任务，处理完成后将结果返回给客户端</p>
 </blockquote>
-</li>
-<li><p>docker-init</p>
+<ol start="3">
+<li>docker-init</li>
+</ol>
 <blockquote>
 <p>docker-init是作为1号进程管理容器内的子进程</p>
 </blockquote>
-</li>
-<li><p>docker-proxy</p>
+<ol start="4">
+<li>docker-proxy</li>
+</ol>
 <blockquote>
 <p>docker-proxy主要是用来做端口映射。当我们使用 docker run 命令启动容器时，如果使用了 -p 参数，docker-proxy 组件就会把容器内相应的端口映射到主机上来，底层是依赖于 iptables 实现的。</p>
 </blockquote>
-</li>
-<li><p>containerd</p>
+<ol start="5">
+<li>containerd</li>
+</ol>
 <blockquote>
 <p>containerd负责容器生命周期的管理、镜像的管理、dockerd的请求、管理存储、网络等相关资源。是容器标准化后的产物</p>
 </blockquote>
-</li>
-<li><p>containerd-shim</p>
+<ol start="6">
+<li>containerd-shim</li>
+</ol>
 <blockquote>
 <p>作为containerd和真正的容器进程的中间层</p>
 </blockquote>
-</li>
-<li><p>runc</p>
+<ol start="7">
+<li>runc</li>
+</ol>
 <blockquote>
 <p>runc 是一个标准的 OCI 容器运行时的实现，它是一个命令行工具，可以直接用来创建和运行容器。</p>
 </blockquote>
-</li>
-</ol>
-<h3 id="数据管理"><a href="#数据管理" class="headerlink" title="数据管理"></a>数据管理</h3><h3 id="网络管理"><a href="#网络管理" class="headerlink" title="网络管理"></a>网络管理</h3><h3 id="容器管理"><a href="#容器管理" class="headerlink" title="容器管理"></a>容器管理</h3><h3 id="镜像管理"><a href="#镜像管理" class="headerlink" title="镜像管理"></a>镜像管理</h3>
+<h3 id="数据管理"><a class="header-anchor" href="#数据管理"></a>数据管理</h3>
+<h3 id="网络管理"><a class="header-anchor" href="#网络管理"></a>网络管理</h3>
+<h3 id="容器管理"><a class="header-anchor" href="#容器管理"></a>容器管理</h3>
+<h3 id="镜像管理"><a class="header-anchor" href="#镜像管理"></a>镜像管理</h3>
+
                 
             </div>
             <hr/>

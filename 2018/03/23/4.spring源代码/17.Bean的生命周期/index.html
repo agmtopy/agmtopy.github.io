@@ -433,7 +433,8 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="Bean的生命周期"><a href="#Bean的生命周期" class="headerlink" title="Bean的生命周期"></a>Bean的生命周期</h1><p>先上一张流程图</p>
+                <h1>Bean的生命周期</h1>
+<p>先上一张流程图</p>
 <p><img src="https://s1.ax1x.com/2020/03/23/8HBWTA.png" alt="8HBWTA.png"></p>
 <p>从图中可以看出初始化bean的流程主要分为</p>
 <ol>
@@ -442,7 +443,8 @@
 <li>bean自己的init方法</li>
 <li>注销bean时执行destroy-method方法</li>
 </ol>
-<h2 id="实例化Bean"><a href="#实例化Bean" class="headerlink" title="实例化Bean"></a>实例化Bean</h2><p>实例化bean主要是用<strong>BeanWrapperImpl</strong>,其主要作用是对这个Bean进行包装。Bean的初始化主要是根据策略模式来进行选择是用JDK的动态代理或CGLib的动态代理来实现。关键代码如下：</p>
+<h2 id="实例化Bean"><a class="header-anchor" href="#实例化Bean"></a>实例化Bean</h2>
+<p>实例化bean主要是用<strong>BeanWrapperImpl</strong>,其主要作用是对这个Bean进行包装。Bean的初始化主要是根据策略模式来进行选择是用JDK的动态代理或CGLib的动态代理来实现。关键代码如下：</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/** Strategy for creating bean instances. */</span>
 <span class="token keyword">private</span> <span class="token class-name">InstantiationStrategy</span> instantiationStrategy <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">CglibSubclassingInstantiationStrategy</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
@@ -468,27 +470,35 @@
            <span class="token punctuation">&#125;</span>
        <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <blockquote>
-<p>在这里**getInstantiationStrategy()**，通过获取指定的动态代理策略来进行实例化</p>
+<p>在这里<strong>getInstantiationStrategy()</strong>，通过获取指定的动态代理策略来进行实例化</p>
 </blockquote>
 <ul>
-<li>如何指定使用JDK的proxy？<blockquote>
+<li>如何指定使用JDK的proxy？</li>
+</ul>
+<blockquote>
 <p>spring5中貌似没有找到</p>
 </blockquote>
-</li>
-</ul>
-<h2 id="使用Aware接口"><a href="#使用Aware接口" class="headerlink" title="使用Aware接口"></a>使用Aware接口</h2><p><strong>Aware</strong>接口是一个具有具有感知能力的接口，其主要的子类分别是<strong>BeanNameAware</strong>、<strong>BeanClassLoaderAware</strong>、<strong>BeanFactoryAware</strong>接口，以上三个接口的方法都是在实例化完成后调用<strong>invokeAware</strong>实现</p>
-<h2 id="BeanPostProcessor增强"><a href="#BeanPostProcessor增强" class="headerlink" title="BeanPostProcessor增强"></a>BeanPostProcessor增强</h2><p><strong>BeanPostProcessor</strong>是bean的增强器，是spring容器用于增强全部bean的类。主要是初始化的前置方法和后置方法，主要的子类是<strong>InstantiationAwareBeanPostProcessorAdapter</strong>在初始化前就对bean进行一个预处理，以便进行特殊处理</p>
-<h2 id="init-method"><a href="#init-method" class="headerlink" title="init-method()"></a>init-method()</h2><p>init-method表示的是bean自身定义的初始化方法，只会作用于bean本身的方法。执行时机是在属性赋值后进行执行。主要有</p>
+<h2 id="使用Aware接口"><a class="header-anchor" href="#使用Aware接口"></a>使用Aware接口</h2>
+<p><strong>Aware</strong>接口是一个具有具有感知能力的接口，其主要的子类分别是<strong>BeanNameAware</strong>、<strong>BeanClassLoaderAware</strong>、<strong>BeanFactoryAware</strong>接口，以上三个接口的方法都是在实例化完成后调用<strong>invokeAware</strong>实现</p>
+<h2 id="BeanPostProcessor增强"><a class="header-anchor" href="#BeanPostProcessor增强"></a>BeanPostProcessor增强</h2>
+<p><strong>BeanPostProcessor</strong>是bean的增强器，是spring容器用于增强全部bean的类。主要是初始化的前置方法和后置方法，主要的子类是<strong>InstantiationAwareBeanPostProcessorAdapter</strong>在初始化前就对bean进行一个预处理，以便进行特殊处理</p>
+<h2 id="init-method"><a class="header-anchor" href="#init-method"></a>init-method()</h2>
+<p>init-method表示的是bean自身定义的初始化方法，只会作用于bean本身的方法。执行时机是在属性赋值后进行执行。主要有</p>
 <ol>
 <li><strong>InitializingBean接口</strong></li>
 <li><strong>@init-method注解</strong></li>
 <li><strong>@PostConstruct</strong>，底层的实现是依赖于<strong>BeanPostProcessor</strong></li>
 </ol>
-<h2 id="DisposableBean"><a href="#DisposableBean" class="headerlink" title="DisposableBean"></a>DisposableBean</h2><p>销毁方法</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><p>Bean初始化的过程如下：</p>
+<h2 id="DisposableBean"><a class="header-anchor" href="#DisposableBean"></a>DisposableBean</h2>
+<p>销毁方法</p>
+<h1>总结</h1>
+<p>Bean初始化的过程如下：</p>
 <ol start="0">
 <li>InstantiationAwareBeanPostProcessor的前置方法</li>
-<li>实列化<br> 1.1 根据实例化策略选择进行JDK反射或者CGlib反射<br> 1.2 执行InstantiationAwareBeanPostProcessor的后置方法<br> 1.3 bean的属性进行赋值</li>
+<li>实列化<br>
+1.1 根据实例化策略选择进行JDK反射或者CGlib反射<br>
+1.2 执行InstantiationAwareBeanPostProcessor的后置方法<br>
+1.3 bean的属性进行赋值</li>
 <li>Aware接口处理</li>
 <li>BeanProcessors接口的前置处理</li>
 <li>init-method方法进行处理</li>

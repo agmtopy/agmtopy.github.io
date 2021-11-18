@@ -433,7 +433,9 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="设计模式-可复用面向对象软件设计的基础-结构型模式"><a href="#设计模式-可复用面向对象软件设计的基础-结构型模式" class="headerlink" title="设计模式-可复用面向对象软件设计的基础-结构型模式"></a>设计模式-可复用面向对象软件设计的基础-结构型模式</h1><h2 id="结构型模式"><a href="#结构型模式" class="headerlink" title="结构型模式"></a>结构型模式</h2><blockquote>
+                <h1>设计模式-可复用面向对象软件设计的基础-结构型模式</h1>
+<h2 id="结构型模式"><a class="header-anchor" href="#结构型模式"></a>结构型模式</h2>
+<blockquote>
 <p>结构型模式涉及到的是如何组织类和对象之间的引用关系,以便获得更大的组织结构和更好的可扩展性。结构性模式往往采用继承和组合两种手段来实现，关注的重点在于对象之间相互组合引用的关系上。主要有以下几种具体的模式：</p>
 </blockquote>
 <ol>
@@ -445,33 +447,53 @@
 <li>享元模式</li>
 <li>代理模式</li>
 </ol>
-<h2 id="适配器模式"><a href="#适配器模式" class="headerlink" title="适配器模式"></a>适配器模式</h2><h3 id="意图"><a href="#意图" class="headerlink" title="意图"></a>意图</h3><blockquote>
+<h2 id="适配器模式"><a class="header-anchor" href="#适配器模式"></a>适配器模式</h2>
+<h3 id="意图"><a class="header-anchor" href="#意图"></a>意图</h3>
+<blockquote>
 <p>将一个类的接口转换成客户端所期望能使用的另外一个接口。Adapter模式使原本由于接口不兼容不能在一起使用的类能够通过一个中间适配类从而能一起工作了</p>
 </blockquote>
-<h3 id="别名"><a href="#别名" class="headerlink" title="别名"></a>别名</h3><p>Wrapper</p>
-<h3 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h3><p><img src="https://www.runoob.com/wp-content/uploads/2014/08/20210223-adapter.png" alt="适配器模式"><br>可以看到原本AudioPlayer不能直接引用AdvanceMediaPlayer，但是通过MediaAdapter实现AudioPlayer同样的接口后，在MediaAdapter中引用AdvanceMediaPlayer实现去执行具体的方法，从而迂回实现AdvanceMediaPlayer的调用</p>
-<h2 id="桥接模式"><a href="#桥接模式" class="headerlink" title="桥接模式"></a>桥接模式</h2><h3 id="意图-1"><a href="#意图-1" class="headerlink" title="意图"></a>意图</h3><blockquote>
+<h3 id="别名"><a class="header-anchor" href="#别名"></a>别名</h3>
+<p>Wrapper</p>
+<h3 id="结构"><a class="header-anchor" href="#结构"></a>结构</h3>
+<p><img src="https://www.runoob.com/wp-content/uploads/2014/08/20210223-adapter.png" alt="适配器模式"><br>
+可以看到原本AudioPlayer不能直接引用AdvanceMediaPlayer，但是通过MediaAdapter实现AudioPlayer同样的接口后，在MediaAdapter中引用AdvanceMediaPlayer实现去执行具体的方法，从而迂回实现AdvanceMediaPlayer的调用</p>
+<h2 id="桥接模式"><a class="header-anchor" href="#桥接模式"></a>桥接模式</h2>
+<h3 id="意图-v2"><a class="header-anchor" href="#意图-v2"></a>意图</h3>
+<blockquote>
 <p>将抽象部分和它的实现部分分离，从而使得两者都可以独立的变化。出现桥接模式的原因在因为继承接口-实现方法这种模式下接口定义好的方法子类必须按照定义进行实现，缺乏灵活性(PS:继承方式是一种强约束的关系，适用于强约束的场合)</p>
 </blockquote>
-<h3 id="别名-1"><a href="#别名-1" class="headerlink" title="别名"></a>别名</h3><p>Hadnle/Body</p>
-<h3 id="结构-1"><a href="#结构-1" class="headerlink" title="结构"></a>结构</h3><p><img src="https://www.runoob.com/wp-content/uploads/2018/06/1528771072-8457-5780d2384acdbb60ec07fc3c71a1.png" alt="桥接模式"></p>
+<h3 id="别名-v2"><a class="header-anchor" href="#别名-v2"></a>别名</h3>
+<p>Hadnle/Body</p>
+<h3 id="结构-v2"><a class="header-anchor" href="#结构-v2"></a>结构</h3>
+<p><img src="https://www.runoob.com/wp-content/uploads/2018/06/1528771072-8457-5780d2384acdbb60ec07fc3c71a1.png" alt="桥接模式"></p>
 <p>Abstraction和Implementor都是抽象类，由于Abstraction内部持有Implementor抽象类，从而使得这两个抽象类都可以独立的发展，桥接模式的核心应该是将业务上不同的抽象部分单独分离开，独立演化，关注的应该是业务上抽象的功能分离和在抽象对象类的组合。通过分离和组合更好的描述一个类</p>
-<h2 id="组合模式"><a href="#组合模式" class="headerlink" title="组合模式"></a>组合模式</h2><blockquote>
-<p>将对象组合成树形结构以表示”部分-整体”的层次结构。组合模式使得用户对单个对象和组合对象的使用具有一致性。适用于希望忽略组合对象和单个对象的不同，用户将统一的使用组合结构中的所有对象。</p>
+<h2 id="组合模式"><a class="header-anchor" href="#组合模式"></a>组合模式</h2>
+<blockquote>
+<p>将对象组合成树形结构以表示&quot;部分-整体&quot;的层次结构。组合模式使得用户对单个对象和组合对象的使用具有一致性。适用于希望忽略组合对象和单个对象的不同，用户将统一的使用组合结构中的所有对象。</p>
 </blockquote>
-<h3 id="结构-2"><a href="#结构-2" class="headerlink" title="结构"></a>结构</h3><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/cztr0P"><img src="https://z3.ax1x.com/2021/04/25/cztr0P.png" alt="cztr0P.png"></a><br>提供Component接口(抽象构件)，该接口有两个实现分别是容器构件(Composlte)、叶子构件(Leaf)。客户端通过直接使用Component接口，来忽略具体是单个对象还是组合对象提供的服务。composlte对象实现了Componet所定义的管理叶子节点的方法Add()、Remove()、GetChild()</p>
-<p>组合模式在实现上有两种方法：1.透明组合模式、2.安全组合模式。<br>透明组合模式的特点是叶子节点和容器构件都要实现相同的接口，但是叶子节点和抽象构件节点其实都相互冗余了部分不属于自己的方法。<br>安全组合模式指的是在抽象构件中不会声明任何有关容器构件的方法，而是在容器构件中去声明并实现该方法</p>
-<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><h4 id="java-awt-Container"><a href="#java-awt-Container" class="headerlink" title="java.awt.Container"></a>java.awt.Container</h4><ul>
-<li>Container.java<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Container</span> <span class="token keyword">extends</span> <span class="token class-name">Component</span> <span class="token punctuation">&#123;</span>
+<h3 id="结构-v3"><a class="header-anchor" href="#结构-v3"></a>结构</h3>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/cztr0P"><img src="https://z3.ax1x.com/2021/04/25/cztr0P.png" alt="cztr0P.png"></a><br>
+提供Component接口(抽象构件)，该接口有两个实现分别是容器构件(Composlte)、叶子构件(Leaf)。客户端通过直接使用Component接口，来忽略具体是单个对象还是组合对象提供的服务。composlte对象实现了Componet所定义的管理叶子节点的方法Add()、Remove()、GetChild()</p>
+<p>组合模式在实现上有两种方法：1.透明组合模式、2.安全组合模式。<br>
+透明组合模式的特点是叶子节点和容器构件都要实现相同的接口，但是叶子节点和抽象构件节点其实都相互冗余了部分不属于自己的方法。<br>
+安全组合模式指的是在抽象构件中不会声明任何有关容器构件的方法，而是在容器构件中去声明并实现该方法</p>
+<h3 id="实例"><a class="header-anchor" href="#实例"></a>实例</h3>
+<h4 id="java-awt-Container"><a class="header-anchor" href="#java-awt-Container"></a>java.awt.Container</h4>
+<ul>
+<li>Container.java</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Container</span> <span class="token keyword">extends</span> <span class="token class-name">Component</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">private</span> <span class="token class-name"><span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span>List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Component</span><span class="token punctuation">></span></span> component <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-Container类内部管理一个<b>Component</b>的集合引用，这里采用的是安全的组合模式因此管理集合中的元素的方法是在Container中实现的</li>
-</ul>
-<h2 id="装饰模式"><a href="#装饰模式" class="headerlink" title="装饰模式"></a>装饰模式</h2><blockquote>
+<p>Container类内部管理一个<b>Component</b>的集合引用，这里采用的是安全的组合模式因此管理集合中的元素的方法是在Container中实现的</p>
+<h2 id="装饰模式"><a class="header-anchor" href="#装饰模式"></a>装饰模式</h2>
+<blockquote>
 <p>动态的为目标对象添加一些额外的职责，装饰模式(Decorator)在功能上与继承类似都是增强目标方法，但是装饰模式在结构上是向上的，而继承在结构上是向下的。装饰模式更加的灵活，没有继承那种强依赖的关系。</p>
 </blockquote>
-<h3 id="别名-2"><a href="#别名-2" class="headerlink" title="别名"></a>别名</h3><p>包装器-Wrapper</p>
-<h3 id="结构-3"><a href="#结构-3" class="headerlink" title="结构"></a>结构</h3><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/gpGYfe"><img src="https://z3.ax1x.com/2021/04/26/gpGYfe.jpg" alt="装饰器模式"></a></p>
+<h3 id="别名-v3"><a class="header-anchor" href="#别名-v3"></a>别名</h3>
+<p>包装器-Wrapper</p>
+<h3 id="结构-v4"><a class="header-anchor" href="#结构-v4"></a>结构</h3>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/gpGYfe"><img src="https://z3.ax1x.com/2021/04/26/gpGYfe.jpg" alt="装饰器模式"></a></p>
 <p>Component是顶层接口，分别别目标对象和装饰器对象实现，装饰器对象通过内部持有目标对象的一个引用，客户端在调用目标类的时候，实际上是通过调用装饰类的提供出来的方法。装饰器在持有目标类的引用后就可以在执行方法前后都进行自定义增强处理，从而实现对目标类的增强</p>
 <p>装饰器的优点在于：</p>
 <ol>
@@ -485,36 +507,58 @@ Container类内部管理一个<b>Component</b>的集合引用，这里采用的�
 <ol start="4">
 <li>过多的类(个人认为不是缺点，类按照职责划分本来就会产生更多的小类，而不是一个大而全的类)</li>
 </ol>
-<h2 id="外观模式"><a href="#外观模式" class="headerlink" title="外观模式"></a>外观模式</h2><blockquote>
+<h2 id="外观模式"><a class="header-anchor" href="#外观模式"></a>外观模式</h2>
+<blockquote>
 <p>为子系统中的一组接口提供一个一致的界面，Facade模式定义了一个高层接口，使得子系统中的一组接口都实现该接口，对外提供一个相同的接口。</p>
 </blockquote>
-<h3 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h3><p>复杂的子系统有多个类，每个类暴露出一些公共方法这些方法相互调用并对外提供一个服务，这个时候外部客户端并不关心子系统的内部调用，就可以通过Facade的模式将子系统暴露出去的接口整理成独立的接口，如下图所示：<br><a target="_blank" rel="noopener" href="https://imgtu.com/i/gCcIqx"><img src="https://z3.ax1x.com/2021/04/27/gCcIqx.png" alt="门面模式"></a></p>
+<h3 id="动机"><a class="header-anchor" href="#动机"></a>动机</h3>
+<p>复杂的子系统有多个类，每个类暴露出一些公共方法这些方法相互调用并对外提供一个服务，这个时候外部客户端并不关心子系统的内部调用，就可以通过Facade的模式将子系统暴露出去的接口整理成独立的接口，如下图所示：<br>
+<a target="_blank" rel="noopener" href="https://imgtu.com/i/gCcIqx"><img src="https://z3.ax1x.com/2021/04/27/gCcIqx.png" alt="门面模式"></a></p>
 <ul>
-<li><p>Facade<br>将请求发送给子系统对象</p>
+<li>
+<p>Facade<br>
+将请求发送给子系统对象</p>
 </li>
-<li><p>Subsystem class<br>实现子系统功能<br>处理有Facade指派的任务</p>
+<li>
+<p>Subsystem class<br>
+实现子系统功能<br>
+处理有Facade指派的任务</p>
 </li>
 </ul>
-<h3 id="实例-1"><a href="#实例-1" class="headerlink" title="实例"></a>实例</h3><ul>
-<li><p>JdbcUtil.java<br>JdbcUtil将有关jdbc的操作封装成为一个方法，对外提供服务</p>
+<h3 id="实例-v2"><a class="header-anchor" href="#实例-v2"></a>实例</h3>
+<ul>
+<li>
+<p>JdbcUtil.java<br>
+JdbcUtil将有关jdbc的操作封装成为一个方法，对外提供服务</p>
 </li>
-<li><p>RequestFacade.java<br>Tomcat的RequestFacade.java</p>
+<li>
+<p>RequestFacade.java<br>
+Tomcat的RequestFacade.java</p>
 </li>
 </ul>
-<h2 id="享元模式"><a href="#享元模式" class="headerlink" title="享元模式"></a>享元模式</h2><blockquote>
+<h2 id="享元模式"><a class="header-anchor" href="#享元模式"></a>享元模式</h2>
+<blockquote>
 <p>运用共享技术有效的支持大量细粒度的对象，通俗的来将就是缓存具体对象，在使用时返回该对象。与单例模式类似，区别在于单例模式要保证全局唯一。享元模式不用保证全局唯一，并且可以继续创建对象。享元模式会通过内部状态和外部状态两个标识来保证对象行为的内部一致性和外部差异性</p>
 </blockquote>
-<h3 id="结构-4"><a href="#结构-4" class="headerlink" title="结构"></a>结构</h3><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/gC5iBd"><img src="https://z3.ax1x.com/2021/04/28/gC5iBd.png" alt="享元模式"></a></p>
-<h3 id="实例-2"><a href="#实例-2" class="headerlink" title="实例"></a>实例</h3><ul>
+<h3 id="结构-v5"><a class="header-anchor" href="#结构-v5"></a>结构</h3>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/gC5iBd"><img src="https://z3.ax1x.com/2021/04/28/gC5iBd.png" alt="享元模式"></a></p>
+<h3 id="实例-v3"><a class="header-anchor" href="#实例-v3"></a>实例</h3>
+<ul>
 <li>String常量池</li>
 <li>线程池</li>
 </ul>
-<h2 id="代理模式"><a href="#代理模式" class="headerlink" title="代理模式"></a>代理模式</h2><blockquote>
+<h2 id="代理模式"><a class="header-anchor" href="#代理模式"></a>代理模式</h2>
+<blockquote>
 <p>为其他对象提供一种代理以控制对这个对象的访问</p>
 </blockquote>
-<h3 id="别名-3"><a href="#别名-3" class="headerlink" title="别名"></a>别名</h3><p>Surrogate</p>
-<h3 id="动机-1"><a href="#动机-1" class="headerlink" title="动机"></a>动机</h3><p>代理模式为对象提供了一个可自定义的访问对象，可以实现<b>远程代理</b>、<b>虚代理</b>、<b>保护代理</b>、<b>智能指引</b>等功能<br>虚代理:指的是也就是动态代理，将初始化延迟到运行时<br>保护代理/虚代理:都是对代理对象的增强</p>
-<h3 id="结构-5"><a href="#结构-5" class="headerlink" title="结构"></a>结构</h3><p><a target="_blank" rel="noopener" href="https://z3.ax1x.com/2021/04/28/gC5ujg.png">![代理模式]</a>](<a target="_blank" rel="noopener" href="https://imgtu.com/i/gC5ujg">https://imgtu.com/i/gC5ujg</a>)</p>
+<h3 id="别名-v4"><a class="header-anchor" href="#别名-v4"></a>别名</h3>
+<p>Surrogate</p>
+<h3 id="动机-v2"><a class="header-anchor" href="#动机-v2"></a>动机</h3>
+<p>代理模式为对象提供了一个可自定义的访问对象，可以实现<b>远程代理</b>、<b>虚代理</b>、<b>保护代理</b>、<b>智能指引</b>等功能<br>
+虚代理:指的是也就是动态代理，将初始化延迟到运行时<br>
+保护代理/虚代理:都是对代理对象的增强</p>
+<h3 id="结构-v6"><a class="header-anchor" href="#结构-v6"></a>结构</h3>
+<p><a target="_blank" rel="noopener" href="https://z3.ax1x.com/2021/04/28/gC5ujg.png">![代理模式]</a>](<a target="_blank" rel="noopener" href="https://imgtu.com/i/gC5ujg">https://imgtu.com/i/gC5ujg</a>)</p>
 <p>代理模式侧重于对目标对象的访问控制上，装饰模式侧重于对目标对象功能增强上。代理模式主要是对不可见的对象进行访问的代理。</p>
 
                 

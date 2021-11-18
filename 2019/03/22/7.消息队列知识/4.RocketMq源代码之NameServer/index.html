@@ -433,8 +433,11 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="RocketMq源代码之NameServer解析"><a href="#RocketMq源代码之NameServer解析" class="headerlink" title="RocketMq源代码之NameServer解析"></a>RocketMq源代码之NameServer解析</h1><p>周末继续阅读RocketMq的学习,在上周已经简单的把RocketMq的安装和使用学习了一下。本周主要来看一下NameServer的源代码和设计</p>
-<h2 id="NameServer启动"><a href="#NameServer启动" class="headerlink" title="NameServer启动"></a>NameServer启动</h2><h3 id="NamesrvController启动"><a href="#NamesrvController启动" class="headerlink" title="NamesrvController启动"></a>NamesrvController启动</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">NamesrvController</span> <span class="token function">main0</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <h1>RocketMq源代码之NameServer解析</h1>
+<p>周末继续阅读RocketMq的学习,在上周已经简单的把RocketMq的安装和使用学习了一下。本周主要来看一下NameServer的源代码和设计</p>
+<h2 id="NameServer启动"><a class="header-anchor" href="#NameServer启动"></a>NameServer启动</h2>
+<h3 id="NamesrvController启动"><a class="header-anchor" href="#NamesrvController启动"></a>NamesrvController启动</h3>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">NamesrvController</span> <span class="token function">main0</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
 
         <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
             <span class="token comment">//创建NamesrvController()</span>
@@ -450,15 +453,16 @@
         <span class="token punctuation">&#125;</span>
         <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p><strong>NamesrvStartup</strong>中启动，调用main0() -&gt; createNamesrvController()</p>
 <p>主要代码逻辑在<strong>createNamesrvController</strong>中，主要执行<strong>NamesrvController初始化</strong>、<strong>NamesrvController.start</strong></p>
-<h3 id="NamesrvController初始化"><a href="#NamesrvController初始化" class="headerlink" title="NamesrvController初始化"></a>NamesrvController初始化</h3><p><strong>NamesrvController</strong>初始化的步骤主要是：</p>
+<h3 id="NamesrvController初始化"><a class="header-anchor" href="#NamesrvController初始化"></a>NamesrvController初始化</h3>
+<p><strong>NamesrvController</strong>初始化的步骤主要是：</p>
 <ol>
 <li>获取到<strong>namesrvConfig</strong>、<strong>nettyServerConfig</strong></li>
 <li>根据配置生成<strong>NamesrvController</strong></li>
 </ol>
-<h3 id="NamesrvController-start"><a href="#NamesrvController-start" class="headerlink" title="NamesrvController.start()"></a>NamesrvController.start()</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//省略代码....</span>
+<h3 id="NamesrvController-start"><a class="header-anchor" href="#NamesrvController-start"></a>NamesrvController.start()</h3>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//省略代码....</span>
 <span class="token comment">//初始化controller</span>
 <span class="token keyword">boolean</span> initResult <span class="token operator">=</span> controller<span class="token punctuation">.</span><span class="token function">initialize</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
@@ -477,13 +481,17 @@
 controller<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
 <span class="token keyword">return</span> controller<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p>**NamesrvController.start()**主要做了两个工作：</p>
 <ol>
-<li>通过<strong>controller.initialize()**设置好controller的配置环境<br> 1.1 开启Netty服务<br> 1.2 启动线程池（</strong>remotingExecutor<strong>、两个定时执行的线程，一个用来扫描失效的</strong>Broker（scanNotActiveBroker）<strong>，另一个用来打印配置信息（</strong>printAllPeriodically**））</li>
-<li>remotingServer.start()<br> 2.1 使用netty开启服务<br> 2.2 <strong>prepareSharableHandlers</strong>中注册<strong>NettyServerHandler</strong>将<strong>NettyRequestProcessor</strong>注册到处理器中</li>
+<li>通过<strong>controller.initialize()<strong>设置好controller的配置环境<br>
+1.1 开启Netty服务<br>
+1.2 启动线程池（<strong>remotingExecutor</strong>、两个定时执行的线程，一个用来扫描失效的</strong>Broker（scanNotActiveBroker）</strong>，另一个用来打印配置信息（<strong>printAllPeriodically</strong>））</li>
+<li>remotingServer.start()<br>
+2.1 使用netty开启服务<br>
+2.2 <strong>prepareSharableHandlers</strong>中注册<strong>NettyServerHandler</strong>将<strong>NettyRequestProcessor</strong>注册到处理器中</li>
 </ol>
-<h2 id="Namesrv的处理逻辑"><a href="#Namesrv的处理逻辑" class="headerlink" title="Namesrv的处理逻辑"></a>Namesrv的处理逻辑</h2><p>Namesrv的处理逻辑主要是通过<strong>NettyRequestProcessor</strong>的子类<strong>DefaultRequestProcessor</strong>来进行实现的</p>
+<h2 id="Namesrv的处理逻辑"><a class="header-anchor" href="#Namesrv的处理逻辑"></a>Namesrv的处理逻辑</h2>
+<p>Namesrv的处理逻辑主要是通过<strong>NettyRequestProcessor</strong>的子类<strong>DefaultRequestProcessor</strong>来进行实现的</p>
 <ul>
 <li>DefaultRequestProcessor</li>
 </ul>
@@ -534,9 +542,9 @@ controller<span class="token punctuation">.</span><span class="token function">s
     <span class="token keyword">default</span><span class="token operator">:</span>
         <span class="token keyword">break</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p>根据不同的请求返回不同的处理函数</p>
-<h2 id="消息的存储"><a href="#消息的存储" class="headerlink" title="消息的存储"></a>消息的存储</h2><p>NameSrv中信息都是存储在内存中的，而且每一个NameSrv保存的信息都是全量的。<strong>RouteInfoManager</strong>是保存这些信息的类</p>
+<h2 id="消息的存储"><a class="header-anchor" href="#消息的存储"></a>消息的存储</h2>
+<p>NameSrv中信息都是存储在内存中的，而且每一个NameSrv保存的信息都是全量的。<strong>RouteInfoManager</strong>是保存这些信息的类</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java">
 <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">RouteInfoManager</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">InternalLogger</span> log <span class="token operator">=</span> <span class="token class-name">InternalLoggerFactory</span><span class="token punctuation">.</span><span class="token function">getLogger</span><span class="token punctuation">(</span><span class="token class-name">LoggerName</span><span class="token punctuation">.</span>NAMESRV_LOGGER_NAME<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -549,9 +557,9 @@ controller<span class="token punctuation">.</span><span class="token function">s
     <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">HashMap</span><span class="token operator">&lt;</span><span class="token class-name">String</span><span class="token comment">/* brokerAddr */</span><span class="token punctuation">,</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span><span class="token comment">/* Filter Server */</span><span class="token operator">></span> filterServerTable<span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p>在这里由于Namesev中的业务场景是<strong>读多写少</strong>，因此用<strong>可重入的读写锁</strong>来保证并发的安全性</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ol>
+<h1>总结</h1>
+<ol>
 <li>加载配置文件转换为NameServerConfig、NettyConfig</li>
 <li>根据配置文件生成<strong>NamesrvController</strong></li>
 <li>创建线程池和定时扫描线程</li>

@@ -433,13 +433,20 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="延迟队列的实现思路"><a href="#延迟队列的实现思路" class="headerlink" title="延迟队列的实现思路"></a>延迟队列的实现思路</h1><h2 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h2><blockquote>
+                <h1>延迟队列的实现思路</h1>
+<h2 id="定义"><a class="header-anchor" href="#定义"></a>定义</h2>
+<blockquote>
 <p>延迟队列指的是元素按照延迟时间进行排序形成并且到时后能自动弹出的有序队列,底层数据结构既可以是数组也可以是链表</p>
 </blockquote>
-<h2 id="适用场景"><a href="#适用场景" class="headerlink" title="适用场景"></a>适用场景</h2><p>按照倒计时触发的业务场景,例如电商网站中的订单未支付自动取消,竞拍,日历待办提醒的场景,以及用定时任务扫表触发的业务场景</p>
-<h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><p>如果让你来设计延时队列,你需要怎么样来设计?<br>先来个基础1.0的设计:要实现延时队列需要两个角色,第一个是存储信息的队列,第二个角色是’计时器’负责监视队列中的消息时候到期</p>
+<h2 id="适用场景"><a class="header-anchor" href="#适用场景"></a>适用场景</h2>
+<p>按照倒计时触发的业务场景,例如电商网站中的订单未支付自动取消,竞拍,日历待办提醒的场景,以及用定时任务扫表触发的业务场景</p>
+<h2 id="实现原理"><a class="header-anchor" href="#实现原理"></a>实现原理</h2>
+<p>如果让你来设计延时队列,你需要怎么样来设计?<br>
+先来个基础1.0的设计:要实现延时队列需要两个角色,第一个是存储信息的队列,第二个角色是’计时器’负责监视队列中的消息时候到期</p>
 <p>图示2</p>
-<h2 id="实现方式"><a href="#实现方式" class="headerlink" title="实现方式"></a>实现方式</h2><h3 id="DelayQueue"><a href="#DelayQueue" class="headerlink" title="DelayQueue"></a>DelayQueue</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+<h2 id="实现方式"><a class="header-anchor" href="#实现方式"></a>实现方式</h2>
+<h3 id="DelayQueue"><a class="header-anchor" href="#DelayQueue"></a>DelayQueue</h3>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
     <span class="token comment">//1.队列的角色</span>
     <span class="token class-name">DelayQueue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">DelayedTask</span><span class="token punctuation">></span></span> queue <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DelayQueue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token class-name">DelayedTask</span> task1 <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DelayedTask</span><span class="token punctuation">(</span><span class="token number">1_0L</span><span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>SECONDS<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-></span> <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"_1:"</span> <span class="token operator">+</span> <span class="token class-name">LocalDateTime</span><span class="token punctuation">.</span><span class="token function">now</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -455,11 +462,11 @@
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <ul>
-<li>源码解析<blockquote>
+<li>源码解析</li>
+</ul>
+<blockquote>
 <p>DelayQueue底层采用的是PriorityQueue,一种提供优先级的队列,poll()方法如下:</p>
 </blockquote>
-</li>
-</ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">E</span> <span class="token function">poll</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
     <span class="token comment">//PriorityQueue是线程不安全的,因此需要用lock</span>
     <span class="token keyword">final</span> <span class="token class-name">ReentrantLock</span> lock <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>lock<span class="token punctuation">;</span>
@@ -474,12 +481,16 @@
         lock<span class="token punctuation">.</span><span class="token function">unlock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>这样的延时队列可以解决单个进程下的延迟队列场景,但是无法解决多个应用下的场景,那么如何在实现分布式的延迟队列喃?<br>先从问题分析,我们想要实现的是分布式的延迟队列,并且知道延迟队列是由定时器和队列构成,定时器由客户端实现,那么问题就变成了我们要实现一个分布式的具有优先级的队列结构,聪明的你一定就想到了这不是redis中的zset嘛?对,下面我们来看一下基于redis实现延迟队列的1.0版本</p>
-<h3 id="基于Redis的延迟队列"><a href="#基于Redis的延迟队列" class="headerlink" title="基于Redis的延迟队列"></a>基于Redis的延迟队列</h3><blockquote>
+<p>这样的延时队列可以解决单个进程下的延迟队列场景,但是无法解决多个应用下的场景,那么如何在实现分布式的延迟队列喃?<br>
+先从问题分析,我们想要实现的是分布式的延迟队列,并且知道延迟队列是由定时器和队列构成,定时器由客户端实现,那么问题就变成了我们要实现一个分布式的具有优先级的队列结构,聪明的你一定就想到了这不是redis中的zset嘛?对,下面我们来看一下基于redis实现延迟队列的1.0版本</p>
+<h3 id="基于Redis的延迟队列"><a class="header-anchor" href="#基于Redis的延迟队列"></a>基于Redis的延迟队列</h3>
+<blockquote>
 <p>zset定义:排序集合，类似于集合，但每个字符串元素都与一个称为得分的浮点值相关联。 元素总是按它们的分数排序，因此与Sets不同，可以检索一系列元素</p>
 </blockquote>
 <ul>
-<li>zset<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">&#123;</span>
+<li>zset</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">&#123;</span>
     <span class="token class-name">RedissonClient</span> redisClient <span class="token operator">=</span> <span class="token function">getRedisClient</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token class-name">RScoredSortedSet</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> zset <span class="token operator">=</span> redisClient<span class="token punctuation">.</span><span class="token function">getScoredSortedSet</span><span class="token punctuation">(</span><span class="token string">"redisDelayQueue"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     zset<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token function">getTimeLong</span><span class="token punctuation">(</span><span class="token number">10L</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"a"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -505,12 +516,10 @@
     <span class="token keyword">return</span> <span class="token class-name">LocalDateTime</span><span class="token punctuation">.</span><span class="token function">now</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">plusSeconds</span><span class="token punctuation">(</span>seconds<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">atZone</span><span class="token punctuation">(</span><span class="token class-name">ZoneId</span><span class="token punctuation">.</span><span class="token function">systemDefault</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toInstant</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">toEpochMilli</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-</li>
-</ul>
 <ul>
-<li>RedissonDelayedTask<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">&#123;</span>
+<li>RedissonDelayedTask</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">&#123;</span>
     <span class="token class-name">RedissonClient</span> redisClient <span class="token operator">=</span> <span class="token function">getRedisClient</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token class-name">RBlockingQueue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> blockingFairQueue <span class="token operator">=</span> redisClient<span class="token punctuation">.</span><span class="token function">getBlockingQueue</span><span class="token punctuation">(</span><span class="token string">"RedissonDelayed"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token class-name">RDelayedQueue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">></span></span> delayedQueue <span class="token operator">=</span> redisClient<span class="token punctuation">.</span><span class="token function">getDelayedQueue</span><span class="token punctuation">(</span>blockingFairQueue<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -523,14 +532,13 @@
         <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>blockingFairQueue<span class="token punctuation">.</span><span class="token function">take</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-</li>
-</ul>
-<p>Redisson也实现了延迟队列(RedissonDelayedQueue),,底层数据结构使用的是zset,list,发布/订阅,并且也不是想我们现在这样通过while和方式来监听变化的,感兴趣的童鞋可以看一下Redisson实现时使用的Lua脚本</p>
+<p>Redisson也实现了延迟队列(RedissonDelayedQueue),底层数据结构使用的是zset,list,发布/订阅,并且也不是想我们现在这样通过while和方式来监听变化的,感兴趣的童鞋可以看一下Redisson实现时使用的Lua脚本</p>
 <blockquote>
 <p>目前Redisson基于reids的延迟队列在功能上很完善了作为延迟队列来说已经是满足的了,但是作为一个延时消息队列来说还缺少重试机制,ACK,因此下面介绍两种基于MQ实现延迟队列的方式</p>
 </blockquote>
-<h3 id="基于RabbitMQ的延迟队列"><a href="#基于RabbitMQ的延迟队列" class="headerlink" title="基于RabbitMQ的延迟队列"></a>基于RabbitMQ的延迟队列</h3><h4 id="基于TTL的实现方式"><a href="#基于TTL的实现方式" class="headerlink" title="基于TTL的实现方式"></a>基于TTL的实现方式</h4><blockquote>
+<h3 id="基于RabbitMQ的延迟队列"><a class="header-anchor" href="#基于RabbitMQ的延迟队列"></a>基于RabbitMQ的延迟队列</h3>
+<h4 id="基于TTL的实现方式"><a class="header-anchor" href="#基于TTL的实现方式"></a>基于TTL的实现方式</h4>
+<blockquote>
 <p>基于生存时间(TTL)和死信队列(DLX)特性实现的延迟队列;TTL指的是每条消息都有一个生存时间,超过过期时间后消息就会进入一个特殊队列,这个队列就是死信队列(DLX),DLX可以将消息重新投递到指定的队列中,consumer只需要订阅这个队列就可以实现延迟消费的功能</p>
 </blockquote>
 <ul>
@@ -538,16 +546,17 @@
 </ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java">
 <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
 <ul>
 <li>consumer</li>
 </ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java">
 <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-
-
-<h4 id="基于插件的实现方式"><a href="#基于插件的实现方式" class="headerlink" title="基于插件的实现方式"></a>基于插件的实现方式</h4><h3 id="基于RocketMQ的延迟队列"><a href="#基于RocketMQ的延迟队列" class="headerlink" title="基于RocketMQ的延迟队列"></a>基于RocketMQ的延迟队列</h3><h2 id="限制和扩展"><a href="#限制和扩展" class="headerlink" title="限制和扩展"></a>限制和扩展</h2><h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/343811173">Redisson 延时队列原理详解</a><br><a target="_blank" rel="noopener" href="https://blog.csdn.net/u010059975/article/details/104537570">kafka延迟消息原因</a></p>
+<h4 id="基于插件的实现方式"><a class="header-anchor" href="#基于插件的实现方式"></a>基于插件的实现方式</h4>
+<h3 id="基于RocketMQ的延迟队列"><a class="header-anchor" href="#基于RocketMQ的延迟队列"></a>基于RocketMQ的延迟队列</h3>
+<h2 id="限制和扩展"><a class="header-anchor" href="#限制和扩展"></a>限制和扩展</h2>
+<h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/343811173">Redisson 延时队列原理详解</a><br>
+<a target="_blank" rel="noopener" href="https://blog.csdn.net/u010059975/article/details/104537570">kafka延迟消息原因</a></p>
 
                 
             </div>

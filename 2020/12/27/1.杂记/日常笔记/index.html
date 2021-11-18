@@ -433,19 +433,19 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="日常笔记"><a href="#日常笔记" class="headerlink" title="日常笔记"></a>日常笔记</h1><blockquote>
+                <h1>日常笔记</h1>
+<blockquote>
 <p>用于记录常用的命令，灵感，待办之类的</p>
 </blockquote>
-<h2 id="docker-command"><a href="#docker-command" class="headerlink" title="docker command"></a>docker command</h2><ol>
+<h2 id="docker-command"><a class="header-anchor" href="#docker-command"></a>docker command</h2>
+<ol>
 <li>mysql 启动命令</li>
 </ol>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker run -p <span class="token number">3306</span>:3306 --name mysql_1 -e <span class="token assign-left variable">MYSQL_ROOT_PASSWORD</span><span class="token operator">=</span><span class="token number">123456</span> -d mysql:5.7.2<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
 <ol start="2">
 <li>mongo 启动命令</li>
 </ol>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker run -itd --name mongo -p <span class="token number">27017</span>:27017 mongo --auth<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
 <ol start="3">
 <li>设置账户</li>
 </ol>
@@ -455,13 +455,11 @@
  //更新用户权限
 db.grantRolesToUser<span class="token punctuation">(</span><span class="token string">"axonUser"</span>,<span class="token punctuation">[</span><span class="token punctuation">&#123;</span>role:<span class="token string">"readWrite"</span>, db:<span class="token string">"axon"</span><span class="token punctuation">&#125;</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p>4.RabbitMQ 启动命令</p>
 <ul>
 <li>windows cmd</li>
 </ul>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker run -d --name rabbitmq -p <span class="token number">5672</span>:5672 -p <span class="token number">15672</span>:15672 -v E:<span class="token punctuation">\</span>dockerfile<span class="token punctuation">\</span>RabbitMQ:/var/lib/rabbitmq --hostname myRabbit -e <span class="token assign-left variable">RABBITMQ_DEFAULT_VHOST</span><span class="token operator">=</span>my_vhost  -e <span class="token assign-left variable">RABBITMQ_DEFAULT_USER</span><span class="token operator">=</span>admin -e <span class="token assign-left variable">RABBITMQ_DEFAULT_PASS</span><span class="token operator">=</span>admin rabbitmq:latest<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
 <ol start="5">
 <li>启动RabbitMQ admin命令</li>
 </ol>

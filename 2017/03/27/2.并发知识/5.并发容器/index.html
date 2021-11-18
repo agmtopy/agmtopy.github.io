@@ -433,17 +433,23 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="并发容器"><a href="#并发容器" class="headerlink" title="并发容器"></a>并发容器</h1><p>有关并发的容器：HashMap、ConcurrentHashMap、CopyOnWriteArrayList</p>
-<h2 id="HashMap"><a href="#HashMap" class="headerlink" title="HashMap"></a>HashMap</h2><p><strong>HashMap</strong>在并发场景时候存在几个问题：</p>
+                <h1>并发容器</h1>
+<p>有关并发的容器：HashMap、ConcurrentHashMap、CopyOnWriteArrayList</p>
+<h2 id="HashMap"><a class="header-anchor" href="#HashMap"></a>HashMap</h2>
+<p><strong>HashMap</strong>在并发场景时候存在几个问题：</p>
 <ol>
 <li>get()方法在容器扩容时，获取到的值可能会不正确。因为在扩容时候，hashMap没有保证容器安全性，可能会出现get()方法获取到镜像链表上，而镜像链表此时并没有值的情况</li>
 <li>put()方法可能会造成值消失（这也是map k-v的特性）</li>
 <li>可见性问题</li>
 <li>死循环cpu占用100%。多个线程同时扩容时，会反转散列表的节点，会有死锁场景相互等待。</li>
 </ol>
-<h2 id="ConcurrentHashMap"><a href="#ConcurrentHashMap" class="headerlink" title="ConcurrentHashMap"></a>ConcurrentHashMap</h2><p><strong>ConcurrentHashMap</strong>底层是采用CAS+synchronized的方式，来保证并发安全性。synchronized保证写操作时资源竞争激烈情况下的安全用CAS机制来保证写操作下轻量级的竞争的安全性。</p>
+<h2 id="ConcurrentHashMap"><a class="header-anchor" href="#ConcurrentHashMap"></a>ConcurrentHashMap</h2>
+<p><strong>ConcurrentHashMap</strong>底层是采用CAS+synchronized的方式，来保证并发安全性。synchronized保证写操作时资源竞争激烈情况下的安全用CAS机制来保证写操作下轻量级的竞争的安全性。</p>
 <p>map中链表红黑树的设计：红黑树在map中属于一种保底，防御性的编程方式。当hash()方法设计良好的时候，散列表中的元素是符合泊松分布，此时很难出现红黑树的情况，可能性为千万分之一，当出现这样的情况时。首先看容量，在考虑hash()方法是否设计良好。8个的限制是基于空间和时间权衡下得出的。</p>
-<h2 id="CopyOnWriteArrayList"><a href="#CopyOnWriteArrayList" class="headerlink" title="CopyOnWriteArrayList"></a>CopyOnWriteArrayList</h2><p><strong>CopyOnWriteArrayList</strong>是线程安全的列表，适合于读多写少的场景，列入内存字典等。<br>CopyOnWriteArrayList底层是采用__ReentrantLock__和volatile修饰数组来保证并发的安全性的。<br>特点：可在迭代器中进行修改列表，当时不会在此次迭代中体系。原因是内部采用双重数组的方式进行扩容，因此迭代器只能读取迭代开始时的元素集合。</p>
+<h2 id="CopyOnWriteArrayList"><a class="header-anchor" href="#CopyOnWriteArrayList"></a>CopyOnWriteArrayList</h2>
+<p><strong>CopyOnWriteArrayList</strong>是线程安全的列表，适合于读多写少的场景，列入内存字典等。<br>
+CopyOnWriteArrayList底层是采用__ReentrantLock__和volatile修饰数组来保证并发的安全性的。<br>
+特点：可在迭代器中进行修改列表，当时不会在此次迭代中体系。原因是内部采用双重数组的方式进行扩容，因此迭代器只能读取迭代开始时的元素集合。</p>
 
                 
             </div>

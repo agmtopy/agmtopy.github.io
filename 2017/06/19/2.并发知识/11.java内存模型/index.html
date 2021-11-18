@@ -433,8 +433,10 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="java内存模型"><a href="#java内存模型" class="headerlink" title="java内存模型"></a>java内存模型</h1><ul>
-<li>jvm内存模型<br>jvm虚拟机中间内存划分为：</li>
+                <h1>java内存模型</h1>
+<ul>
+<li>jvm内存模型<br>
+jvm虚拟机中间内存划分为：</li>
 </ul>
 <ol>
 <li>堆区</li>
@@ -445,23 +447,26 @@
 <li>运行时常量</li>
 </ol>
 <ul>
-<li>java内存模型</li>
+<li>java内存模型<br>
+<strong>java内存模型</strong>是java的规范，定义了语义到实现的规范。主要有<strong>重排序</strong>、<strong>原子性</strong>、<strong>内存可见性</strong></li>
 </ul>
-<p><strong>java内存模型</strong>是java的规范，定义了语义到实现的规范。主要有<strong>重排序</strong>、<strong>原子性</strong>、<strong>内存可见性</strong></p>
-<h2 id="重排序"><a href="#重排序" class="headerlink" title="重排序"></a>重排序</h2><p>指令重排序是通过减少执行指令，来提高整体运行速度。主要有三个地方：</p>
+<h2 id="重排序"><a class="header-anchor" href="#重排序"></a>重排序</h2>
+<p>指令重排序是通过减少执行指令，来提高整体运行速度。主要有三个地方：</p>
 <ol>
 <li>编译器优化</li>
 <li>cpu重排序</li>
 <li>内存重排序</li>
 </ol>
-<h2 id="原子操作"><a href="#原子操作" class="headerlink" title="原子操作"></a>原子操作</h2><p>java中原子操作有哪些？</p>
+<h2 id="原子操作"><a class="header-anchor" href="#原子操作"></a>原子操作</h2>
+<p>java中原子操作有哪些？</p>
 <ol>
 <li>除long和double之外的基本类型</li>
 <li>所有reference的读写</li>
 <li>用volatile修饰后的变量读写</li>
 <li>j.u.c包下的原子类</li>
 </ol>
-<h2 id="内存的可见性"><a href="#内存的可见性" class="headerlink" title="内存的可见性"></a>内存的可见性</h2><p>内存的可见性指的是，当前线程修改内存中的值以后不能被其他线程看到</p>
+<h2 id="内存的可见性"><a class="header-anchor" href="#内存的可见性"></a>内存的可见性</h2>
+<p>内存的可见性指的是，当前线程修改内存中的值以后不能被其他线程看到</p>
 
                 
             </div>

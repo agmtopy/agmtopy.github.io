@@ -433,11 +433,16 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="dubbo常见问题归纳"><a href="#dubbo常见问题归纳" class="headerlink" title="dubbo常见问题归纳"></a>dubbo常见问题归纳</h1><ol>
-<li>dubbo的可选的配置方式？<br>官网上给出了四种方式分别是<strong>xml配置</strong>、<strong>属性配置</strong>、<strong>注解配置</strong>、<strong>API配置</strong></li>
+                <h1>dubbo常见问题归纳</h1>
+<ol>
+<li>dubbo的可选的配置方式？<br>
+官网上给出了四种方式分别是<strong>xml配置</strong>、<strong>属性配置</strong>、<strong>注解配置</strong>、<strong>API配置</strong></li>
 </ol>
 <blockquote>
-<p>xml配置:通过使用xml配置文件的方式<br>通过加载classPath路径下的dubbo.properties文件<br>使用注解的配置方式<br>api的方式（通过@PropertySource加载指定配置文件）</p>
+<p>xml配置:通过使用xml配置文件的方式<br>
+通过加载classPath路径下的dubbo.properties文件<br>
+使用注解的配置方式<br>
+api的方式（通过@PropertySource加载指定配置文件）</p>
 </blockquote>
 <ol start="2">
 <li>配置文件的覆盖关系</li>
@@ -447,28 +452,37 @@
 <li>消大于提</li>
 </ul>
 <blockquote>
-<p>细粒度的配置优先级大于粗粒度的优先级，例如方法级优先级大于接口级，接口级大于全局配置<br>消费者端的配置优先级大于生产者</p>
+<p>细粒度的配置优先级大于粗粒度的优先级，例如方法级优先级大于接口级，接口级大于全局配置<br>
+消费者端的配置优先级大于生产者</p>
 </blockquote>
 <ol start="3">
-<li>dubbo的分层设计<br>大体上分为三个大层：</li>
+<li>dubbo的分层设计<br>
+大体上分为三个大层：</li>
 <li>Bussiness</li>
 <li>RPC</li>
 <li>Remoting</li>
 </ol>
 <p>3.1 Bussiness</p>
 <ul>
-<li>service 业务层<blockquote>
+<li>service 业务层</li>
+</ul>
+<blockquote>
 <p>service接口层，提供给服务提供者和消费者进行实现</p>
 </blockquote>
-</li>
-</ul>
 <p>3.2 RPC</p>
 <blockquote>
-<p>config配置层,加载dubbo的配置信息<br>proxy代理层，对bussiness层生成代理对象<br>registry注册层，负责服务的注册和发现<br>cluster路由层，对同一个服务多个实例进行路由<br>monitor监控层，可以对rpc接口的调用次数和时间进行监控<br>protocol远程调用层，用于封装RPC调用</p>
+<p>config配置层,加载dubbo的配置信息<br>
+proxy代理层，对bussiness层生成代理对象<br>
+registry注册层，负责服务的注册和发现<br>
+cluster路由层，对同一个服务多个实例进行路由<br>
+monitor监控层，可以对rpc接口的调用次数和时间进行监控<br>
+protocol远程调用层，用于封装RPC调用</p>
 </blockquote>
 <p>3.3 Remoting</p>
 <blockquote>
-<p>exchange信息交换层，封装请求的响应模式，异步转同步<br>transport网络传输层,抽象出网络通信方案<br>seriallze序列化层</p>
+<p>exchange信息交换层，封装请求的响应模式，异步转同步<br>
+transport网络传输层,抽象出网络通信方案<br>
+seriallze序列化层</p>
 </blockquote>
 <ol start="4">
 <li>dubbo的调用流程</li>

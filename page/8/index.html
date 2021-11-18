@@ -336,11 +336,12 @@
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                rocketmq的存储原理rocketmq的存储设计主要是分为三个文件：
+                                rocketmq的存储原理
+rocketmq的存储设计主要是分为三个文件：
 
 comitLog文件，该文件是用来顺序存放所有的消息
 consumeQueue文件，该文件是用来保存每一个消费队列的消费信息的
-IndexFile文件，该文件是用来
+IndexFile文件，该文件是用
                             
                         </div>
                         <div class="publish-info">
@@ -387,10 +388,11 @@ IndexFile文件，该文件是用来
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                rocketmq顺序消息的分析顺序消息是指的是一组需要有序的消息集合，在同一参照系下才有意义。rocketmq的顺序消息主要是分为两个方面：
+                                rocketmq顺序消息的分析
+顺序消息是指的是一组需要有序的消息集合，在同一参照系下才有意义。rocketmq的顺序消息主要是分为两个方面：
 
 product保证将一组有序的消息发送到同一个messageQueue下
-consumer消费时
+consumer消费
                             
                         </div>
                         <div class="publish-info">
@@ -437,7 +439,8 @@ consumer消费时
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                rocketmq的通信协议分析rocketmq底层的通信是放在org.apache.rocketmq.remoting包下的，主要有RPCHook、RemotingServer、RemotingClient、RemotingUtil、Rem
+                                rocketmq的通信协议分析
+rocketmq底层的通信是放在org.apache.rocketmq.remoting包下的，主要有RPCHook、RemotingServer、RemotingClient、RemotingUtil、Re
                             
                         </div>
                         <div class="publish-info">
@@ -484,15 +487,19 @@ consumer消费时
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                Linux环境排查问题的工具和思路将工作中使用到的在Linux下进行排查问题的工具和思路进行一个总结，主要从CPU、内存、I/O、网络、JVM这五个方面来进行。
-CPU部分CPU的性能指标
+                                Linux环境排查问题的工具和思路
+将工作中使用到的在Linux下进行排查问题的工具和思路进行一个总结，主要从CPU、内存、I/O、网络、JVM这五个方面来进行。
+CPU部分
+CPU的性能指标
+
 图示
+
 
 CPU的性能分析工具
 
 
-性能指标
-性能工
+
+性能指
                             
                         </div>
                         <div class="publish-info">
@@ -543,7 +550,8 @@ CPU的性能分析工具
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                RocketMQ主从同步机制分析Broker分为Slave、Master两种角色，因此Slave会从master中同步信息、topicConfig、ConsumerOffer、DelayOffset、SubscriptionGroupCon
+                                RocketMQ主从同步机制分析
+Broker分为Slave、Master两种角色，因此Slave会从master中同步信息、topicConfig、ConsumerOffer、DelayOffset、SubscriptionGroupCo
                             
                         </div>
                         <div class="publish-info">
@@ -590,10 +598,13 @@ CPU的性能分析工具
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                rocketmq常见问题RocketMQ由哪些角色组成？由NameSrv、Broker、Consumer、Producer组成
+                                rocketmq常见问题
+RocketMQ由哪些角色组成？
+由NameSrv、Broker、Consumer、Producer组成
 RocketMQ的整体流程？
+
 NameSrv首先启动
-Broker启动后向NameSrv进行注册，并对外提供服务
+Broker启动后向NameSrv进行注册，并对外提
                             
                         </div>
                         <div class="publish-info">
@@ -640,7 +651,8 @@ Broker启动后向NameSrv进行注册，并对外提供服务
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                MQClientInstance类分析MQClientInstance是位于org.apache.rocketmq.client.impl.factory下的一个为producer和consumer提供统一和Broker进行交互的底层工具类
+                                MQClientInstance类分析
+MQClientInstance是位于org.apache.rocketmq.client.impl.factory下的一个为producer和consumer提供统一和Broker进行交互的底层工具
                             
                         </div>
                         <div class="publish-info">
@@ -732,8 +744,10 @@ Broker启动后向NameSrv进行注册，并对外提供服务
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                DefaultMQPushConsumer源代码分析基本使用 DefaultMQPushConsumer是默认进行消费的工具类，类图如下：
- 
+                                DefaultMQPushConsumer源代码分析
+基本使用
+DefaultMQPushConsumer是默认进行消费的工具类，类图如下：
+
  public DefaultMQPushConsumer(final String names
                             
                         </div>
@@ -781,8 +795,10 @@ Broker启动后向NameSrv进行注册，并对外提供服务
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                RocketMq源代码之NameServer解析周末继续阅读RocketMq的学习,在上周已经简单的把RocketMq的安装和使用学习了一下。本周主要来看一下NameServer的源代码和设计
-NameServer启动NamesrvCont
+                                RocketMq源代码之NameServer解析
+周末继续阅读RocketMq的学习,在上周已经简单的把RocketMq的安装和使用学习了一下。本周主要来看一下NameServer的源代码和设计
+NameServer启动
+NamesrvCo
                             
                         </div>
                         <div class="publish-info">
@@ -829,10 +845,12 @@ NameServer启动NamesrvCont
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                RocketMQ特点和组件consumer如何找到信息？
+                                RocketMQ特点和组件
+consumer如何找到信息？
+
 consumer通过向NameServer询问具体的Topic所在的Broker信息
 consumer通过向Broker保持长连接的形式，获取到信息
-同一组下的consumer会向b
+同一组下的consumer会
                             
                         </div>
                         <div class="publish-info">
@@ -879,8 +897,10 @@ consumer通过向Broker保持长连接的形式，获取到信息
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                RocketMQ中的通信模式在RocketMQ中为producer提供了三种通讯模式分别是同步、异步、单向
-同步模式 public static void main(String[] args) throws MQClientExcepti
+                                RocketMQ中的通信模式
+在RocketMQ中为producer提供了三种通讯模式分别是同步、异步、单向
+同步模式
+ public static void main(String[] args) throws MQClientExcep
                             
                         </div>
                         <div class="publish-info">

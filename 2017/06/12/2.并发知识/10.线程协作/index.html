@@ -433,15 +433,19 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="线程协作"><a href="#线程协作" class="headerlink" title="线程协作"></a>线程协作</h1><p>线程之间相互协作</p>
-<h2 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h2><p>线程（semaphore）之间信号量的作用是于标记当前资源能否被线程访问的信号。线程访问资源时尝试用<strong>acquire</strong>，访问完成使用<strong>release</strong>归还资源</p>
-<h2 id="countDownLatch"><a href="#countDownLatch" class="headerlink" title="countDownLatch"></a>countDownLatch</h2><p><strong>countDownLatch</strong>的作用是多线程之间的倒计时器，用于多线程之间的协作。有两种用法：</p>
+                <h1>线程协作</h1>
+<p>线程之间相互协作</p>
+<h2 id="信号量"><a class="header-anchor" href="#信号量"></a>信号量</h2>
+<p>线程（semaphore）之间信号量的作用是于标记当前资源能否被线程访问的信号。线程访问资源时尝试用<strong>acquire</strong>，访问完成使用<strong>release</strong>归还资源</p>
+<h2 id="countDownLatch"><a class="header-anchor" href="#countDownLatch"></a>countDownLatch</h2>
+<p><strong>countDownLatch</strong>的作用是多线程之间的倒计时器，用于多线程之间的协作。有两种用法：</p>
 <ol>
 <li>主线程等待其他线程运行完毕后执行</li>
 <li>其他线程等待主线程运行完毕后执行</li>
 </ol>
 <ul>
-<li><p>演示代码</p>
+<li>演示代码</li>
+</ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java">    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">&#123;</span>
           <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">ThreadPoolExecutor</span> threadPool <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ThreadPoolExecutor</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>SECONDS<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">LinkedBlockingDeque</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">ThreadFactoryBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setNameFormat</span><span class="token punctuation">(</span><span class="token string">"线程_%s"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
@@ -492,22 +496,25 @@
         <span class="token punctuation">&#125;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>
+<p>执行结果<br>
+<img src="https://s1.ax1x.com/2020/03/29/GZ57WR.png" alt="GZ57WR.png"></p>
 </li>
-<li><p>执行结果<br><img src="https://s1.ax1x.com/2020/03/29/GZ57WR.png" alt="GZ57WR.png"></p>
-</li>
-<li><p>有启始动作的方法</p>
+<li>
+<p>有启始动作的方法</p>
 </li>
 </ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">CyclicBarrier</span> cyclicBarrier <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">CyclicBarrier</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-></span><span class="token punctuation">&#123;</span>
     <span class="token class-name">String</span> msg1 <span class="token operator">=</span> <span class="token class-name">String</span><span class="token punctuation">.</span><span class="token function">format</span><span class="token punctuation">(</span><span class="token string">"[%s]-发现奶酪(🧀)"</span><span class="token punctuation">,</span> <span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>msg1<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ul>
 <li>执行结果</li>
 </ul>
 <p><img src="https://s1.ax1x.com/2020/03/29/GZIufs.png" alt="GZIufs.png"></p>
-<h2 id="Condittion"><a href="#Condittion" class="headerlink" title="Condittion"></a>Condittion</h2><p><strong>Condittion</strong>能让不同线程之间相互协作，等待满足条件后继续执行。</p>
+<h2 id="Condittion"><a class="header-anchor" href="#Condittion"></a>Condittion</h2>
+<p><strong>Condittion</strong>能让不同线程之间相互协作，等待满足条件后继续执行。</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ConditionDemo</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">private</span> <span class="token class-name">ReentrantLock</span> lock <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ReentrantLock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">private</span> <span class="token class-name">Condition</span> condition <span class="token operator">=</span> lock<span class="token punctuation">.</span><span class="token function">newCondition</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -548,14 +555,18 @@
         <span class="token punctuation">&#125;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p><strong>Condition</strong>是lock锁提供的一种可供线程之间进行交互的一种方法。由于<strong>signal</strong>底层会使用到当前线程和lock锁的持有线程进行对比，相等才会进行唤醒其他线程。</p>
-<h1 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h1><ul>
-<li><p><strong>semaphore</strong><br>信号量的作用是只有获得信号量的线程才能<strong>执行</strong>，其余线程只能等待持有信号量的线程释放后才有机会执行。</p>
+<h1>总结</h1>
+<ul>
+<li>
+<p><strong>semaphore</strong><br>
+信号量的作用是只有获得信号量的线程才能<strong>执行</strong>，其余线程只能等待持有信号量的线程释放后才有机会执行。</p>
 </li>
-<li><p><strong>countDownLatch</strong>是等待一组线程执行完毕后等待线程才可以执行，是事件触发</p>
+<li>
+<p><strong>countDownLatch</strong>是等待一组线程执行完毕后等待线程才可以执行，是事件触发</p>
 </li>
-<li><p><strong>CyclicBarriar</strong>是一组线程到达**wait()**状态以后才可以开始执行，触发动作是设定的一组线程都到达某个临界状态，并且可被复用，</p>
+<li>
+<p><strong>CyclicBarriar</strong>是一组线程到达**wait()**状态以后才可以开始执行，触发动作是设定的一组线程都到达某个临界状态，并且可被复用，</p>
 </li>
 </ul>
 

@@ -433,27 +433,41 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="rocketmq的存储原理"><a href="#rocketmq的存储原理" class="headerlink" title="rocketmq的存储原理"></a>rocketmq的存储原理</h1><p>rocketmq的存储设计主要是分为三个文件：</p>
+                <h1>rocketmq的存储原理</h1>
+<p>rocketmq的存储设计主要是分为三个文件：</p>
 <ol>
 <li><strong>comitLog文件</strong>，该文件是用来顺序存放所有的消息</li>
 <li><strong>consumeQueue文件</strong>，该文件是用来保存每一个消费队列的消费信息的</li>
 <li><strong>IndexFile</strong>文件，该文件是用来加速消息的检索性能，根据消息的属性快速从<strong>comitLog</strong>获取信息的</li>
 </ol>
-<h2 id="消息如何实现存储的？"><a href="#消息如何实现存储的？" class="headerlink" title="消息如何实现存储的？"></a>消息如何实现存储的？</h2><p><strong>commitLog</strong>是消息存储的文件，是一个容量为1G的文件。该文件以文件中的第一个文件在<strong>broker</strong>中的偏移量作为文件名称。<br>在mq内部用<strong>MappedFileQueue</strong>来表示<strong>store/commitLog</strong>这个文件夹;用<strong>MappedFile</strong>来表示单个<strong>commitLong</strong>文件。</p>
+<h2 id="消息如何实现存储的？"><a class="header-anchor" href="#消息如何实现存储的？"></a>消息如何实现存储的？</h2>
+<p><strong>commitLog</strong>是消息存储的文件，是一个容量为1G的文件。该文件以文件中的第一个文件在<strong>broker</strong>中的偏移量作为文件名称。<br>
+在mq内部用<strong>MappedFileQueue</strong>来表示<strong>store/commitLog</strong>这个文件夹;用<strong>MappedFile</strong>来表示单个<strong>commitLong</strong>文件。</p>
 <ul>
-<li><p>commitLog内部数据-有数据时<br><img src="https://s1.ax1x.com/2020/04/02/GtBXlQ.png" alt="GtBXlQ.png"></p>
+<li>
+<p>commitLog内部数据-有数据时<br>
+<img src="https://s1.ax1x.com/2020/04/02/GtBXlQ.png" alt="GtBXlQ.png"></p>
 </li>
-<li><p>commitLog内部数据-无数据时为空字符<br><img src="https://s1.ax1x.com/2020/04/02/GtBcFK.png" alt="GtBcFK.png"></p>
+<li>
+<p>commitLog内部数据-无数据时为空字符<br>
+<img src="https://s1.ax1x.com/2020/04/02/GtBcFK.png" alt="GtBcFK.png"></p>
 </li>
 </ul>
-<h2 id="写入commitLog文件"><a href="#写入commitLog文件" class="headerlink" title="写入commitLog文件"></a>写入<strong>commitLog</strong>文件</h2><p>写入<strong>commitLog</strong>文件的过程分为以下几个步骤：</p>
+<h2 id="写入commitLog文件"><a class="header-anchor" href="#写入commitLog文件"></a>写入<strong>commitLog</strong>文件</h2>
+<p>写入<strong>commitLog</strong>文件的过程分为以下几个步骤：</p>
 <ol>
-<li>对消息进行处理(消息预处理、延时消息处理)<br>包括消息的预处理(set一些属性值)、处理延时消息(隐藏真实topic放入延时队列的topic中)</li>
-<li>获取到当前正在激活的文件<br>这一步指的是，获取到当前正在使用的文件并转化成为<strong>MappedFile</strong>文件</li>
-<li>获取到文件锁<br>获取到文件锁，保证文件在写入时是独占的<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">protected</span> <span class="token keyword">final</span> <span class="token class-name">PutMessageLock</span> putMessageLock<span class="token punctuation">;</span>
+<li>对消息进行处理(消息预处理、延时消息处理)<br>
+包括消息的预处理(set一些属性值)、处理延时消息(隐藏真实topic放入延时队列的topic中)</li>
+<li>获取到当前正在激活的文件<br>
+这一步指的是，获取到当前正在使用的文件并转化成为<strong>MappedFile</strong>文件</li>
+<li>获取到文件锁<br>
+获取到文件锁，保证文件在写入时是独占的</li>
+</ol>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">protected</span> <span class="token keyword">final</span> <span class="token class-name">PutMessageLock</span> putMessageLock<span class="token punctuation">;</span>
 
 
-putMessageLock<span class="token punctuation">.</span><span class="token function">lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></li>
+putMessageLock<span class="token punctuation">.</span><span class="token function">lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="4">
 <li>将消息追加到文件<strong>MappedFile</strong>中</li>
 <li>执行刷盘操作</li>
 <li>执行同步操作</li>
@@ -462,7 +476,8 @@ putMessageLock<span class="token punctuation">.</span><span class="token functio
 <li>时序图</li>
 </ul>
 <p><img src="https://s1.ax1x.com/2020/04/03/GtRo0e.jpg" alt="GtRo0e.jpg"></p>
-<h3 id="appendMessage-追加文件的方法"><a href="#appendMessage-追加文件的方法" class="headerlink" title="appendMessage() - 追加文件的方法"></a>appendMessage() - 追加文件的方法</h3><p>mq追击<strong>commitLog</strong>是用**MappedFile.appendMessagesInner()**方法来实现的，主要有以下几个部分组成</p>
+<h3 id="appendMessage-追加文件的方法"><a class="header-anchor" href="#appendMessage-追加文件的方法"></a>appendMessage() - 追加文件的方法</h3>
+<p>mq追击<strong>commitLog</strong>是用**MappedFile.appendMessagesInner()**方法来实现的，主要有以下几个部分组成</p>
 <ol>
 <li>获取到当前写入的偏移量</li>
 <li>创建内存共享区(<strong>slice()</strong>)</li>
@@ -472,7 +487,8 @@ putMessageLock<span class="token punctuation">.</span><span class="token functio
 <li>获取当前消息的偏移量</li>
 <li>将数据写入<strong>ByteBuffer</strong>中，完成写入操作</li>
 </ol>
-<h3 id="刷盘操作-handleDiskFlush"><a href="#刷盘操作-handleDiskFlush" class="headerlink" title="刷盘操作() - handleDiskFlush"></a>刷盘操作() - <strong>handleDiskFlush</strong></h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">handleDiskFlush</span><span class="token punctuation">(</span><span class="token class-name">AppendMessageResult</span> result<span class="token punctuation">,</span> <span class="token class-name">PutMessageResult</span> putMessageResult<span class="token punctuation">,</span> <span class="token class-name">MessageExt</span> messageExt<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+<h3 id="刷盘操作-handleDiskFlush"><a class="header-anchor" href="#刷盘操作-handleDiskFlush"></a>刷盘操作() - <strong>handleDiskFlush</strong></h3>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">handleDiskFlush</span><span class="token punctuation">(</span><span class="token class-name">AppendMessageResult</span> result<span class="token punctuation">,</span> <span class="token class-name">PutMessageResult</span> putMessageResult<span class="token punctuation">,</span> <span class="token class-name">MessageExt</span> messageExt<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
         <span class="token comment">// 同步刷新</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token class-name">FlushDiskType</span><span class="token punctuation">.</span>SYNC_FLUSH <span class="token operator">==</span> <span class="token keyword">this</span><span class="token punctuation">.</span>defaultMessageStore<span class="token punctuation">.</span><span class="token function">getMessageStoreConfig</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getFlushDiskType</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
             <span class="token keyword">final</span> <span class="token class-name">GroupCommitService</span> service <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">GroupCommitService</span><span class="token punctuation">)</span> <span class="token keyword">this</span><span class="token punctuation">.</span>flushCommitLogService<span class="token punctuation">;</span>
@@ -495,13 +511,14 @@ putMessageLock<span class="token punctuation">.</span><span class="token functio
             <span class="token punctuation">&#125;</span>
         <span class="token punctuation">&#125;</span>
     <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ul>
-<li>时序图<br><img src="https://s1.ax1x.com/2020/04/04/G061xI.png" alt="G061xI.png"></li>
+<li>时序图<br>
+<img src="https://s1.ax1x.com/2020/04/04/G061xI.png" alt="G061xI.png"></li>
 </ul>
 <p>从图中可以看出</p>
 <ol>
-<li>同步刷盘的策略<br>在<strong>1.1 putRequest</strong>方法中调用刷盘方法，然后等待<strong>1.2 future</strong>方法返回结果</li>
+<li>同步刷盘的策略<br>
+在<strong>1.1 putRequest</strong>方法中调用刷盘方法，然后等待<strong>1.2 future</strong>方法返回结果</li>
 </ol>
 <ul>
 <li>putRequest</li>
@@ -514,7 +531,6 @@ putMessageLock<span class="token punctuation">.</span><span class="token functio
         waitPoint<span class="token punctuation">.</span><span class="token function">countDown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// notify</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p><strong>putRequest</strong>将<strong>GroupCommitRequest</strong>add进*<strong>GroupCommitService.list</strong>的集合中</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">doCommit</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
     <span class="token comment">//采用读list和写list分离的策略</span>
@@ -581,10 +597,10 @@ putMessageLock<span class="token punctuation">.</span><span class="token functio
     <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getFlushedPosition</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
 <p>可以看到同步刷盘的步骤是</p>
-<p>i. <strong>GroupCommitService.doCommit()</strong><br>ii. <strong>mappedFile.flush()</strong><br>iii. <strong>mappedByteBuffer.force()</strong></p>
+<p>i. <strong>GroupCommitService.doCommit()</strong><br>
+ii. <strong>mappedFile.flush()</strong><br>
+iii. <strong>mappedByteBuffer.force()</strong></p>
 <blockquote>
 <p>同步刷盘的简单描述就是，消息生产者在消息服务端将消息内容追加到内存映射文件中（内存）后，需要同步将内存的内容立刻刷写到磁盘。通过调用内存映射文件（MappedByteBuffer的force方法）可将内存中的数据写入磁盘。</p>
 </blockquote>
@@ -592,16 +608,24 @@ putMessageLock<span class="token punctuation">.</span><span class="token functio
 <li>异步有缓冲区刷盘的策略是执行<strong>1.4 flushCommitLogService.wakeup</strong>没有临时缓冲区</li>
 <li>异步无缓冲区刷盘的策略是执行<strong>1.5 commitLogService.wakeup</strong>有临时缓冲区</li>
 </ol>
-<p>分析一下异步刷盘的方法有两种：<br>一种是启用<strong>transientStorePoolEnable</strong>这种会先将数据写到堆外内存上，在由堆外内存写到<strong>PageCache</strong>，然后在有<strong>PageCache</strong>刷盘到磁盘上。</p>
+<p>分析一下异步刷盘的方法有两种：<br>
+一种是启用<strong>transientStorePoolEnable</strong>这种会先将数据写到堆外内存上，在由堆外内存写到<strong>PageCache</strong>，然后在有<strong>PageCache</strong>刷盘到磁盘上。</p>
 <p>一种是消息直接追加到与物理文件直接映射的内存中，然后刷写到磁盘中</p>
-<h3 id="刷盘的总结"><a href="#刷盘的总结" class="headerlink" title="刷盘的总结"></a>刷盘的总结</h3><ol>
-<li><p>同步刷盘依次是<strong>GroupCommitService.doCommit</strong> -&gt; <strong>mappedFile.flush()</strong> -&gt;<strong>mappedByteBuffer.force()</strong></p>
+<h3 id="刷盘的总结"><a class="header-anchor" href="#刷盘的总结"></a>刷盘的总结</h3>
+<ol>
+<li>
+<p>同步刷盘依次是<strong>GroupCommitService.doCommit</strong> -&gt; <strong>mappedFile.flush()</strong> -&gt;<strong>mappedByteBuffer.force()</strong></p>
 </li>
-<li><p>异步刷盘又分为<br> 2.1 有缓冲区：消息先进入文件缓冲区，在文件缓冲区等待2s后在进入内存映射区 -&gt;最后内存映射刷入磁盘<br> 2.2 无缓冲区：消息直接进入内存映射区 -&gt; 最后刷入磁盘文件中</p>
+<li>
+<p>异步刷盘又分为<br>
+2.1 有缓冲区：消息先进入文件缓冲区，在文件缓冲区等待2s后在进入内存映射区 -&gt;最后内存映射刷入磁盘<br>
+2.2 无缓冲区：消息直接进入内存映射区 -&gt; 最后刷入磁盘文件中</p>
 </li>
 </ol>
-<h2 id="rocketmq的内存映射"><a href="#rocketmq的内存映射" class="headerlink" title="rocketmq的内存映射"></a>rocketmq的内存映射</h2><p><strong>MappedFile</strong>文件是rockedmq内存映射文件的具体表现，先看一下如何查找</p>
-<h3 id="查找MappedFile的方法"><a href="#查找MappedFile的方法" class="headerlink" title="查找MappedFile的方法"></a>查找<strong>MappedFile</strong>的方法</h3><ul>
+<h2 id="rocketmq的内存映射"><a class="header-anchor" href="#rocketmq的内存映射"></a>rocketmq的内存映射</h2>
+<p><strong>MappedFile</strong>文件是rockedmq内存映射文件的具体表现，先看一下如何查找</p>
+<h3 id="查找MappedFile的方法"><a class="header-anchor" href="#查找MappedFile的方法"></a>查找<strong>MappedFile</strong>的方法</h3>
+<ul>
 <li>通过时间戳来进行查找</li>
 </ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">MappedFile</span> <span class="token function">getMappedFileByTime</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token keyword">long</span> timestamp<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
@@ -621,7 +645,6 @@ putMessageLock<span class="token punctuation">.</span><span class="token functio
 
         <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token class-name">MappedFile</span><span class="token punctuation">)</span> mfs<span class="token punctuation">[</span>mfs<span class="token punctuation">.</span>length <span class="token operator">-</span> <span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ul>
 <li>根据偏移量来查询</li>
 </ul>
@@ -646,8 +669,8 @@ putMessageLock<span class="token punctuation">.</span><span class="token functio
         <span class="token punctuation">&#125;</span>
     <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="MappFile文件的作用"><a href="#MappFile文件的作用" class="headerlink" title="MappFile文件的作用"></a>MappFile文件的作用</h3><p>提交数据的方法主要有<strong>commit</strong>、<strong>commit0</strong>，commit()主要是调用<strong>commit0（）</strong></p>
+<h3 id="MappFile文件的作用"><a class="header-anchor" href="#MappFile文件的作用"></a>MappFile文件的作用</h3>
+<p>提交数据的方法主要有<strong>commit</strong>、<strong>commit0</strong>，commit()主要是调用<strong>commit0（）</strong></p>
 <ul>
 <li><strong>commit0</strong></li>
 </ul>
@@ -669,7 +692,6 @@ putMessageLock<span class="token punctuation">.</span><span class="token functio
         <span class="token punctuation">&#125;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p><strong>commit0</strong></p>
 <ol>
 <li>首先创建writeBuffer的共享缓存区，然后将新创建的position回退到上一次提交的位置（committedPosition），设置limit为wrotePosition（当前最大有效数据指针）</li>

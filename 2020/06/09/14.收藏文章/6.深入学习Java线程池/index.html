@@ -433,15 +433,19 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="深入学习Java线程池"><a href="#深入学习Java线程池" class="headerlink" title="深入学习Java线程池"></a>深入学习Java线程池</h1><p>转载自:</p>
+                <h1>深入学习Java线程池</h1>
+<p>转载自:</p>
 <pre class="line-numbers language-none"><code class="language-none">原文链接： stackify 翻译： ImportNew.com - 一杯哈希不加盐
 译文链接： http:&#x2F;&#x2F;www.importnew.com&#x2F;29212.html<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<h2 id="导语"><a href="#导语" class="headerlink" title="导语"></a>导语</h2><p>线程池是多线程编程中的核心概念，简单来说就是一组可以执行任务的空闲线程。<br>首先，我们了解一下多线程框架模型，明白为什么需要线程池。</p>
+<h2 id="导语"><a class="header-anchor" href="#导语"></a>导语</h2>
+<p>线程池是多线程编程中的核心概念，简单来说就是一组可以执行任务的空闲线程。<br>
+首先，我们了解一下多线程框架模型，明白为什么需要线程池。</p>
 <p>线程是在一个进程中可以执行一系列指令的执行环境，或称运行程序。多线程编程指的是用多个线程并行执行多个任务。当然，JVM 对多线程有良好的支持。</p>
 <p><strong>PS:进程可以简单的理解为程序，线程可以理解为进程下实际做事的小兵甲乙丙丁</strong></p>
 <p>尽管这带来了诸多优势，首当其冲的就是程序性能提高，但多线程编程也有缺点 —— 增加了代码复杂度、同步问题、非预期结果和增加创建线程的开销。</p>
 <p><strong>在这篇文章中，我们来了解一下如何使用 Java 线程池来缓解这些问题。</strong></p>
-<h2 id="java线程池"><a href="#java线程池" class="headerlink" title="java线程池"></a>java线程池</h2><p>Java 通过 executor 对象来实现自己的线程池模型。可以使用 executor 接口或其他线程池的实现，它们都允许细粒度的控制。</p>
+<h2 id="java线程池"><a class="header-anchor" href="#java线程池"></a>java线程池</h2>
+<p>Java 通过 executor 对象来实现自己的线程池模型。可以使用 executor 接口或其他线程池的实现，它们都允许细粒度的控制。</p>
 <p>java.util.concurrent 包中有以下接口：</p>
 <ul>
 <li>Executor —— 执行任务的简单接口</li>
@@ -455,11 +459,13 @@
 <li>等待执行的任务队列</li>
 </ul>
 <p>在下面的章节，让我们仔细看一看Java类和接口如何为线程池提供支持。</p>
-<h3 id="Executors-类和-Executor-接口"><a href="#Executors-类和-Executor-接口" class="headerlink" title="Executors 类和 Executor 接口"></a>Executors 类和 Executor 接口</h3><p>Executors 类包含工厂方法创建不同类型的线程池，Executor是个简单的线程池接口，只有一个execute() 方法。<br>我们通过一个例子来结合使用这两个类(接口)，首先创建一个单线程的线程池，然后用它执行一个简单的语句：</p>
+<h3 id="Executors-类和-Executor-接口"><a class="header-anchor" href="#Executors-类和-Executor-接口"></a>Executors 类和 Executor 接口</h3>
+<p>Executors 类包含工厂方法创建不同类型的线程池，Executor是个简单的线程池接口，只有一个execute() 方法。<br>
+我们通过一个例子来结合使用这两个类(接口)，首先创建一个单线程的线程池，然后用它执行一个简单的语句：</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">Executor</span> executor <span class="token operator">=</span> <span class="token class-name">Executors</span><span class="token punctuation">.</span><span class="token function">newSingleThreadExecutor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 executor<span class="token punctuation">.</span><span class="token function">execute</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-></span> <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Single thread pool test"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<p>注意语句写成了lambda表达式，会被自动推断成Runnable类型。<br>如果有工作线程可用，execute() 方法将执行语句，否则就把Runnable任务放进队列，等待线程可用。</p>
+<p>注意语句写成了lambda表达式，会被自动推断成Runnable类型。<br>
+如果有工作线程可用，execute() 方法将执行语句，否则就把Runnable任务放进队列，等待线程可用。</p>
 <p>基本上，executor 代替了显式创建和管理线程。</p>
 <p>Executors 类里的工厂方法可以创建很多类型的线程池：</p>
 <ul>
@@ -475,9 +481,9 @@ executor<span class="token punctuation">.</span><span class="token function">exe
             <span class="token class-name">ForkJoinPool</span><span class="token punctuation">.</span>defaultForkJoinWorkerThreadFactory<span class="token punctuation">,</span>
             <span class="token keyword">null</span><span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <blockquote>
-<p>Runtime.getRuntime().availableProcessors()返回的是机器的<strong>逻辑处理器数量</strong><br>默认的<strong>newWorkStealingPool</strong>会返回一个期望并行度为当前逻辑处理器数量的Fork/Join线程池</p>
+<p>Runtime.getRuntime().availableProcessors()返回的是机器的<strong>逻辑处理器数量</strong><br>
+默认的<strong>newWorkStealingPool</strong>会返回一个期望并行度为当前逻辑处理器数量的Fork/Join线程池</p>
 </blockquote>
 <p><strong>接下来，让我们看一下 ExecutorService 接口提供了哪些新功能？</strong></p>
 <ul>
@@ -498,7 +504,6 @@ executor<span class="token punctuation">.</span><span class="token function">exe
 <span class="token keyword">if</span> <span class="token punctuation">(</span>future<span class="token punctuation">.</span><span class="token function">isDone</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">double</span> result <span class="token operator">=</span> future<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p>从上面的例子可以看到Future接口可以返回Callable类型任务的结果，而且能显示任务的执行状态。</p>
 <p>当没有任务等待执行时，ExecutorService并不会自动销毁，所以你可以使用shutdown()或shutdownNow()来显式关闭它。</p>
 <blockquote>
@@ -518,11 +523,11 @@ executor<span class="token punctuation">.</span><span class="token function">exe
 <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-></span> <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Fixed Rate Scheduled"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">2000</span><span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>MILLISECONDS<span class="token punctuation">)</span><span class="token punctuation">;</span>
 executor<span class="token punctuation">.</span><span class="token function">scheduleWithFixedDelay</span><span class="token punctuation">(</span>
 <span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-></span> <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Fixed Delay Scheduled"</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">2000</span><span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>MILLISECONDS<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p>scheduleAtFixedRate() 方法延时 2 毫秒执行任务，然后每 2 秒重复一次。相似的，scheduleWithFixedDelay() 方法延时 2毫秒后执行第一次，然后在上一次执行完成 2 秒后再次重复执行。</p>
 <p>在下面的章节，我们来看一下 ExecutorService 接口的两个实现：ThreadPoolExecutor 和ForkJoinPool。</p>
 <p>ps:ScheduledExecutorService具有延迟功能的线程池</p>
-<p><strong>ThreadPoolExecutor</strong><br>这个线程池的实现增加了配置参数的能力。创建 ThreadPoolExecutor 对象最方便的方式就是通过Executors 工厂方法：</p>
+<p><strong>ThreadPoolExecutor</strong><br>
+这个线程池的实现增加了配置参数的能力。创建 ThreadPoolExecutor 对象最方便的方式就是通过Executors 工厂方法：</p>
 <blockquote>
 <p>ThreadPoolExecutor executor = (ThreadPoolExecutor) Executors.newFixedThreadPool(10);</p>
 </blockquote>
@@ -531,14 +536,17 @@ executor<span class="token punctuation">.</span><span class="token function">sch
 <li>corePoolSize 和 maximumPoolSize：表示线程数量的范围</li>
 <li>keepAliveTime：决定了额外线程存活时间</li>
 </ul>
-<p>我们深入了解一下这些参数如何使用。<br>当一个任务被提交时，如果执行中的线程数量小于 corePoolSize，一个新的线程被创建。如果运行的线程数量大于 corePoolSize，但小于 maximumPoolSize，并且任务队列已满时，依然会创建新的线程。如果多于 corePoolSize 的线程空闲时间超过 keepAliveTime，它们会被终止。<br>上面那个例子中，newFixedThreadPool() 方法创建的线程池，corePoolSize=maximumPoolSize=10 并且 keepAliveTime 为 0 秒。<br>如果你使用 newCachedThreadPool() 方法，创建的线程池 maximumPoolSize 为Integer.MAX_VALUE，并且 keepAliveTime 为 60 秒。</p>
+<p>我们深入了解一下这些参数如何使用。<br>
+当一个任务被提交时，如果执行中的线程数量小于 corePoolSize，一个新的线程被创建。如果运行的线程数量大于 corePoolSize，但小于 maximumPoolSize，并且任务队列已满时，依然会创建新的线程。如果多于 corePoolSize 的线程空闲时间超过 keepAliveTime，它们会被终止。<br>
+上面那个例子中，newFixedThreadPool() 方法创建的线程池，corePoolSize=maximumPoolSize=10 并且 keepAliveTime 为 0 秒。<br>
+如果你使用 newCachedThreadPool() 方法，创建的线程池 maximumPoolSize 为Integer.MAX_VALUE，并且 keepAliveTime 为 60 秒。</p>
 <blockquote>
 <p>ThreadPoolExecutor cachedPoolExecutor = (ThreadPoolExecutor) Executors.newCachedThreadPool();</p>
 </blockquote>
-<p>The parameters can also be set through a constructor or through setter methods:<br>这些参数也可以通过构造函数或setter方法设置：</p>
+<p>The parameters can also be set through a constructor or through setter methods:<br>
+这些参数也可以通过构造函数或setter方法设置：</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">ThreadPoolExecutor</span> executor <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ThreadPoolExecutor</span><span class="token punctuation">(</span><span class="token number">24</span><span class="token punctuation">,</span> <span class="token number">6</span><span class="token punctuation">,</span> <span class="token number">60</span><span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>SECONDS<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">LinkedBlockingQueue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Runnable</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 executor<span class="token punctuation">.</span><span class="token function">setMaximumPoolSize</span><span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
 <p>ThreadPoolExecutor 的一个子类便是 ScheduledThreadPoolExecutor，它实现了ScheduledExecutorService 接口。你可以通过 newScheduledThreadPool() 工厂方法来创建这种类型的线程池。</p>
 <blockquote>
 <p>ScheduledThreadPoolExecutor executor = (ScheduledThreadPoolExecutor) Executors.newScheduledThreadPool(5);</p>
@@ -556,7 +564,8 @@ executor<span class="token punctuation">.</span><span class="token function">set
 <li>将任务结果合并</li>
 <li>实例化对象并添加到池中</li>
 </ul>
-<p>创建一个<strong>ForkJoinTask</strong>，你可以选择<strong>RecursiveAction</strong>或<strong>RecursiveTask</strong>这两个子类，后者有返回值。<br>我们来实现一个继承<strong>RecursiveTask</strong>的类，计算阶乘，并把任务根据阈值划分成子任务。</p>
+<p>创建一个<strong>ForkJoinTask</strong>，你可以选择<strong>RecursiveAction</strong>或<strong>RecursiveTask</strong>这两个子类，后者有返回值。<br>
+我们来实现一个继承<strong>RecursiveTask</strong>的类，计算阶乘，并把任务根据阈值划分成子任务。</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">FactorialTask</span> <span class="token keyword">extends</span> <span class="token class-name">RecursiveTask</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">BigInteger</span><span class="token punctuation">></span></span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">private</span> <span class="token keyword">int</span> start <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
     <span class="token keyword">private</span> <span class="token keyword">int</span> n<span class="token punctuation">;</span>
@@ -585,24 +594,24 @@ executor<span class="token punctuation">.</span><span class="token function">set
     dividedTasks<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">FactorialTask</span><span class="token punctuation">(</span>mid <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span> n<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">return</span> dividedTasks<span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p>最后，calculate() 方法包含一定范围内的乘数。</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">private</span> <span class="token class-name">BigInteger</span> <span class="token function">calculate</span><span class="token punctuation">(</span><span class="token keyword">int</span> start<span class="token punctuation">,</span> <span class="token keyword">int</span> n<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">return</span> <span class="token class-name">IntStream</span><span class="token punctuation">.</span><span class="token function">rangeClosed</span><span class="token punctuation">(</span>start<span class="token punctuation">,</span> n<span class="token punctuation">)</span>
       <span class="token punctuation">.</span><span class="token function">mapToObj</span><span class="token punctuation">(</span><span class="token class-name">BigInteger</span><span class="token operator">::</span><span class="token function">valueOf</span><span class="token punctuation">)</span>
       <span class="token punctuation">.</span><span class="token function">reduce</span><span class="token punctuation">(</span><span class="token class-name">BigInteger</span><span class="token punctuation">.</span>ONE<span class="token punctuation">,</span> <span class="token class-name">BigInteger</span><span class="token operator">::</span><span class="token function">multiply</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p>接下来，任务可以添加到线程池：</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">ForkJoinPool</span> pool <span class="token operator">=</span> <span class="token class-name">ForkJoinPool</span><span class="token punctuation">.</span><span class="token function">commonPool</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token class-name">BigInteger</span> result <span class="token operator">=</span> pool<span class="token punctuation">.</span><span class="token function">invoke</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">FactorialTask</span><span class="token punctuation">(</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
 <p><strong>ThreadPoolExecutor 与 ForkJoinPool 对比</strong></p>
-<p>初看上去，似乎 fork/join 框架带来性能提升。但是这取决于你所解决问题的类型。<br>当选择线程池时，非常重要的一点是牢记创建、管理线程以及线程间切换执行会带来的开销。</p>
+<p>初看上去，似乎 fork/join 框架带来性能提升。但是这取决于你所解决问题的类型。<br>
+当选择线程池时，非常重要的一点是牢记创建、管理线程以及线程间切换执行会带来的开销。</p>
 <ul>
-<li><p><strong>ThreadPoolExecutor可以控制线程数量和每个线程执行的任务,这很适合你需要在不同的线程上执行少量巨大的任务</strong></p>
+<li>
+<p><strong>ThreadPoolExecutor可以控制线程数量和每个线程执行的任务,这很适合你需要在不同的线程上执行少量巨大的任务</strong></p>
 </li>
-<li><p><strong>相比较而言，ForkJoinPool 基于线程从其他线程“窃取”任务。正因如此，当任务可以分割成小任务时可以提高效率。</strong></p>
+<li>
+<p><strong>相比较而言，ForkJoinPool 基于线程从其他线程“窃取”任务。正因如此，当任务可以分割成小任务时可以提高效率。</strong></p>
 </li>
 </ul>
 <p>为了实现工作窃取算法，fork/join 框架使用两种队列：</p>
@@ -611,13 +620,16 @@ executor<span class="token punctuation">.</span><span class="token function">set
 <li>每个线程的任务队列</li>
 </ul>
 <pre class="line-numbers language-none"><code class="language-none">当线程执行完自己任务队列中的任务，它们试图从其他队列获取任务。为了使这一过程更加高效，线程任务队列使用双端队列（double ended queue）数据结构，一端与线程交互，另一端用于“窃取”任务。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
 <p>来自The H Developer的图很好的表现出了这一过程：</p>
 <p><img src="https://s1.ax1x.com/2020/06/09/t5ffI0.png" alt="t5ffI0.png"></p>
-<p>和这种模型相比，ThreadPoolExecutor 只使用一个主要队列。<br>最后要注意的一点 ForkJoinPool 只适用于任务可以创建子任务。否则它和 ThreadPoolExecutor没区别，甚至开销更大。</p>
+<p>和这种模型相比，ThreadPoolExecutor 只使用一个主要队列。<br>
+最后要注意的一点 ForkJoinPool 只适用于任务可以创建子任务。否则它和 ThreadPoolExecutor没区别，甚至开销更大。</p>
 <p><strong>ps:每个工作线程都维持着一个双端的任务队列，当一个工作线程执行完成对应工作队列中的任务时，会去其他线程对应的任务队列尾端去获取待执行的任务来进行执行。</strong></p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>线程池有很大优势，简单来说就是可以将任务的执行从线程的创建和管理中分离。另外，如果使用得当，它们可以极大提高应用的性能。<br>如果你学会充分利用线程池，Java 生态系统好处便是其中有很多成熟稳定的线程池实现。</p>
-<h2 id="收藏笔记"><a href="#收藏笔记" class="headerlink" title="收藏笔记"></a>收藏笔记</h2><p>展示了由<strong>Executors</strong>提供的几种常用的线程池：</p>
+<h3 id="总结"><a class="header-anchor" href="#总结"></a>总结</h3>
+<p>线程池有很大优势，简单来说就是可以将任务的执行从线程的创建和管理中分离。另外，如果使用得当，它们可以极大提高应用的性能。<br>
+如果你学会充分利用线程池，Java 生态系统好处便是其中有很多成熟稳定的线程池实现。</p>
+<h2 id="收藏笔记"><a class="header-anchor" href="#收藏笔记"></a>收藏笔记</h2>
+<p>展示了由<strong>Executors</strong>提供的几种常用的线程池：</p>
 <ol>
 <li>ScheduledExecutorService</li>
 <li>ThreadPoolExecutor</li>
@@ -634,15 +646,17 @@ executor<span class="token punctuation">.</span><span class="token function">set
         <span class="token class-name">ForkJoinPool</span><span class="token punctuation">.</span>common<span class="token punctuation">.</span><span class="token function">externalPush</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>RecursiveTask 提交任务时如果提交线程是ForkJoinWorkerThread就向线程所属于的任务队列进行提交;<br>如果不是就说明是业务线程第一次向ForkJoinThreadPool提交任务，就调用ForkJoinPool的通用线程池进行任务的提交</p>
+<p>RecursiveTask 提交任务时如果提交线程是ForkJoinWorkerThread就向线程所属于的任务队列进行提交;<br>
+如果不是就说明是业务线程第一次向ForkJoinThreadPool提交任务，就调用ForkJoinPool的通用线程池进行任务的提交</p>
 <ul>
-<li>初始化<strong>ForkJoinPool.common</strong><br><img src="https://s1.ax1x.com/2020/06/10/tTxzF0.png" alt="tTxzF0.png"></li>
+<li>初始化<strong>ForkJoinPool.common</strong><br>
+<img src="https://s1.ax1x.com/2020/06/10/tTxzF0.png" alt="tTxzF0.png"></li>
 </ul>
 <blockquote>
 <p>4个逻辑处理器-1，得到forkJoin的并行度为3</p>
 </blockquote>
-<p>CPU逻辑核数（CPU线程数，Thread）：通过超线程技术，能将一个物理核分成多个逻辑核<br>一般情况，一颗物理CPU可以有多个物理内核，加上intel的超线程技术（HT, Hyper-Threading）能够把一个物理处理器（核心，内核）在软件层变成两个逻辑处理器，可以使处理器在某一时刻，同步并行处理更多指令和数据（即有多个线程并行工作）。</p>
+<p>CPU逻辑核数（CPU线程数，Thread）：通过超线程技术，能将一个物理核分成多个逻辑核<br>
+一般情况，一颗物理CPU可以有多个物理内核，加上intel的超线程技术（HT, Hyper-Threading）能够把一个物理处理器（核心，内核）在软件层变成两个逻辑处理器，可以使处理器在某一时刻，同步并行处理更多指令和数据（即有多个线程并行工作）。</p>
 <p>逻辑核心数指的就是线程数</p>
 
                 

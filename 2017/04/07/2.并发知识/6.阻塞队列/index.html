@@ -433,7 +433,9 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="阻塞队列"><a href="#阻塞队列" class="headerlink" title="阻塞队列"></a>阻塞队列</h1><h2 id="阻塞队列的定义"><a href="#阻塞队列的定义" class="headerlink" title="阻塞队列的定义"></a>阻塞队列的定义</h2><p><strong>阻塞队列</strong>是实现了BlockingQueue接口的之类，BlockingQueue的代码入下：</p>
+                <h1>阻塞队列</h1>
+<h2 id="阻塞队列的定义"><a class="header-anchor" href="#阻塞队列的定义"></a>阻塞队列的定义</h2>
+<p><strong>阻塞队列</strong>是实现了BlockingQueue接口的之类，BlockingQueue的代码入下：</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">BlockingQueue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">E</span><span class="token punctuation">></span></span> <span class="token keyword">extends</span> <span class="token class-name">Queue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">E</span><span class="token punctuation">></span></span> <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><strong>BlockingQueue</strong>的特点是有阻塞能力：</p>
 <ol>
@@ -450,7 +452,8 @@
 <li>LinkedTransferQueue</li>
 </ol>
 <p><img src="https://s2.ax1x.com/2020/03/07/3jrGTI.png" alt="3jrGTI.png"></p>
-<h2 id="阻塞队列常用的方法"><a href="#阻塞队列常用的方法" class="headerlink" title="阻塞队列常用的方法"></a>阻塞队列常用的方法</h2><p>在阻塞队列中主要有8种方法，按照分类分为3大类：</p>
+<h2 id="阻塞队列常用的方法"><a class="header-anchor" href="#阻塞队列常用的方法"></a>阻塞队列常用的方法</h2>
+<p>在阻塞队列中主要有8种方法，按照分类分为3大类：</p>
 <ol>
 <li><strong>抛出异常</strong> add、remove、element</li>
 <li><strong>返回结果但是不抛出异常</strong> offer、poll、peek</li>
@@ -465,7 +468,8 @@
 <th>阻塞</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>添加元素</td>
 <td>add</td>
 <td>offer</td>
@@ -483,17 +487,21 @@
 <td>peek</td>
 <td>无</td>
 </tr>
-</tbody></table>
-<h2 id="常见的阻塞队列"><a href="#常见的阻塞队列" class="headerlink" title="常见的阻塞队列"></a>常见的阻塞队列</h2><ul>
-<li>ArrayBlockingQueue</li>
-</ul>
-<p> <strong>ArrayBlockingQueue</strong>是一个容量固定的有界阻塞队列，构造方法如下：<br> <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">ArrayBlockingQueue</span><span class="token punctuation">(</span><span class="token keyword">int</span> capacity<span class="token punctuation">,</span> <span class="token keyword">boolean</span> fair<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
- <span class="token comment">//省略代码...</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><br> <strong>fair</strong>表示队列是公平的还是不公平的</p>
+</tbody>
+</table>
+<h2 id="常见的阻塞队列"><a class="header-anchor" href="#常见的阻塞队列"></a>常见的阻塞队列</h2>
 <ul>
-<li>LinkBlockingQueue</li>
+<li>ArrayBlockingQueue<br>
+<strong>ArrayBlockingQueue</strong>是一个容量固定的有界阻塞队列，构造方法如下：</li>
 </ul>
-<p><strong>LinkedBlockingQueue</strong>是一个默认构造器创建的是无界阻塞队列也可以指定队列容量，构造方法如下：</p>
+ <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">ArrayBlockingQueue</span><span class="token punctuation">(</span><span class="token keyword">int</span> capacity<span class="token punctuation">,</span> <span class="token keyword">boolean</span> fair<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+ <span class="token comment">//省略代码...</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p><strong>fair</strong>表示队列是公平的还是不公平的</p>
+<ul>
+<li>LinkBlockingQueue<br>
+<strong>LinkedBlockingQueue</strong>是一个默认构造器创建的是无界阻塞队列也可以指定队列容量，构造方法如下：</li>
+</ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">LinkedBlockingQueue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">this</span><span class="token punctuation">(</span><span class="token class-name">Integer</span><span class="token punctuation">.</span>MAX_VALUE<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span>
@@ -503,15 +511,16 @@
     <span class="token keyword">this</span><span class="token punctuation">.</span>capacity <span class="token operator">=</span> capacity<span class="token punctuation">;</span>
     last <span class="token operator">=</span> head <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Node</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">E</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ul>
-<li>SynchronousQueue</li>
+<li>
+<p>SynchronousQueue<br>
+<strong>SynchronousQueue</strong>是一个内部容量为0的阻塞队列，导致每次取数据都要阻塞等待</p>
+</li>
+<li>
+<p>PriorityBlockingQueue<br>
+<strong>PriorityBlockingQueue</strong>是一个支持优先级排序的阻塞队列，是一个无界队列。构造方法</p>
+</li>
 </ul>
-<p><strong>SynchronousQueue</strong>是一个内部容量为0的阻塞队列，导致每次取数据都要阻塞等待</p>
-<ul>
-<li>PriorityBlockingQueue</li>
-</ul>
-<p><strong>PriorityBlockingQueue</strong>是一个支持优先级排序的阻塞队列，是一个无界队列。构造方法</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">PriorityBlockingQueue</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">this</span><span class="token punctuation">(</span>DEFAULT_INITIAL_CAPACITY<span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span>
@@ -520,7 +529,6 @@
     <span class="token keyword">this</span><span class="token punctuation">(</span>initialCapacity<span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ul>
 <li>DelayQueue</li>
 </ul>
@@ -531,8 +539,9 @@
     <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">addAll</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="阻塞队列和非阻塞队列并发安全的原理是什么？"><a href="#阻塞队列和非阻塞队列并发安全的原理是什么？" class="headerlink" title="阻塞队列和非阻塞队列并发安全的原理是什么？"></a>阻塞队列和非阻塞队列并发安全的原理是什么？</h2><h3 id="ArrayBlockingQueue"><a href="#ArrayBlockingQueue" class="headerlink" title="ArrayBlockingQueue"></a>ArrayBlockingQueue</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/** Main lock guarding all access */</span>
+<h2 id="阻塞队列和非阻塞队列并发安全的原理是什么？"><a class="header-anchor" href="#阻塞队列和非阻塞队列并发安全的原理是什么？"></a>阻塞队列和非阻塞队列并发安全的原理是什么？</h2>
+<h3 id="ArrayBlockingQueue"><a class="header-anchor" href="#ArrayBlockingQueue"></a>ArrayBlockingQueue</h3>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/** Main lock guarding all access */</span>
 <span class="token keyword">final</span> <span class="token class-name">ReentrantLock</span> lock<span class="token punctuation">;</span>
 <span class="token comment">/** Condition for waiting takes */</span>
 <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">Condition</span> notEmpty<span class="token punctuation">;</span>
@@ -552,7 +561,8 @@
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>通过共用同一个lock来锁住队列后，用首尾两个<strong>Condition</strong>来分别锁住队列</p>
-<h3 id="ConcurrentLinkedQueue"><a href="#ConcurrentLinkedQueue" class="headerlink" title="ConcurrentLinkedQueue"></a>ConcurrentLinkedQueue</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">offer</span><span class="token punctuation">(</span><span class="token class-name">E</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+<h3 id="ConcurrentLinkedQueue"><a class="header-anchor" href="#ConcurrentLinkedQueue"></a>ConcurrentLinkedQueue</h3>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">offer</span><span class="token punctuation">(</span><span class="token class-name">E</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
         <span class="token function">checkNotNull</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">final</span> <span class="token class-name">Node</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">E</span><span class="token punctuation">></span></span> newNode <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Node</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">E</span><span class="token punctuation">></span></span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
@@ -581,10 +591,11 @@
                 p <span class="token operator">=</span> <span class="token punctuation">(</span>p <span class="token operator">!=</span> t <span class="token operator">&amp;&amp;</span> t <span class="token operator">!=</span> <span class="token punctuation">(</span>t <span class="token operator">=</span> tail<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">?</span> t <span class="token operator">:</span> q<span class="token punctuation">;</span>
         <span class="token punctuation">&#125;</span>
     <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p>可以从方法中看出offer方法就是不停的重试加上CAS机制保证了并发的安全性，这是乐观锁的一种思想。适用用线程竞争不激烈的场景。</p>
-<h2 id="如何选择阻塞队列"><a href="#如何选择阻塞队列" class="headerlink" title="如何选择阻塞队列"></a>如何选择阻塞队列</h2><p>如何选择阻塞队列可以中线程池来进行分析</p>
-<h3 id="LinkedBlockingQueue"><a href="#LinkedBlockingQueue" class="headerlink" title="LinkedBlockingQueue"></a>LinkedBlockingQueue</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">ExecutorService</span> <span class="token function">newFixedThreadPool</span><span class="token punctuation">(</span><span class="token keyword">int</span> nThreads<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+<h2 id="如何选择阻塞队列"><a class="header-anchor" href="#如何选择阻塞队列"></a>如何选择阻塞队列</h2>
+<p>如何选择阻塞队列可以中线程池来进行分析</p>
+<h3 id="LinkedBlockingQueue"><a class="header-anchor" href="#LinkedBlockingQueue"></a>LinkedBlockingQueue</h3>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">ExecutorService</span> <span class="token function">newFixedThreadPool</span><span class="token punctuation">(</span><span class="token keyword">int</span> nThreads<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
 <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">ThreadPoolExecutor</span><span class="token punctuation">(</span>nThreads<span class="token punctuation">,</span> nThreads<span class="token punctuation">,</span> <span class="token number">0L</span><span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>MILLISECONDS<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">LinkedBlockingQueue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Runnable</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span>
 
@@ -595,21 +606,22 @@
                             <span class="token keyword">new</span> <span class="token class-name">LinkedBlockingQueue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Runnable</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p>可以看出固定线程数的线程池采用的是无限长度的队列作为缓存池</p>
-<h3 id="SynchronousQueue"><a href="#SynchronousQueue" class="headerlink" title="SynchronousQueue"></a>SynchronousQueue</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">ExecutorService</span> <span class="token function">newCachedThreadPool</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+<h3 id="SynchronousQueue"><a class="header-anchor" href="#SynchronousQueue"></a>SynchronousQueue</h3>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">ExecutorService</span> <span class="token function">newCachedThreadPool</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">ThreadPoolExecutor</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token class-name">Integer</span><span class="token punctuation">.</span>MAX_VALUE<span class="token punctuation">,</span>
                                   <span class="token number">60L</span><span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>SECONDS<span class="token punctuation">,</span>
                                   <span class="token keyword">new</span> <span class="token class-name">SynchronousQueue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Runnable</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>无最大线程数的线程池采用的是无容量的队列做为缓存池</p>
-<h3 id="DelayedWorkQueue"><a href="#DelayedWorkQueue" class="headerlink" title="DelayedWorkQueue"></a>DelayedWorkQueue</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">ScheduledThreadPoolExecutor</span><span class="token punctuation">(</span><span class="token keyword">int</span> corePoolSize<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+<h3 id="DelayedWorkQueue"><a class="header-anchor" href="#DelayedWorkQueue"></a>DelayedWorkQueue</h3>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">ScheduledThreadPoolExecutor</span><span class="token punctuation">(</span><span class="token keyword">int</span> corePoolSize<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">super</span><span class="token punctuation">(</span>corePoolSize<span class="token punctuation">,</span> <span class="token class-name">Integer</span><span class="token punctuation">.</span>MAX_VALUE<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> NANOSECONDS<span class="token punctuation">,</span>
           <span class="token keyword">new</span> <span class="token class-name">DelayedWorkQueue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p>具有周期性执行的线程池采用的是延迟队列，从而实现周期性执行的功能</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>因此选择队列也应该从业务的属性出发，在这几个方面进行取舍<strong>长度</strong>、<strong>特点</strong>、<strong>性能</strong>。从而选择最适合业务场景的队列。</p>
+<h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2>
+<p>因此选择队列也应该从业务的属性出发，在这几个方面进行取舍<strong>长度</strong>、<strong>特点</strong>、<strong>性能</strong>。从而选择最适合业务场景的队列。</p>
 
                 
             </div>

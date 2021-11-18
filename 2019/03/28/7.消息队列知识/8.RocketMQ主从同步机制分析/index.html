@@ -433,8 +433,10 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="RocketMQ主从同步机制分析"><a href="#RocketMQ主从同步机制分析" class="headerlink" title="RocketMQ主从同步机制分析"></a>RocketMQ主从同步机制分析</h1><p><strong>Broker</strong>分为<strong>Slave</strong>、<strong>Master</strong>两种角色，因此Slave会从master中同步<strong>信息</strong>、<strong>topicConfig</strong>、<strong>ConsumerOffer</strong>、<strong>DelayOffset</strong>、<strong>SubscriptionGroupConfig</strong>等信息</p>
-<h2 id="启动同步"><a href="#启动同步" class="headerlink" title="启动同步"></a>启动同步</h2><ul>
+                <h1>RocketMQ主从同步机制分析</h1>
+<p><strong>Broker</strong>分为<strong>Slave</strong>、<strong>Master</strong>两种角色，因此Slave会从master中同步<strong>信息</strong>、<strong>topicConfig</strong>、<strong>ConsumerOffer</strong>、<strong>DelayOffset</strong>、<strong>SubscriptionGroupConfig</strong>等信息</p>
+<h2 id="启动同步"><a class="header-anchor" href="#启动同步"></a>启动同步</h2>
+<ul>
 <li>handleSlaveSynchronize</li>
 </ul>
 <p><img src="https://s1.ax1x.com/2020/03/28/GAqiCj.png" alt="GAqiCj.png"></p>
@@ -444,15 +446,18 @@
 <li>该节点变成Marster节点时会调用</li>
 <li>该节点变成Slaver节点时会调用</li>
 </ol>
-<h2 id="主要方法"><a href="#主要方法" class="headerlink" title="主要方法"></a>主要方法</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">syncAll</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+<h2 id="主要方法"><a class="header-anchor" href="#主要方法"></a>主要方法</h2>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">syncAll</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">syncTopicConfig</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">syncConsumerOffset</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">syncDelayOffset</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">syncSubscriptionGroupConfig</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="syncTopicConfig"><a href="#syncTopicConfig" class="headerlink" title="syncTopicConfig"></a>syncTopicConfig</h2><p><strong>syncTopicConfig</strong>主要是同步<strong>topicConfig</strong>信息，主要步骤如下：<br><img src="https://s1.ax1x.com/2020/03/28/GEV9de.png" alt="GEV9de.png"></p>
-<h2 id="syncConsumerOffset"><a href="#syncConsumerOffset" class="headerlink" title="syncConsumerOffset"></a>syncConsumerOffset</h2><p><strong>syncConsumerOffset</strong>为同步offset数据不进行判断直接覆盖，这样做是因为offset在主从结点进行切换时允许丢失部分offset信息</p>
+<h2 id="syncTopicConfig"><a class="header-anchor" href="#syncTopicConfig"></a>syncTopicConfig</h2>
+<p><strong>syncTopicConfig</strong>主要是同步<strong>topicConfig</strong>信息，主要步骤如下：<br>
+<img src="https://s1.ax1x.com/2020/03/28/GEV9de.png" alt="GEV9de.png"></p>
+<h2 id="syncConsumerOffset"><a class="header-anchor" href="#syncConsumerOffset"></a>syncConsumerOffset</h2>
+<p><strong>syncConsumerOffset</strong>为同步offset数据不进行判断直接覆盖，这样做是因为offset在主从结点进行切换时允许丢失部分offset信息</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">syncConsumerOffset</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
     <span class="token class-name">String</span> masterAddrBak <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>masterAddr<span class="token punctuation">;</span>
     <span class="token keyword">if</span> <span class="token punctuation">(</span>masterAddrBak <span class="token operator">!=</span> <span class="token keyword">null</span> <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span>masterAddrBak<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>brokerController<span class="token punctuation">.</span><span class="token function">getBrokerAddr</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
@@ -469,8 +474,8 @@
         <span class="token punctuation">&#125;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="syncDelayOffset"><a href="#syncDelayOffset" class="headerlink" title="syncDelayOffset"></a>syncDelayOffset</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">syncDelayOffset</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+<h2 id="syncDelayOffset"><a class="header-anchor" href="#syncDelayOffset"></a>syncDelayOffset</h2>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">syncDelayOffset</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
         <span class="token class-name">String</span> masterAddrBak <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>masterAddr<span class="token punctuation">;</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span>masterAddrBak <span class="token operator">!=</span> <span class="token keyword">null</span> <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span>masterAddrBak<span class="token punctuation">.</span><span class="token function">equals</span><span class="token punctuation">(</span>brokerController<span class="token punctuation">.</span><span class="token function">getBrokerAddr</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
               <span class="token class-name">String</span> delayOffset <span class="token operator">=</span>
@@ -488,14 +493,17 @@
         <span class="token punctuation">&#125;</span>
     <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p>核心代码就是从Broker中获取到死信队列的offset,然后将此offset记录下来</p>
-<h2 id="syncSubscriptionGroupConfig"><a href="#syncSubscriptionGroupConfig" class="headerlink" title="syncSubscriptionGroupConfig"></a>syncSubscriptionGroupConfig</h2><p>这个同步类似于Topic的同步机制，需要用版本号严格控制</p>
-<h2 id="同步消息体"><a href="#同步消息体" class="headerlink" title="同步消息体"></a>同步消息体</h2><p>同步消息是M/S架构中最重要的功能，主要执行代码放在<strong>rocketmq-store</strong>中</p>
+<h2 id="syncSubscriptionGroupConfig"><a class="header-anchor" href="#syncSubscriptionGroupConfig"></a>syncSubscriptionGroupConfig</h2>
+<p>这个同步类似于Topic的同步机制，需要用版本号严格控制</p>
+<h2 id="同步消息体"><a class="header-anchor" href="#同步消息体"></a>同步消息体</h2>
+<p>同步消息是M/S架构中最重要的功能，主要执行代码放在<strong>rocketmq-store</strong>中</p>
 <ul>
-<li>模块引用<br><img src="https://s1.ax1x.com/2020/03/29/GEnEtg.png" alt="GEnEtg.png"></li>
+<li>模块引用<br>
+<img src="https://s1.ax1x.com/2020/03/29/GEnEtg.png" alt="GEnEtg.png"></li>
 </ul>
-<h3 id="Broker启动"><a href="#Broker启动" class="headerlink" title="Broker启动"></a>Broker启动</h3><p>在Broker启动时会先判断当前Broker是什么类型的节点，如果是Slave类型的节点会设置<strong>masterAddr</strong></p>
+<h3 id="Broker启动"><a class="header-anchor" href="#Broker启动"></a>Broker启动</h3>
+<p>在Broker启动时会先判断当前Broker是什么类型的节点，如果是Slave类型的节点会设置<strong>masterAddr</strong></p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>updateMasterHAServerAddrPeriodically <span class="token operator">&amp;&amp;</span> registerBrokerResult<span class="token punctuation">.</span><span class="token function">getHaServerAddr</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">this</span><span class="token punctuation">.</span>messageStore<span class="token punctuation">.</span><span class="token function">updateHaMasterAddress</span><span class="token punctuation">(</span>registerBrokerResult<span class="token punctuation">.</span><span class="token function">getHaServerAddr</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span>
@@ -503,8 +511,8 @@
 <span class="token comment">//</span>
 <span class="token keyword">this</span><span class="token punctuation">.</span>haService<span class="token punctuation">.</span><span class="token function">updateMasterAddress</span><span class="token punctuation">(</span>newAddr<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="Slave连接Master"><a href="#Slave连接Master" class="headerlink" title="Slave连接Master"></a>Slave连接Master</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">boolean</span> <span class="token function">connectMaster</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">ClosedChannelException</span> <span class="token punctuation">&#123;</span>
+<h3 id="Slave连接Master"><a class="header-anchor" href="#Slave连接Master"></a>Slave连接Master</h3>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">boolean</span> <span class="token function">connectMaster</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">ClosedChannelException</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">null</span> <span class="token operator">==</span> socketChannel<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
         <span class="token class-name">String</span> addr <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>masterAddress<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span>addr <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
@@ -528,8 +536,8 @@
     <span class="token keyword">return</span> <span class="token keyword">this</span><span class="token punctuation">.</span>socketChannel <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="Master响应Slave"><a href="#Master响应Slave" class="headerlink" title="Master响应Slave"></a>Master响应Slave</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">beginAccept</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
+<h3 id="Master响应Slave"><a class="header-anchor" href="#Master响应Slave"></a>Master响应Slave</h3>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">beginAccept</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">this</span><span class="token punctuation">.</span>serverSocketChannel <span class="token operator">=</span> <span class="token class-name">ServerSocketChannel</span><span class="token punctuation">.</span><span class="token keyword">open</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">this</span><span class="token punctuation">.</span>selector <span class="token operator">=</span> <span class="token class-name">RemotingUtil</span><span class="token punctuation">.</span><span class="token function">openSelector</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">this</span><span class="token punctuation">.</span>serverSocketChannel<span class="token punctuation">.</span><span class="token function">socket</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">setReuseAddress</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -537,7 +545,6 @@
     <span class="token keyword">this</span><span class="token punctuation">.</span>serverSocketChannel<span class="token punctuation">.</span><span class="token function">configureBlocking</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">this</span><span class="token punctuation">.</span>serverSocketChannel<span class="token punctuation">.</span><span class="token function">register</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>selector<span class="token punctuation">,</span> <span class="token class-name">SelectionKey</span><span class="token punctuation">.</span>OP_ACCEPT<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p>Master注册完成一个Tcp通道，连接成功后双方通过不断对比offset来进行同步</p>
 
                 

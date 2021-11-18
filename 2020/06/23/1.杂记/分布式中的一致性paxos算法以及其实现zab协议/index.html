@@ -437,56 +437,74 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="分布式中的一致性paxos算法以及其实现zab协议"><a href="#分布式中的一致性paxos算法以及其实现zab协议" class="headerlink" title="分布式中的一致性paxos算法以及其实现zab协议"></a>分布式中的一致性paxos算法以及其实现zab协议</h1><p> 分布式最重要的问题就是如何解决，不同节点中数据的一致性。paxos算法就是最重要的解决这个问题的理论。</p>
-<h2 id="paxos基础"><a href="#paxos基础" class="headerlink" title="paxos基础"></a>paxos基础</h2><h3 id="Quorum机制"><a href="#Quorum机制" class="headerlink" title="Quorum机制"></a>Quorum机制</h3><blockquote>
+                <h1>分布式中的一致性paxos算法以及其实现zab协议</h1>
+<p>分布式最重要的问题就是如何解决，不同节点中数据的一致性。paxos算法就是最重要的解决这个问题的理论。</p>
+<h2 id="paxos基础"><a class="header-anchor" href="#paxos基础"></a>paxos基础</h2>
+<h3 id="Quorum机制"><a class="header-anchor" href="#Quorum机制"></a>Quorum机制</h3>
+<blockquote>
 <p>Quorum机制是表示在分布式系统中，只要大于总数-被修改数时，就能读到修改值</p>
 </blockquote>
 <p>Quorum是分布式系统中的一种机制，用来保证数据冗余和最终一致性的投票算法。Quorum机制不是一个强一致性的，无法保证每个节点都能读取到最新的数据，需要一个类似于版本号的服务来确定获取到的数据是最新的。</p>
-<h3 id="paxos算法中定义的参与者角色"><a href="#paxos算法中定义的参与者角色" class="headerlink" title="paxos算法中定义的参与者角色"></a>paxos算法中定义的参与者角色</h3><ul>
+<h3 id="paxos算法中定义的参与者角色"><a class="header-anchor" href="#paxos算法中定义的参与者角色"></a>paxos算法中定义的参与者角色</h3>
+<ul>
 <li>proposer 提案者</li>
 <li>acceptor 批准者</li>
 <li>learner 学习者</li>
 </ul>
-<h3 id="paxos算法的流程"><a href="#paxos算法的流程" class="headerlink" title="paxos算法的流程"></a>paxos算法的流程</h3><ol>
-<li><p>准备阶段<br>proposer提案者向acceptor批准者发送一个当前提案者最大的ProposallID,acceptor批准者收到ProposallID后，将与自己的maxId进行比较，这样会产生三种结果</p>
+<h3 id="paxos算法的流程"><a class="header-anchor" href="#paxos算法的流程"></a>paxos算法的流程</h3>
+<ol>
+<li>
+<p>准备阶段<br>
+proposer提案者向acceptor批准者发送一个当前提案者最大的ProposallID,acceptor批准者收到ProposallID后，将与自己的maxId进行比较，这样会产生三种结果</p>
 <ol>
 <li>回复数量中大于一半的节点返回的都是空，提案者直接向批准者发送<strong>更改</strong></li>
 <li>回复数量中大于一半的节点返回的不是空，提案者直接向批准者发送<strong>自己最大的proposallID</strong>和<strong>更改</strong></li>
 <li>回复数量中小于一半的节点，提案者重新进入准备阶段</li>
 </ol>
 </li>
-<li><p>选举阶段</p>
+<li>
+<p>选举阶段</p>
 </li>
 </ol>
-<p>proposer提案者向acceptor批准者发送一个__(proposallId,变更)__，acceptor接受到之后会比较maxId是否进行更新操作，并将结果返回给提案者。这样又产生了三种结果：<br>    1. 大于一半的节点返回更新成功，进行全局广播写入成功,学习者进行更改<br>    2. 小于一半的节点时时，重新进入准备阶段<br>    3. 当收到一条提交失败时，说明有其他的提交者进行了提交，因此重新进入准备阶段</p>
-<h3 id="paxos算法的常见问题"><a href="#paxos算法的常见问题" class="headerlink" title="paxos算法的常见问题"></a>paxos算法的常见问题</h3><ol>
-<li>proposalId有什么作用？<blockquote>
+<p>proposer提案者向acceptor批准者发送一个__(proposallId,变更)__，acceptor接受到之后会比较maxId是否进行更新操作，并将结果返回给提案者。这样又产生了三种结果：<br>
+1. 大于一半的节点返回更新成功，进行全局广播写入成功,学习者进行更改<br>
+2. 小于一半的节点时时，重新进入准备阶段<br>
+3. 当收到一条提交失败时，说明有其他的提交者进行了提交，因此重新进入准备阶段</p>
+<h3 id="paxos算法的常见问题"><a class="header-anchor" href="#paxos算法的常见问题"></a>paxos算法的常见问题</h3>
+<ol>
+<li>proposalId有什么作用？</li>
+</ol>
+<blockquote>
 <p>通过类似于版本号的proposalId,将当前更改和版本进行关联，版本号大的可以替代版本号小的更改</p>
 </blockquote>
-</li>
-</ol>
-<h2 id="Zab算法"><a href="#Zab算法" class="headerlink" title="Zab算法"></a>Zab算法</h2><p>Zab协议是zk用来保证分布式事务最终一致性的的paxos算法的工程实践，其支持崩溃恢复</p>
-<p>zab协议的具体实现可以分为以下两个部分：<br>pk</p>
+<h2 id="Zab算法"><a class="header-anchor" href="#Zab算法"></a>Zab算法</h2>
+<p>Zab协议是zk用来保证分布式事务最终一致性的的paxos算法的工程实践，其支持崩溃恢复</p>
+<p>zab协议的具体实现可以分为以下两个部分：<br>
+pk</p>
 <ul>
-<li><p>消息广播阶段</p>
+<li>消息广播阶段</li>
+</ul>
 <blockquote>
 <p>Leader节点接受更改，再通知从节点，最后进行commit</p>
 </blockquote>
-</li>
-<li><p>崩溃恢复阶段</p>
+<ul>
+<li>崩溃恢复阶段</li>
+</ul>
 <blockquote>
 <p>当Leader节点宕机，会进入崩溃恢复阶段，重新进行Leader选举</p>
 </blockquote>
-</li>
-</ul>
-<h3 id="Zxid"><a href="#Zxid" class="headerlink" title="Zxid"></a>Zxid</h3><p><strong>Zxid</strong>是zab协议中的一个事务编号，由64位数字组成，其中低32位是一个简单的单调递增计数器，高32位表示leader节点的唯一任职周期。</p>
-<h3 id="zab的具体流程"><a href="#zab的具体流程" class="headerlink" title="zab的具体流程"></a>zab的具体流程</h3><h4 id="消息广播阶段"><a href="#消息广播阶段" class="headerlink" title="消息广播阶段"></a>消息广播阶段</h4><p>消息广播阶段主要是分为</p>
+<h3 id="Zxid"><a class="header-anchor" href="#Zxid"></a>Zxid</h3>
+<p><strong>Zxid</strong>是zab协议中的一个事务编号，由64位数字组成，其中低32位是一个简单的单调递增计数器，高32位表示leader节点的唯一任职周期。</p>
+<h3 id="zab的具体流程"><a class="header-anchor" href="#zab的具体流程"></a>zab的具体流程</h3>
+<h4 id="消息广播阶段"><a class="header-anchor" href="#消息广播阶段"></a>消息广播阶段</h4>
+<p>消息广播阶段主要是分为</p>
 <ol>
 <li><strong>leader</strong>节点将操作分配一个zid，封装成一个事务，放到对应的follower节点对应的队列中</li>
 <li>发送队列中的消息到对应的follower节点，返回相应的ACK消息到leader节点</li>
 <li>leader节点根据follower节点返回的消息进行操作，过半进行<strong>广播事务的提交</strong></li>
 </ol>
-<h4 id="崩溃恢复阶段"><a href="#崩溃恢复阶段" class="headerlink" title="崩溃恢复阶段"></a>崩溃恢复阶段</h4><p>可能导致进入崩溃恢复阶段的情况有：</p>
+<h4 id="崩溃恢复阶段"><a class="header-anchor" href="#崩溃恢复阶段"></a>崩溃恢复阶段</h4>
+<p>可能导致进入崩溃恢复阶段的情况有：</p>
 <ol>
 <li>初始化集群</li>
 <li>leader崩溃</li>
@@ -500,7 +518,8 @@
 <th>说明</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>following</td>
 <td>从属节点</td>
 </tr>
@@ -512,9 +531,12 @@
 <td>election/looking</td>
 <td>处于候选状态</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <ul>
-<li>选举的规则<br>候选节点首先在第一次投票中先将自己投为leander，然后将消息广播出去。其他的候选节点接受到消息后进行选举处理。<br>选举处理就是：</li>
+<li>选举的规则<br>
+候选节点首先在第一次投票中先将自己投为leander，然后将消息广播出去。其他的候选节点接受到消息后进行选举处理。<br>
+选举处理就是：</li>
 </ul>
 <ol>
 <li>首先选举 epoch 最大的</li>

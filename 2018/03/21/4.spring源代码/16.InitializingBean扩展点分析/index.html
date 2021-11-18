@@ -433,13 +433,15 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="InitializingBean扩展点分析"><a href="#InitializingBean扩展点分析" class="headerlink" title="InitializingBean扩展点分析"></a>InitializingBean扩展点分析</h1><p>上面两篇分别分析了扩展点<strong>aware</strong>、<strong>BreaProcessesor</strong>，接下来继续分析<strong>InitializingBean</strong></p>
-<h2 id="代码示例"><a href="#代码示例" class="headerlink" title="代码示例"></a>代码示例</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">InitializingBean</span> <span class="token punctuation">&#123;</span>
+                <h1>InitializingBean扩展点分析</h1>
+<p>上面两篇分别分析了扩展点<strong>aware</strong>、<strong>BreaProcessesor</strong>，接下来继续分析<strong>InitializingBean</strong></p>
+<h2 id="代码示例"><a class="header-anchor" href="#代码示例"></a>代码示例</h2>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">InitializingBean</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">void</span> <span class="token function">afterPropertiesSet</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
 <ul>
-<li>代码演示<br><img src="https://s1.ax1x.com/2020/03/21/8W8Ptf.png" alt="8W8Ptf.png"></li>
+<li>代码演示<br>
+<img src="https://s1.ax1x.com/2020/03/21/8W8Ptf.png" alt="8W8Ptf.png"></li>
 </ul>
 <ol>
 <li>InstantiationAwareBeanPostProcessor.postProcessBeforeInstantiation()</li>
@@ -453,20 +455,26 @@
 <blockquote>
 <p><strong>@PostConstruct</strong>方法底层还是依赖于<strong>BeanPostProcess接口</strong>因此应该是在4-5之间进行执行</p>
 </blockquote>
-<h2 id="执行过程"><a href="#执行过程" class="headerlink" title="执行过程"></a>执行过程</h2><ul>
+<h2 id="执行过程"><a class="header-anchor" href="#执行过程"></a>执行过程</h2>
+<ul>
 <li>调用方法</li>
 </ul>
 <ol>
-<li><p><strong>populateBean</strong><br><img src="https://s1.ax1x.com/2020/03/21/8Wetij.png" alt="8Wetij.png"></p>
+<li>
+<p><strong>populateBean</strong><br>
+<img src="https://s1.ax1x.com/2020/03/21/8Wetij.png" alt="8Wetij.png"></p>
 </li>
-<li><p><strong>initializeBean</strong>方法</p>
+<li>
+<p><strong>initializeBean</strong>方法</p>
 </li>
 </ol>
 <p><img src="https://s1.ax1x.com/2020/03/21/8WeEZD.png" alt="8WeEZD.png"></p>
 <p><strong>InitializingBean</strong>接口是一个作用域为当前bean的接口，通过在初始化完成属性后进行执行</p>
 <p>在<strong>initializeBean</strong>方法比较的重要分别执行了<strong>Awarea</strong>、<strong>BeanPostProcess</strong>的后置方法、<strong>invokeInitMethods</strong>方法</p>
-<p>这三个扩展接口整体的执行流程就是<br><strong>Instantiation</strong> -&gt; <strong>BeanPostProcessor.beafore</strong> -&gt; <strong>InitializingBean</strong> -&gt; <strong>@Init-Method</strong> -&gt; <strong>BeanPostProcessor.after</strong></p>
-<p>总结：<br><strong>InitializingBean</strong>是作为初始化对象过程赋值完毕后执行的初始化方法</p>
+<p>这三个扩展接口整体的执行流程就是<br>
+<strong>Instantiation</strong> -&gt; <strong>BeanPostProcessor.beafore</strong> -&gt; <strong>InitializingBean</strong> -&gt; <strong>@Init-Method</strong> -&gt; <strong>BeanPostProcessor.after</strong></p>
+<p>总结：<br>
+<strong>InitializingBean</strong>是作为初始化对象过程赋值完毕后执行的初始化方法</p>
 
                 
             </div>

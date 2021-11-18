@@ -433,7 +433,9 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="AOP简单使用"><a href="#AOP简单使用" class="headerlink" title="AOP简单使用"></a>AOP简单使用</h1><h2 id="AOP术语"><a href="#AOP术语" class="headerlink" title="AOP术语"></a>AOP术语</h2><ul>
+                <h1>AOP简单使用</h1>
+<h2 id="AOP术语"><a class="header-anchor" href="#AOP术语"></a>AOP术语</h2>
+<ul>
 <li><strong>通知(Advice)</strong></li>
 </ul>
 <table>
@@ -443,7 +445,8 @@
 <th>作用</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>前置通知</td>
 <td>在目标方法调用之前执行通知功能</td>
 </tr>
@@ -463,26 +466,37 @@
 <td>环绕通知</td>
 <td>通知包裹被通知的方法，在被通知的方法调用之前和调用之后执行自定义的行为</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <ul>
-<li><p><strong>连接点</strong><br>连接点是应用执行过程中能够插入切面的一个点。切面代码可以利用这些点将切面插入到正常流程中</p>
+<li>
+<p><strong>连接点</strong><br>
+连接点是应用执行过程中能够插入切面的一个点。切面代码可以利用这些点将切面插入到正常流程中</p>
 </li>
-<li><p><strong>切点</strong><br>切点的定义会匹配通知所要织入的一个或多个连接点。通常用明确的类或方法名称或者是正则表达式定义所匹配的类和方法来指定切点</p>
+<li>
+<p><strong>切点</strong><br>
+切点的定义会匹配通知所要织入的一个或多个连接点。通常用明确的类或方法名称或者是正则表达式定义所匹配的类和方法来指定切点</p>
 </li>
-<li><p><strong>切面</strong><br>切面是通知和切点的结合。通知和切点定义了切面的全部内容</p>
+<li>
+<p><strong>切面</strong><br>
+切面是通知和切点的结合。通知和切点定义了切面的全部内容</p>
 </li>
-<li><p><strong>引入</strong><br>引入允许我们向现有的类添加新方法或属性</p>
+<li>
+<p><strong>引入</strong><br>
+引入允许我们向现有的类添加新方法或属性</p>
 </li>
-<li><p><strong>织入</strong><br>织入是把切面应用到目标对象并创建新的代理对象的过程。织入可以在<strong>编译器</strong>、<strong>类加载期</strong>、<strong>运行期</strong></p>
+<li>
+<p><strong>织入</strong><br>
+织入是把切面应用到目标对象并创建新的代理对象的过程。织入可以在<strong>编译器</strong>、<strong>类加载期</strong>、<strong>运行期</strong></p>
 </li>
 </ul>
-<h2 id="AOP示例"><a href="#AOP示例" class="headerlink" title="AOP示例"></a>AOP示例</h2><blockquote>
+<h2 id="AOP示例"><a class="header-anchor" href="#AOP示例"></a>AOP示例</h2>
+<blockquote>
 <p>切点</p>
 </blockquote>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Pointcut</span><span class="token punctuation">(</span><span class="token string">"execution(* com.example.springdemo.interfaces.impl.*.*(..))"</span><span class="token punctuation">)</span>
 <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">performance</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
 <blockquote>
 <p>前置通知</p>
 </blockquote>
@@ -490,7 +504,6 @@
 <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">silenceCellPhones</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
     log<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">"Silencing cell phone"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
 <blockquote>
 <p>后置通知</p>
 </blockquote>
@@ -506,7 +519,6 @@
     <span class="token comment">//执行目标方法</span>
     joinPoint<span class="token punctuation">.</span><span class="token function">proceed</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <blockquote>
 <p>返回通知</p>
 </blockquote>
@@ -514,7 +526,6 @@
 <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">applause</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
     log<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">"CLAP CLAP CLAP"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
 <blockquote>
 <p>异常通知</p>
 </blockquote>
@@ -522,16 +533,21 @@
 <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">demandRefund</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
     log<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">"Demanding a refund"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="增强类型"><a href="#增强类型" class="headerlink" title="增强类型"></a>增强类型</h2><h3 id="前置增强"><a href="#前置增强" class="headerlink" title="前置增强"></a>前置增强</h3><ul>
+<h2 id="增强类型"><a class="header-anchor" href="#增强类型"></a>增强类型</h2>
+<h3 id="前置增强"><a class="header-anchor" href="#前置增强"></a>前置增强</h3>
+<ul>
 <li>接口<strong>org.springframework.aop.MethodBeforeAdvice</strong></li>
 </ul>
-<h3 id="后置增强"><a href="#后置增强" class="headerlink" title="后置增强"></a>后置增强</h3><ul>
+<h3 id="后置增强"><a class="header-anchor" href="#后置增强"></a>后置增强</h3>
+<ul>
 <li>接口<strong>org.springframework.aop.AfterReturningAdvice</strong></li>
 </ul>
-<h3 id="环绕增强"><a href="#环绕增强" class="headerlink" title="环绕增强"></a>环绕增强</h3><ul>
+<h3 id="环绕增强"><a class="header-anchor" href="#环绕增强"></a>环绕增强</h3>
+<ul>
 <li>接口<strong>org.springframework.aop.MethodMatcher</strong></li>
 </ul>
-<h3 id="异常增强"><a href="#异常增强" class="headerlink" title="异常增强"></a>异常增强</h3><ul>
+<h3 id="异常增强"><a class="header-anchor" href="#异常增强"></a>异常增强</h3>
+<ul>
 <li>接口<strong>org.springframework.aop.ThrowsAdvice</strong></li>
 </ul>
 <blockquote>
@@ -571,7 +587,6 @@
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <blockquote>
 <p>ServiceTest.java</p>
 </blockquote>
@@ -580,7 +595,6 @@
         <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getSimpleName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">" : execute"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <blockquote>
 <p>执行主函数</p>
 </blockquote>
@@ -600,13 +614,15 @@
         serviceTest<span class="token punctuation">.</span><span class="token function">execute</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <blockquote>
-<p>执行结果<br><img src="https://s2.ax1x.com/2020/03/11/8F5eDU.png" alt="8F5eDU.png"></p>
+<p>执行结果<br>
+<img src="https://s2.ax1x.com/2020/03/11/8F5eDU.png" alt="8F5eDU.png"></p>
 </blockquote>
-<p>通过<strong>ProxyFactory</strong>通过<strong>setTarget()**设置目标对象，通过</strong>addAdvice**添加增强器形成增强链，在代理类执行方法时会执行增强器</p>
-<h2 id="切点表达式"><a href="#切点表达式" class="headerlink" title="切点表达式"></a>切点表达式</h2><p>spring aop中只是用到AspectJ语法中的一个子集</p>
-<h3 id="切点表达式函数"><a href="#切点表达式函数" class="headerlink" title="切点表达式函数"></a>切点表达式函数</h3><table>
+<p>通过<strong>ProxyFactory</strong>通过<strong>setTarget()<strong>设置目标对象，通过</strong>addAdvice</strong>添加增强器形成增强链，在代理类执行方法时会执行增强器</p>
+<h2 id="切点表达式"><a class="header-anchor" href="#切点表达式"></a>切点表达式</h2>
+<p>spring aop中只是用到AspectJ语法中的一个子集</p>
+<h3 id="切点表达式函数"><a class="header-anchor" href="#切点表达式函数"></a>切点表达式函数</h3>
+<table>
 <thead>
 <tr>
 <th>类型</th>
@@ -614,7 +630,8 @@
 <th>说明</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>方法切点函数</td>
 <td>execution()，@annotation()</td>
 <td>通过描述目标方法信息定义连接点</td>
@@ -634,17 +651,20 @@
 <td>this()</td>
 <td>通过描述目标类的代理类的信息定义连接点</td>
 </tr>
-</tbody></table>
-<h3 id="函数说明"><a href="#函数说明" class="headerlink" title="函数说明"></a>函数说明</h3><table>
+</tbody>
+</table>
+<h3 id="函数说明"><a class="header-anchor" href="#函数说明"></a>函数说明</h3>
+<table>
 <thead>
 <tr>
 <th>函数</th>
 <th>说明</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>execution()</td>
-<td>表示满足某一匹配模式的所有目标类方法连接点，如execution(* handle(..))表示所有目标类中的handle()方法</td>
+<td>表示满足某一匹配模式的所有目标类方法连接点，如execution(* handle(…))表示所有目标类中的handle()方法</td>
 </tr>
 <tr>
 <td>@annotation()</td>
@@ -660,7 +680,7 @@
 </tr>
 <tr>
 <td>within</td>
-<td>表示特定域下的所有连接点，如within(com.service.*)，within(com.service.*Service)和within(com.service..*)</td>
+<td>表示特定域下的所有连接点，如within(com.service.*)，within(com.service.*Service)和within(com.service…*)</td>
 </tr>
 <tr>
 <td>target()</td>
@@ -682,84 +702,100 @@
 <td>bean(beanName)</td>
 <td>这个是Spring特有的表示beanName的bean</td>
 </tr>
-</tbody></table>
-<h3 id="通配符"><a href="#通配符" class="headerlink" title="通配符"></a>通配符</h3><table>
+</tbody>
+</table>
+<h3 id="通配符"><a class="header-anchor" href="#通配符"></a>通配符</h3>
+<table>
 <thead>
 <tr>
 <th>类型</th>
 <th>说明</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>*</td>
 <td>匹配任意字符，但只能匹配上下文中的一个元素</td>
 </tr>
 <tr>
-<td>..</td>
+<td>…</td>
 <td>匹配任意字符，可以匹配上下文中的多个元素。表示类时，和*联合使用；表示入参时单独使用</td>
 </tr>
 <tr>
 <td>+</td>
 <td>按类型匹配指定类的所有类（包括实现类和继承类），必须跟在类名后面</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <ul>
 <li>支持所有通配符：execution()，within()</li>
 <li>仅支持+通配符：args()，this()，target()</li>
 <li>不支持通配符：@args，@within，@target，@annotation</li>
 </ul>
-<h3 id="execution-语法"><a href="#execution-语法" class="headerlink" title="execution()语法"></a>execution()语法</h3><ul>
+<h3 id="execution-语法"><a class="header-anchor" href="#execution-语法"></a>execution()语法</h3>
+<ul>
 <li>语法：execution(&lt;修饰符模式&gt;? &lt;返回类型模式&gt; &lt;方法名模式&gt; (&lt;参数模式&gt;) &lt;异常模式&gt;?)</li>
 </ul>
-<h4 id="通过方法签名定义切点"><a href="#通过方法签名定义切点" class="headerlink" title="通过方法签名定义切点"></a>通过方法签名定义切点</h4><ul>
-<li>execution(pulic * *(..))：匹配目标类的public方法，第一个*代表返回类型，第二个*代表方法名，..代表任意入参</li>
-<li>execution(* *To(..))：匹配目标类所有以To结尾的方法，第一个*代表返回类型，*To代表任意以To结尾的方法</li>
+<h4 id="通过方法签名定义切点"><a class="header-anchor" href="#通过方法签名定义切点"></a>通过方法签名定义切点</h4>
+<ul>
+<li>execution(pulic * *(…))：匹配目标类的public方法，第一个*代表返回类型，第二个*代表方法名，…代表任意入参</li>
+<li>execution(* *To(…))：匹配目标类所有以To结尾的方法，第一个*代表返回类型，*To代表任意以To结尾的方法</li>
 </ul>
-<h4 id="通过类定义切点"><a href="#通过类定义切点" class="headerlink" title="通过类定义切点"></a>通过类定义切点</h4><ul>
-<li>execution(* com.data.User.*(..))：匹配User接口的所有方法</li>
-<li>execution(* com.data.User+.*(..))：匹配User接口的所有方法，包括其实现类中不在User接口中定义的方法</li>
+<h4 id="通过类定义切点"><a class="header-anchor" href="#通过类定义切点"></a>通过类定义切点</h4>
+<ul>
+<li>execution(* com.data.User.*(…))：匹配User接口的所有方法</li>
+<li>execution(* com.data.User+.*(…))：匹配User接口的所有方法，包括其实现类中不在User接口中定义的方法</li>
 </ul>
-<h4 id="通过类包定义切点"><a href="#通过类包定义切点" class="headerlink" title="通过类包定义切点"></a>通过类包定义切点</h4><ul>
-<li>execution(* com.data.*(..))：匹配data包下所有类的所有方法</li>
-<li>execution(* com.data.User..*(..))：匹配data包及其子孙包中的所有类的所有方法</li>
-<li>execution(* com..*Manager.get*(..))：匹配com包及其子孙包中后缀为Manager的类里以get开头的方法</li>
+<h4 id="通过类包定义切点"><a class="header-anchor" href="#通过类包定义切点"></a>通过类包定义切点</h4>
+<ul>
+<li>execution(* com.data.*(…))：匹配data包下所有类的所有方法</li>
+<li>execution(* com.data.User…*(…))：匹配data包及其子孙包中的所有类的所有方法</li>
+<li>execution(* com…*Manager.get*(…))：匹配com包及其子孙包中后缀为Manager的类里以get开头的方法</li>
 </ul>
-<h4 id="通过方法入参定义切点"><a href="#通过方法入参定义切点" class="headerlink" title="通过方法入参定义切点"></a>通过方法入参定义切点</h4><ul>
+<h4 id="通过方法入参定义切点"><a class="header-anchor" href="#通过方法入参定义切点"></a>通过方法入参定义切点</h4>
+<ul>
 <li>execution(* get(String, int))：匹配get(String, int)方法</li>
 <li>execution(* get(String, *))：匹配名为get且第一个入参类型为String、第二个入参类型任意的方法</li>
-<li>execution(* get(String, ..))：匹配名为get且第一个入参为String类型的方法</li>
+<li>execution(* get(String, …))：匹配名为get且第一个入参为String类型的方法</li>
 <li>execution(* get(Object+))：匹配名为get且唯一入参是Object或其子类的方法</li>
 </ul>
-<h3 id="逻辑运算符"><a href="#逻辑运算符" class="headerlink" title="逻辑运算符"></a>逻辑运算符</h3><ul>
+<h3 id="逻辑运算符"><a class="header-anchor" href="#逻辑运算符"></a>逻辑运算符</h3>
+<ul>
 <li>与&amp;&amp;，或||，非!</li>
 </ul>
-<h3 id="织入顺序"><a href="#织入顺序" class="headerlink" title="织入顺序"></a>织入顺序</h3><ul>
+<h3 id="织入顺序"><a class="header-anchor" href="#织入顺序"></a>织入顺序</h3>
+<ul>
 <li>如果增强在同一个切面类中声明，则依照增强在切面类中定义的顺序织入</li>
 <li>如果增强位于不同的增强类中，且都实现了org.springframework.core.Ordered接口，则由接口方法的顺序号决定（顺序号小的先织入）</li>
 <li>如果增强位于不同的增强类中，且没有实现org.springframework.core.Ordered接口，织入顺序不确定</li>
 </ul>
-<h3 id="获取连接点信息"><a href="#获取连接点信息" class="headerlink" title="获取连接点信息"></a>获取连接点信息</h3><ul>
-<li><strong>args()**用于绑定连接点方法的入参，</strong>@annotation()<strong>用于绑定连接点方法的注解对象，</strong>@args()**用于绑定连接点方法的入参注解。下例表示方法入参为(String, int, ..)的方法匹配该切点，并将name和age两个参数绑定到切面方法的入参中</li>
+<h3 id="获取连接点信息"><a class="header-anchor" href="#获取连接点信息"></a>获取连接点信息</h3>
+<ul>
+<li>**args()<strong>用于绑定连接点方法的入参，</strong>@annotation()<strong>用于绑定连接点方法的注解对象，</strong>@args()**用于绑定连接点方法的入参注解。下例表示方法入参为(String, int, …)的方法匹配该切点，并将name和age两个参数绑定到切面方法的入参中</li>
 <li>AspectJ使用org.aspectj.lang.<strong>JointPoint</strong>接口表示目标类连接点对象。如果是环绕增强时，使用org.aspectj.lang.<strong>ProceedingJointPoint</strong>表示连接点对象，该类是JointPoint接口的子接口。任何一个增强方法都可以通过将第一个入参声明为JointPoint访问到连接点上下文的信息</li>
-<li>使用<strong>this()**或</strong>target()**可以绑定被代理对象的实例。下例表示代理对象为User类的所有方法匹配该切点，且代理对象绑定到user入参中</li>
+<li>使用**this()<strong>或</strong>target()**可以绑定被代理对象的实例。下例表示代理对象为User类的所有方法匹配该切点，且代理对象绑定到user入参中</li>
 <li>**@within()**和__@target()__函数可以将目标类的注解对象绑定到增强方法中</li>
 <li>通过<strong>returning</strong>绑定连接点方法的返回值</li>
 <li>使用<strong>AfterThrowing</strong>注解的<strong>throwing</strong>成员绑定</li>
 </ul>
-<h2 id="动态代理的两种方式"><a href="#动态代理的两种方式" class="headerlink" title="动态代理的两种方式"></a>动态代理的两种方式</h2><ul>
-<li><p>JDK中的动态代理是动态创建一个具有某种接口能力的代理对象。这样就必须要有Interface并且方法必须是<strong>public</strong>和<strong>public final</strong>的</p>
+<h2 id="动态代理的两种方式"><a class="header-anchor" href="#动态代理的两种方式"></a>动态代理的两种方式</h2>
+<ul>
+<li>
+<p>JDK中的动态代理是动态创建一个具有某种接口能力的代理对象。这样就必须要有Interface并且方法必须是<strong>public</strong>和<strong>public final</strong>的</p>
 </li>
-<li><p>CGLib采用的是底层的字节码技术，通过子类去拦截父类的方法，织入横切逻辑；不能代理<strong>final</strong>和<strong>private</strong></p>
+<li>
+<p>CGLib采用的是底层的字节码技术，通过子类去拦截父类的方法，织入横切逻辑；不能代理<strong>final</strong>和<strong>private</strong></p>
 </li>
-<li><p>演示代码</p>
+<li>
+<p>演示代码</p>
 </li>
-<li><p>TargetService.java</p>
+<li>
+<p>TargetService.java</p>
 </li>
 </ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">interface</span> <span class="token class-name">TargetService</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">process</span><span class="token punctuation">(</span><span class="token class-name">String</span> param<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
 <ul>
 <li>TargetServiceImpl.java</li>
 </ul>
@@ -769,7 +805,6 @@
         <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getSimpleName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">":"</span> <span class="token operator">+</span> param<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ul>
 <li>CglibProxy.java</li>
 </ul>
@@ -791,7 +826,6 @@
         <span class="token keyword">return</span> obj<span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ul>
 <li>JdkProxy.java</li>
 </ul>
@@ -811,7 +845,6 @@
         <span class="token keyword">return</span> obj<span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ul>
 <li>MainApp.java</li>
 </ul>
@@ -829,7 +862,6 @@
         cglibServiceProxy<span class="token punctuation">.</span><span class="token function">process</span><span class="token punctuation">(</span><span class="token string">"CGLib 动态代理"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ul>
 <li>运行结果</li>
 </ul>

@@ -433,13 +433,18 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="线程的取消与关闭"><a href="#线程的取消与关闭" class="headerlink" title="线程的取消与关闭"></a>线程的取消与关闭</h1><p>在看《java并发编程实战》中的线程的取消和关闭中看到两个例子比较有趣，因此记录下来。</p>
-<h2 id="程序目的"><a href="#程序目的" class="headerlink" title="程序目的"></a>程序目的</h2><blockquote>
+                <h1>线程的取消与关闭</h1>
+<p>在看《java并发编程实战》中的线程的取消和关闭中看到两个例子比较有趣，因此记录下来。</p>
+<h2 id="程序目的"><a class="header-anchor" href="#程序目的"></a>程序目的</h2>
+<blockquote>
 <p>想通过某种动作来达到取消某个特定线程的执行，从而达到中断改线程的目的</p>
 </blockquote>
-<h2 id="自定义标志位来控制线程的中断"><a href="#自定义标志位来控制线程的中断" class="headerlink" title="自定义标志位来控制线程的中断"></a>自定义标志位来控制线程的中断</h2><p>书中先展示了一种反例，通过自定义标志位来控制线程的中断</p>
+<h2 id="自定义标志位来控制线程的中断"><a class="header-anchor" href="#自定义标志位来控制线程的中断"></a>自定义标志位来控制线程的中断</h2>
+<p>书中先展示了一种反例，通过自定义标志位来控制线程的中断</p>
 <ul>
-<li>product<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">Producer</span><span class="token punctuation">&#123;</span>
+<li>product</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">Producer</span><span class="token punctuation">&#123;</span>
     <span class="token comment">/**
      * flag标志是否暂停生产
      */</span>
@@ -478,21 +483,17 @@
         <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">":暂停"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-</li>
-</ul>
 <p>通过volatile修饰flag标志位来控制生产者线程的取消</p>
 <ul>
-<li>main<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">BlockingQueue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">BigInteger</span><span class="token punctuation">></span></span> queue <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayBlockingQueue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">BigInteger</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<li>main</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">BlockingQueue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">BigInteger</span><span class="token punctuation">></span></span> queue <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayBlockingQueue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">BigInteger</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token class-name">Producer</span> producer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Producer</span><span class="token punctuation">(</span>queue<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-></span><span class="token punctuation">&#123;</span>
     producer<span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span class="token punctuation">,</span><span class="token string">"生产者线程"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 producer<span class="token punctuation">.</span><span class="token function">cancel</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-</li>
-</ul>
 <p>执行结果：</p>
 <p><img src="https://s1.ax1x.com/2020/05/24/tSHM5T.png" alt="tSHM5T.png"></p>
 <blockquote>
@@ -500,8 +501,10 @@ producer<span class="token punctuation">.</span><span class="token function">can
 </blockquote>
 <p><img src="https://s1.ax1x.com/2020/05/24/tSvZfP.png" alt="tSvZfP.png"></p>
 <p>通过Arthas观察线程的执行情况,<strong>生产者线程</strong>状态为waiting,可以看到生产者线程在等待阻塞队列释放空间。由于生产者线程会一直等待阻塞队列的释放，所以并不能达到中断生产者线程的效果。</p>
-<h2 id="使用中断来进行取消"><a href="#使用中断来进行取消" class="headerlink" title="使用中断来进行取消"></a>使用中断来进行取消</h2><ul>
-<li><p>product</p>
+<h2 id="使用中断来进行取消"><a class="header-anchor" href="#使用中断来进行取消"></a>使用中断来进行取消</h2>
+<ul>
+<li>product</li>
+</ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java">
 <span class="token keyword">class</span> <span class="token class-name">ProducerInterrupt</span><span class="token punctuation">&#123;</span>
     <span class="token comment">/**
@@ -529,9 +532,8 @@ producer<span class="token punctuation">.</span><span class="token function">can
         <span class="token punctuation">&#125;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><p>main</p>
-</li>
+<ul>
+<li>main</li>
 </ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">BlockingQueue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">BigInteger</span><span class="token punctuation">></span></span> queue <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayBlockingQueue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">BigInteger</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token class-name">ProducerInterrupt</span> producer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ProducerInterrupt</span><span class="token punctuation">(</span>queue<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -541,8 +543,10 @@ producer<span class="token punctuation">.</span><span class="token function">can
 t1<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 t1<span class="token punctuation">.</span><span class="token function">interrupt</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>执行结果：<br><img src="https://s1.ax1x.com/2020/05/24/tpS00g.png" alt="tpS00g.png"></p>
-<p>总结：<br>在使用自定义的标志位来进行线程的取消操作时，要格外注意是否有会阻塞运行线程的操作。当存在有阻塞运行线程的操作时，会阻塞判断标志位的操作。</p>
+<p>执行结果：<br>
+<img src="https://s1.ax1x.com/2020/05/24/tpS00g.png" alt="tpS00g.png"></p>
+<p>总结：<br>
+在使用自定义的标志位来进行线程的取消操作时，要格外注意是否有会阻塞运行线程的操作。当存在有阻塞运行线程的操作时，会阻塞判断标志位的操作。</p>
 
                 
             </div>

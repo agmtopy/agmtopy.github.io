@@ -433,8 +433,10 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="mockito使用小结"><a href="#mockito使用小结" class="headerlink" title="mockito使用小结"></a>mockito使用小结</h1><p>mock框架是测试中必不可少的，它的主要作用是模拟一些在应用中不容易构造或者比较复杂的对象，从而把测试与测试边界以外的对象隔离开。目前市面上流行的mock框架主要有Mockito、JMock、EasyMock、JMock。这几种框架的对比如下</p>
-<h2 id="Mockito使用示例"><a href="#Mockito使用示例" class="headerlink" title="Mockito使用示例"></a>Mockito使用示例</h2><ul>
+                <h1>mockito使用小结</h1>
+<p>mock框架是测试中必不可少的，它的主要作用是模拟一些在应用中不容易构造或者比较复杂的对象，从而把测试与测试边界以外的对象隔离开。目前市面上流行的mock框架主要有Mockito、JMock、EasyMock、JMock。这几种框架的对比如下</p>
+<h2 id="Mockito使用示例"><a class="header-anchor" href="#Mockito使用示例"></a>Mockito使用示例</h2>
+<ul>
 <li>模拟对象</li>
 </ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Test</span>
@@ -444,7 +446,6 @@
     <span class="token comment">//未指定方法返回值因此打印null</span>
     <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>mock<span class="token punctuation">.</span><span class="token function">method1</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ul>
 <li>模拟方法的返回值</li>
 </ul>
@@ -462,7 +463,6 @@
     <span class="token class-name">Mockito</span><span class="token punctuation">.</span><span class="token function">when</span><span class="token punctuation">(</span>mock1<span class="token punctuation">.</span><span class="token function">method2</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">thenReturn</span><span class="token punctuation">(</span><span class="token string">"mock method"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token class-name">Assert</span><span class="token punctuation">.</span><span class="token function">hasText</span><span class="token punctuation">(</span>mock1<span class="token punctuation">.</span><span class="token function">method2</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token string">"mock method"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ul>
 <li>模拟方法抛出异常</li>
 </ul>
@@ -472,17 +472,8 @@
     <span class="token class-name">Mockito</span><span class="token punctuation">.</span><span class="token function">doThrow</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">NullPointerException</span><span class="token punctuation">(</span><span class="token string">"mock NPE"</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">.</span><span class="token function">when</span><span class="token punctuation">(</span>mock<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">method2</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token function">assertThrows</span><span class="token punctuation">(</span><span class="token class-name">NullPointerException</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">,</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-></span> mock<span class="token punctuation">.</span><span class="token function">method2</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token string">"mock NPE"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-
-
-
-
-
-
-
-
-<p>ps:Mock与Stub的区别<br>Mock主要是对不可信赖的代码进行”模拟行为”，Stub主要是将不可信赖的代码片段用”简化”的代码片段进行替代</p>
+<p>ps:Mock与Stub的区别<br>
+Mock主要是对不可信赖的代码进行&quot;模拟行为&quot;，Stub主要是将不可信赖的代码片段用&quot;简化&quot;的代码片段进行替代</p>
 <p><a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000010385247">https://segmentfault.com/a/1190000010385247</a></p>
 
                 

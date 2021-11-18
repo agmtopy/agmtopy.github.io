@@ -386,12 +386,25 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">No tag</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Netty/">
+                                <span class="chip bg-color">Netty</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/Netty/" class="post-category">
+                                Netty
+                            </a>
+                        
+                    </div>
                     
                 </div>
             </div>
@@ -420,7 +433,77 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                
+                <h1>Netty入门基础二</h1>
+<p>在上一篇文章中主要介绍了Netty是从何而来以及概念和组件，下面咱们来看一下如何实现一个简单的例子</p>
+<p>分析Netty实例主要是为了展示服务器端的<B>业务逻辑</B>和<B>引导代码</B>两部分<br>
+服务端的业务逻辑处理主要分为两个部分一部分是对于<B>channel</B>的事件进行处理，另外一部分是对<B>业务数据</B>的处理<br>
+主要以RocketMQ中的<a target="_blank" rel="noopener" href="https://github.com/apache/rocketmq/blob/master/remoting/src/main/java/org/apache/rocketmq/remoting/netty/NettyRemotingServer.java">NettyRemotingServer</a>为主</p>
+<h3 id="引导代码"><a class="header-anchor" href="#引导代码"></a>引导代码</h3>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">ServerBootstrap</span> childHandler <span class="token operator">=</span>
+    <span class="token comment">//1. 设置EventLoopGroup</span>
+    <span class="token keyword">this</span><span class="token punctuation">.</span>serverBootstrap<span class="token punctuation">.</span><span class="token function">group</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>eventLoopGroupBoss<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>eventLoopGroupSelector<span class="token punctuation">)</span>
+        <span class="token comment">//2. 设置channel处理类型</span>
+        <span class="token punctuation">.</span><span class="token function">channel</span><span class="token punctuation">(</span><span class="token function">useEpoll</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token class-name">EpollServerSocketChannel</span><span class="token punctuation">.</span><span class="token keyword">class</span> <span class="token operator">:</span> <span class="token class-name">NioServerSocketChannel</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span>
+        <span class="token comment">//3. 设置用于监听socket的属性</span>
+        <span class="token punctuation">.</span><span class="token function">option</span><span class="token punctuation">(</span><span class="token class-name">ChannelOption</span><span class="token punctuation">.</span>SO_BACKLOG<span class="token punctuation">,</span> <span class="token number">1024</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">option</span><span class="token punctuation">(</span><span class="token class-name">ChannelOption</span><span class="token punctuation">.</span>SO_REUSEADDR<span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">option</span><span class="token punctuation">(</span><span class="token class-name">ChannelOption</span><span class="token punctuation">.</span>SO_KEEPALIVE<span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">)</span>
+        <span class="token comment">//4. 设置创建socket后再创建的socket</span>
+        <span class="token punctuation">.</span><span class="token function">childOption</span><span class="token punctuation">(</span><span class="token class-name">ChannelOption</span><span class="token punctuation">.</span>TCP_NODELAY<span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">childOption</span><span class="token punctuation">(</span><span class="token class-name">ChannelOption</span><span class="token punctuation">.</span>SO_SNDBUF<span class="token punctuation">,</span> nettyServerConfig<span class="token punctuation">.</span><span class="token function">getServerSocketSndBufSize</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">.</span><span class="token function">childOption</span><span class="token punctuation">(</span><span class="token class-name">ChannelOption</span><span class="token punctuation">.</span>SO_RCVBUF<span class="token punctuation">,</span> nettyServerConfig<span class="token punctuation">.</span><span class="token function">getServerSocketRcvBufSize</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token comment">//5. 设置链接地址</span>
+        <span class="token punctuation">.</span><span class="token function">localAddress</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">InetSocketAddress</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>nettyServerConfig<span class="token punctuation">.</span><span class="token function">getListenPort</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token comment">//6. 设置业务处理 Channel</span>
+        <span class="token punctuation">.</span><span class="token function">childHandler</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">ChannelInitializer</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">SocketChannel</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token annotation punctuation">@Override</span>
+            <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">initChannel</span><span class="token punctuation">(</span><span class="token class-name">SocketChannel</span> ch<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
+                ch<span class="token punctuation">.</span><span class="token function">pipeline</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+                    <span class="token punctuation">.</span><span class="token function">addLast</span><span class="token punctuation">(</span>defaultEventExecutorGroup<span class="token punctuation">,</span> HANDSHAKE_HANDLER_NAME<span class="token punctuation">,</span> handshakeHandler<span class="token punctuation">)</span>
+                    <span class="token punctuation">.</span><span class="token function">addLast</span><span class="token punctuation">(</span>defaultEventExecutorGroup<span class="token punctuation">,</span>
+                        encoder<span class="token punctuation">,</span>
+                        <span class="token keyword">new</span> <span class="token class-name">NettyDecoder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                        <span class="token keyword">new</span> <span class="token class-name">IdleStateHandler</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> nettyServerConfig<span class="token punctuation">.</span><span class="token function">getServerChannelMaxIdleTimeSeconds</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+                        connectionManageHandler<span class="token punctuation">,</span>
+                        serverHandler
+                    <span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>引导代码主要是分为以下几个步骤</p>
+<ol>
+<li>设置EventLoopGroup</li>
+<li>设置Channel处理类型</li>
+<li>设置监听socket的属性</li>
+<li>设置地址端口</li>
+<li>设置业务处理的Channel</li>
+</ol>
+<h3 id="业务逻辑"><a class="header-anchor" href="#业务逻辑"></a>业务逻辑</h3>
+<p>业务处理逻辑是由<B>ChannelInitializer</B>实现的，分别是添加了两个处理策略分别是</p>
+<ul>
+<li>
+<p>HandshakeHandler handshakeHandler</p>
+</li>
+<li>
+<p>NettyServerHandler serverHandler</p>
+</li>
+</ul>
+<p>这两个策略都是继承于<B>SimpleChannelInboundHandler</B>,<br>
+HandshakeHandler只是处理入站链接是否需要TSL加密处理的，因此相关参数也比较简单<br>
+NettyServerHandler是真正的业务处理类,因此跟随了很多执行的策略配置参数等</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//设置业务处理策略</span>
+<span class="token punctuation">.</span><span class="token function">addLast</span><span class="token punctuation">(</span>defaultEventExecutorGroup<span class="token punctuation">,</span>
+    encoder<span class="token punctuation">,</span><span class="token comment">//设置解码器</span>
+    <span class="token keyword">new</span> <span class="token class-name">NettyDecoder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token comment">//设置编码器</span>
+    <span class="token keyword">new</span> <span class="token class-name">IdleStateHandler</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> nettyServerConfig<span class="token punctuation">.</span><span class="token function">getServerChannelMaxIdleTimeSeconds</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+    connectionManageHandler<span class="token punctuation">,</span><span class="token comment">//设置双工处理策略</span>
+    serverHandler
+<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>下面来分析以下SimpleChannelInboundHandler的设计</p>
+<h2 id="源码分析"><a class="header-anchor" href="#源码分析"></a>源码分析</h2>
+<h3 id="SimpleChannelInboundHandler"><a class="header-anchor" href="#SimpleChannelInboundHandler"></a>SimpleChannelInboundHandler</h3>
+<p>从上面可以看到业务的处理类都继承于<B>SimpleChannelInboundHandler</B><br>
+<img src="https://i.loli.net/2021/11/18/GmHgT5OzsdwFfLk.jpg" alt="SimpleChannelInboundHandler的继承关系"></p>
+
                 
             </div>
             <hr/>
@@ -432,7 +515,11 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">No tag</span>
+                            
+                                <a href="/tags/Netty/">
+                                    <span class="chip bg-color">Netty</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -529,7 +616,7 @@
                 Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/07/29/10.netty%E7%AC%94%E8%AE%B0/Netty%E5%85%A5%E9%97%A8%E5%9F%BA%E7%A1%80%E4%B8%80/">
+                <a href="/2020/07/29/10.netty%E7%AC%94%E8%AE%B0/1.Netty%E5%85%A5%E9%97%A8%E5%9F%BA%E7%A1%80%E4%B8%80/">
                     <div class="card-image">
                         
                         

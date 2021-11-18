@@ -433,28 +433,33 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="shardingSphere理论基础"><a href="#shardingSphere理论基础" class="headerlink" title="shardingSphere理论基础"></a>shardingSphere理论基础</h1><h2 id="理论"><a href="#理论" class="headerlink" title="理论"></a>理论</h2><p>shardingSpgere实现JDBC规范，并在此基础上进行扩展</p>
-<h2 id="核心概念"><a href="#核心概念" class="headerlink" title="核心概念"></a>核心概念</h2><p>数据分片按照拆分的方式分为水平拆分和垂直拆分</p>
+                <h1>shardingSphere理论基础</h1>
+<h2 id="理论"><a class="header-anchor" href="#理论"></a>理论</h2>
+<p>shardingSpgere实现JDBC规范，并在此基础上进行扩展</p>
+<h2 id="核心概念"><a class="header-anchor" href="#核心概念"></a>核心概念</h2>
+<p>数据分片按照拆分的方式分为水平拆分和垂直拆分</p>
 <ul>
-<li><p>垂直拆分</p>
+<li>垂直拆分</li>
+</ul>
 <blockquote>
 <p>垂直拆分指的是专库专用，将不同业务的表拆分到对应的库中。微服务架构下已基本实现垂直拆分</p>
 </blockquote>
-</li>
-<li><p>水平拆分</p>
+<ul>
+<li>水平拆分</li>
+</ul>
 <blockquote>
 <p>水平拆分指的是通过根据某种规则将数据放到指定的数据节点中，数据节点是由库和表组合而成的</p>
 </blockquote>
-</li>
-</ul>
-<h3 id="shardingSphere中的基本概念"><a href="#shardingSphere中的基本概念" class="headerlink" title="shardingSphere中的基本概念"></a>shardingSphere中的基本概念</h3><table>
+<h3 id="shardingSphere中的基本概念"><a class="header-anchor" href="#shardingSphere中的基本概念"></a>shardingSphere中的基本概念</h3>
+<table>
 <thead>
 <tr>
 <th>名称</th>
 <th>作用</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>逻辑表</td>
 <td>在代码逻辑上对拆分表的总称</td>
 </tr>
@@ -474,7 +479,8 @@
 <td>广播表</td>
 <td>广播表类似于mycat中的全局表,适用于作为字典表</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <ul>
 <li>shardingSphere支持的分片策略</li>
 </ul>
@@ -485,7 +491,8 @@
 <th>作用</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>精确分片算法</td>
 <td>用于处理使用单一键作为分片键的=与IN进行分片的场景</td>
 </tr>
@@ -501,48 +508,58 @@
 <td>Hint分片算法</td>
 <td>用于处理使用Hint行分片的场景(使用外部数据进行分片)</td>
 </tr>
-</tbody></table>
-<h3 id="JDBC规范"><a href="#JDBC规范" class="headerlink" title="JDBC规范"></a>JDBC规范</h3><ul>
-<li><p>DataSource</p>
+</tbody>
+</table>
+<h3 id="JDBC规范"><a class="header-anchor" href="#JDBC规范"></a>JDBC规范</h3>
+<ul>
+<li>DataSource</li>
+</ul>
 <blockquote>
 <p>DataSource 在 JDBC 规范中代表的是一种数据源，核心作用是获取数据库连接对象 Connection。可以直接通过 DriverManager 获取 Connection</p>
 </blockquote>
-</li>
-<li><p>Connection</p>
+<ul>
+<li>Connection</li>
+</ul>
 <blockquote>
 <p>DataSource 的目的是获取 Connection 对象，我们可以把 Connection 理解为一种会话（Session）机制。Connection 代表一个数据库连接，负责完成与数据库之间的通信。所有 SQL 的执行都是在某个特定 Connection 环境中进行的，同时它还提供了一组重载方法，分别用于创建 Statement 和 PreparedStatement。</p>
 </blockquote>
-</li>
-<li><p>Statement</p>
+<ul>
+<li>Statement</li>
+</ul>
 <blockquote>
 <p>JDBC 规范中的 Statement 存在两种类型，一种是普通的 Statement，一种是支持预编译的 PreparedStatement</p>
 </blockquote>
-</li>
-</ul>
 <p>ps: PreparedStatement具体做了什么？</p>
 <blockquote>
 <p>预编译指的是数据库的编译器会对sql进行提前编译，然后将预编译的结果缓存到数据库中。这样下次执行时就可以只用替换参数调用预编译的sql语句，从而提高sql的执行效率</p>
 </blockquote>
 <ul>
-<li><p>ResultSet</p>
+<li>ResultSet</li>
+</ul>
 <blockquote>
 <p>代表sql的执行结果</p>
 </blockquote>
-</li>
-<li><p>基于JDBC规范的流程图</p>
-</li>
+<ul>
+<li>基于JDBC规范的流程图</li>
 </ul>
 <p>Driver -&gt; 创建DataSource -&gt; 获取Connection -&gt; 创建Statement -&gt; 执行SQL语句 -&gt; 处理ResultSet -&gt; 关闭资源对象</p>
 <ul>
 <li>shardingshere基于适配器模式的JDBC重写实现方案</li>
 </ul>
 <p>shardingshere通过继承jdbc预留的Wrapper接口，然后在wrapper中执行jdbc的增强。</p>
-<h2 id="功能"><a href="#功能" class="headerlink" title="功能"></a>功能</h2><p>shardingSphere功能上可以划分为四大部分，<B>基础设施</B>、<B>分片引擎</B>、<B>分布式事务</B>、<B>治理与集成</B></p>
-<h3 id="基础设施层"><a href="#基础设施层" class="headerlink" title="基础设施层"></a>基础设施层</h3><p>基础设施层包含<B>微内核架构</B>、<B>分布式主键</B></p>
-<h3 id="分片引擎"><a href="#分片引擎" class="headerlink" title="分片引擎"></a>分片引擎</h3><p>分片引擎包括<B>数据分片</B>、<B>读写分离</B></p>
-<h3 id="分布式事务"><a href="#分布式事务" class="headerlink" title="分布式事务"></a>分布式事务</h3><p>分布式事务包括<B>标准化事务处理接口</B>、<B>强一致性事务与柔性事务</B></p>
-<h3 id="集成与治理"><a href="#集成与治理" class="headerlink" title="集成与治理"></a>集成与治理</h3><p>集成与治理包括<B>数据脱敏</B>、<B>配置中心</B>、<B>注册中心</B>、<B>链路跟踪</B>、<B>系统集成</B></p>
-<h2 id="业务集成"><a href="#业务集成" class="headerlink" title="业务集成"></a>业务集成</h2><h3 id="jdbc集成"><a href="#jdbc集成" class="headerlink" title="jdbc集成"></a>jdbc集成</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">DataSource</span> <span class="token function">dataSource</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">SQLException</span> <span class="token punctuation">&#123;</span>
+<h2 id="功能"><a class="header-anchor" href="#功能"></a>功能</h2>
+<p>shardingSphere功能上可以划分为四大部分，<B>基础设施</B>、<B>分片引擎</B>、<B>分布式事务</B>、<B>治理与集成</B></p>
+<h3 id="基础设施层"><a class="header-anchor" href="#基础设施层"></a>基础设施层</h3>
+<p>基础设施层包含<B>微内核架构</B>、<B>分布式主键</B></p>
+<h3 id="分片引擎"><a class="header-anchor" href="#分片引擎"></a>分片引擎</h3>
+<p>分片引擎包括<B>数据分片</B>、<B>读写分离</B></p>
+<h3 id="分布式事务"><a class="header-anchor" href="#分布式事务"></a>分布式事务</h3>
+<p>分布式事务包括<B>标准化事务处理接口</B>、<B>强一致性事务与柔性事务</B></p>
+<h3 id="集成与治理"><a class="header-anchor" href="#集成与治理"></a>集成与治理</h3>
+<p>集成与治理包括<B>数据脱敏</B>、<B>配置中心</B>、<B>注册中心</B>、<B>链路跟踪</B>、<B>系统集成</B></p>
+<h2 id="业务集成"><a class="header-anchor" href="#业务集成"></a>业务集成</h2>
+<h3 id="jdbc集成"><a class="header-anchor" href="#jdbc集成"></a>jdbc集成</h3>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">DataSource</span> <span class="token function">dataSource</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">SQLException</span> <span class="token punctuation">&#123;</span>
     <span class="token comment">//创建分片规则配置类</span>
     <span class="token class-name">ShardingRuleConfiguration</span> shardingRuleConfig <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ShardingRuleConfiguration</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
@@ -562,9 +579,9 @@
     <span class="token comment">//创建具体的DataSource</span>
     <span class="token keyword">return</span> <span class="token class-name">ShardingDataSourceFactory</span><span class="token punctuation">.</span><span class="token function">createDataSource</span><span class="token punctuation">(</span><span class="token function">createDataSourceMap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> shardingRuleConfig<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">Properties</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-<h3 id="orm框架集成"><a href="#orm框架集成" class="headerlink" title="orm框架集成"></a>orm框架集成</h3><h4 id="jpa框架"><a href="#jpa框架" class="headerlink" title="jpa框架"></a>jpa框架</h4><pre class="line-numbers language-yml" data-language="yml"><code class="language-yml">shardingsphere:
+<h3 id="orm框架集成"><a class="header-anchor" href="#orm框架集成"></a>orm框架集成</h3>
+<h4 id="jpa框架"><a class="header-anchor" href="#jpa框架"></a>jpa框架</h4>
+<pre class="line-numbers language-yml" data-language="yml"><code class="language-yml">shardingsphere:
     datasource:
       names: ds0,ds1
       ds0:
@@ -596,8 +613,8 @@
               inline: #行表达式
                 shardingColumn: vender_id
                 algorithmExpression: t_user$&#123;vender_id % 2&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h4 id="javaConfig"><a href="#javaConfig" class="headerlink" title="javaConfig"></a>javaConfig</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">DataSource</span> <span class="token function">getShardingDataSource</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">SQLException</span> <span class="token punctuation">&#123;</span>
+<h4 id="javaConfig"><a class="header-anchor" href="#javaConfig"></a>javaConfig</h4>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">DataSource</span> <span class="token function">getShardingDataSource</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">SQLException</span> <span class="token punctuation">&#123;</span>
         <span class="token class-name">ShardingRuleConfiguration</span> shardingRuleConfig <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ShardingRuleConfiguration</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token comment">//设置分库分表策略</span>
         shardingRuleConfig<span class="token punctuation">.</span><span class="token function">getTableRuleConfigs</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token function">getOrderTableRuleConfiguration</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -612,18 +629,18 @@
         shardingRuleConfig<span class="token punctuation">.</span><span class="token function">setDefaultTableShardingStrategyConfig</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">StandardShardingStrategyConfiguration</span><span class="token punctuation">(</span><span class="token string">"order_id"</span><span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">return</span> <span class="token class-name">ShardingDataSourceFactory</span><span class="token punctuation">.</span><span class="token function">createDataSource</span><span class="token punctuation">(</span><span class="token function">createDataSourceMap</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> shardingRuleConfig<span class="token punctuation">,</span> <span class="token keyword">new</span> <span class="token class-name">Properties</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-
-<h2 id="shardingSphere的配置"><a href="#shardingSphere的配置" class="headerlink" title="shardingSphere的配置"></a>shardingSphere的配置</h2><h3 id="行内表达式"><a href="#行内表达式" class="headerlink" title="行内表达式"></a>行内表达式</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ds<span class="token variable">$&#123;0..1&#125;</span>.user<span class="token variable">$&#123;1..1&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
+<h2 id="shardingSphere的配置"><a class="header-anchor" href="#shardingSphere的配置"></a>shardingSphere的配置</h2>
+<h3 id="行内表达式"><a class="header-anchor" href="#行内表达式"></a>行内表达式</h3>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ds<span class="token variable">$&#123;0..1&#125;</span>.user<span class="token variable">$&#123;1..1&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>行内表达式是用来作为shardingSphere的配置信息的一种表达方式。</p>
-<p>${begin..end} 标识的是从begin到end的一个区间</p>
+<p>${begin…end} 标识的是从begin到end的一个区间</p>
 <p>多个${expression}可以用点号来形成组合关系表达式</p>
-<h3 id="核心配置项"><a href="#核心配置项" class="headerlink" title="核心配置项"></a>核心配置项</h3><blockquote>
+<h3 id="核心配置项"><a class="header-anchor" href="#核心配置项"></a>核心配置项</h3>
+<blockquote>
 <p>shardingSphere的核心功能就是分库分表，核心功能是依赖配置的。掌握如何使用shardingsphere就是掌握如何进行配置。</p>
 </blockquote>
-<h4 id="ShardingRuleConfiguration"><a href="#ShardingRuleConfiguration" class="headerlink" title="ShardingRuleConfiguration"></a>ShardingRuleConfiguration</h4>
+<h4 id="ShardingRuleConfiguration"><a class="header-anchor" href="#ShardingRuleConfiguration"></a>ShardingRuleConfiguration</h4>
+
                 
             </div>
             <hr/>

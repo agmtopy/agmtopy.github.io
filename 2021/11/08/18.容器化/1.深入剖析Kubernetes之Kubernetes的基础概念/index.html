@@ -433,18 +433,25 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="深入剖析Kubernetes之Kubernetes的基础"><a href="#深入剖析Kubernetes之Kubernetes的基础" class="headerlink" title="深入剖析Kubernetes之Kubernetes的基础"></a>深入剖析Kubernetes之Kubernetes的基础</h1><blockquote>
+                <h1>深入剖析Kubernetes之Kubernetes的基础</h1>
+<blockquote>
 <p>Kubernetes是由google和RetHot主导的容器编排工具，已经称为容器编排的标准.Kubernetes源自Google内部的Borg,可以参考这篇文章</p>
 </blockquote>
 <p><a target="_blank" rel="noopener" href="https://kubernetes.io/zh/blog/2015/04/borg-predecessor-to-kubernetes/">Borg: Kubernetes 的前身</a></p>
-<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p>Kubernetes是一个对容器进行管理的框架,提供了<B>服务发现和负载均衡</B>、<B>存储编排</B>、<B>自动部署和回滚</B>、<B>自动完成装箱计算</B>、<B>自我修复</B>、<B>密钥与配置管理</B>等功能，可以参考这篇文章</p>
+<h2 id="概念"><a class="header-anchor" href="#概念"></a>概念</h2>
+<p>Kubernetes是一个对容器进行管理的框架,提供了<B>服务发现和负载均衡</B>、<B>存储编排</B>、<B>自动部署和回滚</B>、<B>自动完成装箱计算</B>、<B>自我修复</B>、<B>密钥与配置管理</B>等功能，可以参考这篇文章</p>
 <p><a target="_blank" rel="noopener" href="https://kubernetes.io/zh/docs/concepts/overview/">Kubernetes 是什么</a></p>
-<h2 id="组件"><a href="#组件" class="headerlink" title="组件"></a>组件</h2><p><img src="https://d33wubrfki0l68.cloudfront.net/2475489eaf20163ec0f54ddc1d92aa8d4c87c96b/e7c81/images/docs/components-of-kubernetes.svg" alt="kubernetes组件总览"></p>
+<h2 id="组件"><a class="header-anchor" href="#组件"></a>组件</h2>
+<p><img src="https://d33wubrfki0l68.cloudfront.net/2475489eaf20163ec0f54ddc1d92aa8d4c87c96b/e7c81/images/docs/components-of-kubernetes.svg" alt="kubernetes组件总览"></p>
 <p>kubernetes的组件分为<B>控制平面组件</B>、<B>Node 组件</B>、<B>插件</B></p>
-<h3 id="控制平面组件"><a href="#控制平面组件" class="headerlink" title="控制平面组件"></a>控制平面组件</h3><p>  控制平面组件是对集群做出全局决策(比如调度)，以及检测和响应集群事件的决策和处理。</p>
-<h3 id="Node-组件"><a href="#Node-组件" class="headerlink" title="Node 组件"></a>Node 组件</h3><p>  Node节点组件在每个节点上运行，维护运行的 Pod 并提供 Kubernetes 运行环境。</p>
-<h3 id="插件（Addons）"><a href="#插件（Addons）" class="headerlink" title="插件（Addons）"></a>插件（Addons）</h3><p>  插件是是对Kubernetes资源（DaemonSet、 Deployment等）实现管理的功能。 因为这些插件提供集群级别的功能，插件中命名空间域的资源属于kube-system命名空间。</p>
-<h2 id="部署"><a href="#部署" class="headerlink" title="部署"></a>部署</h2><p>  Kubernetes的部署工具目前有<B>kubeadm</B>、<B>kops</B>、<B>Kubespray</B></p>
+<h3 id="控制平面组件"><a class="header-anchor" href="#控制平面组件"></a>控制平面组件</h3>
+<p>控制平面组件是对集群做出全局决策(比如调度)，以及检测和响应集群事件的决策和处理。</p>
+<h3 id="Node-组件"><a class="header-anchor" href="#Node-组件"></a>Node 组件</h3>
+<p>Node节点组件在每个节点上运行，维护运行的 Pod 并提供 Kubernetes 运行环境。</p>
+<h3 id="插件（Addons）"><a class="header-anchor" href="#插件（Addons）"></a>插件（Addons）</h3>
+<p>插件是是对Kubernetes资源（DaemonSet、 Deployment等）实现管理的功能。 因为这些插件提供集群级别的功能，插件中命名空间域的资源属于kube-system命名空间。</p>
+<h2 id="部署"><a class="header-anchor" href="#部署"></a>部署</h2>
+<p>Kubernetes的部署工具目前有<B>kubeadm</B>、<B>kops</B>、<B>Kubespray</B></p>
 <p><img src="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/" alt="kubernetes的部署工具"></p>
 
                 

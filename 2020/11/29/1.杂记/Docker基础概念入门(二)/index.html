@@ -420,10 +420,12 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="Dockerfile文件"><a href="#Dockerfile文件" class="headerlink" title="Dockerfile文件"></a>Dockerfile文件</h2><blockquote>
+                <h2 id="Dockerfile文件"><a class="header-anchor" href="#Dockerfile文件"></a>Dockerfile文件</h2>
+<blockquote>
 <p>Dockerfile文件是用来构建镜像的文本文件，文本文件中包含了一系列构建镜像所需的指令和说明</p>
 </blockquote>
-<h2 id="java基础环境"><a href="#java基础环境" class="headerlink" title="java基础环境"></a>java基础环境</h2><ul>
+<h2 id="java基础环境"><a class="header-anchor" href="#java基础环境"></a>java基础环境</h2>
+<ul>
 <li>Dockerfile</li>
 </ul>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 基础镜像版本</span>
@@ -445,10 +447,10 @@ RUN <span class="token punctuation">[</span><span class="token string">"/usr/lib
 
 <span class="token comment"># 运行</span>
 ENTRYPOINT <span class="token punctuation">[</span><span class="token string">"/usr/lib/jvm/java-8-openjdk-amd64/bin/java"</span>, <span class="token string">"Docker_java"</span><span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p>Dockerfile文件需要在当前工作目录下编写，Docker_java.java文件也需要在当前工作目录下</p>
 <ul>
-<li><p>Docker_java.java</p>
+<li>Docker_java.java</li>
+</ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token operator">*</span><span class="token punctuation">;</span>
 
 <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Docker_java</span><span class="token punctuation">&#123;</span>
@@ -457,9 +459,8 @@ ENTRYPOINT <span class="token punctuation">[</span><span class="token string">"/
         <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><p>build命令和启动命令</p>
-</li>
+<ul>
+<li>build命令和启动命令</li>
 </ul>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># -rm 表示构建完成后删除中间镜像</span>
 <span class="token comment"># -f  表示指定Dockerfile文件,默认为当前目录下的Dockerfile文件 </span>
@@ -488,7 +489,6 @@ ENV TZ&#x3D;Asia&#x2F;Shanghai \
 
 #将sql目录下的文件全部拷贝到目标文件夹下
 COPY sql&#x2F;. &#x2F;docker-entrypoint-initdb.d<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ul>
 <li>init.sql</li>
 </ul>
@@ -505,17 +505,15 @@ COPY sql&#x2F;. &#x2F;docker-entrypoint-initdb.d<span aria-hidden="true" class="
 <span class="token punctuation">`</span>remark<span class="token punctuation">`</span> <span class="token keyword">varchar</span><span class="token punctuation">(</span><span class="token number">1024</span><span class="token punctuation">)</span> <span class="token keyword">COLLATE</span> utf8mb4_unicode_ci <span class="token keyword">DEFAULT</span> <span class="token boolean">NULL</span> <span class="token punctuation">,</span>
 <span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span><span class="token punctuation">`</span>sync_pk<span class="token punctuation">`</span><span class="token punctuation">)</span>
 <span class="token punctuation">)</span> <span class="token keyword">ENGINE</span><span class="token operator">=</span><span class="token keyword">InnoDB</span> <span class="token keyword">DEFAULT</span> <span class="token keyword">CHARSET</span><span class="token operator">=</span>utf8mb4 <span class="token keyword">COLLATE</span><span class="token operator">=</span>utf8mb4_unicode_ci <span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ul>
 <li>构建命令</li>
 </ul>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker build --rm -f <span class="token string">"Dockerfile"</span> -t mysqlc:0.0.1 <span class="token builtin class-name">.</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
 <ul>
-<li>运行命令<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#与mysql启动一致</span>
-docker run -itd --name mysql_local mysqlc:0.0.1 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<li>运行命令</li>
 </ul>
-
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#与mysql启动一致</span>
+docker run -itd --name mysql_local mysqlc:0.0.1 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
                 
             </div>
             <hr/>

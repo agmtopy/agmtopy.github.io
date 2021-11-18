@@ -424,13 +424,16 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h1><h2 id="计算机网络的类别"><a href="#计算机网络的类别" class="headerlink" title="计算机网络的类别"></a>计算机网络的类别</h2><ol>
+                <h1>基础知识</h1>
+<h2 id="计算机网络的类别"><a class="header-anchor" href="#计算机网络的类别"></a>计算机网络的类别</h2>
+<ol>
 <li>广域网 WAN(Wide Area Network),作用范围在几十至几千公里</li>
 <li>城域网 MAN(Metropolitan Area Network),作用范围在五至五十公里</li>
 <li>局域网 LAN(Local Area Network),作用范围在一功能左右</li>
 <li>个人局域网 PAN(Personal Area Network),通常作用范围为10米左右,通过无线连接起来的个人局域网又称为WPAN</li>
 </ol>
-<h2 id="计算机网络的性能指标"><a href="#计算机网络的性能指标" class="headerlink" title="计算机网络的性能指标"></a>计算机网络的性能指标</h2><ol>
+<h2 id="计算机网络的性能指标"><a class="header-anchor" href="#计算机网络的性能指标"></a>计算机网络的性能指标</h2>
+<ol>
 <li>速率:指的是连接在计算机网络上的主机在数字信道上传送数据的速率.通俗来讲就是单位时间内能发送的数据量</li>
 <li>带宽:指的是网络的通信线路所能传送数据的能力.通俗来讲就是网络线路承载数据的宽度</li>
 <li>吞吐量:指的是单位时间内通过某个网络的数据量</li>
@@ -439,44 +442,63 @@
 <li>往返时间RTT:指的是从发送端发送数据开始到发送端接受到接受端的响应为止</li>
 <li>利用率:指的是信道利用率和网络利用率</li>
 </ol>
-<h2 id="计算机网络协议划分"><a href="#计算机网络协议划分" class="headerlink" title="计算机网络协议划分"></a>计算机网络协议划分</h2><ol>
-<li><p>OSI七层协议</p>
-<ol start="7">
-<li>应用层</li>
-<li>表示层</li>
-<li>会话层</li>
-<li>运输层</li>
-<li>网络层</li>
-<li>数据链路层</li>
+<h2 id="计算机网络协议划分"><a class="header-anchor" href="#计算机网络协议划分"></a>计算机网络协议划分</h2>
+<ol>
+<li>
+<p>OSI七层协议<br>
+7. 应用层<br>
+6. 表示层<br>
+5. 会话层<br>
+4. 运输层<br>
+3. 网络层<br>
+2. 数据链路层</p>
+<ol>
 <li>物理层</li>
 </ol>
 </li>
-<li><p>TCP/IP四层协议</p>
-<ol start="4">
-<li>应用层(TELNET,FTP,SMTP)</li>
-<li>运输层(TCP/UDP)</li>
-<li>网际层(IP)</li>
-<li>网络接口层<br>由于TCP/IP协议中的网络接口层是对通信链路的一个抽象因此并无具体实现,因此又折中出了一个五层协议的架构</li>
+<li>
+<p>TCP/IP四层协议<br>
+4. 应用层(TELNET,FTP,SMTP)<br>
+3. 运输层(TCP/UDP)<br>
+2. 网际层(IP)</p>
+<ol>
+<li>网络接口层<br>
+由于TCP/IP协议中的网络接口层是对通信链路的一个抽象因此并无具体实现,因此又折中出了一个五层协议的架构</li>
 </ol>
 </li>
-<li><p>五层协议</p>
-<ol start="5">
-<li>应用层</li>
-<li>运输层</li>
-<li>网络层</li>
-<li>数据链路层</li>
+<li>
+<p>五层协议<br>
+5. 应用层<br>
+4. 运输层<br>
+3. 网络层<br>
+2. 数据链路层</p>
+<ol>
 <li>物理层</li>
 </ol>
 </li>
 </ol>
-<h2 id="TCP和UDP的异同"><a href="#TCP和UDP的异同" class="headerlink" title="TCP和UDP的异同"></a>TCP和UDP的异同</h2><p>TCP和UDP都是运输层协议,TCP在设计是可靠的(因此有三次握手)</p>
-<h2 id="TCP-IP协议族的沙漏模型"><a href="#TCP-IP协议族的沙漏模型" class="headerlink" title="TCP/IP协议族的沙漏模型"></a>TCP/IP协议族的沙漏模型</h2><p>应用层 :  HTTP   SMTP    DNS  RTP   H.323  SIP<br>           \     /       \    /     \      /<br>运输层 :     TCP            UDP        SCTP<br>              \             |          /<br>网际层 :                    IP<br>               /            |            <br>网络接口层:  接口1          接口2         接口3</p>
-<h2 id="通信方式"><a href="#通信方式" class="headerlink" title="通信方式"></a>通信方式</h2><ol>
-<li>单向通信<br>信号只能沿着一个方向移动</li>
-<li>双向交替通信(半双工通信)<br>单位时间内信号只能沿着一个方向移动</li>
-<li>双向同时通信<br>单位时间内信号可向不同的方向移动</li>
+<h2 id="TCP和UDP的异同"><a class="header-anchor" href="#TCP和UDP的异同"></a>TCP和UDP的异同</h2>
+<p>TCP和UDP都是运输层协议,TCP在设计是可靠的(因此有三次握手)</p>
+<h2 id="TCP-IP协议族的沙漏模型"><a class="header-anchor" href="#TCP-IP协议族的沙漏模型"></a>TCP/IP协议族的沙漏模型</h2>
+<p>应用层 :  HTTP   SMTP    DNS  RTP   H.323  SIP<br>
+\     /       \    /     \      /<br>
+运输层 :     TCP            UDP        SCTP<br>
+\             |          /<br>
+网际层 :                    IP<br>
+/            |            <br>
+网络接口层:  接口1          接口2         接口3</p>
+<h2 id="通信方式"><a class="header-anchor" href="#通信方式"></a>通信方式</h2>
+<ol>
+<li>单向通信<br>
+信号只能沿着一个方向移动</li>
+<li>双向交替通信(半双工通信)<br>
+单位时间内信号只能沿着一个方向移动</li>
+<li>双向同时通信<br>
+单位时间内信号可向不同的方向移动</li>
 </ol>
-<h2 id="网际层协议-IP"><a href="#网际层协议-IP" class="headerlink" title="网际层协议-IP"></a>网际层协议-IP</h2><p>HTTP是什么?<br>HTTP是一种超文本传输协议(Hypertext Transfer Protocol),主要是由于</p>
+<h2 id="网际层协议-IP"><a class="header-anchor" href="#网际层协议-IP"></a>网际层协议-IP</h2>
+<p>HTTP是什么?<br>
+HTTP是一种超文本传输协议(Hypertext Transfer Protocol),主要是由于</p>
 
                 
             </div>

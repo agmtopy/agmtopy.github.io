@@ -336,8 +336,10 @@
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                InitializingBean扩展点分析上面两篇分别分析了扩展点aware、BreaProcessesor，接下来继续分析InitializingBean
-代码示例public interface InitializingBean &#1
+                                InitializingBean扩展点分析
+上面两篇分别分析了扩展点aware、BreaProcessesor，接下来继续分析InitializingBean
+代码示例
+public interface InitializingBean &
                             
                         </div>
                         <div class="publish-info">
@@ -385,12 +387,13 @@
                         <div class="summary block-with-text">
                             
                                 BeanPostProcessor扩展点分析
+
 BeanPostProcess接口是在Bean完成实例化后，如果我们要对所有的加载bean进行一些处理或增加配置的接口
 
 
 BeanPostProcessor.java
 
-BeanPostPro
+BeanPostPr
                             
                         </div>
                         <div class="publish-info">
@@ -437,9 +440,12 @@ BeanPostPro
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                Aware接口扩展点的分析aware字面上的意思为感知，在spring中就是感知容器、bean的时机并进行自定义扩展的
+                                Aware接口扩展点的分析
+aware字面上的意思为感知，在spring中就是感知容器、bean的时机并进行自定义扩展的
 使用
+
 常用的Aware
+
 
 
 类名
@@ -447,8 +453,9 @@ BeanPostPro
 
 
 
+
 LoadTimeWeaverAware
-加载Spring Bean时织入第
+加载Spring Bean
                             
                         </div>
                         <div class="publish-info">
@@ -495,9 +502,11 @@ LoadTimeWeaverAware
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                创建bean的流程通过上面几个流程的分析，终于来到了spring初始化bean的流程了。在这个过程中主要的功能有实列化bean对象、加载到缓存、前后置处理;
-创建流程@Override
-	protected Object createBea
+                                创建bean的流程
+通过上面几个流程的分析，终于来到了spring初始化bean的流程了。在这个过程中主要的功能有实列化bean对象、加载到缓存、前后置处理;
+创建流程
+@Override
+	protected Object createB
                             
                         </div>
                         <div class="publish-info">
@@ -544,14 +553,16 @@ LoadTimeWeaverAware
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                Bean的加载Spring Ioc容器就是以某种方式加载配置文件并创建相应的对象进行绑定形成一个可取可存的容器。
+                                Bean的加载
+Spring Ioc容器就是以某种方式加载配置文件并创建相应的对象进行绑定形成一个可取可存的容器。
 spring在实现过程中分为两个阶段：
 
 容器初始化阶段
 加载bean阶段
 
 容器初始化阶段
-通过某种方式(ResourceL
+
+通过某种方式(Resourc
                             
                         </div>
                         <div class="publish-info">
@@ -598,9 +609,11 @@ spring在实现过程中分为两个阶段：
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                spring的BeanDefinition体系BeanDefinition是作为记录Bean的原始信息。读取完成配置文件后就要将配置文件解析为BeanDefinition。我们来分析一一下这个流程
+                                spring的BeanDefinition体系
+BeanDefinition是作为记录Bean的原始信息。读取完成配置文件后就要将配置文件解析为BeanDefinition。我们来分析一一下这个流程
 bean的元数据
-BeanDefiniti
+
+BeanDefini
                             
                         </div>
                         <div class="publish-info">
@@ -647,10 +660,13 @@ BeanDefiniti
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                spring中资源的加载对于资源的加载这个场景首先要划分边界,spring抽象出两个组件：Resource、ResourceLoader
-Resource接口Resource是对资源的一种抽象，提供一系列操作文件的方法
+                                spring中资源的加载
+对于资源的加载这个场景首先要划分边界,spring抽象出两个组件：Resource、ResourceLoader
+Resource接口
+Resource是对资源的一种抽象，提供一系列操作文件的方法
 定义
-resourc
+
+reso
                             
                         </div>
                         <div class="publish-info">
@@ -697,7 +713,8 @@ resourc
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                spring的IoC理解IoC名词含义指的是控制反转或依赖注入，但是本质上指的是我们在不同的类中相互依赖的不是类本身，而是不同的类提供出来的不同服务，本质是依赖于服务。由于业务处理逻辑本身是一种无状态的处理过程，因此不该使用者去关心服务提供
+                                spring的IoC理解
+IoC名词含义指的是控制反转或依赖注入，但是本质上指的是我们在不同的类中相互依赖的不是类本身，而是不同的类提供出来的不同服务，本质是依赖于服务。由于业务处理逻辑本身是一种无状态的处理过程，因此不该使用者去关心服务提
                             
                         </div>
                         <div class="publish-info">
@@ -744,13 +761,17 @@ resourc
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                spring调试环境搭建环境依赖
+                                spring调试环境搭建
+环境依赖
+
 Gradle
 Git
 JDK1.8+
 
-clone跳过，下载后导入idea会自动使用Gradle来Build项目
+clone
+跳过，下载后导入idea会自动使用Gradle来Build项目
 gradlew :spring-oxm:compileTestJava
+
 
                             
                         </div>
@@ -798,9 +819,10 @@ gradlew :spring-oxm:compileTestJava
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                spring持久化的设计spring中大量运用到模板模式，简单回顾一下模板模式就是
+                                spring持久化的设计
+spring中大量运用到模板模式，简单回顾一下模板模式就是
 
-抽象类中定义好产品的步骤，不同的之类去实现相同的步骤方法，客户端调用抽象类的方法，执行统一的产品步骤，从而返回结果有点类似于桥接模式的一半，将建造过程抽象
+抽象类中定义好产品的步骤，不同的之类去实现相同的步骤方法，客户端调用抽象类的方法，执行统一的产品步骤，从而返回结果有点类似于桥接模式的一半，将建造过程抽
                             
                         </div>
                         <div class="publish-info">
@@ -847,8 +869,10 @@ gradlew :spring-oxm:compileTestJava
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                spring MVC分析 本章主要分析一下spring MVC的过程，主要从一下几个方面：
-spring MVC概述如果要在web环境中使用IOC容器，需要spring IOC设计一个启动过程把IOC容器导入。在这个过程中一方面处理Web容
+                                spring MVC分析
+本章主要分析一下spring MVC的过程，主要从一下几个方面：
+spring MVC概述
+如果要在web环境中使用IOC容器，需要spring IOC设计一个启动过程把IOC容器导入。在这个过程中一方面处理Web
                             
                         </div>
                         <div class="publish-info">
@@ -895,9 +919,10 @@ spring MVC概述如果要在web环境中使用IOC容器，需要spring IOC设计
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                AOP源代码分析阅读spring的源代码，来查看spring是如何实现AOP增强的
-探寻bean初始化的方法在普通bean的加载流程中，如果一个bean是被AOP拦截增强后doCreateBean方法返回的是CGLib动态代理类生成的对象
-
+                                AOP源代码分析
+阅读spring的源代码，来查看spring是如何实现AOP增强的
+探寻bean初始化的方法
+在普通bean的加载流程中，如果一个bean是被AOP拦截增强后doCreateBean方法返回的是CGLib动态代理类生成的对
                             
                         </div>
                         <div class="publish-info">

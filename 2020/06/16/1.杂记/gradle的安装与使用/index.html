@@ -437,31 +437,38 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="gradle的安装与使用"><a href="#gradle的安装与使用" class="headerlink" title="gradle的安装与使用"></a>gradle的安装与使用</h1><blockquote>
+                <h1>gradle的安装与使用</h1>
+<blockquote>
 <p>由于新的项目大多是使用gradle进行依赖管理，因此在这里将其用法做一下总结</p>
 </blockquote>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>主要步骤是：</p>
+<h2 id="安装"><a class="header-anchor" href="#安装"></a>安装</h2>
+<p>主要步骤是：</p>
 <ol>
 <li>下载安装包</li>
 <li>配置环境变量</li>
-<li>查看版本号<blockquote>
+<li>查看版本号</li>
+</ol>
+<blockquote>
 <p>gradle -v</p>
 </blockquote>
-</li>
-</ol>
 <ul>
-<li>显示对应版本号表示安装成功<br><img src="https://s1.ax1x.com/2020/06/16/NkXXFA.png" alt="NkXXFA.png"></li>
+<li>显示对应版本号表示安装成功<br>
+<img src="https://s1.ax1x.com/2020/06/16/NkXXFA.png" alt="NkXXFA.png"></li>
 </ul>
-<h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><p>gradle是一个基于Ant和Maven的理念的项目自动化构建工具。基于Groovy的特定领域语言（DSL）来声明项目设置。</p>
-<h3 id="gradle与maven的对比"><a href="#gradle与maven的对比" class="headerlink" title="gradle与maven的对比"></a>gradle与maven的对比</h3><ol>
+<h2 id="基础知识"><a class="header-anchor" href="#基础知识"></a>基础知识</h2>
+<p>gradle是一个基于Ant和Maven的理念的项目自动化构建工具。基于Groovy的特定领域语言（DSL）来声明项目设置。</p>
+<h3 id="gradle与maven的对比"><a class="header-anchor" href="#gradle与maven的对比"></a>gradle与maven的对比</h3>
+<ol>
 <li>灵活性更高</li>
 <li>性能更好</li>
 <li>依赖管理</li>
 </ol>
-<h3 id="gradle构建生命周期"><a href="#gradle构建生命周期" class="headerlink" title="gradle构建生命周期"></a>gradle构建生命周期</h3><p>gradle构建系统的生命周期可以分为：<strong>初始化</strong>、<strong>配置</strong>、<strong>运行</strong>三个阶段</p>
+<h3 id="gradle构建生命周期"><a class="header-anchor" href="#gradle构建生命周期"></a>gradle构建生命周期</h3>
+<p>gradle构建系统的生命周期可以分为：<strong>初始化</strong>、<strong>配置</strong>、<strong>运行</strong>三个阶段</p>
 <p><img src="https://s1.ax1x.com/2020/06/20/NQ6IOg.png" alt="NQ6IOg.png"></p>
 <ol>
-<li>初始化阶段<br>此阶段读取根目录下的<strong>setting.gradle</strong>中的include信息，来决定构建哪些工程。以spring为例</li>
+<li>初始化阶段<br>
+此阶段读取根目录下的<strong>setting.gradle</strong>中的include信息，来决定构建哪些工程。以spring为例</li>
 </ol>
 <pre class="line-numbers language-Groovy" data-language="Groovy"><code class="language-Groovy">
 ## 省略若干项目
@@ -476,10 +483,10 @@ rootProject.name &#x3D; &quot;spring&quot;
 rootProject.children.each &#123;project -&gt;
 	project.buildFileName &#x3D; &quot;$&#123;project.name&#125;.gradle&quot;
 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
 <ol start="2">
-<li>配置阶段<br>此阶段主要解析每个项目中的<strong>build.gradle</strong>配置文件、<strong>处理依赖关系</strong>、<strong>执行顺序</strong><br>以<strong>spring beans</strong>和<strong>spring-core</strong>两个项目为例</li>
+<li>配置阶段<br>
+此阶段主要解析每个项目中的<strong>build.gradle</strong>配置文件、<strong>处理依赖关系</strong>、<strong>执行顺序</strong><br>
+以<strong>spring beans</strong>和<strong>spring-core</strong>两个项目为例</li>
 </ol>
 <ul>
 <li><strong>spring-beans</strong>的gradle文件</li>
@@ -508,9 +515,10 @@ dependencies &#123;
 	testCompile(&quot;org.apache.tomcat.embed:tomcat-embed-core:$&#123;tomcatVersion&#125;&quot;)
 &#125;
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ul>
-<li><strong>spring-core</strong>的gradle文件<pre class="line-numbers language-Groovy" data-language="Groovy"><code class="language-Groovy">dependencies &#123;
+<li><strong>spring-core</strong>的gradle文件</li>
+</ul>
+<pre class="line-numbers language-Groovy" data-language="Groovy"><code class="language-Groovy">dependencies &#123;
     &#x2F;&#x2F;省略...
 	cglib(&quot;cglib:cglib:$&#123;cglibVersion&#125;@jar&quot;)
 	objenesis(&quot;org.objenesis:objenesis:$&#123;objenesisVersion&#125;@jar&quot;)
@@ -523,22 +531,21 @@ dependencies &#123;
 		exclude group: &quot;stax&quot;, module: &quot;stax-api&quot;
 	&#125;
 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-</ul>
 <ol start="3">
-<li>运行阶段<blockquote>
+<li>运行阶段</li>
+</ol>
+<blockquote>
 <p>根据Gradle命令传递过来的任务名称，执行相关依赖任务。此阶段真正构建项目并执行项目下的各个任务。Gradle就会将这个任务链上的所有任务全部按依赖顺序执行一遍。</p>
 </blockquote>
-</li>
-</ol>
-<h3 id="gradle插件"><a href="#gradle插件" class="headerlink" title="gradle插件"></a>gradle插件</h3><h3 id="task的概念"><a href="#task的概念" class="headerlink" title="task的概念"></a>task的概念</h3><p><strong>gradle</strong>是通过task任务的模型进行驱动开发的，在一个gradle工程中将不同的构建工作打散成不同的task。task脚本采用Groovy语言进行编写。</p>
+<h3 id="gradle插件"><a class="header-anchor" href="#gradle插件"></a>gradle插件</h3>
+<h3 id="task的概念"><a class="header-anchor" href="#task的概念"></a>task的概念</h3>
+<p><strong>gradle</strong>是通过task任务的模型进行驱动开发的，在一个gradle工程中将不同的构建工作打散成不同的task。task脚本采用Groovy语言进行编写。</p>
 <ul>
 <li>task定义示例</li>
 </ul>
 <pre class="line-numbers language-gradle" data-language="gradle"><code class="language-gradle">task helloword &#123;
     println &#39;hello word!&#39;
 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
 <ul>
 <li>task依赖示例</li>
 </ul>
@@ -559,8 +566,6 @@ dependencies &#123;
      println &#39;hello task3!&#39;
  &#125;
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
 <ul>
 <li>跳过依赖</li>
 </ul>
@@ -571,55 +576,57 @@ compile.doFirst &#123;
     if (true) &#123; throw new StopExecutionException() &#125;
 &#125;
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="Gradle申明依赖"><a href="#Gradle申明依赖" class="headerlink" title="Gradle申明依赖"></a>Gradle申明依赖</h3><h3 id="配置远程仓库"><a href="#配置远程仓库" class="headerlink" title="配置远程仓库"></a>配置远程仓库</h3><pre class="line-numbers language-gradle" data-language="gradle"><code class="language-gradle">repositories &#123;
+<h3 id="Gradle申明依赖"><a class="header-anchor" href="#Gradle申明依赖"></a>Gradle申明依赖</h3>
+<h3 id="配置远程仓库"><a class="header-anchor" href="#配置远程仓库"></a>配置远程仓库</h3>
+<pre class="line-numbers language-gradle" data-language="gradle"><code class="language-gradle">repositories &#123;
    maven &#123;
       url &quot;http:&#x2F;&#x2F;repo.mycompany.com&#x2F;maven2&quot;
    &#125;
 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-
-
-
-<h2 id="基础命令"><a href="#基础命令" class="headerlink" title="基础命令"></a>基础命令</h2><ul>
-<li>build 编译命令<blockquote>
-<p>./gradlew build –scan</p>
-</blockquote>
-</li>
+<h2 id="基础命令"><a class="header-anchor" href="#基础命令"></a>基础命令</h2>
+<ul>
+<li>build 编译命令</li>
 </ul>
+<blockquote>
+<p>./gradlew build --scan</p>
+</blockquote>
 <p>表示编译项目并上传相应的编译数据到云端进行分析，本地分析的命令是</p>
 <blockquote>
-<p> ./gradlew clean app:assembleDebug –profile<br>该命令会在<strong>build/report</strong>中生成对应的报告</p>
+<p>./gradlew clean app:assembleDebug --profile<br>
+该命令会在<strong>build/report</strong>中生成对应的报告</p>
 </blockquote>
 <ul>
-<li><p>gradle  build</p>
+<li>gradle  build</li>
+</ul>
 <blockquote>
 <p>gradle  build<br> 编译（编译过程中会进行单元测试）</p>
 </blockquote>
-</li>
-<li><p>gradle test</p>
+<ul>
+<li>gradle test</li>
+</ul>
 <blockquote>
 <p>gradle test <br> 单元测试</p>
 </blockquote>
-</li>
-<li><p>gradle test</p>
+<ul>
+<li>gradle test</li>
+</ul>
 <blockquote>
 <p>gradle build -x test <br> 编译时跳过单元测试</p>
 </blockquote>
-</li>
-<li><p>gradle run</p>
+<ul>
+<li>gradle run</li>
+</ul>
 <blockquote>
 <p>gradle run <br> 直接运行项目</p>
 </blockquote>
-</li>
-<li><p>gradle clean</p>
+<ul>
+<li>gradle clean</li>
+</ul>
 <blockquote>
 <p>gradle clean 清空所有编译、打包生成的文件(即：清空build目录)</p>
 </blockquote>
-</li>
-</ul>
-<h2 id="build-gradle模板"><a href="#build-gradle模板" class="headerlink" title="build.gradle模板"></a>build.gradle模板</h2><pre class="line-numbers language-gradle" data-language="gradle"><code class="language-gradle">&#x2F;&#x2F; 创建Java项目插件，提供了所有构建和测试Java程序所需项目结构
+<h2 id="build-gradle模板"><a class="header-anchor" href="#build-gradle模板"></a>build.gradle模板</h2>
+<pre class="line-numbers language-gradle" data-language="gradle"><code class="language-gradle">&#x2F;&#x2F; 创建Java项目插件，提供了所有构建和测试Java程序所需项目结构
 apply plugin: &#39;java&#39;
 &#x2F;&#x2F; 引入Maven插件，以便Gradle可以引用Maven仓库的Jar包
 apply plugin: &#39;maven&#39;
@@ -697,45 +704,54 @@ uploadArchives &#123;
     &#125;
 &#125;
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
-<li><p>查看task</p>
+<h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2>
+<ul>
+<li>查看task</li>
+</ul>
 <blockquote>
 <p>gradle task</p>
 </blockquote>
-</li>
-<li><p>编译-编译过程中会进行单元测试</p>
+<ul>
+<li>编译-编译过程中会进行单元测试</li>
+</ul>
 <blockquote>
 <p>gradle build</p>
 </blockquote>
-</li>
-<li><p>单元测试</p>
+<ul>
+<li>单元测试</li>
+</ul>
 <blockquote>
 <p>gradle test</p>
 </blockquote>
-</li>
-<li><p>编译时跳过单元测试</p>
+<ul>
+<li>编译时跳过单元测试</li>
+</ul>
 <blockquote>
 <p>gradle build -x test</p>
 </blockquote>
-</li>
-<li><p>直接远行项目</p>
+<ul>
+<li>直接远行项目</li>
+</ul>
 <blockquote>
 <p>gradle run</p>
 </blockquote>
-</li>
-<li><p>清空build文件</p>
+<ul>
+<li>清空build文件</li>
+</ul>
 <blockquote>
 <p>gradle clean</p>
 </blockquote>
-</li>
-<li><p>安装jar到maven仓库</p>
+<ul>
+<li>安装jar到maven仓库</li>
+</ul>
 <blockquote>
 <p>gradle install</p>
 </blockquote>
-</li>
-</ul>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://gradle.org/release-candidate/">官方下载地址</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/shaloo/p/6096277.html">Gradle学习笔记</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/NyanKoSenSei/p/11458953.html">Gradle的安装与配置</a><br><a target="_blank" rel="noopener" href="https://www.cnblogs.com/lucas1024/p/9533566.html">【入门】Gradle的基本使用、在IDEA中的配置、常用命令</a></p>
+<h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
+<p><a target="_blank" rel="noopener" href="https://gradle.org/release-candidate/">官方下载地址</a><br>
+<a target="_blank" rel="noopener" href="https://www.cnblogs.com/shaloo/p/6096277.html">Gradle学习笔记</a><br>
+<a target="_blank" rel="noopener" href="https://www.cnblogs.com/NyanKoSenSei/p/11458953.html">Gradle的安装与配置</a><br>
+<a target="_blank" rel="noopener" href="https://www.cnblogs.com/lucas1024/p/9533566.html">【入门】Gradle的基本使用、在IDEA中的配置、常用命令</a></p>
 
                 
             </div>

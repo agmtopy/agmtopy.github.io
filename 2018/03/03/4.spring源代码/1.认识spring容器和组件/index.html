@@ -433,19 +433,29 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>前言：<br>spring始终是java程序员必须要掌握的一个技能，随着springBoot的普及化，springBoot将大量初始化工作替我们实现，隐藏了实现细节。方便了我们快速开展业务，但是掌握好spring，熟悉基础，才能更好的知道应用运行的本质是什么。出现问题怎么去解决。反反复复，我也尝试看了很多遍spring的源代码，但是都只是知识在脑海中过了一下，并没有留下、理解。这一次一定要把spring弄懂！</p>
-<h1 id="认识spring容器和组件"><a href="#认识spring容器和组件" class="headerlink" title="认识spring容器和组件"></a>认识spring容器和组件</h1><h2 id="spring容器"><a href="#spring容器" class="headerlink" title="spring容器"></a>spring容器</h2><h3 id="spring容器指的是什么？"><a href="#spring容器指的是什么？" class="headerlink" title="spring容器指的是什么？"></a>spring容器指的是什么？</h3><p>spring容器指的是</p>
+                <p>前言：<br>
+spring始终是java程序员必须要掌握的一个技能，随着springBoot的普及化，springBoot将大量初始化工作替我们实现，隐藏了实现细节。方便了我们快速开展业务，但是掌握好spring，熟悉基础，才能更好的知道应用运行的本质是什么。出现问题怎么去解决。反反复复，我也尝试看了很多遍spring的源代码，但是都只是知识在脑海中过了一下，并没有留下、理解。这一次一定要把spring弄懂！</p>
+<h1>认识spring容器和组件</h1>
+<h2 id="spring容器"><a class="header-anchor" href="#spring容器"></a>spring容器</h2>
+<h3 id="spring容器指的是什么？"><a class="header-anchor" href="#spring容器指的是什么？"></a>spring容器指的是什么？</h3>
+<p>spring容器指的是</p>
 <ul>
 <li>功能描述：是一个通过配置文件或类似方式加载配置的容器，这个容器可以根据配置去<strong>创建</strong>、<strong>管理</strong>、<strong>销毁</strong>Bean对象。</li>
 <li>代码描述：是实现了<strong>ApplicationContext</strong>接口的子类</li>
 </ul>
-<h3 id="spring容器的功能和特点有哪些？"><a href="#spring容器的功能和特点有哪些？" class="headerlink" title="spring容器的功能和特点有哪些？"></a>spring容器的功能和特点有哪些？</h3><ul>
-<li><p>spring容器功能<br><img src="https://s2.ax1x.com/2020/03/03/34bTkq.png" alt="spring容器功能"></p>
+<h3 id="spring容器的功能和特点有哪些？"><a class="header-anchor" href="#spring容器的功能和特点有哪些？"></a>spring容器的功能和特点有哪些？</h3>
+<ul>
+<li>
+<p>spring容器功能<br>
+<img src="https://s2.ax1x.com/2020/03/03/34bTkq.png" alt="spring容器功能"></p>
 </li>
-<li><p>spring容器类型<br><img src="https://s2.ax1x.com/2020/03/03/35pvRA.png" alt="spring容器类型"></p>
+<li>
+<p>spring容器类型<br>
+<img src="https://s2.ax1x.com/2020/03/03/35pvRA.png" alt="spring容器类型"></p>
 </li>
 </ul>
-<h3 id="BeanFactory和ApplicationContext的对比"><a href="#BeanFactory和ApplicationContext的对比" class="headerlink" title="BeanFactory和ApplicationContext的对比"></a>BeanFactory和ApplicationContext的对比</h3><table>
+<h3 id="BeanFactory和ApplicationContext的对比"><a class="header-anchor" href="#BeanFactory和ApplicationContext的对比"></a>BeanFactory和ApplicationContext的对比</h3>
+<table>
 <thead>
 <tr>
 <th>\</th>
@@ -453,21 +463,27 @@
 <th>ApplicationContext</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>初始化bean方式</td>
 <td>在启动时，不会实例化Bean，从容器中获取的时候才会实例化bean</td>
 <td>启动时就会初始化全部bean，可配置lazy-init=true实现延迟加载</td>
 </tr>
-</tbody></table>
-<h3 id="Application容器的特点和功能"><a href="#Application容器的特点和功能" class="headerlink" title="Application容器的特点和功能"></a>Application容器的特点和功能</h3><p><img src="https://s2.ax1x.com/2020/03/03/35SvuV.png" alt="Application类别和特点"></p>
-<h2 id="spring组件"><a href="#spring组件" class="headerlink" title="spring组件"></a>spring组件</h2><h3 id="资源抽象接口"><a href="#资源抽象接口" class="headerlink" title="资源抽象接口"></a>资源抽象接口</h3><table>
+</tbody>
+</table>
+<h3 id="Application容器的特点和功能"><a class="header-anchor" href="#Application容器的特点和功能"></a>Application容器的特点和功能</h3>
+<p><img src="https://s2.ax1x.com/2020/03/03/35SvuV.png" alt="Application类别和特点"></p>
+<h2 id="spring组件"><a class="header-anchor" href="#spring组件"></a>spring组件</h2>
+<h3 id="资源抽象接口"><a class="header-anchor" href="#资源抽象接口"></a>资源抽象接口</h3>
+<table>
 <thead>
 <tr>
 <th>名称</th>
 <th>功能</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>FileSystemResource</td>
 <td>文件系统绝对路径的方式进行访问</td>
 </tr>
@@ -479,13 +495,21 @@
 <td>ServletContextResource</td>
 <td>相对于Web应用根目录的方式进行访问</td>
 </tr>
-</tbody></table>
-<h3 id="BeanFactory组件类"><a href="#BeanFactory组件类" class="headerlink" title="BeanFactory组件类"></a>BeanFactory组件类</h3><ul>
-<li><p>DefaultListableBeanFactory类图<br><img src="https://s2.ax1x.com/2020/03/04/35EWge.png" alt="DefaultListableBeanFactory类图"></p>
+</tbody>
+</table>
+<h3 id="BeanFactory组件类"><a class="header-anchor" href="#BeanFactory组件类"></a>BeanFactory组件类</h3>
+<ul>
+<li>
+<p>DefaultListableBeanFactory类图<br>
+<img src="https://s2.ax1x.com/2020/03/04/35EWge.png" alt="DefaultListableBeanFactory类图"></p>
 </li>
-<li><p>观察BeanFactory的类图结构为：<br><img src="https://s2.ax1x.com/2020/03/04/3omrsU.png" alt="BeanFactory的类图"></p>
+<li>
+<p>观察BeanFactory的类图结构为：<br>
+<img src="https://s2.ax1x.com/2020/03/04/3omrsU.png" alt="BeanFactory的类图"></p>
 </li>
-<li><p>BeanFactory中定义的功能<br><img src="https://s2.ax1x.com/2020/03/04/3oQ9cq.png" alt="BeanFactory的功能"></p>
+<li>
+<p>BeanFactory中定义的功能<br>
+<img src="https://s2.ax1x.com/2020/03/04/3oQ9cq.png" alt="BeanFactory的功能"></p>
 </li>
 </ul>
 <p><strong>BeanFactory</strong>下有三个实现类，分别是：</p>
@@ -494,10 +518,13 @@
 <li>HierarchicalBeanFactory</li>
 <li>AutowireCapableBeanFactory</li>
 </ul>
-<h4 id="ListableBeanFactory"><a href="#ListableBeanFactory" class="headerlink" title="ListableBeanFactory"></a>ListableBeanFactory</h4><ul>
-<li><p>定义：可将Bean列出的工厂类</p>
+<h4 id="ListableBeanFactory"><a class="header-anchor" href="#ListableBeanFactory"></a>ListableBeanFactory</h4>
+<ul>
+<li>
+<p>定义：可将Bean列出的工厂类</p>
 </li>
-<li><p>主要的功能有：</p>
+<li>
+<p>主要的功能有：</p>
 </li>
 </ul>
 <table>
@@ -507,7 +534,8 @@
 <th>功能含义</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>boolean containsBeanDefinition(String beanName)</td>
 <td>根据名称判断是否有BeanDefinition</td>
 </tr>
@@ -527,11 +555,15 @@
 <td>Map&lt;String,T&gt; getBeansOfType(Class<T> type)</td>
 <td>根据类型返回Bean实例</td>
 </tr>
-</tbody></table>
-<h4 id="HierarchicalBeanFactory"><a href="#HierarchicalBeanFactory" class="headerlink" title="HierarchicalBeanFactory"></a>HierarchicalBeanFactory</h4><ul>
-<li><p>定义：实现Bean工厂的分层</p>
+</tbody>
+</table>
+<h4 id="HierarchicalBeanFactory"><a class="header-anchor" href="#HierarchicalBeanFactory"></a>HierarchicalBeanFactory</h4>
+<ul>
+<li>
+<p>定义：实现Bean工厂的分层</p>
 </li>
-<li><p>主要的功能有：</p>
+<li>
+<p>主要的功能有：</p>
 </li>
 </ul>
 <table>
@@ -541,7 +573,8 @@
 <th>功能含义</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>BeanFactory getParentBeanFactory()</td>
 <td>返回bean工厂的父工厂</td>
 </tr>
@@ -549,11 +582,15 @@
 <td>boolean containsLocalBean(String name)</td>
 <td>根据名称判断该Bean工厂是否包含这个bean</td>
 </tr>
-</tbody></table>
-<h4 id="AutowireCapableBeanFactory"><a href="#AutowireCapableBeanFactory" class="headerlink" title="AutowireCapableBeanFactory"></a>AutowireCapableBeanFactory</h4><ul>
-<li><p>定义：实现自动装配的Bean工厂</p>
+</tbody>
+</table>
+<h4 id="AutowireCapableBeanFactory"><a class="header-anchor" href="#AutowireCapableBeanFactory"></a>AutowireCapableBeanFactory</h4>
+<ul>
+<li>
+<p>定义：实现自动装配的Bean工厂</p>
 </li>
-<li><p>主要的功能有：</p>
+<li>
+<p>主要的功能有：</p>
 </li>
 </ul>
 <table>
@@ -563,7 +600,8 @@
 <th>功能含义</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>applyBeanPostProcessorsBeforeInitialization、applyBeanPostProcessorsBeforeInitialization、applyBeanPropertyValues</td>
 <td>分别是执行InstantiationAwareBeanPostProcessor接口对应的方法</td>
 </tr>
@@ -583,13 +621,17 @@
 <td>resolveBeanByName</td>
 <td>分解指定依赖的方法</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <ul>
-<li>AutowireCapableBeanFactory方法<br><img src="https://s2.ax1x.com/2020/03/04/3oBjsO.png" alt="AutowireCapableBeanFactory"></li>
+<li>AutowireCapableBeanFactory方法<br>
+<img src="https://s2.ax1x.com/2020/03/04/3oBjsO.png" alt="AutowireCapableBeanFactory"></li>
 </ul>
-<h4 id="ConfigurableBeanFactory"><a href="#ConfigurableBeanFactory" class="headerlink" title="ConfigurableBeanFactory"></a>ConfigurableBeanFactory</h4><p><strong>ConfigurableBeanFactory</strong>是可配置的bean工厂,实现了<strong>HierarchicalBeanFactory</strong>、<strong>SingletonBeanRegistry</strong></p>
+<h4 id="ConfigurableBeanFactory"><a class="header-anchor" href="#ConfigurableBeanFactory"></a>ConfigurableBeanFactory</h4>
+<p><strong>ConfigurableBeanFactory</strong>是可配置的bean工厂,实现了<strong>HierarchicalBeanFactory</strong>、<strong>SingletonBeanRegistry</strong></p>
 <ul>
-<li>SingletonBeanRegistry<br>注册单列bean的接口</li>
+<li>SingletonBeanRegistry<br>
+注册单列bean的接口</li>
 </ul>
 <table>
 <thead>
@@ -598,7 +640,8 @@
 <th>功能含义</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>containsSingleton</td>
 <td>根据名称判断Bean是否存在</td>
 </tr>
@@ -622,7 +665,8 @@
 <td>registerSingleton</td>
 <td>注册单列bean</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p>由于<strong>ConfigurableBeanFactory</strong>方法实在是太多了，因此这里只单独列举几个比较典型的方法，后面的章节在结合流程来分析。</p>
 <ul>
 <li>ConfigurableBeanFactory的方法</li>
@@ -634,7 +678,8 @@
 <th>功能含义</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>isFactoryBean</td>
 <td>判断是否是BeanFactory</td>
 </tr>
@@ -646,8 +691,10 @@
 <td>addBeanPostProcessor</td>
 <td>添加BeanPostProcessor</td>
 </tr>
-</tbody></table>
-<h4 id="ConfigurableListableBeanFactory"><a href="#ConfigurableListableBeanFactory" class="headerlink" title="ConfigurableListableBeanFactory"></a>ConfigurableListableBeanFactory</h4><p><strong>ConfigurableListableBeanFactory</strong>该类继承自<strong>ListableBeanFactory</strong>、<strong>AutowireCapableBeanFactory</strong>、<strong>ConfigurableBeanFactory</strong>等类</p>
+</tbody>
+</table>
+<h4 id="ConfigurableListableBeanFactory"><a class="header-anchor" href="#ConfigurableListableBeanFactory"></a>ConfigurableListableBeanFactory</h4>
+<p><strong>ConfigurableListableBeanFactory</strong>该类继承自<strong>ListableBeanFactory</strong>、<strong>AutowireCapableBeanFactory</strong>、<strong>ConfigurableBeanFactory</strong>等类</p>
 <table>
 <thead>
 <tr>
@@ -655,7 +702,8 @@
 <th>功能含义</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>registerResolvableDependency</td>
 <td>注册一个可分解的依赖</td>
 </tr>
@@ -667,8 +715,10 @@
 <td>getBeanDefinition</td>
 <td>根据名称返回BeanDefinition</td>
 </tr>
-</tbody></table>
-<h4 id="BeanDefinitionRegistry"><a href="#BeanDefinitionRegistry" class="headerlink" title="BeanDefinitionRegistry"></a>BeanDefinitionRegistry</h4><p><strong>BeanDefinitionRegistry</strong>用来操作BeanDefinition的类，继承了<strong>AliasRegistry</strong></p>
+</tbody>
+</table>
+<h4 id="BeanDefinitionRegistry"><a class="header-anchor" href="#BeanDefinitionRegistry"></a>BeanDefinitionRegistry</h4>
+<p><strong>BeanDefinitionRegistry</strong>用来操作BeanDefinition的类，继承了<strong>AliasRegistry</strong></p>
 <p><strong>AliasRegistry</strong>定义了根据别名对类进行操作的方法，包括<strong>registerAlias</strong>、<strong>removeAlias</strong>、<strong>isAlias</strong>、<strong>getAliases</strong></p>
 <ul>
 <li>BeanDefinitionRegistry方法的定义</li>
@@ -680,7 +730,8 @@
 <th>功能含义</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>registerBeanDefinition</td>
 <td>注册一个beanName名称的BeanDefinition</td>
 </tr>
@@ -700,27 +751,37 @@
 <td>isBeanNameInUse</td>
 <td>根据名称判断BeanDefintion是否被注册过</td>
 </tr>
-</tbody></table>
-<h3 id="ApplicationContext组件类"><a href="#ApplicationContext组件类" class="headerlink" title="ApplicationContext组件类"></a>ApplicationContext组件类</h3><p>ApplicationContext容器以<strong>AbstractXmlApplicationContext</strong>来进行分析</p>
+</tbody>
+</table>
+<h3 id="ApplicationContext组件类"><a class="header-anchor" href="#ApplicationContext组件类"></a>ApplicationContext组件类</h3>
+<p>ApplicationContext容器以<strong>AbstractXmlApplicationContext</strong>来进行分析</p>
 <ul>
 <li>AbstractXmlApplicationContext类图</li>
 </ul>
-<p><img src="https://s2.ax1x.com/2020/03/04/3ohgJO.png" alt="3ohgJO.png"><br>从类图可以看得出ApplicationContxt主要还是实现BeanFactory的子类，并且也继承了实现Spring容器其他特性的功能，例如事件监听、资源文件、国际化等接口</p>
+<p><img src="https://s2.ax1x.com/2020/03/04/3ohgJO.png" alt="3ohgJO.png"><br>
+从类图可以看得出ApplicationContxt主要还是实现BeanFactory的子类，并且也继承了实现Spring容器其他特性的功能，例如事件监听、资源文件、国际化等接口</p>
 <p>以下截取☞<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000008291174">Learn Spring - Spring IoC</a>的总结</p>
 <ul>
-<li><p><strong>ApplicationEventPublisher</strong>：让容器拥有发布应用上下文事件的功能，包括容器启动事件、关闭事件等。实现了ApplicationListener事件监听接口的Bean 可以接收到容器事件，并对事件进行响应处理。在ApplicationContext抽象实现类AbstractApplicationContext中，我们可以发现存在一个ApplicationEventMulticaster，它负责保存所有监听器，以便在容器产生上下文事件时通知这些事件监听者。</p>
+<li>
+<p><strong>ApplicationEventPublisher</strong>：让容器拥有发布应用上下文事件的功能，包括容器启动事件、关闭事件等。实现了ApplicationListener事件监听接口的Bean 可以接收到容器事件，并对事件进行响应处理。在ApplicationContext抽象实现类AbstractApplicationContext中，我们可以发现存在一个ApplicationEventMulticaster，它负责保存所有监听器，以便在容器产生上下文事件时通知这些事件监听者。</p>
 </li>
-<li><p><strong>MessageSource</strong>：为应用提供i18n国际化消息访问的功能；</p>
+<li>
+<p><strong>MessageSource</strong>：为应用提供i18n国际化消息访问的功能；</p>
 </li>
-<li><p><strong>ResourcePatternResolver</strong>：所有ApplicationContext实现类都实现了类似于PathMatchingResourcePatternResolver的功能，可以通过带前缀的Ant风格的资源文件路径装载Spring的配置文件。</p>
+<li>
+<p><strong>ResourcePatternResolver</strong>：所有ApplicationContext实现类都实现了类似于PathMatchingResourcePatternResolver的功能，可以通过带前缀的Ant风格的资源文件路径装载Spring的配置文件。</p>
 </li>
-<li><p><strong>LifeCycle</strong>：该接口是Spring 2.0加入的，该接口提供了start()和stop()两个方法，主要用于控制异步处理过程。在具体使用时，该接口同时被ApplicationContext实现及具体Bean实现，ApplicationContext会将start/stop的信息传递给容器中所有实现了该接口的Bean，以达到管理和控制JMX、任务调度等目的。</p>
+<li>
+<p><strong>LifeCycle</strong>：该接口是Spring 2.0加入的，该接口提供了start()和stop()两个方法，主要用于控制异步处理过程。在具体使用时，该接口同时被ApplicationContext实现及具体Bean实现，ApplicationContext会将start/stop的信息传递给容器中所有实现了该接口的Bean，以达到管理和控制JMX、任务调度等目的。</p>
 </li>
-<li><p><strong>ConfigurableApplicationContext</strong>扩展于ApplicationContext，它新增加了两个主要的方法：refresh()和close()，让ApplicationContext具有启动、刷新和关闭应用上下文的能力。在应用上下文关闭的情况下调用refresh()即可启动应用上下文，在已经启动的状态下，调用refresh()则清除缓存并重新装载配置信息，而调用close()则可关闭应用上下文。</p>
+<li>
+<p><strong>ConfigurableApplicationContext</strong>扩展于ApplicationContext，它新增加了两个主要的方法：refresh()和close()，让ApplicationContext具有启动、刷新和关闭应用上下文的能力。在应用上下文关闭的情况下调用refresh()即可启动应用上下文，在已经启动的状态下，调用refresh()则清除缓存并重新装载配置信息，而调用close()则可关闭应用上下文。</p>
 </li>
 </ul>
-<h3 id="WebApplicantContext组件类"><a href="#WebApplicantContext组件类" class="headerlink" title="WebApplicantContext组件类"></a>WebApplicantContext组件类</h3><p><strong>WebApplicationContext</strong>是一个专门为Web应用准备的，它允许从Web根目录根据相对路径进行装载配置文件完成初始化。从WebApplicationContext中可以获取ServletContext引用，整个Web应用上下文对象将作为属性放置在ServletContext中，以便Web应用环境可以访问spring上下文。</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>主要介绍了Spring容器和组件，Spring组件主要是分为BeanFactory组件和ApplicationContext组件。这两个组件下面有分别派生出其他的组件例如BeanFactory下又有<strong>AutowireCapableBeanFactory</strong>实现了自动装配和应用InstantiationAwareBeanPostProcessor接口的方法、<strong>ConfigurableBeanFactory</strong>可配置化的BeanFactory增强了BeanFactory的能力；Application下的<strong>ApplicationEventPublisher</strong>让容器拥有发布应用上下文事件的功能(启动和关闭)、<strong>ConfigurableApplicationContext</strong>扩展于ApplicationContext，它新增加了两个主要的方法：**refresh()**和close()，让ApplicationContext具有启动、刷新和关闭应用上下文的能力。</p>
+<h3 id="WebApplicantContext组件类"><a class="header-anchor" href="#WebApplicantContext组件类"></a>WebApplicantContext组件类</h3>
+<p><strong>WebApplicationContext</strong>是一个专门为Web应用准备的，它允许从Web根目录根据相对路径进行装载配置文件完成初始化。从WebApplicationContext中可以获取ServletContext引用，整个Web应用上下文对象将作为属性放置在ServletContext中，以便Web应用环境可以访问spring上下文。</p>
+<h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2>
+<p>主要介绍了Spring容器和组件，Spring组件主要是分为BeanFactory组件和ApplicationContext组件。这两个组件下面有分别派生出其他的组件例如BeanFactory下又有<strong>AutowireCapableBeanFactory</strong>实现了自动装配和应用InstantiationAwareBeanPostProcessor接口的方法、<strong>ConfigurableBeanFactory</strong>可配置化的BeanFactory增强了BeanFactory的能力；Application下的<strong>ApplicationEventPublisher</strong>让容器拥有发布应用上下文事件的功能(启动和关闭)、<strong>ConfigurableApplicationContext</strong>扩展于ApplicationContext，它新增加了两个主要的方法：**refresh()**和close()，让ApplicationContext具有启动、刷新和关闭应用上下文的能力。</p>
 <blockquote>
 <p>参考资料</p>
 </blockquote>

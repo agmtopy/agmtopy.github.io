@@ -433,14 +433,19 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="ThreadLocal的分析"><a href="#ThreadLocal的分析" class="headerlink" title="ThreadLocal的分析"></a>ThreadLocal的分析</h1><h2 id="ThreadLocal的适用场景"><a href="#ThreadLocal的适用场景" class="headerlink" title="ThreadLocal的适用场景"></a>ThreadLocal的适用场景</h2><ul>
+                <h1>ThreadLocal的分析</h1>
+<h2 id="ThreadLocal的适用场景"><a class="header-anchor" href="#ThreadLocal的适用场景"></a>ThreadLocal的适用场景</h2>
+<ul>
 <li><strong>ThreadLocal</strong>适用于保存每个线程都独享的对象</li>
-<li><strong>ThreadLocal</strong>适用于保存每个线程独享的对象可供其他方法获取的场景<br>例如web应用程序中的用户信息可以保存中用线程中，从而在其他需要用到的地方直接可以获取到</li>
+<li><strong>ThreadLocal</strong>适用于保存每个线程独享的对象可供其他方法获取的场景<br>
+例如web应用程序中的用户信息可以保存中用线程中，从而在其他需要用到的地方直接可以获取到</li>
 </ul>
-<h2 id="ThreadLocal是不是用来解决共享资源多线程访问的？"><a href="#ThreadLocal是不是用来解决共享资源多线程访问的？" class="headerlink" title="ThreadLocal是不是用来解决共享资源多线程访问的？"></a>ThreadLocal是不是用来解决共享资源多线程访问的？</h2><ul>
+<h2 id="ThreadLocal是不是用来解决共享资源多线程访问的？"><a class="header-anchor" href="#ThreadLocal是不是用来解决共享资源多线程访问的？"></a>ThreadLocal是不是用来解决共享资源多线程访问的？</h2>
+<ul>
 <li>不是，ThreadLocal的底层机制决定了每个线程都独立拥有一份空间来存放数据。虽然在效果上线程安全的，但这并不是通过解决共享资源的方式实现的。</li>
 </ul>
-<h2 id="底层原理"><a href="#底层原理" class="headerlink" title="底层原理"></a>底层原理</h2><p>每一个<strong>Thread</strong>内部都有一个<strong>ThreadLocalMap</strong>对象，在<strong>ThreadLocalMap</strong>中有保存的是<strong>ThreadLocal</strong>作为key，值作为value的k-v结构</p>
+<h2 id="底层原理"><a class="header-anchor" href="#底层原理"></a>底层原理</h2>
+<p>每一个<strong>Thread</strong>内部都有一个<strong>ThreadLocalMap</strong>对象，在<strong>ThreadLocalMap</strong>中有保存的是<strong>ThreadLocal</strong>作为key，值作为value的k-v结构</p>
 <blockquote>
 <p>ThreadLocal.get()</p>
 </blockquote>
@@ -457,7 +462,6 @@
     <span class="token punctuation">&#125;</span>
     <span class="token keyword">return</span> <span class="token function">setInitialValue</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p><strong>this</strong>就是ThreadLocal，因为ThreadLocalMap中的key就是ThreadLocal,因此通过getEntry(this)的方式取到对应的值</p>
 <blockquote>
 <p>Thread.getMap()</p>
@@ -482,12 +486,11 @@
   <span class="token keyword">return</span> t<span class="token punctuation">.</span>inheritableThreadLocals<span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p>getMap()就是获取<strong>Thread</strong>的成员变量<strong>threadLocals</strong>、<strong>inheritableThreadLocals</strong></p>
 <ul>
-<li>ThreadLocalMap</li>
+<li>ThreadLocalMap<br>
+<strong>ThreadLocalMap</strong></li>
 </ul>
-<p><strong>ThreadLocalMap</strong></p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">Entry</span> <span class="token keyword">extends</span> <span class="token class-name">WeakReference</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">ThreadLocal</span><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span><span class="token punctuation">></span></span> <span class="token punctuation">&#123;</span>
     <span class="token comment">/** The value associated with this ThreadLocal. */</span>
     <span class="token class-name">Object</span> value<span class="token punctuation">;</span>
@@ -497,10 +500,13 @@
         value <span class="token operator">=</span> v<span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>Entry是一个内部类，类似于map结构。Entry这里不是采用HashMap的<strong>拉链法</strong>而是采用的是<strong>线性探测法</strong><br><strong>线性探测法</strong>原理如下：<br><img src="https://s2.ax1x.com/2020/03/09/89Hm0e.png" alt="89Hm0e.png"></p>
-<h2 id="ThreadLocal-remove"><a href="#ThreadLocal-remove" class="headerlink" title="ThreadLocal.remove"></a>ThreadLocal.remove</h2><p><strong>ThreadLocal.remove</strong>方法。在线程不使用ThreadLocal之后必须进行<strong>remove</strong>操作，因为在ThreadLocalMap中k-v是强引用关系，会造成内存泄漏。因此在不使用ThreaLocal之后一定要进行remove操作</p>
-<h2 id="InheritableThreadLocal"><a href="#InheritableThreadLocal" class="headerlink" title="InheritableThreadLocal"></a>InheritableThreadLocal</h2><p><strong>InheritableThreadLocal</strong>是子线程能访问到父线程的ThreadLoca</p>
+<p>Entry是一个内部类，类似于map结构。Entry这里不是采用HashMap的<strong>拉链法</strong>而是采用的是<strong>线性探测法</strong><br>
+<strong>线性探测法</strong>原理如下：<br>
+<img src="https://s2.ax1x.com/2020/03/09/89Hm0e.png" alt="89Hm0e.png"></p>
+<h2 id="ThreadLocal-remove"><a class="header-anchor" href="#ThreadLocal-remove"></a>ThreadLocal.remove</h2>
+<p><strong>ThreadLocal.remove</strong>方法。在线程不使用ThreadLocal之后必须进行<strong>remove</strong>操作，因为在ThreadLocalMap中k-v是强引用关系，会造成内存泄漏。因此在不使用ThreaLocal之后一定要进行remove操作</p>
+<h2 id="InheritableThreadLocal"><a class="header-anchor" href="#InheritableThreadLocal"></a>InheritableThreadLocal</h2>
+<p><strong>InheritableThreadLocal</strong>是子线程能访问到父线程的ThreadLoca</p>
 <blockquote>
 <p>Thread.init()</p>
 </blockquote>

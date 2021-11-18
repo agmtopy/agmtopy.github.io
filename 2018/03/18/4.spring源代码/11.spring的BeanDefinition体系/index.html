@@ -433,9 +433,13 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="spring的BeanDefinition体系"><a href="#spring的BeanDefinition体系" class="headerlink" title="spring的BeanDefinition体系"></a>spring的BeanDefinition体系</h1><p>BeanDefinition是作为记录Bean的原始信息。读取完成配置文件后就要将配置文件解析为<strong>BeanDefinition</strong>。我们来分析一一下这个流程</p>
-<h2 id="bean的元数据"><a href="#bean的元数据" class="headerlink" title="bean的元数据"></a>bean的元数据</h2><ul>
-<li>BeanDefinition -&gt; bean的元数据<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">String</span> SCOPE_SINGLETON <span class="token operator">=</span> <span class="token class-name">ConfigurableBeanFactory</span><span class="token punctuation">.</span>SCOPE_SINGLETON<span class="token punctuation">;</span>
+                <h1>spring的BeanDefinition体系</h1>
+<p>BeanDefinition是作为记录Bean的原始信息。读取完成配置文件后就要将配置文件解析为<strong>BeanDefinition</strong>。我们来分析一一下这个流程</p>
+<h2 id="bean的元数据"><a class="header-anchor" href="#bean的元数据"></a>bean的元数据</h2>
+<ul>
+<li>BeanDefinition -&gt; bean的元数据</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">String</span> SCOPE_SINGLETON <span class="token operator">=</span> <span class="token class-name">ConfigurableBeanFactory</span><span class="token punctuation">.</span>SCOPE_SINGLETON<span class="token punctuation">;</span>
 <span class="token class-name">String</span> SCOPE_PROTOTYPE <span class="token operator">=</span> <span class="token class-name">ConfigurableBeanFactory</span><span class="token punctuation">.</span>SCOPE_PROTOTYPE<span class="token punctuation">;</span>
 
 
@@ -531,9 +535,6 @@
 <span class="token annotation punctuation">@Nullable</span>
 <span class="token class-name">BeanDefinition</span> <span class="token function">getOriginatingBeanDefinition</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-</li>
-</ul>
 <p><strong>BeanDefinition</strong>继承两个接口<strong>AttributeAccessor</strong>、<strong>BeanMetadataElement</strong></p>
 <ul>
 <li>AttributeAccessor</li>
@@ -566,12 +567,15 @@
 </ul>
 <p><img src="https://s1.ax1x.com/2020/03/18/8D1wJx.png" alt="8D1wJx.png"></p>
 <ul>
-<li><p><strong>AbstractBeanDefinition</strong>抽象出文件定义的BeanDefintion</p>
+<li>
+<p><strong>AbstractBeanDefinition</strong>抽象出文件定义的BeanDefintion</p>
 </li>
-<li><p><strong>AnnotatedBeanDefinition</strong>基于注解的BeanDefinition</p>
+<li>
+<p><strong>AnnotatedBeanDefinition</strong>基于注解的BeanDefinition</p>
 </li>
 </ul>
-<h2 id="BeanDefinition的加载器"><a href="#BeanDefinition的加载器" class="headerlink" title="BeanDefinition的加载器"></a>BeanDefinition的加载器</h2><p>AnnotatedBeanDefinitionReader -&gt; BeanDefinition的加载器</p>
+<h2 id="BeanDefinition的加载器"><a class="header-anchor" href="#BeanDefinition的加载器"></a>BeanDefinition的加载器</h2>
+<p>AnnotatedBeanDefinitionReader -&gt; BeanDefinition的加载器</p>
 <ul>
 <li>BeanDefinitionReader.java</li>
 </ul>
@@ -580,7 +584,9 @@
 </blockquote>
 <p>现在普遍使用注解的方式来加载bean，因此用<strong>AnnotatedBeanDefinitionReader</strong>来分析加载资源的流程</p>
 <ul>
-<li>AnnotatedBeanDefinitionReader.java<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token keyword">void</span> <span class="token function">doRegisterBean</span><span class="token punctuation">(</span><span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> annotatedClass<span class="token punctuation">,</span> <span class="token annotation punctuation">@Nullable</span> <span class="token class-name">Supplier</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> instanceSupplier<span class="token punctuation">,</span> <span class="token annotation punctuation">@Nullable</span> <span class="token class-name">String</span> name<span class="token punctuation">,</span>
+<li>AnnotatedBeanDefinitionReader.java</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token keyword">void</span> <span class="token function">doRegisterBean</span><span class="token punctuation">(</span><span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> annotatedClass<span class="token punctuation">,</span> <span class="token annotation punctuation">@Nullable</span> <span class="token class-name">Supplier</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> instanceSupplier<span class="token punctuation">,</span> <span class="token annotation punctuation">@Nullable</span> <span class="token class-name">String</span> name<span class="token punctuation">,</span>
 			<span class="token annotation punctuation">@Nullable</span> <span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span> <span class="token keyword">extends</span> <span class="token class-name">Annotation</span><span class="token punctuation">></span></span><span class="token punctuation">[</span><span class="token punctuation">]</span> qualifiers<span class="token punctuation">,</span> <span class="token class-name">BeanDefinitionCustomizer</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> definitionCustomizers<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
 
 		<span class="token class-name">AnnotatedGenericBeanDefinition</span> abd <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">AnnotatedGenericBeanDefinition</span><span class="token punctuation">(</span>annotatedClass<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -615,15 +621,17 @@
 		definitionHolder <span class="token operator">=</span> <span class="token class-name">AnnotationConfigUtils</span><span class="token punctuation">.</span><span class="token function">applyScopedProxyMode</span><span class="token punctuation">(</span>scopeMetadata<span class="token punctuation">,</span> definitionHolder<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>registry<span class="token punctuation">)</span><span class="token punctuation">;</span>
 		<span class="token class-name">BeanDefinitionReaderUtils</span><span class="token punctuation">.</span><span class="token function">registerBeanDefinition</span><span class="token punctuation">(</span>definitionHolder<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>registry<span class="token punctuation">)</span><span class="token punctuation">;</span>
 	<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-注册代码主要分为两步</li>
-</ul>
+<p>注册代码主要分为两步</p>
 <ol>
 <li>创建<strong>AnnotatedGenericBeanDefinition</strong>,set各种属性</li>
-<li>注册BeanDefinition<br>其中注册<strong>registerBeanDefinition</strong>使用的是模板模式，根据不同的实现向注册BeanDefinition时进行不同的操作和检查</li>
+<li>注册BeanDefinition<br>
+其中注册<strong>registerBeanDefinition</strong>使用的是模板模式，根据不同的实现向注册BeanDefinition时进行不同的操作和检查</li>
 </ol>
-<h2 id="BeanDefinition的注册器"><a href="#BeanDefinition的注册器" class="headerlink" title="BeanDefinition的注册器"></a>BeanDefinition的注册器</h2><p>在上一步的结尾，通过调用<strong>BeanDefinitionReaderUtils.registerBeanDefinition</strong>实际上调用的是<strong>BeanDefinitionRegistry.registerBeanDefinition</strong></p>
+<h2 id="BeanDefinition的注册器"><a class="header-anchor" href="#BeanDefinition的注册器"></a>BeanDefinition的注册器</h2>
+<p>在上一步的结尾，通过调用<strong>BeanDefinitionReaderUtils.registerBeanDefinition</strong>实际上调用的是<strong>BeanDefinitionRegistry.registerBeanDefinition</strong></p>
 <p>注册BeanDefinition的过程其实就向<strong>beanDefinitionMap</strong>中添加元素的</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p><strong>BeanDefinition</strong>作为bean定义的元数据，通过<strong>BeanDefinitionReader</strong>来进行加载。可以从文件、注解等地方加载定义。最后通过<strong>BeanDefinitionRegistry</strong>将<strong>BeanDefinitionReader</strong>加载进<strong>beanDefinitionMap</strong>中。</p>
+<h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2>
+<p><strong>BeanDefinition</strong>作为bean定义的元数据，通过<strong>BeanDefinitionReader</strong>来进行加载。可以从文件、注解等地方加载定义。最后通过<strong>BeanDefinitionRegistry</strong>将<strong>BeanDefinitionReader</strong>加载进<strong>beanDefinitionMap</strong>中。</p>
 
                 
             </div>

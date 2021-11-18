@@ -433,33 +433,48 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="ShardingSphere入门简介"><a href="#ShardingSphere入门简介" class="headerlink" title="ShardingSphere入门简介"></a>ShardingSphere入门简介</h2><h3 id="概览"><a href="#概览" class="headerlink" title="概览"></a>概览</h3><blockquote>
-<p>ShardingSphere是一套开源的分布式数据库中间件解决方案组成的生态圈，它由Sharding-JDBC、Sharding-Proxy和Sharding-Sidecar（计划中）这3款相互独立的产品组成。 他们均提供标准化的数据分片、分布式事务和数据库治理功能，可适用于如Java同构、异构语言、云原生等各种多样化的应用场景。<a href="%5BShardingSphere%E5%AE%98%E7%BD%91%5D(https://shardingsphere.apache.org/)">^1</a></p>
+                <h2 id="ShardingSphere入门简介"><a class="header-anchor" href="#ShardingSphere入门简介"></a>ShardingSphere入门简介</h2>
+<h3 id="概览"><a class="header-anchor" href="#概览"></a>概览</h3>
+<blockquote>
+<p>ShardingSphere是一套开源的分布式数据库中间件解决方案组成的生态圈，它由Sharding-JDBC、Sharding-Proxy和Sharding-Sidecar（计划中）这3款相互独立的产品组成。 他们均提供标准化的数据分片、分布式事务和数据库治理功能，可适用于如Java同构、异构语言、云原生等各种多样化的应用场景。<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
 </blockquote>
-<h4 id="基本概念"><a href="#基本概念" class="headerlink" title="基本概念"></a>基本概念</h4><p>数据分片拆分方式</p>
+<h4 id="基本概念"><a class="header-anchor" href="#基本概念"></a>基本概念</h4>
+<p>数据分片拆分方式</p>
 <ul>
-<li><p>垂直拆分<br>  <b>垂直拆分</b>指的是专库专用，将不同业务的表拆分到对应的库中。微服务架构下已基本实现了垂直拆分。</p>
+<li>
+<p>垂直拆分<br>
+<b>垂直拆分</b>指的是专库专用，将不同业务的表拆分到对应的库中。微服务架构下已基本实现了垂直拆分。</p>
 </li>
-<li><p>水平拆分<br>  <b>水平拆分</b>指的是逻辑上相同的数据通过根据某种规则将数据分散存储到指定的数据节点中。</p>
+<li>
+<p>水平拆分<br>
+<b>水平拆分</b>指的是逻辑上相同的数据通过根据某种规则将数据分散存储到指定的数据节点中。</p>
 </li>
 </ul>
 <p>产品组成</p>
 <ul>
-<li><p><b>Sharding-JDBC</b><br>  Sharding-JDBC定位为轻量级Java框架，在Java的JDBC层提供的额外服务。 它使用客户端直连数据库，以jar包形式提供服务，无需额外部署和依赖，可理解为增强版的JDBC驱动，完全兼容JDBC和各种ORM框架。</p>
+<li>
+<p><b>Sharding-JDBC</b><br>
+Sharding-JDBC定位为轻量级Java框架，在Java的JDBC层提供的额外服务。 它使用客户端直连数据库，以jar包形式提供服务，无需额外部署和依赖，可理解为增强版的JDBC驱动，完全兼容JDBC和各种ORM框架。</p>
 </li>
-<li><p><b>Sharding-Proxy</b><br>  Sharding-Proxy定位为透明化的数据库代理端，提供封装了数据库二进制协议的服务端版本，用于完成对异构语言的支持。</p>
+<li>
+<p><b>Sharding-Proxy</b><br>
+Sharding-Proxy定位为透明化的数据库代理端，提供封装了数据库二进制协议的服务端版本，用于完成对异构语言的支持。</p>
 </li>
-<li><p><b>Sharding-Sidecar</b><br>  Sharding-Sidecar定位为Kubernetes的云原生数据库代理，以Sidecar的形式代理所有对数据库的访问，是想作为DB层面的数据网格。(规划中)</p>
+<li>
+<p><b>Sharding-Sidecar</b><br>
+Sharding-Sidecar定位为Kubernetes的云原生数据库代理，以Sidecar的形式代理所有对数据库的访问，是想作为DB层面的数据网格。(规划中)</p>
 </li>
 </ul>
-<h4 id="专有名词"><a href="#专有名词" class="headerlink" title="专有名词"></a>专有名词</h4><table>
+<h4 id="专有名词"><a class="header-anchor" href="#专有名词"></a>专有名词</h4>
+<table>
 <thead>
 <tr>
 <th>名称</th>
 <th>作用</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>逻辑表</td>
 <td>水平拆分的数据库（表）的相同逻辑和数据结构表的总称</td>
 </tr>
@@ -495,9 +510,12 @@
 <td>Hint分片算法</td>
 <td>用于处理使用Hint行分片的场景(使用外部规则进行分片)</td>
 </tr>
-</tbody></table>
-<h4 id="功能列表"><a href="#功能列表" class="headerlink" title="功能列表"></a>功能列表</h4><ul>
-<li><p><b>数据分片</b></p>
+</tbody>
+</table>
+<h4 id="功能列表"><a class="header-anchor" href="#功能列表"></a>功能列表</h4>
+<ul>
+<li>
+<p><b>数据分片</b></p>
 <ol>
 <li>分库 &amp; 分表</li>
 <li>读写分离</li>
@@ -505,14 +523,16 @@
 <li>无中心化分布式主键</li>
 </ol>
 </li>
-<li><p><b>分布式事务</b></p>
+<li>
+<p><b>分布式事务</b></p>
 <ol>
 <li>标准化事务接口</li>
 <li>XA强一致事务</li>
 <li>柔性事务</li>
 </ol>
 </li>
-<li><p><b>数据库治理</b></p>
+<li>
+<p><b>数据库治理</b></p>
 <ol>
 <li>配置动态化</li>
 <li>编排 &amp; 治理</li>
@@ -521,12 +541,15 @@
 </ol>
 </li>
 </ul>
-<h3 id="sharding-jdbc"><a href="#sharding-jdbc" class="headerlink" title="sharding-jdbc"></a>sharding-jdbc</h3><h4 id="功能列表-1"><a href="#功能列表-1" class="headerlink" title="功能列表"></a>功能列表</h4><pre><code>1. 数据分片
+<h3 id="sharding-jdbc"><a class="header-anchor" href="#sharding-jdbc"></a>sharding-jdbc</h3>
+<h4 id="功能列表-v2"><a class="header-anchor" href="#功能列表-v2"></a>功能列表</h4>
+<pre><code>1. 数据分片
 2. 读写分离
 3. 强制路由
 4. 数据脱敏
 </code></pre>
-<h4 id="数据分片配置"><a href="#数据分片配置" class="headerlink" title="数据分片配置"></a>数据分片配置</h4><pre class="line-numbers language-yml" data-language="yml"><code class="language-yml">server:
+<h4 id="数据分片配置"><a class="header-anchor" href="#数据分片配置"></a>数据分片配置</h4>
+<pre class="line-numbers language-yml" data-language="yml"><code class="language-yml">server:
   port: 8080
   tomcat:
     uri-encoding: utf-8
@@ -579,19 +602,26 @@ spring:
             - ds0_slave0 #从库
             - ds0_slave1
           loadBalanceAlgorithmType: ROUND_ROBIN<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h4 id="jdbc不支持的操作"><a href="#jdbc不支持的操作" class="headerlink" title="jdbc不支持的操作"></a>jdbc不支持的操作</h4><ol>
+<h4 id="jdbc不支持的操作"><a class="header-anchor" href="#jdbc不支持的操作"></a>jdbc不支持的操作</h4>
+<ol>
 <li>不支持存储过程，函数，游标的操作</li>
-<li>不支持联表删除<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">DELETE</span> TABLE_XXX1<span class="token punctuation">,</span> TABLE_xxx2 <span class="token keyword">FROM</span> TABLE_XXX1 <span class="token keyword">JOIN</span> TABLE_XXX2<span class="token punctuation">;</span>
-<span class="token keyword">DELETE</span> <span class="token keyword">FROM</span> TABLE_XXX1<span class="token punctuation">,</span> TABLE_xxx2 <span class="token keyword">USING</span> TABLE_XXX1 <span class="token keyword">JOIN</span> TABLE_XXX2<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<li>不支持联表删除</li>
+</ol>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">DELETE</span> TABLE_XXX1<span class="token punctuation">,</span> TABLE_xxx2 <span class="token keyword">FROM</span> TABLE_XXX1 <span class="token keyword">JOIN</span> TABLE_XXX2<span class="token punctuation">;</span>
+<span class="token keyword">DELETE</span> <span class="token keyword">FROM</span> TABLE_XXX1<span class="token punctuation">,</span> TABLE_xxx2 <span class="token keyword">USING</span> TABLE_XXX1 <span class="token keyword">JOIN</span> TABLE_XXX2<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<ol start="3">
 <li>不建议使用子查询(4.x版本对子查询的优化不太好)</li>
 </ol>
-<h3 id="sharding-proxy"><a href="#sharding-proxy" class="headerlink" title="sharding-proxy"></a>sharding-proxy</h3><h4 id="功能列表-2"><a href="#功能列表-2" class="headerlink" title="功能列表"></a>功能列表</h4><pre><code>1. sharding-jdbc提供的功能
+<h3 id="sharding-proxy"><a class="header-anchor" href="#sharding-proxy"></a>sharding-proxy</h3>
+<h4 id="功能列表-v3"><a class="header-anchor" href="#功能列表-v3"></a>功能列表</h4>
+<pre><code>1. sharding-jdbc提供的功能
 2. 权限控制
 3. DB高可用管理
 </code></pre>
-<h4 id="数据分片配置-1"><a href="#数据分片配置-1" class="headerlink" title="数据分片配置"></a>数据分片配置</h4><ul>
-<li><p>server.yaml</p>
+<h4 id="数据分片配置-v2"><a class="header-anchor" href="#数据分片配置-v2"></a>数据分片配置</h4>
+<ul>
+<li>server.yaml</li>
+</ul>
 <pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">authentication</span><span class="token punctuation">:</span>
 <span class="token key atrule">users</span><span class="token punctuation">:</span>
 <span class="token key atrule">root</span><span class="token punctuation">:</span> 
@@ -599,9 +629,8 @@ spring:
 <span class="token key atrule">sharding</span><span class="token punctuation">:</span>
     <span class="token key atrule">password</span><span class="token punctuation">:</span> sharding 
     <span class="token key atrule">authorizedSchemas</span><span class="token punctuation">:</span> sharding_db<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><p>config-sharding.yaml</p>
-</li>
+<ul>
+<li>config-sharding.yaml</li>
 </ul>
 <pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">schemaName</span><span class="token punctuation">:</span> sharding_db
 
@@ -640,13 +669,15 @@ spring:
     <span class="token key atrule">algorithmExpression</span><span class="token punctuation">:</span> ds$<span class="token punctuation">&#123;</span>id % 2<span class="token punctuation">&#125;</span>
 <span class="token key atrule">defaultTableStrategy</span><span class="token punctuation">:</span>
 none<span class="token punctuation">:</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h4 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h4><ol>
+<h4 id="注意事项"><a class="header-anchor" href="#注意事项"></a>注意事项</h4>
+<ol>
 <li>在部署sharding-proxy时需要将mysql driver在lib下</li>
 <li>不建议使用子查询(4.x版本对子查询的优化不太好)</li>
 <li>配置文件请以官网为准(5.x版本与4.x版本改动较大)</li>
 </ol>
-<h3 id="client与proxy对比"><a href="#client与proxy对比" class="headerlink" title="client与proxy对比"></a>client与proxy对比</h3><h4 id="功能对比"><a href="#功能对比" class="headerlink" title="功能对比"></a>功能对比</h4><table>
+<h3 id="client与proxy对比"><a class="header-anchor" href="#client与proxy对比"></a>client与proxy对比</h3>
+<h4 id="功能对比"><a class="header-anchor" href="#功能对比"></a>功能对比</h4>
+<table>
 <thead>
 <tr>
 <th>/</th>
@@ -654,7 +685,8 @@ none<span class="token punctuation">:</span><span aria-hidden="true" class="line
 <th>Sharding-Proxy</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>数据库连接</td>
 <td>任意</td>
 <td>MySql</td>
@@ -684,24 +716,38 @@ none<span class="token punctuation">:</span><span aria-hidden="true" class="line
 <td>无</td>
 <td>有</td>
 </tr>
-</tbody></table>
-<h4 id="性能对比"><a href="#性能对比" class="headerlink" title="性能对比"></a>性能对比</h4><p>Sharding-JDBC与Sharding-Proxy保持相同的数据库、数据库连接配置、后端应用下进行测试</p>
+</tbody>
+</table>
+<h4 id="性能对比"><a class="header-anchor" href="#性能对比"></a>性能对比</h4>
+<p>Sharding-JDBC与Sharding-Proxy保持相同的数据库、数据库连接配置、后端应用下进行测试</p>
 <ul>
-<li><p>单表插入<br><img src="https://s1.ax1x.com/2020/09/10/wY071U.png" alt="wY071U.png"></p>
+<li>
+<p>单表插入<br>
+<img src="https://s1.ax1x.com/2020/09/10/wY071U.png" alt="wY071U.png"></p>
 </li>
-<li><p>单表查询<br><img src="https://s1.ax1x.com/2020/09/10/wY0f7n.png" alt="wY0f7n.png"></p>
+<li>
+<p>单表查询<br>
+<img src="https://s1.ax1x.com/2020/09/10/wY0f7n.png" alt="wY0f7n.png"></p>
 </li>
-<li><p>结论<br>从耗时上比较单表插入的性能从高到低依次是Sharding-JDBC、JDBC、Sharding-Proxy<br>从耗时上比较单表查询的性能从高到低依次是Sharding-JDBC、JDBC、Sharding-Proxy</p>
+<li>
+<p>结论<br>
+从耗时上比较单表插入的性能从高到低依次是Sharding-JDBC、JDBC、Sharding-Proxy<br>
+从耗时上比较单表查询的性能从高到低依次是Sharding-JDBC、JDBC、Sharding-Proxy</p>
 </li>
 </ul>
-<h3 id="扩展部分"><a href="#扩展部分" class="headerlink" title="扩展部分"></a>扩展部分</h3><h4 id="源码分析"><a href="#源码分析" class="headerlink" title="源码分析"></a>源码分析</h4><ul>
+<h3 id="扩展部分"><a class="header-anchor" href="#扩展部分"></a>扩展部分</h3>
+<h4 id="源码分析"><a class="header-anchor" href="#源码分析"></a>源码分析</h4>
+<ul>
 <li>Sharding-JDBC的数据分片的执行过程</li>
 </ul>
 <p><img src="https://s1.ax1x.com/2020/09/06/wmlLC9.png" alt="wmlLC9.png"></p>
-<p>ShardingRouter.<strong>route()**方法作为路由的核心，主要是返回路由对象</strong>SQLRouteResult**,SQLRouteResult保存路由信息<br><img src="https://s1.ax1x.com/2020/05/19/Y4Fupq.png" alt="Y4Fupq.png"></p>
+<p>ShardingRouter.<strong>route()<strong>方法作为路由的核心，主要是返回路由对象</strong>SQLRouteResult</strong>,SQLRouteResult保存路由信息<br>
+<img src="https://s1.ax1x.com/2020/05/19/Y4Fupq.png" alt="Y4Fupq.png"></p>
 <p><strong>RouteResult</strong>对象会被返回到<strong>ShardingPreparedStatement</strong>中，这个类继承于<strong>java.sql.Statement</strong>,Statement是定义数据库进行交互并返回结果的接口</p>
 <ul>
-<li>ShardingPreparedStatement扩展的方法<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">ShardingPreparedStatement</span> <span class="token keyword">extends</span> <span class="token class-name">AbstractShardingPreparedStatementAdapter</span> <span class="token punctuation">&#123;</span>
+<li>ShardingPreparedStatement扩展的方法</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">ShardingPreparedStatement</span> <span class="token keyword">extends</span> <span class="token class-name">AbstractShardingPreparedStatementAdapter</span> <span class="token punctuation">&#123;</span>
 
     <span class="token comment">//分片连接</span>
     <span class="token annotation punctuation">@Getter</span>
@@ -728,10 +774,8 @@ none<span class="token punctuation">:</span><span aria-hidden="true" class="line
     <span class="token comment">//实现executeQuery、executeUpdate、execute、getGeneratedKeys等方法</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-</li>
-</ul>
-<h3 id="execute-方法进行具体的执行过程"><a href="#execute-方法进行具体的执行过程" class="headerlink" title="execute()方法进行具体的执行过程"></a>execute()方法进行具体的执行过程</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">execute</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">SQLException</span> <span class="token punctuation">&#123;</span>
+<h3 id="execute-方法进行具体的执行过程"><a class="header-anchor" href="#execute-方法进行具体的执行过程"></a>execute()方法进行具体的执行过程</h3>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">execute</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">SQLException</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
         <span class="token comment">//清除环境</span>
         <span class="token function">clearPrevious</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -745,19 +789,16 @@ none<span class="token punctuation">:</span><span aria-hidden="true" class="line
         <span class="token function">clearBatch</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ul>
-<li>initPreparedStatementExecutor()方法初始化预处理执行<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">initPreparedStatementExecutor</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">SQLException</span> <span class="token punctuation">&#123;</span>
+<li>initPreparedStatementExecutor()方法初始化预处理执行</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">initPreparedStatementExecutor</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">SQLException</span> <span class="token punctuation">&#123;</span>
     <span class="token comment">//初始化执行器</span>
     preparedStatementExecutor<span class="token punctuation">.</span><span class="token function">init</span><span class="token punctuation">(</span>sqlRouteResult<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token comment">//设置语句参数</span>
     <span class="token function">setParametersForStatements</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token function">replayMethodForStatements</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-</li>
-</ul>
 <p>**preparedStatementExecutor.execute()**方法是具体执行的方法</p>
 <p><img src="https://s1.ax1x.com/2020/05/20/Y7XsIA.png" alt="Y7XsIA.png"></p>
 <p>1处将待执行sql封装成为回调对象，2处**executeCallback(executeCallback)**执行回调对象</p>
@@ -769,13 +810,13 @@ none<span class="token punctuation">:</span><span aria-hidden="true" class="line
     <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token class-name">PreparedStatement</span><span class="token punctuation">)</span> statement<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">execute</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ul>
-<li>executeCallback()<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> result <span class="token operator">=</span> sqlExecuteTemplate<span class="token punctuation">.</span><span class="token function">executeGroup</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token class-name">Collection</span><span class="token punctuation">)</span> executeGroups<span class="token punctuation">,</span> executeCallback<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<li>executeCallback()</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> result <span class="token operator">=</span> sqlExecuteTemplate<span class="token punctuation">.</span><span class="token function">executeGroup</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token class-name">Collection</span><span class="token punctuation">)</span> executeGroups<span class="token punctuation">,</span> executeCallback<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token function">refreshMetaDataIfNeeded</span><span class="token punctuation">(</span>connection<span class="token punctuation">.</span><span class="token function">getRuntimeContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> sqlStatementContext<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token keyword">return</span> result<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-通过<strong>sqlExecuteTemplate.executeGroup</strong>执行方法，会将执行动作传递到执行引擎<strong>ShardingExecuteEngine</strong>的<strong>groupExecute</strong>方法</li>
-</ul>
+<p>通过<strong>sqlExecuteTemplate.executeGroup</strong>执行方法，会将执行动作传递到执行引擎<strong>ShardingExecuteEngine</strong>的<strong>groupExecute</strong>方法</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">I</span><span class="token punctuation">,</span> <span class="token class-name">O</span><span class="token punctuation">></span></span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">O</span><span class="token punctuation">></span></span> <span class="token function">groupExecute</span><span class="token punctuation">(</span>
     <span class="token keyword">final</span> <span class="token class-name">Collection</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">ShardingExecuteGroup</span><span class="token punctuation">&lt;</span><span class="token class-name">I</span><span class="token punctuation">></span><span class="token punctuation">></span></span> inputGroups<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token class-name">ShardingGroupExecuteCallback</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">I</span><span class="token punctuation">,</span> <span class="token class-name">O</span><span class="token punctuation">></span></span> firstCallback<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token class-name">ShardingGroupExecuteCallback</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">I</span><span class="token punctuation">,</span> <span class="token class-name">O</span><span class="token punctuation">></span></span> callback<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token keyword">boolean</span> serial<span class="token punctuation">)</span>
     <span class="token keyword">throws</span> <span class="token class-name">SQLException</span> <span class="token punctuation">&#123;</span>
@@ -795,7 +836,15 @@ none<span class="token punctuation">:</span><span aria-hidden="true" class="line
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>这段代码很细心，不但使用到了当前线程来执行第一个任务，并且线程池也使用的是Guava提供的可回调的线程池<strong>ListeningExecutorService</strong>,可参考<a href="/2020/05/20/1.%E6%9D%82%E8%AE%B0/Guava%E7%9A%84%E4%BD%BF%E7%94%A8/#more">Guava的使用</a></p>
 <p>在执行sql时候又会回到当初创建回调函数的地方进行执行回调方法。</p>
-<h3 id="参考文献"><a href="#参考文献" class="headerlink" title="参考文献"></a>参考文献</h3>
+<h3 id="参考文献"><a class="header-anchor" href="#参考文献"></a>参考文献</h3>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://shardingsphere.apache.org/">ShardingSphere官网</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
                 
             </div>
             <hr/>

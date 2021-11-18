@@ -433,9 +433,16 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="两数之和-LeetCode01"><a href="#两数之和-LeetCode01" class="headerlink" title="两数之和_LeetCode01"></a>两数之和_LeetCode01</h1><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。<br>你可以假设每种输入只会对应一个答案。但是，数组中同一个元素不能使用两遍。</p>
-<p>示例:<br>给定 nums = [2, 7, 11, 15], target = 9<br>因为 nums[0] + nums[1] = 2 + 7 = 9<br>所以返回 [0, 1]</p>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>第一个版本中我只是用到了一个最基本的冒泡的方式遍历了数组进行的查询，目前代码如下：</p>
+                <h1>两数之和_LeetCode01</h1>
+<h2 id="题目"><a class="header-anchor" href="#题目"></a>题目</h2>
+<p>给定一个整数数组 nums 和一个目标值 target，请你在该数组中找出和为目标值的那 两个 整数，并返回他们的数组下标。<br>
+你可以假设每种输入只会对应一个答案。但是，数组中同一个元素不能使用两遍。</p>
+<p>示例:<br>
+给定 nums = [2, 7, 11, 15], target = 9<br>
+因为 nums[0] + nums[1] = 2 + 7 = 9<br>
+所以返回 [0, 1]</p>
+<h2 id="分析"><a class="header-anchor" href="#分析"></a>分析</h2>
+<p>第一个版本中我只是用到了一个最基本的冒泡的方式遍历了数组进行的查询，目前代码如下：</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">Solution</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">public</span> <span class="token keyword">int</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token function">twoSum</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">[</span><span class="token punctuation">]</span> nums<span class="token punctuation">,</span> <span class="token keyword">int</span> target<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
         <span class="token keyword">int</span><span class="token punctuation">[</span><span class="token punctuation">]</span> array <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token keyword">int</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">&#123;</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">&#125;</span><span class="token punctuation">;</span>
@@ -451,7 +458,8 @@
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <ul>
-<li>执行结果<br><img src="https://s1.ax1x.com/2020/05/26/tPS9bT.png" alt="tPS9bT.png"></li>
+<li>执行结果<br>
+<img src="https://s1.ax1x.com/2020/05/26/tPS9bT.png" alt="tPS9bT.png"></li>
 </ul>
 <p>第二个版本思路本来是想先将不可能的数进行一次排除后再进行求和，后来发现存在可为负数的情况。因此这种方案失败。最后推荐一种官方给出的解题思路<strong>一次Hash法</strong></p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">int</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token function">twoSum1</span><span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">[</span><span class="token punctuation">]</span> nums<span class="token punctuation">,</span> <span class="token keyword">int</span> target<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
@@ -465,9 +473,9 @@
     <span class="token punctuation">&#125;</span>
     <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalArgumentException</span><span class="token punctuation">(</span><span class="token string">"No two sum solution"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ul>
-<li>执行结果<br><img src="https://s1.ax1x.com/2020/05/26/tPPwXn.png" alt="tPPwXn.png"></li>
+<li>执行结果<br>
+<img src="https://s1.ax1x.com/2020/05/26/tPPwXn.png" alt="tPPwXn.png"></li>
 </ul>
 <p>这种方法最最主要的特定是利用了HashMap中的key只能映射一个元素。通过这样的特性使得在一次遍历中可以去map中寻找是否存在差值。这是一种空间加hash来换取时间的方法。</p>
 

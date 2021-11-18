@@ -433,28 +433,31 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="最长公共前缀-LeetCode08"><a href="#最长公共前缀-LeetCode08" class="headerlink" title="最长公共前缀_LeetCode08"></a>最长公共前缀_LeetCode08</h1><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>编写一个函数来查找字符串数组中的最长公共前缀。<br>如果不存在公共前缀，返回空字符串 “”。</p>
+                <h1>最长公共前缀_LeetCode08</h1>
+<h2 id="题目"><a class="header-anchor" href="#题目"></a>题目</h2>
+<p>编写一个函数来查找字符串数组中的最长公共前缀。<br>
+如果不存在公共前缀，返回空字符串 “”。</p>
 <ul>
 <li>示例 1:</li>
 </ul>
 <pre class="line-numbers language-none"><code class="language-none">输入: [&quot;flower&quot;,&quot;flow&quot;,&quot;flight&quot;]
 输出: &quot;fl&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
 <ul>
 <li>示例 2:</li>
 </ul>
 <pre class="line-numbers language-none"><code class="language-none">输入: [&quot;dog&quot;,&quot;racecar&quot;,&quot;car&quot;]
 输出: &quot;&quot;
 解释: 输入不存在公共前缀。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
 <p><b>说明:</b></p>
 <blockquote>
 <p>所有输入只包含小写字母 a-z 。</p>
 </blockquote>
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><ul>
+<h2 id="解题思路"><a class="header-anchor" href="#解题思路"></a>解题思路</h2>
+<ul>
 <li>根据字符串数组中的每一个字符串依次比较前缀是否相同，从而得到最长公共前缀的长度。</li>
 </ul>
-<h2 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">longestCommonPrefix</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> strs<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+<h2 id="代码"><a class="header-anchor" href="#代码"></a>代码</h2>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">longestCommonPrefix</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> strs<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
         <span class="token comment">//1.先找到最短字符串</span>
         <span class="token keyword">int</span> minLength <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
         <span class="token keyword">for</span><span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>i <span class="token operator">&lt;</span> strs<span class="token punctuation">.</span>length<span class="token punctuation">;</span>i<span class="token operator">++</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
@@ -493,8 +496,8 @@
         <span class="token punctuation">&#125;</span>
         <span class="token keyword">return</span> strs<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">substring</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span>lastIndex<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="官方思路"><a href="#官方思路" class="headerlink" title="官方思路"></a>官方思路</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java">
+<h3 id="官方思路"><a class="header-anchor" href="#官方思路"></a>官方思路</h3>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">
 <span class="token keyword">public</span> <span class="token class-name">String</span> <span class="token function">longestCommonPrefix1</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> strs<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">if</span> <span class="token punctuation">(</span>strs<span class="token punctuation">.</span>length <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token keyword">return</span> <span class="token string">""</span><span class="token punctuation">;</span>
     <span class="token class-name">String</span> prefix <span class="token operator">=</span> strs<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
@@ -507,7 +510,6 @@
     <span class="token keyword">return</span> prefix<span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p>官方解题思路有很多种，这里展示第一种感觉十分巧妙。</p>
 <ol>
 <li>获取到数组中的第一个字符串</li>

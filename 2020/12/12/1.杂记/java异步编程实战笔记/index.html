@@ -433,8 +433,11 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="《Java异步编程实战》笔记"><a href="#《Java异步编程实战》笔记" class="headerlink" title="《Java异步编程实战》笔记"></a>《Java异步编程实战》笔记</h1><h2 id="第一章-认识异步编程"><a href="#第一章-认识异步编程" class="headerlink" title="第一章 认识异步编程"></a>第一章 认识异步编程</h2><p>基础概念和场景介绍。略…</p>
-<h2 id="第二章-显示使用线程和线程池实现异步编程"><a href="#第二章-显示使用线程和线程池实现异步编程" class="headerlink" title="第二章 显示使用线程和线程池实现异步编程"></a>第二章 显示使用线程和线程池实现异步编程</h2><p>线程和线程池的使用做了个简介，重点讲了一下线程池的实现原理</p>
+                <h1>《Java异步编程实战》笔记</h1>
+<h2 id="第一章-认识异步编程"><a class="header-anchor" href="#第一章-认识异步编程"></a>第一章 认识异步编程</h2>
+<p>基础概念和场景介绍。略…</p>
+<h2 id="第二章-显示使用线程和线程池实现异步编程"><a class="header-anchor" href="#第二章-显示使用线程和线程池实现异步编程"></a>第二章 显示使用线程和线程池实现异步编程</h2>
+<p>线程和线程池的使用做了个简介，重点讲了一下线程池的实现原理</p>
 <ul>
 <li>线程池的实现原理<b>ThreadPoolExecutor</b></li>
 </ul>
@@ -477,19 +480,21 @@
            <span class="token function">processWorkerExit</span><span class="token punctuation">(</span>w<span class="token punctuation">,</span> completedAbruptly<span class="token punctuation">)</span><span class="token punctuation">;</span>
        <span class="token punctuation">&#125;</span>
    <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <blockquote>
 <p>注意两个地方:1.Thread会被包装成worker对象用<b>HashSet</b>保存;2.Task是用<b>BlockingQueue</b>来进行保存</p>
 </blockquote>
-<h2 id="第三章-基于JDK中的Futrue实现异步编程"><a href="#第三章-基于JDK中的Futrue实现异步编程" class="headerlink" title="第三章 基于JDK中的Futrue实现异步编程"></a>第三章 基于JDK中的Futrue实现异步编程</h2><h3 id="FutureTask"><a href="#FutureTask" class="headerlink" title="FutureTask"></a>FutureTask</h3><ul>
+<h2 id="第三章-基于JDK中的Futrue实现异步编程"><a class="header-anchor" href="#第三章-基于JDK中的Futrue实现异步编程"></a>第三章 基于JDK中的Futrue实现异步编程</h2>
+<h3 id="FutureTask"><a class="header-anchor" href="#FutureTask"></a>FutureTask</h3>
+<ul>
 <li>run()</li>
 <li>get()</li>
-<li>cancel()<blockquote>
+<li>cancel()</li>
+</ul>
+<blockquote>
 <p>注意一下FutureTask的state是用volatile进行修饰，结果outcome是用state的内存屏障技术来保证可见性的</p>
 </blockquote>
-</li>
-</ul>
-<h3 id="CompletableFuture"><a href="#CompletableFuture" class="headerlink" title="CompletableFuture"></a>CompletableFuture</h3><ul>
+<h3 id="CompletableFuture"><a class="header-anchor" href="#CompletableFuture"></a>CompletableFuture</h3>
+<ul>
 <li>runAsync()</li>
 <li>supplyAsync()</li>
 <li>thenRun()</li>
@@ -505,24 +510,40 @@
 <blockquote>
 <p>CompletableFuture默认是用ForkJoinPool,这里需要注意下</p>
 </blockquote>
-<h2 id="Spring框架中的异步执行"><a href="#Spring框架中的异步执行" class="headerlink" title="Spring框架中的异步执行"></a>Spring框架中的异步执行</h2><h3 id="TaskExecutor"><a href="#TaskExecutor" class="headerlink" title="TaskExecutor"></a>TaskExecutor</h3><p>略…</p>
-<h3 id="Async"><a href="#Async" class="headerlink" title="@Async"></a>@Async</h3><p>@EnableAsync是通过AsyncConfigurationSelector进行加载，</p>
-<h2 id="基于反应式编程实现异步编程"><a href="#基于反应式编程实现异步编程" class="headerlink" title="基于反应式编程实现异步编程"></a>基于反应式编程实现异步编程</h2><blockquote>
+<h2 id="Spring框架中的异步执行"><a class="header-anchor" href="#Spring框架中的异步执行"></a>Spring框架中的异步执行</h2>
+<h3 id="TaskExecutor"><a class="header-anchor" href="#TaskExecutor"></a>TaskExecutor</h3>
+<p>略…</p>
+<h3 id="Async"><a class="header-anchor" href="#Async"></a>@Async</h3>
+<p>@EnableAsync是通过AsyncConfigurationSelector进行加载，</p>
+<h2 id="基于反应式编程实现异步编程"><a class="header-anchor" href="#基于反应式编程实现异步编程"></a>基于反应式编程实现异步编程</h2>
+<blockquote>
 <p>反应式编程是一种涉及数据流和变化传播的异步编程范式。这意味着可以通过所采用的编程语言轻松的表达静态或动态数据流。</p>
 </blockquote>
 <p>反应式编程主要是强调对数据的处理过程是主动的，是以数据为核心参与对象的过程。传统的编程模型下是以业务流程为核心，通过业务流程将数据串联起来。</p>
-<h3 id="Reactive-Streams规范"><a href="#Reactive-Streams规范" class="headerlink" title="Reactive Streams规范"></a>Reactive Streams规范</h3><blockquote>
-<p> Reactive Streams规范是提供一个使用非阻塞回压功能对异步流进行处理的标准，也就是定义反应式编程的规范</p>
+<h3 id="Reactive-Streams规范"><a class="header-anchor" href="#Reactive-Streams规范"></a>Reactive Streams规范</h3>
+<blockquote>
+<p>Reactive Streams规范是提供一个使用非阻塞回压功能对异步流进行处理的标准，也就是定义反应式编程的规范</p>
 </blockquote>
-<h3 id="基于RxJava实现异步编程"><a href="#基于RxJava实现异步编程" class="headerlink" title="基于RxJava实现异步编程"></a>基于RxJava实现异步编程</h3><p>==RxJava==是Reactive Extensions的java语言实现，具体的使用方法可参考官网</p>
-<h3 id="基于Reactor实现异步编程"><a href="#基于Reactor实现异步编程" class="headerlink" title="基于Reactor实现异步编程"></a>基于Reactor实现异步编程</h3><p>==Reactor==是另外一个Java语言下的是Reactive实现，目前在webFlux中作为反应式框架进行使用</p>
+<h3 id="基于RxJava实现异步编程"><a class="header-anchor" href="#基于RxJava实现异步编程"></a>基于RxJava实现异步编程</h3>
+<p>==RxJava==是Reactive Extensions的java语言实现，具体的使用方法可参考官网</p>
+<h3 id="基于Reactor实现异步编程"><a class="header-anchor" href="#基于Reactor实现异步编程"></a>基于Reactor实现异步编程</h3>
+<p>==Reactor==是另外一个Java语言下的是Reactive实现，目前在webFlux中作为反应式框架进行使用</p>
 <p>这里有一个软件发展的趋势就是传统的编程模型是基于cpu多核技术发展的还不是很好的时候提出来的，已经不太适用于现代多核cpu架构。因此基于现代cpu多核架构和传统软件架构面对的问题，提出了反应式编程模型。这种编程方式也许不是很便于人类理解，但是确拥有更高的资源利用率。如果未来出现一个像spring对于java那样对于反应式编程的框架，反应式编程理念应该会得到更好的发展。</p>
-<h2 id="Web-Servlet的异步非阻塞处理"><a href="#Web-Servlet的异步非阻塞处理" class="headerlink" title="Web Servlet的异步非阻塞处理"></a>Web Servlet的异步非阻塞处理</h2><p>在Servlet3.0中提供了异步处理能力，让请求线程和处理线程不在是1：1的关系了,这里就可以更好的利用服务器的性能。<br>这里有一个问题什么Servlet 3才提出的异步处理能力喃？<br>这是因为servlet是基http1.1的方案，http1.1开始支持http可以保持长连接的形式，hhtp1.1方案是1999年开始<br>在Servlet3.1中提供了非阻塞I/O的处理方式:Web容器中的非阻塞请求处理有助于增加Web容器可同时处理请求的数量，允许我们在ServletInputStream上通过函数setReadListener注册一个监听器，该监听器在发现内核中有数据时才会进行回调处理函数。</p>
-<h3 id="spring-MVC的异步处理能力"><a href="#spring-MVC的异步处理能力" class="headerlink" title="spring MVC的异步处理能力"></a>spring MVC的异步处理能力</h3><blockquote>
+<h2 id="Web-Servlet的异步非阻塞处理"><a class="header-anchor" href="#Web-Servlet的异步非阻塞处理"></a>Web Servlet的异步非阻塞处理</h2>
+<p>在Servlet3.0中提供了异步处理能力，让请求线程和处理线程不在是1：1的关系了,这里就可以更好的利用服务器的性能。<br>
+这里有一个问题什么Servlet 3才提出的异步处理能力喃？<br>
+这是因为servlet是基http1.1的方案，http1.1开始支持http可以保持长连接的形式，hhtp1.1方案是1999年开始<br>
+在Servlet3.1中提供了非阻塞I/O的处理方式:Web容器中的非阻塞请求处理有助于增加Web容器可同时处理请求的数量，允许我们在ServletInputStream上通过函数setReadListener注册一个监听器，该监听器在发现内核中有数据时才会进行回调处理函数。</p>
+<h3 id="spring-MVC的异步处理能力"><a class="header-anchor" href="#spring-MVC的异步处理能力"></a>spring MVC的异步处理能力</h3>
+<blockquote>
 <p>Spring MVC是围绕前端控制器模式设计，由中央处理器Servlet DispatcheaServlet作为请求处理进行路由分派，实际请求处理工作由可配置处理类进行执行。在Spring MVC中通过调用request.startAsync()将ServletRequest设置为异步模式，这样可以让Servlet在推出的同时，让响应保持打开状态。</p>
 </blockquote>
-<h2 id="Spring-web-Flux"><a href="#Spring-web-Flux" class="headerlink" title="Spring web Flux"></a>Spring web Flux</h2><p>webFlux与spring mvc的对比<br><img src="https://docs.spring.io/spring-framework/docs/current/reference/html/images/spring-mvc-and-webflux-venn.png" alt="webFlux vs spring mvc"></p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://www.infoworld.com/article/2077995/java-concurrency-asynchronous-processing-support-in-servlet-3-0.html?page=1">infoworld关于servlet 3.0的介绍</a><br><a target="_blank" rel="noopener" href="https://docs.spring.io/spring-framework/docs/current/reference/html/web-reactive.html">spring官网关于webFlux的文档</a></p>
+<h2 id="Spring-web-Flux"><a class="header-anchor" href="#Spring-web-Flux"></a>Spring web Flux</h2>
+<p>webFlux与spring mvc的对比<br>
+<img src="https://docs.spring.io/spring-framework/docs/current/reference/html/images/spring-mvc-and-webflux-venn.png" alt="webFlux vs spring mvc"></p>
+<h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
+<p><a target="_blank" rel="noopener" href="https://www.infoworld.com/article/2077995/java-concurrency-asynchronous-processing-support-in-servlet-3-0.html?page=1">infoworld关于servlet 3.0的介绍</a><br>
+<a target="_blank" rel="noopener" href="https://docs.spring.io/spring-framework/docs/current/reference/html/web-reactive.html">spring官网关于webFlux的文档</a></p>
 
                 
             </div>

@@ -433,8 +433,11 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="rocketmq常见问题"><a href="#rocketmq常见问题" class="headerlink" title="rocketmq常见问题"></a>rocketmq常见问题</h1><h2 id="RocketMQ由哪些角色组成？"><a href="#RocketMQ由哪些角色组成？" class="headerlink" title="RocketMQ由哪些角色组成？"></a>RocketMQ由哪些角色组成？</h2><p>由<strong>NameSrv</strong>、<strong>Broker</strong>、<strong>Consumer</strong>、<strong>Producer</strong>组成</p>
-<h2 id="RocketMQ的整体流程？"><a href="#RocketMQ的整体流程？" class="headerlink" title="RocketMQ的整体流程？"></a>RocketMQ的整体流程？</h2><ol>
+                <h1>rocketmq常见问题</h1>
+<h2 id="RocketMQ由哪些角色组成？"><a class="header-anchor" href="#RocketMQ由哪些角色组成？"></a>RocketMQ由哪些角色组成？</h2>
+<p>由<strong>NameSrv</strong>、<strong>Broker</strong>、<strong>Consumer</strong>、<strong>Producer</strong>组成</p>
+<h2 id="RocketMQ的整体流程？"><a class="header-anchor" href="#RocketMQ的整体流程？"></a>RocketMQ的整体流程？</h2>
+<ol>
 <li><strong>NameSrv</strong>首先启动</li>
 <li><strong>Broker</strong>启动后向NameSrv进行注册，并对外提供服务</li>
 <li><strong>producer</strong>向<strong>NameSrv</strong>查询向<strong>Topic</strong>提供写服务的<strong>Broker</strong>进行写入</li>
@@ -443,47 +446,68 @@
 <blockquote>
 <p>与<strong>NameSrv</strong>都是保持长连接的形式,<strong>Broker</strong>是定时发送心跳包(ip:端口、Topic信息)</p>
 </blockquote>
-<h2 id="Namesrv的了解？"><a href="#Namesrv的了解？" class="headerlink" title="Namesrv的了解？"></a>Namesrv的了解？</h2><p>RocketMQ的<strong>NameSrv</strong>是提供给其他参与者的分布式协调服务，由于每台NameSrv都保存的是全量信息，因此支持横向扩展</p>
-<h2 id="如何配置NameSrv地址到生产者和消费者？"><a href="#如何配置NameSrv地址到生产者和消费者？" class="headerlink" title="如何配置NameSrv地址到生产者和消费者？"></a>如何配置NameSrv地址到生产者和消费者？</h2><ol>
+<h2 id="Namesrv的了解？"><a class="header-anchor" href="#Namesrv的了解？"></a>Namesrv的了解？</h2>
+<p>RocketMQ的<strong>NameSrv</strong>是提供给其他参与者的分布式协调服务，由于每台NameSrv都保存的是全量信息，因此支持横向扩展</p>
+<h2 id="如何配置NameSrv地址到生产者和消费者？"><a class="header-anchor" href="#如何配置NameSrv地址到生产者和消费者？"></a>如何配置NameSrv地址到生产者和消费者？</h2>
+<ol>
 <li>setNamesrvAddr()</li>
 <li>java启动参数</li>
 <li><strong>NAMESRV_ADDR</strong></li>
 <li>HTTP站点解析</li>
 </ol>
-<h2 id="说说对Broker的理解"><a href="#说说对Broker的理解" class="headerlink" title="说说对Broker的理解"></a>说说对<strong>Broker</strong>的理解</h2><p><strong>Broker</strong>将网络和存储等核心功能封装起来，对外提供了存/取消息的功能。<br>内部通过大量使用线程池，将消息的处理设计成为异步形式的，提高了性能。</p>
+<h2 id="说说对Broker的理解"><a class="header-anchor" href="#说说对Broker的理解"></a>说说对<strong>Broker</strong>的理解</h2>
+<p><strong>Broker</strong>将网络和存储等核心功能封装起来，对外提供了存/取消息的功能。<br>
+内部通过大量使用线程池，将消息的处理设计成为异步形式的，提高了性能。</p>
 <ol>
 <li>通过消息顺序写，建立索引随机读的方式</li>
 <li>根据MessageQueue进行负载</li>
 <li>支持主从部署</li>
 <li>高可靠是用同步刷盘机制来保证的</li>
 </ol>
-<h2 id="Broker如何实现存储的？"><a href="#Broker如何实现存储的？" class="headerlink" title="Broker如何实现存储的？"></a><strong>Broker</strong>如何实现存储的？</h2><p>逻辑上划分业务数据、系统数据<br>业务数据分别为<strong>CommitLog</strong>、<strong>index</strong>、<strong>ConsumerQueue</strong>、<strong>config</strong>(topic信息、filter等信息)<br>系统数据分别为abort、lock</p>
+<h2 id="Broker如何实现存储的？"><a class="header-anchor" href="#Broker如何实现存储的？"></a><strong>Broker</strong>如何实现存储的？</h2>
+<p>逻辑上划分业务数据、系统数据<br>
+业务数据分别为<strong>CommitLog</strong>、<strong>index</strong>、<strong>ConsumerQueue</strong>、<strong>config</strong>(topic信息、filter等信息)<br>
+系统数据分别为abort、lock</p>
 <p>收到请求后将请求封装成为正确的消息格式，然后找到commitlog文件，写入文件后更新index文件</p>
-<h2 id="producer的理解"><a href="#producer的理解" class="headerlink" title="producer的理解"></a><strong>producer</strong>的理解</h2><ol>
+<h2 id="producer的理解"><a class="header-anchor" href="#producer的理解"></a><strong>producer</strong>的理解</h2>
+<ol>
 <li>通过NameSrv获取到<strong>Broker-Topic</strong>数据</li>
 <li>生产者端可以进行负载</li>
 <li>有三种发送方式（同步，异步，单向）</li>
 </ol>
-<h2 id="comsumer的理解"><a href="#comsumer的理解" class="headerlink" title="comsumer的理解"></a><strong>comsumer</strong>的理解</h2><ol>
+<h2 id="comsumer的理解"><a class="header-anchor" href="#comsumer的理解"></a><strong>comsumer</strong>的理解</h2>
+<ol>
 <li>两种消费模式：集群和广播</li>
 <li>获取消息的模式：推送和拉取</li>
 </ol>
-<h2 id="如何实现消息的重发？"><a href="#如何实现消息的重发？" class="headerlink" title="如何实现消息的重发？"></a>如何实现消息的重发？</h2><p>consumer端重置offset</p>
-<h2 id="顺序消息是什么？"><a href="#顺序消息是什么？" class="headerlink" title="顺序消息是什么？"></a>顺序消息是什么？</h2><p>顺序消息分为<strong>普通顺序消息</strong>和<strong>全局顺序消息</strong>，全局顺序消息是普通顺序消息下只有一个messageQueue的特例。<br>1.生产者端将消息有序的发送到MessageQueue<br>2.消费端保证一个消费组组内只有一个线程在进行消费(ConsumerOrderLister)</p>
-<h2 id="顺序消息在扩容时如何保证不停写的情况下扩容？"><a href="#顺序消息在扩容时如何保证不停写的情况下扩容？" class="headerlink" title="顺序消息在扩容时如何保证不停写的情况下扩容？"></a>顺序消息在扩容时如何保证不停写的情况下扩容？</h2><ol>
+<h2 id="如何实现消息的重发？"><a class="header-anchor" href="#如何实现消息的重发？"></a>如何实现消息的重发？</h2>
+<p>consumer端重置offset</p>
+<h2 id="顺序消息是什么？"><a class="header-anchor" href="#顺序消息是什么？"></a>顺序消息是什么？</h2>
+<p>顺序消息分为<strong>普通顺序消息</strong>和<strong>全局顺序消息</strong>，全局顺序消息是普通顺序消息下只有一个messageQueue的特例。<br>
+1.生产者端将消息有序的发送到MessageQueue<br>
+2.消费端保证一个消费组组内只有一个线程在进行消费(ConsumerOrderLister)</p>
+<h2 id="顺序消息在扩容时如何保证不停写的情况下扩容？"><a class="header-anchor" href="#顺序消息在扩容时如何保证不停写的情况下扩容？"></a>顺序消息在扩容时如何保证不停写的情况下扩容？</h2>
+<ol>
 <li>保证key指定到原messageQueue</li>
 <li>消费完旧队列在消费新队列</li>
 </ol>
-<h2 id="什么是定时消息？"><a href="#什么是定时消息？" class="headerlink" title="什么是定时消息？"></a>什么是定时消息？</h2><p>RocketMQ中提供了18个级别的定时消息，从<strong>1s</strong> -&gt; <strong>2h</strong><br>原理是：延时消息在发送到broker后会被存储到特定的延迟队列中,broker根据不同的延时级别创建不同的定时任务来根据延迟消费进度来从对应的延迟队列中拉去消息。然后根据延迟队列中的信息还原到真实的topic中。</p>
-<h2 id="什么是重试消息？"><a href="#什么是重试消息？" class="headerlink" title="什么是重试消息？"></a>什么是重试消息？</h2><p>重试消息指的是消息在消费失败后提供的一种重试机制，消费失败的消息会被发回Broker的延迟队列中<br>主要流程：</p>
+<h2 id="什么是定时消息？"><a class="header-anchor" href="#什么是定时消息？"></a>什么是定时消息？</h2>
+<p>RocketMQ中提供了18个级别的定时消息，从<strong>1s</strong> -&gt; <strong>2h</strong><br>
+原理是：延时消息在发送到broker后会被存储到特定的延迟队列中,broker根据不同的延时级别创建不同的定时任务来根据延迟消费进度来从对应的延迟队列中拉去消息。然后根据延迟队列中的信息还原到真实的topic中。</p>
+<h2 id="什么是重试消息？"><a class="header-anchor" href="#什么是重试消息？"></a>什么是重试消息？</h2>
+<p>重试消息指的是消息在消费失败后提供的一种重试机制，消费失败的消息会被发回Broker的延迟队列中<br>
+主要流程：</p>
 <ol>
 <li>consumerGroup消费失败后发送到broker</li>
 <li>broker收到消息后将消息放到延迟消息队列中，到期后向consumer发送拉取请求</li>
 <li>consumer重新消费消息，并将topice替换为原始的topic</li>
 </ol>
-<h2 id="多次消费失败后这么处理"><a href="#多次消费失败后这么处理" class="headerlink" title="多次消费失败后这么处理?"></a>多次消费失败后这么处理?</h2><p>rocketmq多次消费失败后进入死信队列，应用可以订阅死信队列进行告警。</p>
-<h2 id="RocketMQ的事务消息？"><a href="#RocketMQ的事务消息？" class="headerlink" title="RocketMQ的事务消息？"></a>RocketMQ的事务消息？</h2><p>RocketMQ的事务消息是保证一方的本地事务和消息发送状态的状态是一个原子类型的操作，通过是基于base理论的，因此适用于长事务的场景</p>
-<h2 id="RocketMQ如何实现高可用？"><a href="#RocketMQ如何实现高可用？" class="headerlink" title="RocketMQ如何实现高可用？"></a>RocketMQ如何实现高可用？</h2><ol>
+<h2 id="多次消费失败后这么处理"><a class="header-anchor" href="#多次消费失败后这么处理"></a>多次消费失败后这么处理?</h2>
+<p>rocketmq多次消费失败后进入死信队列，应用可以订阅死信队列进行告警。</p>
+<h2 id="RocketMQ的事务消息？"><a class="header-anchor" href="#RocketMQ的事务消息？"></a>RocketMQ的事务消息？</h2>
+<p>RocketMQ的事务消息是保证一方的本地事务和消息发送状态的状态是一个原子类型的操作，通过是基于base理论的，因此适用于长事务的场景</p>
+<h2 id="RocketMQ如何实现高可用？"><a class="header-anchor" href="#RocketMQ如何实现高可用？"></a>RocketMQ如何实现高可用？</h2>
+<ol>
 <li>NameSrv无状态的多节点部署</li>
 <li>broker可以用master-salve部署（2m-2s-async）</li>
 </ol>

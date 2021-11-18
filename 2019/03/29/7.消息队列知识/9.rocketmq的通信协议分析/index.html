@@ -433,8 +433,10 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="rocketmq的通信协议分析"><a href="#rocketmq的通信协议分析" class="headerlink" title="rocketmq的通信协议分析"></a>rocketmq的通信协议分析</h1><p>rocketmq底层的通信是放在<strong>org.apache.rocketmq.remoting</strong>包下的，主要有<strong>RPCHook</strong>、<strong>RemotingServer</strong>、<strong>RemotingClient</strong>、<strong>RemotingUtil</strong>、<strong>RemotingHelper</strong>等接口和类组成</p>
-<h2 id="RemotingCommand协议"><a href="#RemotingCommand协议" class="headerlink" title="RemotingCommand协议"></a>RemotingCommand协议</h2><p><strong>RemotingCommand</strong>是rocketmq定义的远程通信协议</p>
+                <h1>rocketmq的通信协议分析</h1>
+<p>rocketmq底层的通信是放在<strong>org.apache.rocketmq.remoting</strong>包下的，主要有<strong>RPCHook</strong>、<strong>RemotingServer</strong>、<strong>RemotingClient</strong>、<strong>RemotingUtil</strong>、<strong>RemotingHelper</strong>等接口和类组成</p>
+<h2 id="RemotingCommand协议"><a class="header-anchor" href="#RemotingCommand协议"></a>RemotingCommand协议</h2>
+<p><strong>RemotingCommand</strong>是rocketmq定义的远程通信协议</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//请求头statrt</span>
 <span class="token comment">//请求类型</span>
 <span class="token keyword">private</span> <span class="token keyword">int</span> code<span class="token punctuation">;</span>
@@ -453,9 +455,9 @@
 <span class="token comment">//消息体</span>
 <span class="token keyword">private</span> <span class="token keyword">transient</span> <span class="token keyword">byte</span><span class="token punctuation">[</span><span class="token punctuation">]</span> body<span class="token punctuation">;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p>协议在请求头中定义了请求请求类型、语言、版本号、请求id等信息；将消息体定义在**byte[]**数组中。</p>
-<h3 id="decode解码方法"><a href="#decode解码方法" class="headerlink" title="decode解码方法"></a>decode解码方法</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//该方法会将网络中加载的字节数组封装成为通用的RemotingCommand类型</span>
+<h3 id="decode解码方法"><a class="header-anchor" href="#decode解码方法"></a>decode解码方法</h3>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//该方法会将网络中加载的字节数组封装成为通用的RemotingCommand类型</span>
     <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">RemotingCommand</span> <span class="token function">decode</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token class-name">ByteBuffer</span> byteBuffer<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
         <span class="token comment">//总长度</span>
         <span class="token keyword">int</span> length <span class="token operator">=</span> byteBuffer<span class="token punctuation">.</span><span class="token function">limit</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -478,7 +480,9 @@
 
         <span class="token keyword">return</span> cmd<span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h2 id="NettyRemotingAbstract"><a href="#NettyRemotingAbstract" class="headerlink" title="NettyRemotingAbstract"></a>NettyRemotingAbstract</h2><h3 id="invokeSyncImpl-发送请求"><a href="#invokeSyncImpl-发送请求" class="headerlink" title="invokeSyncImpl 发送请求"></a>invokeSyncImpl 发送请求</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">RemotingCommand</span> <span class="token function">invokeSyncImpl</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token class-name">Channel</span> channel<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token class-name">RemotingCommand</span> request<span class="token punctuation">,</span>
+<h2 id="NettyRemotingAbstract"><a class="header-anchor" href="#NettyRemotingAbstract"></a>NettyRemotingAbstract</h2>
+<h3 id="invokeSyncImpl-发送请求"><a class="header-anchor" href="#invokeSyncImpl-发送请求"></a>invokeSyncImpl 发送请求</h3>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">RemotingCommand</span> <span class="token function">invokeSyncImpl</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token class-name">Channel</span> channel<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token class-name">RemotingCommand</span> request<span class="token punctuation">,</span>
        <span class="token keyword">final</span> <span class="token keyword">long</span> timeoutMillis<span class="token punctuation">)</span>
        <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span><span class="token punctuation">,</span> <span class="token class-name">RemotingSendRequestException</span><span class="token punctuation">,</span> <span class="token class-name">RemotingTimeoutException</span> <span class="token punctuation">&#123;</span>
        <span class="token comment">//获得本次请求号</span>
@@ -517,9 +521,10 @@
            <span class="token keyword">this</span><span class="token punctuation">.</span>responseTable<span class="token punctuation">.</span><span class="token function">remove</span><span class="token punctuation">(</span>opaque<span class="token punctuation">)</span><span class="token punctuation">;</span>
        <span class="token punctuation">&#125;</span>
    <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p><strong>invokeSyncImpl</strong>是<strong>NettyRemotingAbstract</strong>提供的同步请求的方法，从上面的代码可以看出。在发送请求后会等待<strong>timeoutMillis</strong>，默认是3s。</p>
-<h2 id="NettyRemotingServer"><a href="#NettyRemotingServer" class="headerlink" title="NettyRemotingServer"></a>NettyRemotingServer</h2><h3 id="start-方法"><a href="#start-方法" class="headerlink" title="start()方法"></a>start()方法</h3><p>**NettyRemotingServer.start()**方法是创建一个netty服务端</p>
+<h2 id="NettyRemotingServer"><a class="header-anchor" href="#NettyRemotingServer"></a>NettyRemotingServer</h2>
+<h3 id="start-方法"><a class="header-anchor" href="#start-方法"></a>start()方法</h3>
+<p>**NettyRemotingServer.start()**方法是创建一个netty服务端</p>
 <ul>
 <li>调用方</li>
 </ul>
@@ -592,8 +597,8 @@
         <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token number">1000</span> <span class="token operator">*</span> <span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>启动服务主要是用Netty来做的，这一块还需要学习完成Netty后重写理解一下。<br>目前看懂的就是linux环境下使用的是Epoll,其他环境使用的是NioServerSocketChannel</p>
+<p>启动服务主要是用Netty来做的，这一块还需要学习完成Netty后重写理解一下。<br>
+目前看懂的就是linux环境下使用的是Epoll,其他环境使用的是NioServerSocketChannel</p>
 
                 
             </div>

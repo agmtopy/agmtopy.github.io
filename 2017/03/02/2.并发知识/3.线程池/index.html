@@ -433,8 +433,10 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="线程池"><a href="#线程池" class="headerlink" title="线程池"></a>线程池</h1><p>有关线程池的创建、常见的几种线程池，线程池的使用方式</p>
-<h2 id="创建线程池"><a href="#创建线程池" class="headerlink" title="创建线程池"></a>创建线程池</h2><p>创建线程池：</p>
+                <h1>线程池</h1>
+<p>有关线程池的创建、常见的几种线程池，线程池的使用方式</p>
+<h2 id="创建线程池"><a class="header-anchor" href="#创建线程池"></a>创建线程池</h2>
+<p>创建线程池：</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">ThreadPoolExecutor</span><span class="token punctuation">(</span><span class="token keyword">int</span> corePoolSize<span class="token punctuation">,</span> <span class="token keyword">int</span> maximumPoolSize<span class="token punctuation">,</span> <span class="token keyword">long</span> keepAliveTime<span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span> unit<span class="token punctuation">,</span> <span class="token class-name">BlockingQueue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Runnable</span><span class="token punctuation">></span></span> workQueue<span class="token punctuation">,</span> <span class="token class-name">ThreadFactory</span> threadFactory<span class="token punctuation">,</span> <span class="token class-name">RejectedExecutionHandler</span> handler<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>各个参数含义</p>
@@ -445,7 +447,8 @@
 <th>含义</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>corePoolSize</td>
 <td>核心线程数</td>
 </tr>
@@ -469,7 +472,8 @@
 <td>handler</td>
 <td>拒绝策略</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p>线程池的执行流程为、</p>
 <ol>
 <li>线程池中的线程未达到核心线程，<strong>提交任务后就会立刻执行任务</strong></li>
@@ -477,14 +481,16 @@
 <li>任务缓存队列已满，未达到最大线程数，<strong>将会创建新的线程执行任务</strong></li>
 <li>达到最大线程数，执行拒绝策略</li>
 </ol>
-<h2 id="拒绝策略"><a href="#拒绝策略" class="headerlink" title="拒绝策略"></a>拒绝策略</h2><table>
+<h2 id="拒绝策略"><a class="header-anchor" href="#拒绝策略"></a>拒绝策略</h2>
+<table>
 <thead>
 <tr>
 <th>初始化</th>
 <th>特性</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>ThreadPoolExecutor.AbortPolicy()</td>
 <td>抛出异常</td>
 </tr>
@@ -500,16 +506,19 @@
 <td>ThreadPoolExecutor.CallerRunsPolicy()</td>
 <td>由提交任务的线程来执行任务</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p>**ThreadPoolExecutor.CallerRunsPolicy()**这种拒绝策略比较合理，通过将任务由提交任务的线程去执行这样可以减少任务的累积</p>
-<h2 id="通过Executers创建的线程池"><a href="#通过Executers创建的线程池" class="headerlink" title="通过Executers创建的线程池"></a>通过Executers创建的线程池</h2><table>
+<h2 id="通过Executers创建的线程池"><a class="header-anchor" href="#通过Executers创建的线程池"></a>通过Executers创建的线程池</h2>
+<table>
 <thead>
 <tr>
 <th>初始化</th>
 <th>特性</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>Executors.newCachedThreadPool()</td>
 <td>无上限的线程数的线程池,线程会保持60s</td>
 </tr>
@@ -525,22 +534,22 @@
 <td>Executors.ScheduledThreadPoolExecutor()</td>
 <td>有固定线程数,延迟队列</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
 <p><strong>ForkJoinPool线程池</strong></p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">ForkJoinPool</span> forkJoinPool <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ForkJoinPool</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token class-name">ForkJoinTask</span> task <span class="token operator">=</span> forkJoinPool<span class="token punctuation">.</span><span class="token function">submit</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Fibonacci</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 task<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-
-
-<h2 id="阻塞队列"><a href="#阻塞队列" class="headerlink" title="阻塞队列"></a>阻塞队列</h2><table>
+<h2 id="阻塞队列"><a class="header-anchor" href="#阻塞队列"></a>阻塞队列</h2>
+<table>
 <thead>
 <tr>
 <th>初始化</th>
 <th>特性</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>LinkedBlockingQueue</td>
 <td>无容量上限的队列</td>
 </tr>
@@ -552,12 +561,16 @@ task<span class="token punctuation">.</span><span class="token function">get</sp
 <td>DelayedWorkQueue</td>
 <td>延迟队列</td>
 </tr>
-</tbody></table>
-<h2 id="核心线程数的选择"><a href="#核心线程数的选择" class="headerlink" title="核心线程数的选择"></a>核心线程数的选择</h2><p>核心线程数的选择是根据任务的类型<strong>CPU密集性</strong>、<strong>IO密集型</strong></p>
+</tbody>
+</table>
+<h2 id="核心线程数的选择"><a class="header-anchor" href="#核心线程数的选择"></a>核心线程数的选择</h2>
+<p>核心线程数的选择是根据任务的类型<strong>CPU密集性</strong>、<strong>IO密集型</strong></p>
 <p><strong>CPU密集性</strong>任务，会一直使用cpu进行计算，合适的线程数为cpu核心数的<strong>1~2</strong>倍，过多的线程数会造成线程上下文的频繁切换，执行效率反而不高。</p>
 <p><strong>IO密集型</strong>任务，会执行IO任务，cpu进行等待，因此线程数可以尽量多一些。</p>
 <p>*<em>线程数 =  CPU核心数 <em>（1 + 平均等待时间/平均工作时间）</em></em></p>
-<h2 id="shutdown和shutdownNew的区别"><a href="#shutdown和shutdownNew的区别" class="headerlink" title="shutdown和shutdownNew的区别"></a>shutdown和shutdownNew的区别</h2><p>__shutdown__不在允许提交任务，待执行线程池中正在执行的任务和任务队列中的任务后线程池关闭<br>__shutdownNow__立即暂停任务，向正在执行任务的线程发送中断信号，将等待队列中的任务转移出来，然后线程池关闭</p>
+<h2 id="shutdown和shutdownNew的区别"><a class="header-anchor" href="#shutdown和shutdownNew的区别"></a>shutdown和shutdownNew的区别</h2>
+<p>__shutdown__不在允许提交任务，待执行线程池中正在执行的任务和任务队列中的任务后线程池关闭<br>
+__shutdownNow__立即暂停任务，向正在执行任务的线程发送中断信号，将等待队列中的任务转移出来，然后线程池关闭</p>
 <p>线程池复用线程的逻辑是，创建线程后不停的获取task进行执行（run）方法</p>
 
                 

@@ -433,16 +433,24 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="两数向加"><a href="#两数向加" class="headerlink" title="两数向加"></a>两数向加</h1><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>给出两个 非空 的链表用来表示两个非负的整数。其中它们各自的位数是按照逆序的方式存储的，并且它们的每个节点只能存储一位数字。<br>如果，我们将这两个数相加起来，则会返回一个新的链表来表示它们的和。<br>您可以假设除了数字 0 之外，这两个数都不会以 0 开头。</p>
+                <h1>两数向加</h1>
+<h2 id="题目"><a class="header-anchor" href="#题目"></a>题目</h2>
+<p>给出两个 非空 的链表用来表示两个非负的整数。其中它们各自的位数是按照逆序的方式存储的，并且它们的每个节点只能存储一位数字。<br>
+如果，我们将这两个数相加起来，则会返回一个新的链表来表示它们的和。<br>
+您可以假设除了数字 0 之外，这两个数都不会以 0 开头。</p>
 <ul>
-<li>示例：<pre class="line-numbers language-none"><code class="language-none">输入：(2 -&gt; 4 -&gt; 3) + (5 -&gt; 6 -&gt; 4)
+<li>示例：</li>
+</ul>
+<pre class="line-numbers language-none"><code class="language-none">输入：(2 -&gt; 4 -&gt; 3) + (5 -&gt; 6 -&gt; 4)
 输出：7 -&gt; 0 -&gt; 8
 原因：342 + 465 &#x3D; 807<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-</li>
-</ul>
-<h2 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h2><p>最开始按照题目要求我自己思考的想法是<br>第一步：先得到数字<br>第二步：数字相加<br>第三步：将和转化成ListNode的数据结构</p>
-<h3 id="递归数字解法"><a href="#递归数字解法" class="headerlink" title="递归数字解法"></a>递归数字解法</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//client方法</span>
+<h2 id="分析"><a class="header-anchor" href="#分析"></a>分析</h2>
+<p>最开始按照题目要求我自己思考的想法是<br>
+第一步：先得到数字<br>
+第二步：数字相加<br>
+第三步：将和转化成ListNode的数据结构</p>
+<h3 id="递归数字解法"><a class="header-anchor" href="#递归数字解法"></a>递归数字解法</h3>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//client方法</span>
 <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">ListNode</span> <span class="token function">addTwoNumbers</span><span class="token punctuation">(</span><span class="token class-name">ListNode</span> l1<span class="token punctuation">,</span> <span class="token class-name">ListNode</span> l2<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
     <span class="token class-name">BigInteger</span> result <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">BigInteger</span><span class="token punctuation">(</span><span class="token function">buildNum</span><span class="token punctuation">(</span>l1<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">BigInteger</span><span class="token punctuation">(</span><span class="token function">buildNum</span><span class="token punctuation">(</span>l2<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">return</span> <span class="token function">buildNote</span><span class="token punctuation">(</span>result<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -473,12 +481,12 @@
     <span class="token punctuation">&#125;</span>
     <span class="token keyword">return</span> currentNode<span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ul>
 <li>实验结果</li>
 </ul>
 <p>抛出<strong>BigInteger</strong>不能识别异常，应该是评测程序不能使用相关的引用类。就代表着不能使用数值之和的解法。</p>
-<h3 id="移位相加解法"><a href="#移位相加解法" class="headerlink" title="移位相加解法"></a>移位相加解法</h3><ul>
+<h3 id="移位相加解法"><a class="header-anchor" href="#移位相加解法"></a>移位相加解法</h3>
+<ul>
 <li>代码</li>
 </ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">ListNode</span> <span class="token function">addTwoNumbers</span><span class="token punctuation">(</span><span class="token class-name">ListNode</span> l1<span class="token punctuation">,</span> <span class="token class-name">ListNode</span> l2<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
@@ -511,13 +519,15 @@
 
         <span class="token keyword">return</span> rsNote<span class="token punctuation">.</span>next<span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>这里使用到的数学原理就只是逢十进位。先设置一个标志位<strong>carry</strong>，然后计算当前位置的值模除10从而得到当前位置的值。<br>这里使用了一个技巧，在对这种尾节点进行递增时使用了</p>
+<p>这里使用到的数学原理就只是逢十进位。先设置一个标志位<strong>carry</strong>，然后计算当前位置的值模除10从而得到当前位置的值。<br>
+这里使用了一个技巧，在对这种尾节点进行递增时使用了</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java">currNode<span class="token punctuation">.</span>next<span class="token operator">=</span>node<span class="token punctuation">;</span>
 currNode <span class="token operator">=</span> currNode<span class="token punctuation">.</span>next<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p>用图来表示<br><img src="https://s1.ax1x.com/2020/05/27/tkiMSU.png" alt="tkiMSU.png"></p>
+<p>用图来表示<br>
+<img src="https://s1.ax1x.com/2020/05/27/tkiMSU.png" alt="tkiMSU.png"></p>
 <p>不断的将当前节点顺着链表向下移动，并且给每一个next节点进行赋值。这种方法比递归所占用的空间较小。</p>
-<h2 id="总结："><a href="#总结：" class="headerlink" title="总结："></a>总结：</h2><p>两数向加问题本质上还是要去解决进位问题而不是进行数值计算，这种进位问题应该还可以继续进行优化。</p>
+<h2 id="总结："><a class="header-anchor" href="#总结："></a>总结：</h2>
+<p>两数向加问题本质上还是要去解决进位问题而不是进行数值计算，这种进位问题应该还可以继续进行优化。</p>
 
                 
             </div>

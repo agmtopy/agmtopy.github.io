@@ -433,7 +433,8 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="设计模式-可复用面向对象软件设计的基础-行为模式"><a href="#设计模式-可复用面向对象软件设计的基础-行为模式" class="headerlink" title="设计模式-可复用面向对象软件设计的基础-行为模式"></a>设计模式-可复用面向对象软件设计的基础-行为模式</h1><p>行为模式是通过将多个类通过继承\组合的形式形成对方法的处理,主要有以下几种</p>
+                <h1>设计模式-可复用面向对象软件设计的基础-行为模式</h1>
+<p>行为模式是通过将多个类通过继承\组合的形式形成对方法的处理,主要有以下几种</p>
 <ol>
 <li>责任链模式</li>
 <li>命令模式</li>
@@ -447,12 +448,16 @@
 <li>模板模式</li>
 <li>访问者模式</li>
 </ol>
-<h2 id="责任链模式"><a href="#责任链模式" class="headerlink" title="责任链模式"></a>责任链模式</h2><h3 id="意图"><a href="#意图" class="headerlink" title="意图"></a>意图</h3><blockquote>
+<h2 id="责任链模式"><a class="header-anchor" href="#责任链模式"></a>责任链模式</h2>
+<h3 id="意图"><a class="header-anchor" href="#意图"></a>意图</h3>
+<blockquote>
 <p>责任链模式是使得多个对象都有机会处理请求,从而避免请求的发送者和接收者之间的耦合关系,这些对象的处理过程逻辑上形成链状结构,请求沿着这条链依次被不同的对象进行处理。标准的定义是直到有一个对象处理请求为止，我自己理解应该是依次进行处理，而不是有一个处理即止，因为如果只有一个处理，那么责任链模式与策略模式类似。责任链模式是通过将请求需要依次处理的场景从显的客户端一个一个调用的过程，升级成了将请求传入和由责任链客户端去串联整个调用过程，并且这样更容易扩展步骤。</p>
 </blockquote>
 <p>在这种模式中，通常每个接收者都包含对另一个接收者的引用。如果一个对象不能处理该请求，那么它会把相同的请求传给下一个接收者，依此类推。</p>
-<h3 id="结构"><a href="#结构" class="headerlink" title="结构"></a>结构</h3><p><img src="https://www.runoob.com/wp-content/uploads/2014/08/2021-chain-of-responsibility.svg" alt="责任链模式"></p>
-<h3 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h3><ul>
+<h3 id="结构"><a class="header-anchor" href="#结构"></a>结构</h3>
+<p><img src="https://www.runoob.com/wp-content/uploads/2014/08/2021-chain-of-responsibility.svg" alt="责任链模式"></p>
+<h3 id="实例"><a class="header-anchor" href="#实例"></a>实例</h3>
+<ul>
 <li>AbstractLogger.java</li>
 </ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">abstract</span> <span class="token keyword">class</span> <span class="token class-name">AbstractLogger</span> <span class="token punctuation">&#123;</span>
@@ -481,7 +486,6 @@
    <span class="token keyword">abstract</span> <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">write</span><span class="token punctuation">(</span><span class="token class-name">String</span> message<span class="token punctuation">)</span><span class="token punctuation">;</span>  
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ul>
 <li>ChainPatternDemo.java</li>
 </ul>
@@ -512,22 +516,27 @@
    <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>ErrorLogger、FileLogger、ConsoleLogger都是AbstractLogger.java的子类，在客户端中，通过提供setNextHandler的方法，客户端可以根据业务场景自由组合链的顺序</p>
-<h2 id="命令模式"><a href="#命令模式" class="headerlink" title="命令模式"></a>命令模式</h2><h3 id="意图-1"><a href="#意图-1" class="headerlink" title="意图"></a>意图</h3><p>将请求封装成为一个对象，从而使得你可以用不同的请求对客户进行参数化</p>
-<h3 id="动机"><a href="#动机" class="headerlink" title="动机"></a>动机</h3><p>命令模式主要是将请求和对请求执行的动作责任分离,让两者都可以独立进行演化。适合请求内容是类似于信号量的场景，接受者可以根据这个请求内容进行不同的处理</p>
-<h3 id="结构-1"><a href="#结构-1" class="headerlink" title="结构"></a>结构</h3><p><img src="https://www.runoob.com/wp-content/uploads/2014/08/commanduml.jpg" alt="命令模式"></p>
-<h3 id="实例-1"><a href="#实例-1" class="headerlink" title="实例"></a>实例</h3><ul>
-<li>Command<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Command</span> <span class="token punctuation">&#123;</span>
+<h2 id="命令模式"><a class="header-anchor" href="#命令模式"></a>命令模式</h2>
+<h3 id="意图-v2"><a class="header-anchor" href="#意图-v2"></a>意图</h3>
+<p>将请求封装成为一个对象，从而使得你可以用不同的请求对客户进行参数化</p>
+<h3 id="动机"><a class="header-anchor" href="#动机"></a>动机</h3>
+<p>命令模式主要是将请求和对请求执行的动作责任分离,让两者都可以独立进行演化。适合请求内容是类似于信号量的场景，接受者可以根据这个请求内容进行不同的处理</p>
+<h3 id="结构-v2"><a class="header-anchor" href="#结构-v2"></a>结构</h3>
+<p><img src="https://www.runoob.com/wp-content/uploads/2014/08/commanduml.jpg" alt="命令模式"></p>
+<h3 id="实例-v2"><a class="header-anchor" href="#实例-v2"></a>实例</h3>
+<ul>
+<li>Command</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Command</span> <span class="token punctuation">&#123;</span>
     <span class="token comment">/**
      * 执行方法
      */</span>
     <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">execute</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-</li>
-</ul>
 <p>Command.java 定义的抽象命令类，所有具体命令的接口</p>
 <ul>
-<li><p>PlayCommand.java</p>
+<li>PlayCommand.java</li>
+</ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">PlayCommand</span> <span class="token keyword">implements</span> <span class="token class-name">Command</span> <span class="token punctuation">&#123;</span>
 
    <span class="token comment">//具体的执行类</span>
@@ -545,8 +554,9 @@
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>PlayCommand是具体的命令执行类，内部具有一个execute方法,该方法会执行该命令定义的动作</p>
-</li>
-<li><p>Keypad.java</p>
+<ul>
+<li>Keypad.java</li>
+</ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Keypad</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">private</span> <span class="token class-name">Command</span> playCommand<span class="token punctuation">;</span>
 
@@ -560,12 +570,11 @@
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-</li>
-</ul>
 <p>keyPad作为请求类，再次对命令进行一次封装，便于客户端进行调用，这里可以不用再次封装，自己通过客户端进行调用</p>
 <ul>
-<li>client.java<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Julia</span> <span class="token punctuation">&#123;</span>
+<li>client.java</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Julia</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span>args<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
          <span class="token comment">//创建接收者对象</span>
         <span class="token class-name">AudioPlayer</span> audioPlayer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">AudioPlayer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -581,50 +590,89 @@
    <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-</li>
-</ul>
 <p>客户端通过调用请求类==Keypad==的指定方法，keyPad会调用具体的命令封装类进行执行。其实命令模式只是将请求和对应的动作进行分离，便于复杂请求场景的扩展</p>
-<h2 id="解释器模式"><a href="#解释器模式" class="headerlink" title="解释器模式"></a>解释器模式</h2><h3 id="意图-2"><a href="#意图-2" class="headerlink" title="意图"></a>意图</h3><p>解释器模式（Interpreter Pattern）提供了评估语言的语法或表达式的方式，它属于行为型模式。这种模式实现了一个表达式接口，该接口解释一个特定的上下文。这种模式被用在 SQL 解析、符号处理引擎等。</p>
-<h3 id="动机-1"><a href="#动机-1" class="headerlink" title="动机"></a>动机</h3><p>给定一个语言，定义它的文法表示，并定义一个解释器，这个解释器使用该标识来解释语言中的句子。</p>
-<h3 id="结构-2"><a href="#结构-2" class="headerlink" title="结构"></a>结构</h3><p><img src="https://www.runoob.com/wp-content/uploads/2014/08/interpreter_pattern_uml_diagram.jpg" alt="解释器模式"></p>
-<h2 id="迭代器模式"><a href="#迭代器模式" class="headerlink" title="迭代器模式"></a>迭代器模式</h2><h3 id="意图-3"><a href="#意图-3" class="headerlink" title="意图"></a>意图</h3><p>提供一种方法顺序访问一个聚合对象中各个元素，而又不需要暴露聚合对象内部表示的模式</p>
-<h3 id="别名"><a href="#别名" class="headerlink" title="别名"></a>别名</h3><p>游标(Cursor)</p>
-<h3 id="动机-2"><a href="#动机-2" class="headerlink" title="动机"></a>动机</h3><p>迭代器模式是为了将内部元素和访问/遍历动作分离开，通过增加一个迭代器，通过迭代器来访问内部元素。</p>
-<h3 id="结构-3"><a href="#结构-3" class="headerlink" title="结构"></a>结构</h3><p><img src="https://www.runoob.com/wp-content/uploads/2014/08/iterator_pattern_uml_diagram.jpg" alt="迭代器模式"></p>
-<h2 id="中介者模式"><a href="#中介者模式" class="headerlink" title="中介者模式"></a>中介者模式</h2><h3 id="意图-4"><a href="#意图-4" class="headerlink" title="意图"></a>意图</h3><p>用一个中介对象来封装一系列的对象交互。中介者使各对象不需要显式地相互引用，从而使其耦合松散，而且可以独立的改变它们之间的交互</p>
-<h3 id="动机-3"><a href="#动机-3" class="headerlink" title="动机"></a>动机</h3><p>由于面向对象鼓励按照行为进行类的划分，因此系统中会存在大量的类。如果不同的类之间都要相互引用来完成一个行为的话不符合面向对象的特性，因此需要有一个中介来将服务聚合起来，相当于将细小的行为进行一次聚合形成较大的行为，这样不用关注细小的行为对象。</p>
-<h3 id="结构-4"><a href="#结构-4" class="headerlink" title="结构"></a>结构</h3><p><img src="https://www.runoob.com/wp-content/uploads/2014/08/mediator_pattern_uml_diagram.jpg" alt="中介者模式"></p>
+<h2 id="解释器模式"><a class="header-anchor" href="#解释器模式"></a>解释器模式</h2>
+<h3 id="意图-v3"><a class="header-anchor" href="#意图-v3"></a>意图</h3>
+<p>解释器模式（Interpreter Pattern）提供了评估语言的语法或表达式的方式，它属于行为型模式。这种模式实现了一个表达式接口，该接口解释一个特定的上下文。这种模式被用在 SQL 解析、符号处理引擎等。</p>
+<h3 id="动机-v2"><a class="header-anchor" href="#动机-v2"></a>动机</h3>
+<p>给定一个语言，定义它的文法表示，并定义一个解释器，这个解释器使用该标识来解释语言中的句子。</p>
+<h3 id="结构-v3"><a class="header-anchor" href="#结构-v3"></a>结构</h3>
+<p><img src="https://www.runoob.com/wp-content/uploads/2014/08/interpreter_pattern_uml_diagram.jpg" alt="解释器模式"></p>
+<h2 id="迭代器模式"><a class="header-anchor" href="#迭代器模式"></a>迭代器模式</h2>
+<h3 id="意图-v4"><a class="header-anchor" href="#意图-v4"></a>意图</h3>
+<p>提供一种方法顺序访问一个聚合对象中各个元素，而又不需要暴露聚合对象内部表示的模式</p>
+<h3 id="别名"><a class="header-anchor" href="#别名"></a>别名</h3>
+<p>游标(Cursor)</p>
+<h3 id="动机-v3"><a class="header-anchor" href="#动机-v3"></a>动机</h3>
+<p>迭代器模式是为了将内部元素和访问/遍历动作分离开，通过增加一个迭代器，通过迭代器来访问内部元素。</p>
+<h3 id="结构-v4"><a class="header-anchor" href="#结构-v4"></a>结构</h3>
+<p><img src="https://www.runoob.com/wp-content/uploads/2014/08/iterator_pattern_uml_diagram.jpg" alt="迭代器模式"></p>
+<h2 id="中介者模式"><a class="header-anchor" href="#中介者模式"></a>中介者模式</h2>
+<h3 id="意图-v5"><a class="header-anchor" href="#意图-v5"></a>意图</h3>
+<p>用一个中介对象来封装一系列的对象交互。中介者使各对象不需要显式地相互引用，从而使其耦合松散，而且可以独立的改变它们之间的交互</p>
+<h3 id="动机-v4"><a class="header-anchor" href="#动机-v4"></a>动机</h3>
+<p>由于面向对象鼓励按照行为进行类的划分，因此系统中会存在大量的类。如果不同的类之间都要相互引用来完成一个行为的话不符合面向对象的特性，因此需要有一个中介来将服务聚合起来，相当于将细小的行为进行一次聚合形成较大的行为，这样不用关注细小的行为对象。</p>
+<h3 id="结构-v5"><a class="header-anchor" href="#结构-v5"></a>结构</h3>
+<p><img src="https://www.runoob.com/wp-content/uploads/2014/08/mediator_pattern_uml_diagram.jpg" alt="中介者模式"></p>
 <p>中介者模式在功能上类似于门面模式，但是门面模式着重于对子系统类的封装，中介者模式着重是对行为的封装和调和各个子行为从而形成一个大的行为，因此门面模式是结构型而中介者模式是行为型。</p>
-<h2 id="备忘录模式"><a href="#备忘录模式" class="headerlink" title="备忘录模式"></a>备忘录模式</h2><h3 id="意图-5"><a href="#意图-5" class="headerlink" title="意图"></a>意图</h3><p>在不破坏对象封装性的前提下，捕获一个对象的内部状态，并将该状态保存在对象之外。在需要时，可以根据这个数据进行恢复。类似于游戏中的存档点设置。</p>
-<h3 id="别名-1"><a href="#别名-1" class="headerlink" title="别名"></a>别名</h3><p>token</p>
-<h3 id="动机-4"><a href="#动机-4" class="headerlink" title="动机"></a>动机</h3><p>备忘录模式针对于那些需要进行暂存的数据或对象，在不破坏封装性的前提下。</p>
-<h3 id="结构-5"><a href="#结构-5" class="headerlink" title="结构"></a>结构</h3><p><img src="https://www.runoob.com/wp-content/uploads/2014/08/memento_pattern_uml_diagram.jpg" alt="备忘录模式"></p>
+<h2 id="备忘录模式"><a class="header-anchor" href="#备忘录模式"></a>备忘录模式</h2>
+<h3 id="意图-v6"><a class="header-anchor" href="#意图-v6"></a>意图</h3>
+<p>在不破坏对象封装性的前提下，捕获一个对象的内部状态，并将该状态保存在对象之外。在需要时，可以根据这个数据进行恢复。类似于游戏中的存档点设置。</p>
+<h3 id="别名-v2"><a class="header-anchor" href="#别名-v2"></a>别名</h3>
+<p>token</p>
+<h3 id="动机-v5"><a class="header-anchor" href="#动机-v5"></a>动机</h3>
+<p>备忘录模式针对于那些需要进行暂存的数据或对象，在不破坏封装性的前提下。</p>
+<h3 id="结构-v6"><a class="header-anchor" href="#结构-v6"></a>结构</h3>
+<p><img src="https://www.runoob.com/wp-content/uploads/2014/08/memento_pattern_uml_diagram.jpg" alt="备忘录模式"></p>
 <p>CareTaker.java 负责保存每个阶段的对象状态</p>
-<h2 id="观察者模式"><a href="#观察者模式" class="headerlink" title="观察者模式"></a>观察者模式</h2><h3 id="意图-6"><a href="#意图-6" class="headerlink" title="意图"></a>意图</h3><p>定义对象之间的一种一对多的依赖关系，当一个对象的状态发送改变时，所有依赖于它的对象都会得到通知</p>
-<h3 id="别名-2"><a href="#别名-2" class="headerlink" title="别名"></a>别名</h3><p>依赖(Dependents),发布-订阅(Publish-Subscribe)</p>
-<h3 id="动机-5"><a href="#动机-5" class="headerlink" title="动机"></a>动机</h3><p>在一个系统中一个对象的改变会导致引起相关对象的改变，如果要保持这样的一致性会导致对象间强依赖。观察者模式就是通过发布-订阅模式将通知的职责从动作类中强制依赖转换为通知的模式</p>
-<h3 id="结构-6"><a href="#结构-6" class="headerlink" title="结构"></a>结构</h3><p><img src="https://www.runoob.com/wp-content/uploads/2014/08/observer_pattern_uml_diagram.jpg" alt="观察者模式"></p>
-<p>Subject作为被观察者中维护一个所有观察者的引用，Observer作为被观察者维护一个Subject的引用，将自己组成到被观察者中<br>可参考<br><a href="../../../../../2020/05/06/3.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/#more">观察者模式</a></p>
-<h3 id="实例-2"><a href="#实例-2" class="headerlink" title="实例"></a>实例</h3><p>spring中的ApplicationListener和ApplicationEvent、ApplicationEventPublisherAware分别作为被观察者、观察者和客户端</p>
-<h2 id="状态模式"><a href="#状态模式" class="headerlink" title="状态模式"></a>状态模式</h2><h3 id="意图-7"><a href="#意图-7" class="headerlink" title="意图"></a>意图</h3><p>允许一个对象在其内部状态发生改变时改变它的行为。从表象上来看就是对象可以根据内部状态执行不同的业务逻辑。</p>
-<h3 id="动机-6"><a href="#动机-6" class="headerlink" title="动机"></a>动机</h3><p>一个对象的行为取决于内部状态进行驱动时，状态模式可以将状态和行为分离，减少分支的条件语句。</p>
-<h3 id="结构-7"><a href="#结构-7" class="headerlink" title="结构"></a>结构</h3><p><img src="https://www.runoob.com/wp-content/uploads/2014/08/state_pattern_uml_diagram.png" alt="状态模式"></p>
+<h2 id="观察者模式"><a class="header-anchor" href="#观察者模式"></a>观察者模式</h2>
+<h3 id="意图-v7"><a class="header-anchor" href="#意图-v7"></a>意图</h3>
+<p>定义对象之间的一种一对多的依赖关系，当一个对象的状态发送改变时，所有依赖于它的对象都会得到通知</p>
+<h3 id="别名-v3"><a class="header-anchor" href="#别名-v3"></a>别名</h3>
+<p>依赖(Dependents),发布-订阅(Publish-Subscribe)</p>
+<h3 id="动机-v6"><a class="header-anchor" href="#动机-v6"></a>动机</h3>
+<p>在一个系统中一个对象的改变会导致引起相关对象的改变，如果要保持这样的一致性会导致对象间强依赖。观察者模式就是通过发布-订阅模式将通知的职责从动作类中强制依赖转换为通知的模式</p>
+<h3 id="结构-v7"><a class="header-anchor" href="#结构-v7"></a>结构</h3>
+<p><img src="https://www.runoob.com/wp-content/uploads/2014/08/observer_pattern_uml_diagram.jpg" alt="观察者模式"></p>
+<p>Subject作为被观察者中维护一个所有观察者的引用，Observer作为被观察者维护一个Subject的引用，将自己组成到被观察者中<br>
+可参考<br>
+<a href="../../../../../2020/05/06/3.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%A7%82%E5%AF%9F%E8%80%85%E6%A8%A1%E5%BC%8F/#more">观察者模式</a></p>
+<h3 id="实例-v3"><a class="header-anchor" href="#实例-v3"></a>实例</h3>
+<p>spring中的ApplicationListener和ApplicationEvent、ApplicationEventPublisherAware分别作为被观察者、观察者和客户端</p>
+<h2 id="状态模式"><a class="header-anchor" href="#状态模式"></a>状态模式</h2>
+<h3 id="意图-v8"><a class="header-anchor" href="#意图-v8"></a>意图</h3>
+<p>允许一个对象在其内部状态发生改变时改变它的行为。从表象上来看就是对象可以根据内部状态执行不同的业务逻辑。</p>
+<h3 id="动机-v7"><a class="header-anchor" href="#动机-v7"></a>动机</h3>
+<p>一个对象的行为取决于内部状态进行驱动时，状态模式可以将状态和行为分离，减少分支的条件语句。</p>
+<h3 id="结构-v8"><a class="header-anchor" href="#结构-v8"></a>结构</h3>
+<p><img src="https://www.runoob.com/wp-content/uploads/2014/08/state_pattern_uml_diagram.png" alt="状态模式"></p>
 <p>可以看到doAction()方法中才会执行具体的行为，不同的状态具有不同的行为，通过context维护状态，当状态发生改变时，对应的行为也随之发生改变</p>
-<h2 id="策略模式"><a href="#策略模式" class="headerlink" title="策略模式"></a>策略模式</h2><h3 id="意图-8"><a href="#意图-8" class="headerlink" title="意图"></a>意图</h3><p>策略模式是将不同的算法单独定义起来，通过不同的场景选择不同的算法。将客户端中的条件分支去掉，并且支持扩展。</p>
-<h3 id="结构-8"><a href="#结构-8" class="headerlink" title="结构"></a>结构</h3><p><img src="https://www.runoob.com/wp-content/uploads/2014/08/strategy_pattern_uml_diagram.jpg" alt="策略模式"></p>
+<h2 id="策略模式"><a class="header-anchor" href="#策略模式"></a>策略模式</h2>
+<h3 id="意图-v9"><a class="header-anchor" href="#意图-v9"></a>意图</h3>
+<p>策略模式是将不同的算法单独定义起来，通过不同的场景选择不同的算法。将客户端中的条件分支去掉，并且支持扩展。</p>
+<h3 id="结构-v9"><a class="header-anchor" href="#结构-v9"></a>结构</h3>
+<p><img src="https://www.runoob.com/wp-content/uploads/2014/08/strategy_pattern_uml_diagram.jpg" alt="策略模式"></p>
 <p>Context中的strategy类是具体执行的算法，这里有两种设计方案，第一种就是UML图中的写法，将Contetxx作为每次行动的容器，每次执行前都先进行赋值。第二种是Context持有一个Strategy的List根据添加选择算法、</p>
-<p>策略模式在实际工作中大量使用到，因为消除了条件判断减少了分支。通过增加类的方式来减少分支，结构上便于扩展了 </p>
-<h2 id="模板模式"><a href="#模板模式" class="headerlink" title="模板模式"></a>模板模式</h2><h3 id="意图-9"><a href="#意图-9" class="headerlink" title="意图"></a>意图</h3><p>定义一个方法的骨架，通过继承的方式让子类可以改变特点行为，使得不用重新定义算法的顺序就能改变行为。</p>
-<h3 id="动机-7"><a href="#动机-7" class="headerlink" title="动机"></a>动机</h3><p>模板方法的出现主要是为了解决重复定义的算法执行顺序并且具体执行有差异的场景</p>
-<h3 id="结构-9"><a href="#结构-9" class="headerlink" title="结构"></a>结构</h3><p><img src="https://www.runoob.com/wp-content/uploads/2014/08/template_pattern_uml_diagram.jpg" alt="模板模式"></p>
+<p>策略模式在实际工作中大量使用到，因为消除了条件判断减少了分支。通过增加类的方式来减少分支，结构上便于扩展了</p>
+<h2 id="模板模式"><a class="header-anchor" href="#模板模式"></a>模板模式</h2>
+<h3 id="意图-v10"><a class="header-anchor" href="#意图-v10"></a>意图</h3>
+<p>定义一个方法的骨架，通过继承的方式让子类可以改变特点行为，使得不用重新定义算法的顺序就能改变行为。</p>
+<h3 id="动机-v8"><a class="header-anchor" href="#动机-v8"></a>动机</h3>
+<p>模板方法的出现主要是为了解决重复定义的算法执行顺序并且具体执行有差异的场景</p>
+<h3 id="结构-v10"><a class="header-anchor" href="#结构-v10"></a>结构</h3>
+<p><img src="https://www.runoob.com/wp-content/uploads/2014/08/template_pattern_uml_diagram.jpg" alt="模板模式"></p>
 <p>模板模式与策略模式的区别在于模板模式是通过继承的方式来改变行为，策略模式是通过改变委托对象的方式来改变行为；策略模式针对的场景是相同类在处理不同的业务场景时候算法的选择问题，模板模式针对的是相同的类在处理相同的业务场景下算法细微的差异结构上。</p>
-<h2 id="访问者模式"><a href="#访问者模式" class="headerlink" title="访问者模式"></a>访问者模式</h2><h3 id="意图-10"><a href="#意图-10" class="headerlink" title="意图"></a>意图</h3><p>将数据和数据操作分离</p>
-<h3 id="动机-8"><a href="#动机-8" class="headerlink" title="动机"></a>动机</h3><p>对一个对象需要进行多次操作时，为了避免这些操作将对象污染，可以通过访问者模式将数据和操作进行隔离。实现不同的访问者访问不同的数据。</p>
-<h3 id="结构-10"><a href="#结构-10" class="headerlink" title="结构"></a>结构</h3><p><img src="https://www.runoob.com/wp-content/uploads/2014/08/visitor_pattern_uml_diagram.jpg" alt="访问者模式"></p>
+<h2 id="访问者模式"><a class="header-anchor" href="#访问者模式"></a>访问者模式</h2>
+<h3 id="意图-v11"><a class="header-anchor" href="#意图-v11"></a>意图</h3>
+<p>将数据和数据操作分离</p>
+<h3 id="动机-v9"><a class="header-anchor" href="#动机-v9"></a>动机</h3>
+<p>对一个对象需要进行多次操作时，为了避免这些操作将对象污染，可以通过访问者模式将数据和操作进行隔离。实现不同的访问者访问不同的数据。</p>
+<h3 id="结构-v11"><a class="header-anchor" href="#结构-v11"></a>结构</h3>
+<p><img src="https://www.runoob.com/wp-content/uploads/2014/08/visitor_pattern_uml_diagram.jpg" alt="访问者模式"></p>
 <p>访问者模式的核心是在于数据对象会针对不同的访问者定义出不同的行为，由于访问者知道被访问的数据对象中的数据结构，因此访问者可以根据不同的对象定义出不同的行为</p>
 <p>访问者的好处在于将数据对象的操作延迟到的访问者那一步中去了，通过定义不同的访问者可以执行不同的动作。</p>
-<h2 id="设计模式思维导图"><a href="#设计模式思维导图" class="headerlink" title="设计模式思维导图"></a>设计模式思维导图</h2><p><a target="_blank" rel="noopener" href="https://imgtu.com/i/gJVn2Q"><img src="https://z3.ax1x.com/2021/05/08/gJVn2Q.png" alt="设计模式思维导图"></a></p>
+<h2 id="设计模式思维导图"><a class="header-anchor" href="#设计模式思维导图"></a>设计模式思维导图</h2>
+<p><a target="_blank" rel="noopener" href="https://imgtu.com/i/gJVn2Q"><img src="https://z3.ax1x.com/2021/05/08/gJVn2Q.png" alt="设计模式思维导图"></a></p>
 
                 
             </div>

@@ -433,9 +433,13 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="MQClientInstance类分析"><a href="#MQClientInstance类分析" class="headerlink" title="MQClientInstance类分析"></a>MQClientInstance类分析</h1><p><strong>MQClientInstance</strong>是位于<strong>org.apache.rocketmq.client.impl.factory</strong>下的一个为producer和consumer提供统一和<strong>Broker</strong>进行交互的底层工具类；</p>
-<h2 id="创建"><a href="#创建" class="headerlink" title="创建"></a>创建</h2><ul>
-<li>MQClientManager<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">MQClientInstance</span> <span class="token function">getOrCreateMQClientInstance</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token class-name">ClientConfig</span> clientConfig<span class="token punctuation">,</span> <span class="token class-name">RPCHook</span> rpcHook<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <h1>MQClientInstance类分析</h1>
+<p><strong>MQClientInstance</strong>是位于<strong>org.apache.rocketmq.client.impl.factory</strong>下的一个为producer和consumer提供统一和<strong>Broker</strong>进行交互的底层工具类；</p>
+<h2 id="创建"><a class="header-anchor" href="#创建"></a>创建</h2>
+<ul>
+<li>MQClientManager</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">MQClientInstance</span> <span class="token function">getOrCreateMQClientInstance</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token class-name">ClientConfig</span> clientConfig<span class="token punctuation">,</span> <span class="token class-name">RPCHook</span> rpcHook<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
         <span class="token class-name">String</span> clientId <span class="token operator">=</span> clientConfig<span class="token punctuation">.</span><span class="token function">buildMQClientId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token comment">//判断当前client是否有过实例对象，有就取</span>
         <span class="token class-name">MQClientInstance</span> instance <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>factoryTable<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>clientId<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -454,12 +458,10 @@
 
         <span class="token keyword">return</span> instance<span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-</li>
-</ul>
 <p><strong>MQClientInstance</strong>的创建是通过<strong>MQClientManager</strong>来进行创建和管理的，通过将实例和<strong>MQClientInstance</strong>放入一个<strong>ConcurrentHashMap</strong>中。默认情况下每个进程内共享同一个MQClientInstance对象连接一个集群，如果要设置多个集群需要手动指定实例名称。</p>
 <p><img src="https://s1.ax1x.com/2020/03/28/GFEx1K.png" alt="GFEx1K.png"></p>
-<h2 id="start-方法"><a href="#start-方法" class="headerlink" title="start()方法"></a>start()方法</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">MQClientException</span> <span class="token punctuation">&#123;</span>
+<h2 id="start-方法"><a class="header-anchor" href="#start-方法"></a>start()方法</h2>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">MQClientException</span> <span class="token punctuation">&#123;</span>
 
         <span class="token keyword">synchronized</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
             <span class="token comment">//判断服务状态</span>

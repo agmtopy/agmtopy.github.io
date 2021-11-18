@@ -433,26 +433,26 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="整数反转"><a href="#整数反转" class="headerlink" title="整数反转"></a>整数反转</h1><h2 id="题目"><a href="#题目" class="headerlink" title="题目"></a>题目</h2><p>给出一个 32 位的有符号整数，你需要将这个整数中每位上的数字进行反转。</p>
+                <h1>整数反转</h1>
+<h2 id="题目"><a class="header-anchor" href="#题目"></a>题目</h2>
+<p>给出一个 32 位的有符号整数，你需要将这个整数中每位上的数字进行反转。</p>
 <ul>
 <li>示例1:</li>
 </ul>
 <pre class="line-numbers language-none"><code class="language-none">输入: 123
 输出: 321<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
 <ul>
 <li>示例2:</li>
 </ul>
 <pre class="line-numbers language-none"><code class="language-none">输入: -123
 输出: -321<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
 <ul>
 <li>示例3:</li>
 </ul>
 <pre class="line-numbers language-none"><code class="language-none">输入: 120
 输出: 21<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<h2 id="解题思路"><a href="#解题思路" class="headerlink" title="解题思路"></a>解题思路</h2><blockquote>
+<h2 id="解题思路"><a class="header-anchor" href="#解题思路"></a>解题思路</h2>
+<blockquote>
 <p><strong>%10</strong>模除可以得到数字的最后一位;<strong>/10</strong>可以得到数字的前n位</p>
 </blockquote>
 <p>根据前面两个原理，可以将给定的数字依次进行模除运算得到最后一位，然后根据上一次的结果在进行<strong>乘</strong>10操作后相加得到新的结果</p>

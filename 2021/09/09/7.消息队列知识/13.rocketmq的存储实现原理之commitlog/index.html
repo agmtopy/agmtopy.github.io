@@ -433,9 +433,14 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="rocketmq的存储实现原理之commitlog"><a href="#rocketmq的存储实现原理之commitlog" class="headerlink" title="rocketmq的存储实现原理之commitlog"></a>rocketmq的存储实现原理之commitlog</h1><p>在之前的《rocketmq的存储原理》文章中分析了rocketmq的存储过程主要是通过两个类来实现的分别是commitlog和MappedFile，这篇文章重点分析commitlog这个类的实现</p>
-<h2 id="初始化过程"><a href="#初始化过程" class="headerlink" title="初始化过程"></a>初始化过程</h2><p>comitlog对象是通过三个方法来负责初始化处理过程分别是构造方法<b>commitLog()</b>/加载方法<b>load()</b>/启动方法<b>start()</b>,这里将commitlog的对象初始化过程和load过程以及启动-start过程都划分为初始化过程中</p>
-<h3 id="commitLog-构造方法"><a href="#commitLog-构造方法" class="headerlink" title="commitLog()构造方法"></a>commitLog()构造方法</h3><p>CommitLog()构造方法的调用链如图所示<br><img src="https://i.loli.net/2021/09/10/s2fcpiQdSHC8Tyv.png" alt="CommitLog()"><br>可以看到在Broker启动过程中会通过<B>DefaultMessageStore</B>来调用<B>Commitlog</B>构造方法,commitlog的构造方法主要是做初始化日志环境的功能，下面详细的看一下<B>commitLog()</B>方法的实现</p>
+                <h1>rocketmq的存储实现原理之commitlog</h1>
+<p>在之前的《rocketmq的存储原理》文章中分析了rocketmq的存储过程主要是通过两个类来实现的分别是commitlog和MappedFile，这篇文章重点分析commitlog这个类的实现</p>
+<h2 id="初始化过程"><a class="header-anchor" href="#初始化过程"></a>初始化过程</h2>
+<p>comitlog对象是通过三个方法来负责初始化处理过程分别是构造方法<b>commitLog()</b>/加载方法<b>load()</b>/启动方法<b>start()</b>,这里将commitlog的对象初始化过程和load过程以及启动-start过程都划分为初始化过程中</p>
+<h3 id="commitLog-构造方法"><a class="header-anchor" href="#commitLog-构造方法"></a>commitLog()构造方法</h3>
+<p>CommitLog()构造方法的调用链如图所示<br>
+<img src="https://i.loli.net/2021/09/10/s2fcpiQdSHC8Tyv.png" alt="CommitLog()"><br>
+可以看到在Broker启动过程中会通过<B>DefaultMessageStore</B>来调用<B>Commitlog</B>构造方法,commitlog的构造方法主要是做初始化日志环境的功能，下面详细的看一下<B>commitLog()</B>方法的实现</p>
 <ul>
 <li>CommitLog构造方法</li>
 </ul>
@@ -473,7 +478,8 @@
 <li>初始化提交线程池</li>
 </ul>
 <hr>
-<h3 id="load-方法"><a href="#load-方法" class="headerlink" title="load()方法"></a>load()方法</h3><p>在构造方法完成后<B>BrokerController</B>会继续调用<B>DefaultMessageStore</B>load()方法,来对<B>CommitLog</B>对象进行加载</p>
+<h3 id="load-方法"><a class="header-anchor" href="#load-方法"></a>load()方法</h3>
+<p>在构造方法完成后<B>BrokerController</B>会继续调用<B>DefaultMessageStore</B>load()方法,来对<B>CommitLog</B>对象进行加载</p>
 <ul>
 <li>BrokerController.load</li>
 </ul>
@@ -483,7 +489,6 @@
     result <span class="token operator">=</span> result <span class="token operator">&amp;&amp;</span> <span class="token keyword">this</span><span class="token punctuation">.</span>messageStore<span class="token punctuation">.</span><span class="token function">load</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token comment">//省略...</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ul>
 <li>DefaultMessageStore.load()</li>
 </ul>
@@ -528,7 +533,8 @@
     <span class="token punctuation">&#125;</span>
     <span class="token keyword">return</span> loadResult<span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>在DefaultMessageStore.load的第3步会将commitLog进行加载,其他方法是对异常恢复、延迟消息处理队列服务、ConsumerQueue进行加载。<br>下面介绍一下commitLog.loan的加载过程</p>
+<p>在DefaultMessageStore.load的第3步会将commitLog进行加载,其他方法是对异常恢复、延迟消息处理队列服务、ConsumerQueue进行加载。<br>
+下面介绍一下commitLog.loan的加载过程</p>
 <ul>
 <li>CommitLog.load()</li>
 </ul>
@@ -538,7 +544,6 @@
     log<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">"load commit log "</span> <span class="token operator">+</span> <span class="token punctuation">(</span>result <span class="token operator">?</span> <span class="token string">"OK"</span> <span class="token operator">:</span> <span class="token string">"Failed"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token keyword">return</span> result<span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p>可以看到CommitLog.load()方法就是加载<B>MappedFileQueue</B></p>
 <ul>
 <li>MappedFileQueue.load()</li>
@@ -580,9 +585,10 @@
     <span class="token punctuation">&#125;</span>
     <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>mappedFiles.load()方法主要通过指定的文件路径加载文件，并将文件对象通过CopyOnWriteArrayList容器进行存放<br>CopyOnWriteArrayList是读无锁-写有锁的容器，存储commitLog信息</p>
-<h3 id="start-方法"><a href="#start-方法" class="headerlink" title="start()方法"></a>start()方法</h3><ul>
+<p>mappedFiles.load()方法主要通过指定的文件路径加载文件，并将文件对象通过CopyOnWriteArrayList容器进行存放<br>
+CopyOnWriteArrayList是读无锁-写有锁的容器，存储commitLog信息</p>
+<h3 id="start-方法"><a class="header-anchor" href="#start-方法"></a>start()方法</h3>
+<ul>
 <li>commitLog.Start()</li>
 </ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
@@ -593,26 +599,24 @@
         <span class="token keyword">this</span><span class="token punctuation">.</span>commitLogService<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p>commitLog.start()方法主要是启动刷盘线程和判断是否启动异步提交</p>
-<h2 id="调用过程"><a href="#调用过程" class="headerlink" title="调用过程"></a>调用过程</h2><p>CommitLog底层是通过<B>asyncPutMessage()</B>方法来实现异步向文件系统提交的，下面我们先根据asyncPutMessage()来分析从上至下的调用链过程</p>
-<h3 id="调用链"><a href="#调用链" class="headerlink" title="调用链"></a>调用链</h3><p>通过Arthas分析<B>asyncPutMessage()</B>的调用过程如图所示</p>
+<h2 id="调用过程"><a class="header-anchor" href="#调用过程"></a>调用过程</h2>
+<p>CommitLog底层是通过<B>asyncPutMessage()</B>方法来实现异步向文件系统提交的，下面我们先根据asyncPutMessage()来分析从上至下的调用链过程</p>
+<h3 id="调用链"><a class="header-anchor" href="#调用链"></a>调用链</h3>
+<p>通过Arthas分析<B>asyncPutMessage()</B>的调用过程如图所示</p>
 <p><img src="https://i.loli.net/2021/09/13/rbDHVqyCkc8XJoj.jpg" alt="/调用链路.jpg"></p>
 <ul>
 <li>arthas cmd</li>
 </ul>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">stack org.apache.rocketmq.store.CommitLog asyncPutMessage  -n <span class="token number">5</span> <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
 <p>从图中可以看处理整个调用过程从网络I/O到文件I/O是非常短的</p>
-<pre class="line-numbers language-log" data-language="log"><code class="language-log">@org.apache.rocketmq.store.CommitLog.asyncPutMessage()
-    at org.apache.rocketmq.store.DefaultMessageStore.asyncPutMessage(DefaultMessageStore.java:435)
-    at org.apache.rocketmq.broker.processor.SendMessageProcessor.asyncSendMessage(SendMessageProcessor.java:314)
-    at org.apache.rocketmq.broker.processor.SendMessageProcessor.asyncProcessRequest(SendMessageProcessor.java:101)
-    at org.apache.rocketmq.broker.processor.SendMessageProcessor.asyncProcessRequest(SendMessageProcessor.java:82)
-    at org.apache.rocketmq.remoting.netty.NettyRemotingAbstract$1.run(NettyRemotingAbstract.java:225)
-    at org.apache.rocketmq.remoting.netty.RequestTask.run(RequestTask.java:80)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
+<pre class="line-numbers language-log" data-language="log"><code class="language-log"><span class="token operator">@</span>org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>rocketmq<span class="token punctuation">.</span>store<span class="token punctuation">.</span>CommitLog<span class="token punctuation">.</span>asyncPutMessage<span class="token operator">(</span><span class="token operator">)</span>
+    at org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>rocketmq<span class="token punctuation">.</span>store<span class="token punctuation">.</span>DefaultMessageStore<span class="token punctuation">.</span>asyncPutMessage<span class="token operator">(</span>DefaultMessageStore<span class="token punctuation">.</span>java<span class="token operator">:</span><span class="token number">435</span><span class="token operator">)</span>
+    at org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>rocketmq<span class="token punctuation">.</span>broker<span class="token punctuation">.</span>processor<span class="token punctuation">.</span>SendMessageProcessor<span class="token punctuation">.</span>asyncSendMessage<span class="token operator">(</span>SendMessageProcessor<span class="token punctuation">.</span>java<span class="token operator">:</span><span class="token number">314</span><span class="token operator">)</span>
+    at org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>rocketmq<span class="token punctuation">.</span>broker<span class="token punctuation">.</span>processor<span class="token punctuation">.</span>SendMessageProcessor<span class="token punctuation">.</span>asyncProcessRequest<span class="token operator">(</span>SendMessageProcessor<span class="token punctuation">.</span>java<span class="token operator">:</span><span class="token number">101</span><span class="token operator">)</span>
+    at org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>rocketmq<span class="token punctuation">.</span>broker<span class="token punctuation">.</span>processor<span class="token punctuation">.</span>SendMessageProcessor<span class="token punctuation">.</span>asyncProcessRequest<span class="token operator">(</span>SendMessageProcessor<span class="token punctuation">.</span>java<span class="token operator">:</span><span class="token number">82</span><span class="token operator">)</span>
+    at org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>rocketmq<span class="token punctuation">.</span>remoting<span class="token punctuation">.</span>netty<span class="token punctuation">.</span>NettyRemotingAbstract<span class="token operator">$</span>1<span class="token punctuation">.</span>run<span class="token operator">(</span>NettyRemotingAbstract<span class="token punctuation">.</span>java<span class="token operator">:</span><span class="token number">225</span><span class="token operator">)</span>
+    at org<span class="token punctuation">.</span>apache<span class="token punctuation">.</span>rocketmq<span class="token punctuation">.</span>remoting<span class="token punctuation">.</span>netty<span class="token punctuation">.</span>RequestTask<span class="token punctuation">.</span>run<span class="token operator">(</span>RequestTask<span class="token punctuation">.</span>java<span class="token operator">:</span><span class="token number">80</span><span class="token operator">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>NettyRemotingAbstract -&gt; SendMessageProcessor -&gt; CommitLog 三个类就完成了处理</p>
 
                 
@@ -678,6 +682,59 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;Previous</div>
             <div class="card">
+                <a href="/2021/09/26/12.JVM/6.G1GC%E7%9A%84%E7%AE%97%E6%B3%95%E4%B8%8E%E5%AE%9E%E7%8E%B0/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="G1GC的算法与实现">
+                        
+                        <span class="card-title">G1GC的算法与实现</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-09-26
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/jvm/" class="post-category">
+                                    jvm
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/jvm/">
+                        <span class="chip bg-color">jvm</span>
+                    </a>
+                    
+                    <a href="/tags/G1/">
+                        <span class="chip bg-color">G1</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                Next&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
                 <a href="/2021/09/09/7.%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9F%A5%E8%AF%86/14.rocketmq%E7%9A%84%E5%AD%98%E5%82%A8%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86%E4%B9%8BMappedFile/">
                     <div class="card-image">
                         
@@ -694,9 +751,9 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-09-09
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-09-09
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -714,55 +771,6 @@
                     
                     <a href="/tags/RocketMQ/">
                         <span class="chip bg-color">RocketMQ</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                Next&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2021/09/05/17.Nacos/0.Nacos%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="Nacos使用指南">
-                        
-                        <span class="card-title">Nacos使用指南</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-09-05
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/%E6%A1%86%E6%9E%B6/" class="post-category">
-                                    框架
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/Nacos/">
-                        <span class="chip bg-color">Nacos</span>
                     </a>
                     
                 </div>

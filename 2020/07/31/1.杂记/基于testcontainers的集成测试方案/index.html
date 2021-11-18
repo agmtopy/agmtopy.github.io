@@ -433,19 +433,24 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="基于testcontainers的集成测试方案"><a href="#基于testcontainers的集成测试方案" class="headerlink" title="基于testcontainers的集成测试方案"></a>基于testcontainers的集成测试方案</h1><blockquote>
+                <h1>基于testcontainers的集成测试方案</h1>
+<blockquote>
 <p>Testcontainers是一个Java库，支持JUnit测试，它提供常见数据库，Selenium Web浏览器或可以在Docker容器中运行的任何其他东西的轻量级，一次性的实例。</p>
 </blockquote>
-<p><B>testcontainers</B>官网为<a target="_blank" rel="noopener" href="https://www.testcontainers.org/">https://www.testcontainers.org/</a></p>
-<h2 id="基础工程"><a href="#基础工程" class="headerlink" title="基础工程"></a>基础工程</h2><ol>
+<p><B>testcontainers</B>官网为https://www.testcontainers.org/</p>
+<h2 id="基础工程"><a class="header-anchor" href="#基础工程"></a>基础工程</h2>
+<ol>
 <li>docker环境</li>
 <li>springBoot工程</li>
 </ol>
-<h3 id="docker环境"><a href="#docker环境" class="headerlink" title="docker环境"></a>docker环境</h3><blockquote>
-<p><a target="_blank" rel="noopener" href="https://download.docker.com/win/stable/Docker%20Desktop%20Installer.exe">https://download.docker.com/win/stable/Docker%20Desktop%20Installer.exe</a><br>下载Docker Desktop Installer.exe进行安装Docker</p>
+<h3 id="docker环境"><a class="header-anchor" href="#docker环境"></a>docker环境</h3>
+<blockquote>
+<p><a target="_blank" rel="noopener" href="https://download.docker.com/win/stable/Docker%20Desktop%20Installer.exe">https://download.docker.com/win/stable/Docker Desktop Installer.exe</a><br>
+下载Docker Desktop Installer.exe进行安装Docker</p>
 </blockquote>
 <ul>
-<li>查看Docker版本<br><img src="https://s1.ax1x.com/2020/08/01/a3z3Md.png" alt="a3z3Md.png"></li>
+<li>查看Docker版本<br>
+<img src="https://s1.ax1x.com/2020/08/01/a3z3Md.png" alt="a3z3Md.png"></li>
 <li>Docker 服务启动/关闭命令</li>
 </ul>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 启动docker服务</span>
@@ -453,13 +458,12 @@ Net start com.docker.service
 
 <span class="token comment"># 停止docker服务</span>
 Net stop com.docker.service<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-
-<h3 id="springBoot应用"><a href="#springBoot应用" class="headerlink" title="springBoot应用"></a>springBoot应用</h3><blockquote>
+<h3 id="springBoot应用"><a class="header-anchor" href="#springBoot应用"></a>springBoot应用</h3>
+<blockquote>
 <p><a target="_blank" rel="noopener" href="https://github.com/agmtopy/testcontainers-simple">https://github.com/agmtopy/testcontainers-simple</a></p>
 </blockquote>
-<h2 id="redis"><a href="#redis" class="headerlink" title="redis"></a>redis</h2><ul>
+<h2 id="redis"><a class="header-anchor" href="#redis"></a>redis</h2>
+<ul>
 <li>RedisTestContainersTest.java</li>
 </ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Testcontainers</span>
@@ -491,8 +495,8 @@ Net stop com.docker.service<span aria-hidden="true" class="line-numbers-rows"><s
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="mysql"><a href="#mysql" class="headerlink" title="mysql"></a>mysql</h2><ul>
+<h2 id="mysql"><a class="header-anchor" href="#mysql"></a>mysql</h2>
+<ul>
 <li>MysqlTestContainersTest</li>
 </ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**
@@ -531,12 +535,14 @@ Net stop com.docker.service<span aria-hidden="true" class="line-numbers-rows"><s
         <span class="token function">assertThat</span><span class="token punctuation">(</span>jdbcTemplate<span class="token punctuation">.</span><span class="token function">queryForObject</span><span class="token punctuation">(</span><span class="token string">"select count(first_name) from users where first_name = 'Sam' "</span><span class="token punctuation">,</span> <span class="token class-name">Integer</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">isEqualTo</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-<h2 id="kafka"><a href="#kafka" class="headerlink" title="kafka"></a>kafka</h2><ul>
+<h2 id="kafka"><a class="header-anchor" href="#kafka"></a>kafka</h2>
+<ul>
 <li></li>
 </ul>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://www.testcontainers.org/">testcontainers官网</a><br><a target="_blank" rel="noopener" href="https://github.com/testcontainers/testcontainers-java/">testcontainers项目地址</a><br><a target="_blank" rel="noopener" href="https://github.com/testcontainers/testcontainers-spring-boot">testcontainers-spring-boot</a></p>
+<h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
+<p><a target="_blank" rel="noopener" href="https://www.testcontainers.org/">testcontainers官网</a><br>
+<a target="_blank" rel="noopener" href="https://github.com/testcontainers/testcontainers-java/">testcontainers项目地址</a><br>
+<a target="_blank" rel="noopener" href="https://github.com/testcontainers/testcontainers-spring-boot">testcontainers-spring-boot</a></p>
 
                 
             </div>
@@ -650,7 +656,7 @@ Net stop com.docker.service<span aria-hidden="true" class="line-numbers-rows"><s
                 Next&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2020/07/29/10.netty%E7%AC%94%E8%AE%B0/Netty%E5%85%A5%E9%97%A8%E5%9F%BA%E7%A1%80%E4%BA%8C/">
+                <a href="/2020/07/29/10.netty%E7%AC%94%E8%AE%B0/2.Netty%E5%85%A5%E9%97%A8%E5%9F%BA%E7%A1%80%E4%BA%8C/">
                     <div class="card-image">
                         
                         
@@ -671,11 +677,23 @@ Net stop com.docker.service<span aria-hidden="true" class="line-numbers-rows"><s
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            agmtopy
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Netty/" class="post-category">
+                                    Netty
+                                </a>
+                            
                             
                         </span>
                     </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Netty/">
+                        <span class="chip bg-color">Netty</span>
+                    </a>
+                    
                 </div>
                 
             </div>

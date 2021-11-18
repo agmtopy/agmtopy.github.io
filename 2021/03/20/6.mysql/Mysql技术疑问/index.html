@@ -437,38 +437,44 @@
 <p>记录&lt;&lt;MySQL技术内幕-InnoDB存储引擎&gt;&gt;阅读中存在的疑问点</p>
 </blockquote>
 <ul>
-<li>P77 日志文件<blockquote>
+<li>P77 日志文件</li>
+</ul>
+<blockquote>
 <p>如果使用RC隔离级别会出现类似数据丢失更新的现象,从而出现主从数据库上的数据不一致</p>
 </blockquote>
-</li>
-</ul>
 <p>bin_log的记录格式为’STATENEBT’是,会出现这样的情况为什么喃?</p>
 <p>原因:</p>
 <blockquote>
 <ol>
 <li>bin_log的记录顺序是commit的顺序,而不是执行顺序</li>
-<li>RC中SQL的执行是立即执行的<br>这样如果bin_log记录格式如果是sql,就会出现丢失数据的场景</li>
 </ol>
 </blockquote>
+<ol start="2">
+<li>RC中SQL的执行是立即执行的<br>
+这样如果bin_log记录格式如果是sql,就会出现丢失数据的场景</li>
+</ol>
 <hr>
 <ul>
-<li><p>P268 锁</p>
+<li>P268 锁</li>
+</ul>
 <blockquote>
 <p>InnoDB对于Insert的操作会检查插入记录的下一条记录是否被锁定,如果锁定则不允许操作</p>
 </blockquote>
-</li>
-<li><p>P269 解决幻读</p>
+<ul>
+<li>P269 解决幻读</li>
+</ul>
 <blockquote>
 <p>在RR模式下通过Next-Key Locking机制来解决幻读,既然MVVC是读取快照,为什么还需要Next-Key Locking机制来解决幻读问题</p>
 </blockquote>
-</li>
-</ul>
 <p>InnoDB实际上是把读取拆分成两种类型</p>
 <ul>
-<li>快照读<br>通过读取undo log,并且对比版本号得到事务开始时的数据,这种主要是select 操作,对数据加s锁</li>
-<li>当前读<br>当前读指的是通过Next-Key Locking 机制将对数据的读取操作序列化,解决幻读问题</li>
+<li>快照读<br>
+通过读取undo log,并且对比版本号得到事务开始时的数据,这种主要是select 操作,对数据加s锁</li>
+<li>当前读<br>
+当前读指的是通过Next-Key Locking 机制将对数据的读取操作序列化,解决幻读问题</li>
 </ul>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><ul>
+<h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
+<ul>
 <li><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/334408495">知乎MVCC的解答</a></li>
 </ul>
 

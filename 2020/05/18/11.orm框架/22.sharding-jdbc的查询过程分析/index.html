@@ -433,16 +433,21 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="sharding-jdbc的查询过程分析"><a href="#sharding-jdbc的查询过程分析" class="headerlink" title="sharding-jdbc的查询过程分析"></a>sharding-jdbc的查询过程分析</h1><p>上一章简单的说了一下sharding-jdbc的使用方法，这一章分析一下sharding-jdbc进行数据分片的原理</p>
-<h2 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h2><p><strong>数据分片</strong>指的是数据按照某个维度将单一数据库的数据分散到多个数据库或多个数据表中达到已提升性能瓶颈已经可用性的效果。数据分片主要分为<strong>水平分片</strong>、<strong>垂直分片</strong>。</p>
-<h3 id="水平分片"><a href="#水平分片" class="headerlink" title="水平分片"></a>水平分片</h3><p><strong>水平分片</strong>指的是根据某种规则将数据分散到多个库或多个表中，每个分片包含数据的一部分</p>
-<h3 id="垂直分片"><a href="#垂直分片" class="headerlink" title="垂直分片"></a>垂直分片</h3><p><strong>垂直分片</strong>指的是按照业务来进行划分专库专用，每个表都放到专门的库中</p>
-<h2 id="内核剖析"><a href="#内核剖析" class="headerlink" title="内核剖析"></a>内核剖析</h2><ul>
-<li>核心流程<blockquote>
+                <h1>sharding-jdbc的查询过程分析</h1>
+<p>上一章简单的说了一下sharding-jdbc的使用方法，这一章分析一下sharding-jdbc进行数据分片的原理</p>
+<h2 id="概念"><a class="header-anchor" href="#概念"></a>概念</h2>
+<p><strong>数据分片</strong>指的是数据按照某个维度将单一数据库的数据分散到多个数据库或多个数据表中达到已提升性能瓶颈已经可用性的效果。数据分片主要分为<strong>水平分片</strong>、<strong>垂直分片</strong>。</p>
+<h3 id="水平分片"><a class="header-anchor" href="#水平分片"></a>水平分片</h3>
+<p><strong>水平分片</strong>指的是根据某种规则将数据分散到多个库或多个表中，每个分片包含数据的一部分</p>
+<h3 id="垂直分片"><a class="header-anchor" href="#垂直分片"></a>垂直分片</h3>
+<p><strong>垂直分片</strong>指的是按照业务来进行划分专库专用，每个表都放到专门的库中</p>
+<h2 id="内核剖析"><a class="header-anchor" href="#内核剖析"></a>内核剖析</h2>
+<ul>
+<li>核心流程</li>
+</ul>
+<blockquote>
 <p>SQL解析 =&gt; 执行器优化 =&gt; SQL路由 =&gt; SQL改写 =&gt; SQL执行 =&gt; 结果归并</p>
 </blockquote>
-</li>
-</ul>
 <p><img src="https://s1.ax1x.com/2020/05/19/Y49lon.png" alt="Y49lon.png"></p>
 <ol>
 <li><strong>SQL解析</strong>主要是通过sql解析器对sql进行理解</li>
@@ -452,10 +457,15 @@
 <li><strong>SQL执行</strong>通过多线程异步执行</li>
 <li><strong>结果并归</strong>将多个结果集进行合并返回</li>
 </ol>
-<h2 id="代码分析"><a href="#代码分析" class="headerlink" title="代码分析"></a>代码分析</h2><h3 id="ShardingRouter核心分析"><a href="#ShardingRouter核心分析" class="headerlink" title="ShardingRouter核心分析"></a>ShardingRouter核心分析</h3><p>ShardingRouter.<strong>route()**方法作为路由的核心，主要是返回路由对象</strong>SQLRouteResult**，这个对象保存路由信息。<br><img src="https://s1.ax1x.com/2020/05/19/Y4Fupq.png" alt="Y4Fupq.png"></p>
+<h2 id="代码分析"><a class="header-anchor" href="#代码分析"></a>代码分析</h2>
+<h3 id="ShardingRouter核心分析"><a class="header-anchor" href="#ShardingRouter核心分析"></a>ShardingRouter核心分析</h3>
+<p>ShardingRouter.<strong>route()<strong>方法作为路由的核心，主要是返回路由对象</strong>SQLRouteResult</strong>，这个对象保存路由信息。<br>
+<img src="https://s1.ax1x.com/2020/05/19/Y4Fupq.png" alt="Y4Fupq.png"></p>
 <p><strong>RouteResult</strong>对象最终被返回到<strong>ShardingPreparedStatement</strong>。这个类继承于<strong>java.sql.Statement</strong>,Statement定义了与数据库进行交互并返回结果的接口。</p>
 <ul>
-<li>ShardingPreparedStatement<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">ShardingPreparedStatement</span> <span class="token keyword">extends</span> <span class="token class-name">AbstractShardingPreparedStatementAdapter</span> <span class="token punctuation">&#123;</span>
+<li>ShardingPreparedStatement</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">ShardingPreparedStatement</span> <span class="token keyword">extends</span> <span class="token class-name">AbstractShardingPreparedStatementAdapter</span> <span class="token punctuation">&#123;</span>
 
     <span class="token comment">//分片连接</span>
     <span class="token annotation punctuation">@Getter</span>
@@ -482,10 +492,8 @@
     <span class="token comment">//实现executeQuery、executeUpdate、execute、getGeneratedKeys等方法</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-</li>
-</ul>
-<h3 id="execute-方法"><a href="#execute-方法" class="headerlink" title="execute()方法"></a>execute()方法</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">execute</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">SQLException</span> <span class="token punctuation">&#123;</span>
+<h3 id="execute-方法"><a class="header-anchor" href="#execute-方法"></a>execute()方法</h3>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">execute</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">SQLException</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
         <span class="token comment">//清除环境</span>
         <span class="token function">clearPrevious</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -499,19 +507,17 @@
         <span class="token function">clearBatch</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p><strong>shard()**方法已经在上面进行了分析，我们继续分析一下</strong>initPreparedStatementExecutor**方法</p>
+<p><strong>shard()<strong>方法已经在上面进行了分析，我们继续分析一下</strong>initPreparedStatementExecutor</strong>方法</p>
 <ul>
-<li>initPreparedStatementExecutor<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">initPreparedStatementExecutor</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">SQLException</span> <span class="token punctuation">&#123;</span>
+<li>initPreparedStatementExecutor</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">initPreparedStatementExecutor</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">SQLException</span> <span class="token punctuation">&#123;</span>
     <span class="token comment">//初始化执行器</span>
     preparedStatementExecutor<span class="token punctuation">.</span><span class="token function">init</span><span class="token punctuation">(</span>sqlRouteResult<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token comment">//设置语句参数</span>
     <span class="token function">setParametersForStatements</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token function">replayMethodForStatements</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-</li>
-</ul>
 <p>**preparedStatementExecutor.execute()**方法是具体执行的方法</p>
 <p><img src="https://s1.ax1x.com/2020/05/20/Y7XsIA.png" alt="Y7XsIA.png"></p>
 <p>1处将待执行sql封装成为回调对象，2处**executeCallback(executeCallback)**执行回调对象</p>
@@ -523,13 +529,13 @@
     <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token class-name">PreparedStatement</span><span class="token punctuation">)</span> statement<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">execute</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ul>
-<li>executeCallback()<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> result <span class="token operator">=</span> sqlExecuteTemplate<span class="token punctuation">.</span><span class="token function">executeGroup</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token class-name">Collection</span><span class="token punctuation">)</span> executeGroups<span class="token punctuation">,</span> executeCallback<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<li>executeCallback()</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> result <span class="token operator">=</span> sqlExecuteTemplate<span class="token punctuation">.</span><span class="token function">executeGroup</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token class-name">Collection</span><span class="token punctuation">)</span> executeGroups<span class="token punctuation">,</span> executeCallback<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token function">refreshMetaDataIfNeeded</span><span class="token punctuation">(</span>connection<span class="token punctuation">.</span><span class="token function">getRuntimeContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> sqlStatementContext<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token keyword">return</span> result<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-通过<strong>sqlExecuteTemplate.executeGroup</strong>执行方法，会将执行动作传递到执行引擎<strong>ShardingExecuteEngine</strong>的<strong>groupExecute</strong>方法</li>
-</ul>
+<p>通过<strong>sqlExecuteTemplate.executeGroup</strong>执行方法，会将执行动作传递到执行引擎<strong>ShardingExecuteEngine</strong>的<strong>groupExecute</strong>方法</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">I</span><span class="token punctuation">,</span> <span class="token class-name">O</span><span class="token punctuation">></span></span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">O</span><span class="token punctuation">></span></span> <span class="token function">groupExecute</span><span class="token punctuation">(</span>
     <span class="token keyword">final</span> <span class="token class-name">Collection</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">ShardingExecuteGroup</span><span class="token punctuation">&lt;</span><span class="token class-name">I</span><span class="token punctuation">></span><span class="token punctuation">></span></span> inputGroups<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token class-name">ShardingGroupExecuteCallback</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">I</span><span class="token punctuation">,</span> <span class="token class-name">O</span><span class="token punctuation">></span></span> firstCallback<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token class-name">ShardingGroupExecuteCallback</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">I</span><span class="token punctuation">,</span> <span class="token class-name">O</span><span class="token punctuation">></span></span> callback<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token keyword">boolean</span> serial<span class="token punctuation">)</span>
     <span class="token keyword">throws</span> <span class="token class-name">SQLException</span> <span class="token punctuation">&#123;</span>
@@ -549,7 +555,8 @@
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>这段代码很细心，不但使用到了当前线程来执行第一个任务，并且线程池也使用的是Guava提供的可回调的线程池<strong>ListeningExecutorService</strong>,可参考<a href="/2020/05/20/1.%E6%9D%82%E8%AE%B0/Guava%E7%9A%84%E4%BD%BF%E7%94%A8/#more">Guava的使用</a></p>
 <p>在执行sql时候又会回到当初创建回调函数的地方进行执行回调方法。</p>
-<p>总结：<br>sharding-jdbc在执行sql的时候首先要获取分库的配置生成<strong>statement</strong>,然后构造回调函数，将回调函数放到线程池中去执行得到结果并执行回调函数合并结果返回，接下来重点介绍一下sharding-jdbc的详细用法。</p>
+<p>总结：<br>
+sharding-jdbc在执行sql的时候首先要获取分库的配置生成<strong>statement</strong>,然后构造回调函数，将回调函数放到线程池中去执行得到结果并执行回调函数合并结果返回，接下来重点介绍一下sharding-jdbc的详细用法。</p>
 
                 
             </div>

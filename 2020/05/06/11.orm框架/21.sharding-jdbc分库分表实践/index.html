@@ -433,14 +433,18 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="sharding-jdbc分库分表实践"><a href="#sharding-jdbc分库分表实践" class="headerlink" title="sharding-jdbc分库分表实践"></a>sharding-jdbc分库分表实践</h1><p>在项目中大量的使用到sharding-jdbc，今天将它的实践用法做一个总结。<br>总结前先提几个问题:</p>
+                <h1>sharding-jdbc分库分表实践</h1>
+<p>在项目中大量的使用到sharding-jdbc，今天将它的实践用法做一个总结。<br>
+总结前先提几个问题:</p>
 <ol>
 <li>为什么要用sharding-jdbc？</li>
 <li>如何使用？</li>
 <li>有什么注意事项？</li>
-<li>同类型的框架对比？<br>让我们带着问题去开始了解sharding-jdbc。</li>
+<li>同类型的框架对比？<br>
+让我们带着问题去开始了解sharding-jdbc。</li>
 </ol>
-<h2 id="基础知识"><a href="#基础知识" class="headerlink" title="基础知识"></a>基础知识</h2><p><strong>sharding-jdbc</strong>是定位为轻量级Java框架，在Java的JDBC层提供的额外服务。 它使用客户端直连数据库，以jar包形式提供服务，无需额外部署和依赖，可理解为增强版的JDBC驱动，完全兼容JDBC和各种ORM框架。</p>
+<h2 id="基础知识"><a class="header-anchor" href="#基础知识"></a>基础知识</h2>
+<p><strong>sharding-jdbc</strong>是定位为轻量级Java框架，在Java的JDBC层提供的额外服务。 它使用客户端直连数据库，以jar包形式提供服务，无需额外部署和依赖，可理解为增强版的JDBC驱动，完全兼容JDBC和各种ORM框架。</p>
 <ul>
 <li>Sharding-Proxy</li>
 </ul>
@@ -449,19 +453,23 @@
 <li>支持的功能</li>
 </ul>
 <p><img src="https://s1.ax1x.com/2020/05/06/YVJ5PH.png" alt="YVJ5PH.png"></p>
-<h2 id="快速入门"><a href="#快速入门" class="headerlink" title="快速入门"></a>快速入门</h2><h3 id="maven依赖"><a href="#maven依赖" class="headerlink" title="maven依赖"></a>maven依赖</h3><pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
+<h2 id="快速入门"><a class="header-anchor" href="#快速入门"></a>快速入门</h2>
+<h3 id="maven依赖"><a class="header-anchor" href="#maven依赖"></a>maven依赖</h3>
+<pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.apache.shardingsphere<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>sharding-jdbc-core<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>$&#123;latest.release.version&#125;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="规则配置"><a href="#规则配置" class="headerlink" title="规则配置"></a>规则配置</h3><blockquote>
+<h3 id="规则配置"><a class="header-anchor" href="#规则配置"></a>规则配置</h3>
+<blockquote>
 <p>Sharding-JDBC可以通过Java，YAML，Spring命名空间和Spring Boot Starter四种方式配置，开发者可根据场景选择适合的配置方式。详情请参见配置手册。</p>
 </blockquote>
-<h3 id="创建DataSource"><a href="#创建DataSource" class="headerlink" title="创建DataSource"></a>创建DataSource</h3><blockquote>
+<h3 id="创建DataSource"><a class="header-anchor" href="#创建DataSource"></a>创建DataSource</h3>
+<blockquote>
 <p>通过ShardingDataSourceFactory工厂和规则配置对象获取ShardingDataSource，ShardingDataSource实现自JDBC的标准接口DataSource。然后即可通过DataSource选择使用原生JDBC开发，或者使用JPA, MyBatis等ORM工具。</p>
 </blockquote>
-<h3 id="演示实例"><a href="#演示实例" class="headerlink" title="演示实例"></a>演示实例</h3><ul>
+<h3 id="演示实例"><a class="header-anchor" href="#演示实例"></a>演示实例</h3>
+<ul>
 <li>用springBoot Starter+mysql方式演示</li>
 </ul>
 <ol>
@@ -482,7 +490,6 @@
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>sharding-jdbc-spring-namespace<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>$&#123;sharding.jdbc.version&#125;<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ol start="2">
 <li>分库分表配置规则(基于yml文件)</li>
 </ol>
@@ -522,25 +529,25 @@
 #              shardingColumn: vender_id
 #              algorithmExpression: t_user$&#123;vender_id % 2&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <ol start="3">
-<li>创建DataSource<blockquote>
+<li>创建DataSource</li>
+</ol>
+<blockquote>
 <p>由于引入使用了<strong>SpringBoot Mybatis</strong>因此会自动装配相应的<strong>DataSource</strong></p>
 </blockquote>
-</li>
-</ol>
 <pre class="line-numbers language-xml" data-language="xml"><code class="language-xml"><span class="token comment">&lt;!-- SpringBoot Mybatis 依赖 --></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>dependency</span><span class="token punctuation">></span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>groupId</span><span class="token punctuation">></span></span>org.mybatis.spring.boot<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>groupId</span><span class="token punctuation">></span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>artifactId</span><span class="token punctuation">></span></span>mybatis-spring-boot-starter<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>artifactId</span><span class="token punctuation">></span></span>
     <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>version</span><span class="token punctuation">></span></span>2.1.0<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>version</span><span class="token punctuation">></span></span>
 <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>dependency</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <blockquote>
 <p>如果在不同的库中有相同的表，但是未设置分库策略的话会随机使用一个连接进行查询(这一点可以在下一章中分析原因)</p>
 </blockquote>
-<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><p>sharding-jdbc官网上的示例地址已经不是跳转的那个单独的演示项目地址了，已经被合并到主项目中。直接下载主项目时候如果是window会提示文件名称太长，官网已经给了解决方案</p>
+<h2 id="注意事项"><a class="header-anchor" href="#注意事项"></a>注意事项</h2>
+<p>sharding-jdbc官网上的示例地址已经不是跳转的那个单独的演示项目地址了，已经被合并到主项目中。直接下载主项目时候如果是window会提示文件名称太长，官网已经给了解决方案</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> config --global core.longpaths <span class="token boolean">true</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>以上只是粗略的将<strong>sharding-jdbc</strong>介绍了一下，下一篇文章我们来分析一下<strong>sharding-jdbc</strong>的原理。</p>
+<h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2>
+<p>以上只是粗略的将<strong>sharding-jdbc</strong>介绍了一下，下一篇文章我们来分析一下<strong>sharding-jdbc</strong>的原理。</p>
 <ul>
 <li>参考资料</li>
 </ul>

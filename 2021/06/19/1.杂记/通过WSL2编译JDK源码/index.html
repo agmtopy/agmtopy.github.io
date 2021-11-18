@@ -433,23 +433,35 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="通过WSL2编译JDK源码"><a href="#通过WSL2编译JDK源码" class="headerlink" title="通过WSL2编译JDK源码"></a>通过WSL2编译JDK源码</h1><p>WSL的全称是’Windows Subsystem for Linux’,通过在系统层面对Linux内核进行支持,WSL1只是部分支持Linux内核而WSL2支持完整的Linux内核。不但可以通过WSL运行Linux内核，甚至可以将Windows Docker指定通过WSL2来进行远行</p>
-<h2 id="WSL1-gt-WSL2"><a href="#WSL1-gt-WSL2" class="headerlink" title="WSL1 -&gt; WSL2"></a>WSL1 -&gt; WSL2</h2><ul>
-<li><p>安装Linux发行版<br>WSL1只需要开启Linux子系统并下载linux发行版即可,linux发行版默认是只能通过Windows Store进行下载，也可以通过下载安装包(msi)进行安装,手动选择安装包地址如下(<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/windows/wsl/install-manual">https://docs.microsoft.com/zh-cn/windows/wsl/install-manual</a>)</p>
+                <h1>通过WSL2编译JDK源码</h1>
+<p>WSL的全称是’Windows Subsystem for Linux’,通过在系统层面对Linux内核进行支持,WSL1只是部分支持Linux内核而WSL2支持完整的Linux内核。不但可以通过WSL运行Linux内核，甚至可以将Windows Docker指定通过WSL2来进行远行</p>
+<h2 id="WSL1-WSL2"><a class="header-anchor" href="#WSL1-WSL2"></a>WSL1 -&gt; WSL2</h2>
+<ul>
+<li>
+<p>安装Linux发行版<br>
+WSL1只需要开启Linux子系统并下载linux发行版即可,linux发行版默认是只能通过Windows Store进行下载，也可以通过下载安装包(msi)进行安装,手动选择安装包地址如下(<a target="_blank" rel="noopener" href="https://docs.microsoft.com/zh-cn/windows/wsl/install-manual">https://docs.microsoft.com/zh-cn/windows/wsl/install-manual</a>)</p>
 </li>
-<li><p>切换WSL2</p>
+<li>
+<p>切换WSL2</p>
+</li>
+</ul>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">wsl --set-default-version <span class="token number">2</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-</li>
-<li><p>启动WSL</p>
-</li>
+<ul>
+<li>启动WSL</li>
 </ul>
 <ol>
 <li>应用程序直接启动安装Linux发行版</li>
-<li>‘wsl -l -v’ 检查WSL版本,VERSION -&gt; 2即可<br><a target="_blank" rel="noopener" href="https://imgtu.com/i/RPsbr9"><img src="https://z3.ax1x.com/2021/06/19/RPsbr9.png" alt="WSL2"></a></li>
+<li>‘wsl -l -v’ 检查WSL版本,VERSION -&gt; 2即可<br>
+<a target="_blank" rel="noopener" href="https://imgtu.com/i/RPsbr9"><img src="https://z3.ax1x.com/2021/06/19/RPsbr9.png" alt="WSL2"></a></li>
 </ol>
-<h2 id="编译JDK"><a href="#编译JDK" class="headerlink" title="编译JDK"></a>编译JDK</h2><p>严谨的说法是编译OpenJDK</p>
-<h3 id="下载JDK源代码"><a href="#下载JDK源代码" class="headerlink" title="下载JDK源代码"></a>下载JDK源代码</h3><p>推荐直接下载,下面是JDK11的源代码地址,直接选择zip file进行下载,也可以选择不同的版本<br><a target="_blank" rel="noopener" href="https://jdk.java.net/java-se-ri/11">https://jdk.java.net/java-se-ri/11</a></p>
-<h3 id="准备JDK编译环境"><a href="#准备JDK编译环境" class="headerlink" title="准备JDK编译环境"></a>准备JDK编译环境</h3><h4 id="安装必要程序"><a href="#安装必要程序" class="headerlink" title="安装必要程序"></a>安装必要程序</h4><ul>
+<h2 id="编译JDK"><a class="header-anchor" href="#编译JDK"></a>编译JDK</h2>
+<p>严谨的说法是编译OpenJDK</p>
+<h3 id="下载JDK源代码"><a class="header-anchor" href="#下载JDK源代码"></a>下载JDK源代码</h3>
+<p>推荐直接下载,下面是JDK11的源代码地址,直接选择zip file进行下载,也可以选择不同的版本<br>
+<a target="_blank" rel="noopener" href="https://jdk.java.net/java-se-ri/11">https://jdk.java.net/java-se-ri/11</a></p>
+<h3 id="准备JDK编译环境"><a class="header-anchor" href="#准备JDK编译环境"></a>准备JDK编译环境</h3>
+<h4 id="安装必要程序"><a class="header-anchor" href="#安装必要程序"></a>安装必要程序</h4>
+<ul>
 <li>推荐先先切换软件源</li>
 </ul>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">sed</span> -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list
@@ -458,31 +470,28 @@
 <li>安装必要软件</li>
 </ul>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> -y <span class="token function">curl</span> <span class="token function">ssh</span> <span class="token function">zip</span> <span class="token function">unzip</span> ant <span class="token function">git</span> build-essential ccache cpio g++ gcc gdb libx11-dev libxext-dev libxrender-dev libxtst-dev libxt-dev libcups2-dev libfreetype6-dev libasound2-dev libelf-dev ccache libfontconfig1-dev autoconf<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h4 id="安装BootStrap-JDK"><a href="#安装BootStrap-JDK" class="headerlink" title="安装BootStrap JDK"></a>安装BootStrap JDK</h4><p>BootStrap JDK的作用是编译JDK源代码中的java代码,默认要比编译的JDK小一个版本</p>
+<h4 id="安装BootStrap-JDK"><a class="header-anchor" href="#安装BootStrap-JDK"></a>安装BootStrap JDK</h4>
+<p>BootStrap JDK的作用是编译JDK源代码中的java代码,默认要比编译的JDK小一个版本</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> openjdk-10-jdk
 java -version<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<h4 id="解压JDK源代码"><a href="#解压JDK源代码" class="headerlink" title="解压JDK源代码"></a>解压JDK源代码</h4><p>由于我比较喜欢使用VS code,VS code中已经集成了连接WSL的插件，因此只需要将JDK源代码直接拖拽到Linux的目录下即可。也可以通过WSL进行复制<br>得到JDK源代码后就可以进行解压</p>
-<h4 id="编译JDK源代码"><a href="#编译JDK源代码" class="headerlink" title="编译JDK源代码"></a>编译JDK源代码</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 准备配置(警告不作为异常抛出)</span>
+<h4 id="解压JDK源代码"><a class="header-anchor" href="#解压JDK源代码"></a>解压JDK源代码</h4>
+<p>由于我比较喜欢使用VS code,VS code中已经集成了连接WSL的插件，因此只需要将JDK源代码直接拖拽到Linux的目录下即可。也可以通过WSL进行复制<br>
+得到JDK源代码后就可以进行解压</p>
+<h4 id="编译JDK源代码"><a class="header-anchor" href="#编译JDK源代码"></a>编译JDK源代码</h4>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 准备配置(警告不作为异常抛出)</span>
 <span class="token function">bash</span> ./configure --disable-warnings-as-errors
 
 <span class="token function">make</span> all
 
 <span class="token comment"># 编译失败时推荐先进行clean,在重新进行编译</span>
 <span class="token function">make</span> clean<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h4 id="异常处理"><a href="#异常处理" class="headerlink" title="异常处理"></a>异常处理</h4><ol>
-<li>在构建低版本的JDK时可能出现OS版本不支持<br>修改./hotspot/make/linux/Makefile<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 5% 内核版本</span>
-SUPPORTED_OS_VERSION <span class="token operator">=</span> <span class="token number">2.4</span>% <span class="token number">2.5</span>% <span class="token number">2.6</span>% <span class="token number">2.7</span>% <span class="token number">3</span>% <span class="token number">4</span>%<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-
-
-
-
-
-
-</li>
+<h4 id="异常处理"><a class="header-anchor" href="#异常处理"></a>异常处理</h4>
+<ol>
+<li>在构建低版本的JDK时可能出现OS版本不支持<br>
+修改./hotspot/make/linux/Makefile</li>
 </ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 5% 内核版本</span>
+SUPPORTED_OS_VERSION <span class="token operator">=</span> <span class="token number">2.4</span>% <span class="token number">2.5</span>% <span class="token number">2.6</span>% <span class="token number">2.7</span>% <span class="token number">3</span>% <span class="token number">4</span>%<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
                 
             </div>

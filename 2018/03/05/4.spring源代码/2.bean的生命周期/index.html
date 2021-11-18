@@ -433,8 +433,10 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="bean的生命周期"><a href="#bean的生命周期" class="headerlink" title="bean的生命周期"></a>bean的生命周期</h1><p>bean的生命周期可以通过**AbstrctApplicationContext.refresh()**方法进行加载普通bean可以得出。</p>
-<h2 id="refresh"><a href="#refresh" class="headerlink" title="refresh()"></a>refresh()</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java">
+                <h1>bean的生命周期</h1>
+<p>bean的生命周期可以通过**AbstrctApplicationContext.refresh()**方法进行加载普通bean可以得出。</p>
+<h2 id="refresh"><a class="header-anchor" href="#refresh"></a>refresh()</h2>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">
 <span class="token annotation punctuation">@Override</span>
 	<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">refresh</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">BeansException</span><span class="token punctuation">,</span> <span class="token class-name">IllegalStateException</span> <span class="token punctuation">&#123;</span>
 		<span class="token keyword">synchronized</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>startupShutdownMonitor<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
@@ -499,8 +501,10 @@
 		<span class="token punctuation">&#125;</span>
 	<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>下面按照流程进一步分析refresh()方法</p>
-<h2 id="配置资源初始化环境"><a href="#配置资源初始化环境" class="headerlink" title="配置资源初始化环境"></a>配置资源初始化环境</h2><p>配置应用刷新上下文环境的方法主要有<strong>prepareRefresh()**、</strong>obtainFreshBeanFactory()<strong>、</strong>prepareBeanFactory(beanFactory)**</p>
-<h3 id="prepareRefresh"><a href="#prepareRefresh" class="headerlink" title="prepareRefresh()"></a>prepareRefresh()</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**
+<h2 id="配置资源初始化环境"><a class="header-anchor" href="#配置资源初始化环境"></a>配置资源初始化环境</h2>
+<p>配置应用刷新上下文环境的方法主要有<strong>prepareRefresh()</strong>、<strong>obtainFreshBeanFactory()</strong>、<strong>prepareBeanFactory(beanFactory)</strong></p>
+<h3 id="prepareRefresh"><a class="header-anchor" href="#prepareRefresh"></a>prepareRefresh()</h3>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**
  * 准备此上下文以进行刷新，设置其启动日期和
  * 活动标志，以及执行属性源的任何初始化.
  */</span>
@@ -536,20 +540,23 @@
 		<span class="token keyword">this</span><span class="token punctuation">.</span>applicationListeners<span class="token punctuation">.</span><span class="token function">addAll</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>earlyApplicationListeners<span class="token punctuation">)</span><span class="token punctuation">;</span>
 	<span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p><strong>prepareRefresh()**方法只是在清理上下文环境、设置启动事件以及初始化</strong>PropertySources容器<strong>等；<br>初始化</strong>PropertySources**容器方法对应web应用底层是调用</p>
+<p><strong>prepareRefresh()<strong>方法只是在清理上下文环境、设置启动事件以及初始化</strong>PropertySources容器</strong>等；<br>
+初始化<strong>PropertySources</strong>容器方法对应web应用底层是调用</p>
 <pre class="line-numbers language-none"><code class="language-none">WebApplicationContextUtils.initServletPropertySources(getPropertySources(), servletContext, servletConfig)<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>实现将<strong>servletContext</strong>, <strong>servletConfig</strong>加载到<strong>PropertySources容器</strong>中的</p>
 <ul>
 <li>servletContext是web应用服务器为每一个应用创建的一个服务上下文对象</li>
 <li>servletConfig是操作一个servlet中的配置属性的接口</li>
 </ul>
-<h3 id="obtainFreshBeanFactory"><a href="#obtainFreshBeanFactory" class="headerlink" title="obtainFreshBeanFactory()"></a>obtainFreshBeanFactory()</h3><p><strong>obtainFreshBeanFactory()</strong></p>
+<h3 id="obtainFreshBeanFactory"><a class="header-anchor" href="#obtainFreshBeanFactory"></a>obtainFreshBeanFactory()</h3>
+<p><strong>obtainFreshBeanFactory()</strong></p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">protected</span> <span class="token class-name">ConfigurableListableBeanFactory</span> <span class="token function">obtainFreshBeanFactory</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
 	<span class="token function">refreshBeanFactory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 	<span class="token keyword">return</span> <span class="token function">getBeanFactory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <ol>
-<li><p><strong>refreshBeanFactory()**刷新beanFactory，底层是调用</strong>DefaultListableBeanFactory.setSerializationId()**方法去刷新工厂集合</p>
+<li>**refreshBeanFactory()<strong>刷新beanFactory，底层是调用</strong>DefaultListableBeanFactory.setSerializationId()**方法去刷新工厂集合</li>
+</ol>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java">   <span class="token comment">//这里使用的是ConcurrentHashMap</span>
 <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">String</span><span class="token punctuation">,</span> <span class="token class-name">Reference</span><span class="token punctuation">&lt;</span><span class="token class-name">DefaultListableBeanFactory</span><span class="token punctuation">></span><span class="token punctuation">></span></span> serializableFactories <span class="token operator">=</span>
 		<span class="token keyword">new</span> <span class="token class-name">ConcurrentHashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -565,11 +572,11 @@
 	<span class="token keyword">this</span><span class="token punctuation">.</span>serializationId <span class="token operator">=</span> serializationId<span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><p>getBeanFactory()方法不同的实现都是返回<strong>DefaultListableBeanFactory</strong></p>
-</li>
+<ol start="2">
+<li>getBeanFactory()方法不同的实现都是返回<strong>DefaultListableBeanFactory</strong></li>
 </ol>
-<h3 id="prepareBeanFactory-beanFactory"><a href="#prepareBeanFactory-beanFactory" class="headerlink" title="prepareBeanFactory(beanFactory)"></a>prepareBeanFactory(beanFactory)</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">prepareBeanFactory</span><span class="token punctuation">(</span><span class="token class-name">ConfigurableListableBeanFactory</span> beanFactory<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+<h3 id="prepareBeanFactory-beanFactory"><a class="header-anchor" href="#prepareBeanFactory-beanFactory"></a>prepareBeanFactory(beanFactory)</h3>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">prepareBeanFactory</span><span class="token punctuation">(</span><span class="token class-name">ConfigurableListableBeanFactory</span> beanFactory<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
 	<span class="token comment">// 告诉内部bean工厂使用上下文的类加载器等.</span>
 	beanFactory<span class="token punctuation">.</span><span class="token function">setBeanClassLoader</span><span class="token punctuation">(</span><span class="token function">getClassLoader</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 	beanFactory<span class="token punctuation">.</span><span class="token function">setBeanExpressionResolver</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">StandardBeanExpressionResolver</span><span class="token punctuation">(</span>beanFactory<span class="token punctuation">.</span><span class="token function">getBeanClassLoader</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -614,15 +621,20 @@
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>**prepareBeanFactory(beanFactory)**主要是给beanFactory设置各种预设的属性的</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>对<strong>配置资源初始化环境</strong>的总结就是：</p>
+<h3 id="总结"><a class="header-anchor" href="#总结"></a>总结</h3>
+<p>对<strong>配置资源初始化环境</strong>的总结就是：</p>
 <ol>
 <li>清理环境，设置启动时间，装载servletContext和servletConfig</li>
 <li>获取<strong>DefaultListableBeanFactory</strong></li>
 <li>给获取到的<strong>DefaultListableBeanFactory</strong>设置各种属性</li>
 </ol>
-<h2 id="postProcessBeanFactory"><a href="#postProcessBeanFactory" class="headerlink" title="postProcessBeanFactory"></a>postProcessBeanFactory</h2><p>  <strong>postProcessBeanFactory</strong>是用来在应用上下文中注册一些特殊的<strong>BeanPostProrecessors</strong></p>
-<h3 id="GenericWebApplicationContext分析"><a href="#GenericWebApplicationContext分析" class="headerlink" title="GenericWebApplicationContext分析"></a>GenericWebApplicationContext分析</h3><ul>
-<li>代码展示<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
+<h2 id="postProcessBeanFactory"><a class="header-anchor" href="#postProcessBeanFactory"></a>postProcessBeanFactory</h2>
+<p><strong>postProcessBeanFactory</strong>是用来在应用上下文中注册一些特殊的<strong>BeanPostProrecessors</strong></p>
+<h3 id="GenericWebApplicationContext分析"><a class="header-anchor" href="#GenericWebApplicationContext分析"></a>GenericWebApplicationContext分析</h3>
+<ul>
+<li>代码展示</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
 	<span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">postProcessBeanFactory</span><span class="token punctuation">(</span><span class="token class-name">ConfigurableListableBeanFactory</span> beanFactory<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
 		<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>servletContext <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
 			beanFactory<span class="token punctuation">.</span><span class="token function">addBeanPostProcessor</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">ServletContextAwareProcessor</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>servletContext<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -631,8 +643,6 @@
 		<span class="token class-name">WebApplicationContextUtils</span><span class="token punctuation">.</span><span class="token function">registerWebApplicationScopes</span><span class="token punctuation">(</span>beanFactory<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>servletContext<span class="token punctuation">)</span><span class="token punctuation">;</span>
 		<span class="token class-name">WebApplicationContextUtils</span><span class="token punctuation">.</span><span class="token function">registerEnvironmentBeans</span><span class="token punctuation">(</span>beanFactory<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>servletContext<span class="token punctuation">)</span><span class="token punctuation">;</span>
 	<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-</ul>
 <ol>
 <li><strong>ServletContextAwareProcessor</strong></li>
 </ol>
@@ -687,7 +697,9 @@
 <ol start="3">
 <li>将<strong>servletContext</strong>、<strong>servletConfig</strong>、<strong>contextParameters</strong>、<strong>contextParameters</strong>注册到容器中</li>
 </ol>
-<h3 id="总结：postProcessBeanFactory方法就是在bean初始化之前将一些特殊的bean注册到容器中去，从而完成接下来的初始化操作"><a href="#总结：postProcessBeanFactory方法就是在bean初始化之前将一些特殊的bean注册到容器中去，从而完成接下来的初始化操作" class="headerlink" title="总结：postProcessBeanFactory方法就是在bean初始化之前将一些特殊的bean注册到容器中去，从而完成接下来的初始化操作"></a>总结：postProcessBeanFactory方法就是在bean初始化之前将一些特殊的bean注册到容器中去，从而完成接下来的初始化操作</h3><h2 id="invokeBeanFactoryPostProcessors"><a href="#invokeBeanFactoryPostProcessors" class="headerlink" title="invokeBeanFactoryPostProcessors"></a>invokeBeanFactoryPostProcessors</h2><p><strong>invokeBeanFactoryPostProcessors</strong>方法是执行实现<strong>BeanFactoryPostProcessor</strong>接口的方法</p>
+<h3 id="总结：postProcessBeanFactory方法就是在bean初始化之前将一些特殊的bean注册到容器中去，从而完成接下来的初始化操作"><a class="header-anchor" href="#总结：postProcessBeanFactory方法就是在bean初始化之前将一些特殊的bean注册到容器中去，从而完成接下来的初始化操作"></a>总结：postProcessBeanFactory方法就是在bean初始化之前将一些特殊的bean注册到容器中去，从而完成接下来的初始化操作</h3>
+<h2 id="invokeBeanFactoryPostProcessors"><a class="header-anchor" href="#invokeBeanFactoryPostProcessors"></a>invokeBeanFactoryPostProcessors</h2>
+<p><strong>invokeBeanFactoryPostProcessors</strong>方法是执行实现<strong>BeanFactoryPostProcessor</strong>接口的方法</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">invokeBeanFactoryPostProcessors</span><span class="token punctuation">(</span><span class="token class-name">ConfigurableListableBeanFactory</span> beanFactory<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
 	<span class="token class-name">PostProcessorRegistrationDelegate</span><span class="token punctuation">.</span><span class="token function">invokeBeanFactoryPostProcessors</span><span class="token punctuation">(</span>beanFactory<span class="token punctuation">,</span><span class="token function">getBeanFactoryPostProcessors</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
@@ -698,8 +710,7 @@
 		beanFactory<span class="token punctuation">.</span><span class="token function">setTempClassLoader</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">ContextTypeMatchClassLoader</span><span class="token punctuation">(</span>beanFactory<span class="token punctuation">.</span><span class="token function">getBeanClassLoader</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 	<span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p><strong>getBeanFactoryPostProcessors()**中返回的bean是在初始化化环境</strong>prepareContext**中加载的</p>
+<p><strong>getBeanFactoryPostProcessors()<strong>中返回的bean是在初始化化环境</strong>prepareContext</strong>中加载的</p>
 <p><strong>invokeBeanFactoryPostProcessors</strong>的代码：</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">invokeBeanFactoryPostProcessors</span><span class="token punctuation">(</span>
 		<span class="token class-name">ConfigurableListableBeanFactory</span> beanFactory<span class="token punctuation">,</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">BeanFactoryPostProcessor</span><span class="token punctuation">></span></span> beanFactoryPostProcessors<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
@@ -749,17 +760,19 @@
 		<span class="token function">invokeBeanFactoryPostProcessors</span><span class="token punctuation">(</span>regularPostProcessors<span class="token punctuation">,</span> beanFactory<span class="token punctuation">)</span><span class="token punctuation">;</span>
 		<span class="token comment">//省略....</span>
 	<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p>以上代码的作用就是</p>
 <ol>
 <li>先处理<strong>BeanDefinitionRegistryPostProcessor</strong>，按照PriorityOrdered &gt; Ordered &gt; 普通的顺序一次执行<strong>postProcessBeanDefinitionRegistry</strong>方法；</li>
 <li>再处理<strong>BeanFactoryPostProcessors</strong>，按照PriorityOrdered &gt; Ordered &gt; 普通的顺序一次执行<strong>postProcessBeanFactory</strong>方法；</li>
 </ol>
-<h3 id="总结-1"><a href="#总结-1" class="headerlink" title="总结"></a>总结</h3><p><strong>invokeBeanFactoryPostProcessors</strong>方法就是执行实现<strong>BeanDefinitionRegistryPostProcessor</strong>接口的<strong>postProcessBeanDefinitionRegistry</strong>以及执行实现<strong>BeanFactoryPostProcessors</strong>接口的<strong>postProcessBeanFactory</strong>方法</p>
+<h3 id="总结-v2"><a class="header-anchor" href="#总结-v2"></a>总结</h3>
+<p><strong>invokeBeanFactoryPostProcessors</strong>方法就是执行实现<strong>BeanDefinitionRegistryPostProcessor</strong>接口的<strong>postProcessBeanDefinitionRegistry</strong>以及执行实现<strong>BeanFactoryPostProcessors</strong>接口的<strong>postProcessBeanFactory</strong>方法</p>
 <blockquote>
-<p>运行示例<br><img src="https://s2.ax1x.com/2020/03/06/3LvlRO.png" alt="3LvlRO.png"></p>
+<p>运行示例<br>
+<img src="https://s2.ax1x.com/2020/03/06/3LvlRO.png" alt="3LvlRO.png"></p>
 </blockquote>
-<h2 id="registerBeanPostProcessors分析"><a href="#registerBeanPostProcessors分析" class="headerlink" title="registerBeanPostProcessors分析"></a>registerBeanPostProcessors分析</h2><ul>
+<h2 id="registerBeanPostProcessors分析"><a class="header-anchor" href="#registerBeanPostProcessors分析"></a>registerBeanPostProcessors分析</h2>
+<ul>
 <li>代码示例</li>
 </ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">registerBeanPostProcessors</span><span class="token punctuation">(</span>
@@ -803,11 +816,14 @@
 <p>主要是往beanFactory中注册<strong>BeanProcessor</strong>的实现，在beanFactory中是用<strong>CopyOnWriteArrayList</strong>来作为缓存容器的。</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/** AbstractBeanFactory内部是用CopyOnWriteArrayList来保证安全性的 */</span>
 <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">BeanPostProcessor</span><span class="token punctuation">></span></span> beanPostProcessors <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">CopyOnWriteArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<h2 id="initMessageSource"><a href="#initMessageSource" class="headerlink" title="initMessageSource()"></a>initMessageSource()</h2><p><strong>initMessageSource</strong>是初始化消息源的，也就是进行初始化国际化配置相关的</p>
-<h2 id="initApplicationEventMulticaster"><a href="#initApplicationEventMulticaster" class="headerlink" title="initApplicationEventMulticaster"></a>initApplicationEventMulticaster</h2><p><strong>initApplicationEventMulticaster</strong>进行初始化事件发布器。beanFactory中存在<strong>ApplicationEventMulticaster</strong>就进行注册，没有就注册<strong>SimpleApplicationEventMulticaster</strong>。</p>
-<h2 id="onRefresh"><a href="#onRefresh" class="headerlink" title="onRefresh()"></a>onRefresh()</h2><p><strong>onRefresh</strong>,用于子类实现容器refresh的过程中执行其他特殊操作，这是一个模板方法，允许子类去扩展</p>
-<h2 id="registerListeners"><a href="#registerListeners" class="headerlink" title="registerListeners"></a>registerListeners</h2><p><strong>registerListeners</strong>注册监听器</p>
+<h2 id="initMessageSource"><a class="header-anchor" href="#initMessageSource"></a>initMessageSource()</h2>
+<p><strong>initMessageSource</strong>是初始化消息源的，也就是进行初始化国际化配置相关的</p>
+<h2 id="initApplicationEventMulticaster"><a class="header-anchor" href="#initApplicationEventMulticaster"></a>initApplicationEventMulticaster</h2>
+<p><strong>initApplicationEventMulticaster</strong>进行初始化事件发布器。beanFactory中存在<strong>ApplicationEventMulticaster</strong>就进行注册，没有就注册<strong>SimpleApplicationEventMulticaster</strong>。</p>
+<h2 id="onRefresh"><a class="header-anchor" href="#onRefresh"></a>onRefresh()</h2>
+<p><strong>onRefresh</strong>,用于子类实现容器refresh的过程中执行其他特殊操作，这是一个模板方法，允许子类去扩展</p>
+<h2 id="registerListeners"><a class="header-anchor" href="#registerListeners"></a>registerListeners</h2>
+<p><strong>registerListeners</strong>注册监听器</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">registerListeners</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
 	<span class="token comment">// 首先注册指定的静态侦听器.</span>
 	<span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">ApplicationListener</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> listener <span class="token operator">:</span> <span class="token function">getApplicationListeners</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
@@ -830,9 +846,10 @@
 		<span class="token punctuation">&#125;</span>
 	<span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="finishBeanFactoryInitialization-beanFactory"><a href="#finishBeanFactoryInitialization-beanFactory" class="headerlink" title="finishBeanFactoryInitialization(beanFactory)"></a>finishBeanFactoryInitialization(beanFactory)</h2><p>**finishBeanFactoryInitialization(beanFactory)**实列化剩下的bean,这个方法也是绝大多数bean初始化的方式。这个方法的解析放在下一篇文章</p>
-<h2 id="finishRefresh"><a href="#finishRefresh" class="headerlink" title="finishRefresh"></a>finishRefresh</h2><p><strong>finishRefresh</strong>完成容器的刷新</p>
+<h2 id="finishBeanFactoryInitialization-beanFactory"><a class="header-anchor" href="#finishBeanFactoryInitialization-beanFactory"></a>finishBeanFactoryInitialization(beanFactory)</h2>
+<p>**finishBeanFactoryInitialization(beanFactory)**实列化剩下的bean,这个方法也是绝大多数bean初始化的方式。这个方法的解析放在下一篇文章</p>
+<h2 id="finishRefresh"><a class="header-anchor" href="#finishRefresh"></a>finishRefresh</h2>
+<p><strong>finishRefresh</strong>完成容器的刷新</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">finishRefresh</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
 	<span class="token comment">// 清除上下文级别的资源缓存（例如来自扫描的ASM元数据）.</span>
 	<span class="token function">clearResourceCaches</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -849,30 +866,35 @@
 	<span class="token comment">// 先LiveBeanView中注册ApplicationContext.</span>
 	<span class="token class-name">LiveBeansView</span><span class="token punctuation">.</span><span class="token function">registerApplicationContext</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p><strong>initLifecycleProcessor</strong>容器执行容器初始化周期过程中的控制</p>
 <ul>
-<li>代码运行<br><img src="https://s2.ax1x.com/2020/03/07/3OuocQ.png" alt="3OuocQ.png"></li>
+<li>代码运行<br>
+<img src="https://s2.ax1x.com/2020/03/07/3OuocQ.png" alt="3OuocQ.png"></li>
 </ul>
-<h1 id="总结-2"><a href="#总结-2" class="headerlink" title="总结"></a>总结</h1><ol>
-<li>配置资源初始化环境<ol>
+<h1>总结</h1>
+<ol>
+<li>配置资源初始化环境
+<ol>
 <li>清理环境，设置启动时间，装载servletContext和servletConfig</li>
 <li>获取DefaultListableBeanFactory</li>
 <li>给DefaultListableBeanFactory设置各种属性</li>
 </ol>
 </li>
-<li>postProcessBeanFactory()<ol>
+<li>postProcessBeanFactory()
+<ol>
 <li>注册ServletContextAwareProcessor</li>
 <li>主要是用于注册web应用程序bean的注册范围增加request、session、application</li>
 <li>将servletContext、servletConfig、contextParameters、contextParameters注册到容器中</li>
 </ol>
 </li>
-<li>invokeBeanFactoryPostProcessors()<ol>
+<li>invokeBeanFactoryPostProcessors()
+<ol>
 <li>先处理BeanDefinitionRegistryPostProcessor，按照PriorityOrdered &gt; Ordered &gt; 普通的顺序一次执行postProcessBeanDefinitionRegistry方法</li>
 <li>再处理BeanFactoryPostProcessors，按照PriorityOrdered &gt; Ordered &gt; 普通的顺序一次执行postProcessBeanFactory方法</li>
 </ol>
 </li>
-<li>registerBeanPostProcessors()<ol>
+<li>registerBeanPostProcessors()
+<ol>
 <li>往beanFactory中注册BeanProcessor的实现</li>
 </ol>
 </li>
@@ -884,7 +906,8 @@
 <li>finishRefresh完成容器的刷新</li>
 </ol>
 <ul>
-<li>流程图<br><img src="https://s2.ax1x.com/2020/03/07/3OMqYV.png" alt="3OMqYV.png"></li>
+<li>流程图<br>
+<img src="https://s2.ax1x.com/2020/03/07/3OMqYV.png" alt="3OMqYV.png"></li>
 </ul>
 <blockquote>
 <p>参考资料</p>

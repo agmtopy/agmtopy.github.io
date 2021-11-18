@@ -433,8 +433,10 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="通过实例理解CompletableFuture并发框架"><a href="#通过实例理解CompletableFuture并发框架" class="headerlink" title="通过实例理解CompletableFuture并发框架"></a>通过实例理解CompletableFuture并发框架</h1><p><b>CompletableFuture</b>实现<strong>Future</strong>、<strong>CompletionStage</strong>;<strong>CompletionStage</strong>的定义是作为一个用于异步执行中的处理阶段，适用于lambda表达式计算过程中。<strong>Future</strong>定义是作为异步返回值容器。下面通过一系列实列先来熟悉CompletableFuture能够完成的功能。</p>
-<h2 id="实现功能"><a href="#实现功能" class="headerlink" title="实现功能"></a>实现功能</h2><ol>
+                <h1>通过实例理解CompletableFuture并发框架</h1>
+<p><b>CompletableFuture</b>实现<strong>Future</strong>、<strong>CompletionStage</strong>;<strong>CompletionStage</strong>的定义是作为一个用于异步执行中的处理阶段，适用于lambda表达式计算过程中。<strong>Future</strong>定义是作为异步返回值容器。下面通过一系列实列先来熟悉CompletableFuture能够完成的功能。</p>
+<h2 id="实现功能"><a class="header-anchor" href="#实现功能"></a>实现功能</h2>
+<ol>
 <li>初始化一个完成的CompletableFuture</li>
 </ol>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java">
@@ -455,7 +457,6 @@
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ol start="2">
 <li>创建一个简单的异步stage</li>
 </ol>
@@ -471,9 +472,9 @@
     <span class="token keyword">boolean</span> done <span class="token operator">=</span> future<span class="token punctuation">.</span><span class="token function">isDone</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"future.isDone() = "</span> <span class="token operator">+</span> future<span class="token punctuation">.</span><span class="token function">isDone</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ol start="3">
-<li><p>对完成的CompletableFuture继续同步进行处理</p>
+<li>对完成的CompletableFuture继续同步进行处理</li>
+</ol>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**
  * 对完成的CompletableFuture继续同步进行处理
  */</span>
@@ -487,9 +488,8 @@
     <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"返回结果为"</span> <span class="token operator">+</span> result <span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><p>对完成的CompletableFuture继续异步进行处理(有返回结果)</p>
-</li>
+<ol start="4">
+<li>对完成的CompletableFuture继续异步进行处理(有返回结果)</li>
 </ol>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**
  * 对完成的CompletableFuture继续异步进行处理
@@ -504,7 +504,6 @@
     <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"返回结果为"</span> <span class="token operator">+</span> result <span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ol start="5">
 <li>异步消费结果(无返回值)</li>
 </ol>
@@ -519,7 +518,6 @@
        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">":"</span> <span class="token operator">+</span> item<span class="token punctuation">.</span><span class="token function">toUpperCase</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ol start="6">
 <li>计算时出现异常</li>
 </ol>
@@ -546,7 +544,6 @@
     future<span class="token punctuation">.</span><span class="token function">cancel</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ol start="7">
 <li>BiConsumer同时处理两个stage结果</li>
 </ol>
@@ -563,18 +560,21 @@
                     <span class="token punctuation">(</span>v1<span class="token punctuation">,</span> v2<span class="token punctuation">)</span> <span class="token operator">-></span> result<span class="token punctuation">.</span><span class="token function">append</span><span class="token punctuation">(</span>v1 <span class="token operator">+</span> <span class="token string">"-"</span> <span class="token operator">+</span> v2<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"result:"</span> <span class="token operator">+</span> result<span class="token punctuation">.</span><span class="token function">toString</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-<h2 id="实现原理"><a href="#实现原理" class="headerlink" title="实现原理"></a>实现原理</h2><h3 id="Future接口介绍"><a href="#Future接口介绍" class="headerlink" title="Future接口介绍"></a>Future接口介绍</h3><blockquote>
+<h2 id="实现原理"><a class="header-anchor" href="#实现原理"></a>实现原理</h2>
+<h3 id="Future接口介绍"><a class="header-anchor" href="#Future接口介绍"></a>Future接口介绍</h3>
+<blockquote>
 <p>JDK5新增了Future接口，用于描述一个异步计算的结果。但是对于结果的获取却是很不方便，只能通过阻塞或者轮询的方式得到任务的结果。</p>
 </blockquote>
-<h3 id="CompletableFuture类介绍"><a href="#CompletableFuture类介绍" class="headerlink" title="CompletableFuture类介绍"></a>CompletableFuture类介绍</h3><blockquote>
+<h3 id="CompletableFuture类介绍"><a class="header-anchor" href="#CompletableFuture类介绍"></a>CompletableFuture类介绍</h3>
+<blockquote>
 <p>CompletableFuture提供了非常强大的 Future 的扩展功能，可以帮助我们简化异步编程的复杂性，并且提供了函数式编程的能力，可以通过回调的方式处理计算结果，也提供了转换和组合 CompletableFuture 的方法。</p>
 </blockquote>
 <blockquote>
 <p>对于阻塞或者轮询方式，依然可以通过 CompletableFuture 类的 CompletionStage和Future接口方式支持。CompletableFuture 类声明了 CompletionStage 接口，CompletionStage 接口实际上提供了同步或异步运行计算的舞台，所以我们可以通过实现多个 CompletionStage 命令，并且将这些命令串联在一起的方式实现多个命令之间的触发。</p>
 </blockquote>
-<h2 id="扩展知识"><a href="#扩展知识" class="headerlink" title="扩展知识"></a>扩展知识</h2><h2 id="参考文档"><a href="#参考文档" class="headerlink" title="参考文档"></a>参考文档</h2><p><a target="_blank" rel="noopener" href="https://developer.ibm.com/zh/articles/j-cf-of-jdk8/">通过实例理解 JDK8 的 CompletableFuture</a></p>
+<h2 id="扩展知识"><a class="header-anchor" href="#扩展知识"></a>扩展知识</h2>
+<h2 id="参考文档"><a class="header-anchor" href="#参考文档"></a>参考文档</h2>
+<p><a target="_blank" rel="noopener" href="https://developer.ibm.com/zh/articles/j-cf-of-jdk8/">通过实例理解 JDK8 的 CompletableFuture</a></p>
 
                 
             </div>

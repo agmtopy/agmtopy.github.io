@@ -433,8 +433,10 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="创建bean的流程"><a href="#创建bean的流程" class="headerlink" title="创建bean的流程"></a>创建bean的流程</h1><p>通过上面几个流程的分析，终于来到了spring初始化bean的流程了。在这个过程中主要的功能有实列化bean对象、加载到缓存、前后置处理;</p>
-<h2 id="创建流程"><a href="#创建流程" class="headerlink" title="创建流程"></a>创建流程</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
+                <h1>创建bean的流程</h1>
+<p>通过上面几个流程的分析，终于来到了spring初始化bean的流程了。在这个过程中主要的功能有实列化bean对象、加载到缓存、前后置处理;</p>
+<h2 id="创建流程"><a class="header-anchor" href="#创建流程"></a>创建流程</h2>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
 	<span class="token keyword">protected</span> <span class="token class-name">Object</span> <span class="token function">createBean</span><span class="token punctuation">(</span><span class="token class-name">String</span> beanName<span class="token punctuation">,</span> <span class="token class-name">RootBeanDefinition</span> mbd<span class="token punctuation">,</span> <span class="token annotation punctuation">@Nullable</span> <span class="token class-name">Object</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span>
 			<span class="token keyword">throws</span> <span class="token class-name">BeanCreationException</span> <span class="token punctuation">&#123;</span>
         
@@ -456,8 +458,11 @@
 	<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>创建流程主要分为以下三步：</p>
 <ol>
-<li>对BeanDifinition属性在加载前进行处理<br> 1.1 解析指定 BeanDefinition 的 class<br> 1.2 处理override属性</li>
-<li>尝试在创建前调用前置处理返回bean<br> 2.1 主要是调用<strong>InstantiationAwareBeanPostProcessor</strong>接口(提前返回代理类，AOP就是基于此)</li>
+<li>对BeanDifinition属性在加载前进行处理<br>
+1.1 解析指定 BeanDefinition 的 class<br>
+1.2 处理override属性</li>
+<li>尝试在创建前调用前置处理返回bean<br>
+2.1 主要是调用<strong>InstantiationAwareBeanPostProcessor</strong>接口(提前返回代理类，AOP就是基于此)</li>
 <li>开始初始化bean</li>
 </ol>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java">
@@ -522,7 +527,6 @@
         <span class="token comment">//返回</span>
 		<span class="token keyword">return</span> exposedObject<span class="token punctuation">;</span>
 	<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ol>
 <li>单列模式下清除容器</li>
 <li>构造方法初始化bean对象</li>

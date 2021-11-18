@@ -433,54 +433,60 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="Bean的加载"><a href="#Bean的加载" class="headerlink" title="Bean的加载"></a>Bean的加载</h1><p>Spring Ioc容器就是以某种方式加载配置文件并创建相应的对象进行绑定形成一个可取可存的容器。</p>
+                <h1>Bean的加载</h1>
+<p>Spring Ioc容器就是以某种方式加载配置文件并创建相应的对象进行绑定形成一个可取可存的容器。</p>
 <p>spring在实现过程中分为两个阶段：</p>
 <ol>
 <li>容器初始化阶段</li>
 <li>加载bean阶段</li>
 </ol>
-<h2 id="容器初始化阶段"><a href="#容器初始化阶段" class="headerlink" title="容器初始化阶段"></a>容器初始化阶段</h2><ol>
+<h2 id="容器初始化阶段"><a class="header-anchor" href="#容器初始化阶段"></a>容器初始化阶段</h2>
+<ol>
 <li>通过某种方式(<strong>ResourceLoadle</strong>)将配置文件(Resource)加载</li>
 <li>通过<strong>BeanDefinitionReader</strong>将配置文件转换为BeanDefinition</li>
 <li>通过<strong>BeanDefinitionRegistry</strong>将BeanDefinition注册到容器中</li>
 <li>Ioc容器开始进行初始化</li>
 </ol>
-<h2 id="加载bean阶段"><a href="#加载bean阶段" class="headerlink" title="加载bean阶段"></a>加载bean阶段</h2><ol>
+<h2 id="加载bean阶段"><a class="header-anchor" href="#加载bean阶段"></a>加载bean阶段</h2>
+<ol>
 <li>调用**BeanFactory.getBean(…)**进行bean加载</li>
 <li>初始化Bean完成之后进行缓存或原型模式</li>
 </ol>
-<h1 id="doGetBean-…-方法"><a href="#doGetBean-…-方法" class="headerlink" title="doGetBean(…)方法"></a>doGetBean(…)方法</h1><p>**doGetBean(…)**方法是bean加载的核心方法，主要有以下几个流程：</p>
-<h2 id="核心流程"><a href="#核心流程" class="headerlink" title="核心流程"></a>核心流程</h2><ol>
-<li><p>对BeanName的处理</p>
+<h1>doGetBean(…)方法</h1>
+<p>**doGetBean(…)**方法是bean加载的核心方法，主要有以下几个流程：</p>
+<h2 id="核心流程"><a class="header-anchor" href="#核心流程"></a>核心流程</h2>
+<ol>
+<li>对BeanName的处理</li>
+</ol>
 <blockquote>
 <p>通过对传入的beanName进行处理获取到真实的beanName</p>
 </blockquote>
-</li>
-<li><p>尝试从已加载的容器中获取</p>
+<ol start="2">
+<li>尝试从已加载的容器中获取</li>
+</ol>
 <blockquote>
 <p>如果容器中已经存在bean，那么就直接进行返回</p>
 </blockquote>
-</li>
-<li><p>对原型模式循环依赖的检查</p>
-</li>
-<li><p>尝试通过ParentBeanFacoty返回bean</p>
-</li>
-<li><p>标记bean正在进行创建</p>
-</li>
-<li><p>处理循环依赖</p>
+<ol start="3">
+<li>对原型模式循环依赖的检查</li>
+<li>尝试通过ParentBeanFacoty返回bean</li>
+<li>标记bean正在进行创建</li>
+<li>处理循环依赖</li>
+</ol>
 <blockquote>
 <p>通过标记 beanName -&gt; 依赖的beanNames，递归进行判断是否存在递归关系；如果存在递归关系 -&gt; 处理循环依赖</p>
 </blockquote>
-</li>
-<li><p>不同作用域下的实例化</p>
+<ol start="8">
+<li>不同作用域下的实例化</li>
+</ol>
 <blockquote>
 <p>createBean(…)</p>
 </blockquote>
-</li>
-<li><p>对返回结果进行类型转化</p>
-</li>
+<ol start="9">
+<li>对返回结果进行类型转化</li>
 </ol>
-<h2 id="循环依赖"><a href="#循环依赖" class="headerlink" title="循环依赖"></a>循环依赖</h2><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">protected</span> <span class="token class-name">Object</span> <span class="token function">getSingleton</span><span class="token punctuation">(</span><span class="token class-name">String</span> beanName<span class="token punctuation">,</span> <span class="token keyword">boolean</span> allowEarlyReference<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+<h2 id="循环依赖"><a class="header-anchor" href="#循环依赖"></a>循环依赖</h2>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">protected</span> <span class="token class-name">Object</span> <span class="token function">getSingleton</span><span class="token punctuation">(</span><span class="token class-name">String</span> beanName<span class="token punctuation">,</span> <span class="token keyword">boolean</span> allowEarlyReference<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
 		<span class="token class-name">Object</span> singletonObject <span class="token operator">=</span> <span class="token keyword">this</span><span class="token punctuation">.</span>singletonObjects<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>beanName<span class="token punctuation">)</span><span class="token punctuation">;</span>
 		<span class="token keyword">if</span> <span class="token punctuation">(</span>singletonObject <span class="token operator">==</span> <span class="token keyword">null</span> <span class="token operator">&amp;&amp;</span> <span class="token function">isSingletonCurrentlyInCreation</span><span class="token punctuation">(</span>beanName<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
 			<span class="token keyword">synchronized</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>singletonObjects<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
@@ -495,7 +501,6 @@
 				<span class="token punctuation">&#125;</span>
 			<span class="token punctuation">&#125;</span>
 		<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ul>
 <li>属性依赖</li>
 </ul>
@@ -507,31 +512,44 @@
 <li>B类加载成功-&gt;A类继续加载</li>
 </ol>
 <ul>
-<li>@DependsOn<blockquote>
+<li>@DependsOn</li>
+</ul>
+<blockquote>
 <p>@DependsOn是指定其他bean要在当前bean初始化之前进行加载；并且不能有循环依赖的场景出现</p>
 </blockquote>
-</li>
-</ul>
 <ol>
 <li>A类依赖于B类，A类初始化到这里时会去加载B类，</li>
 <li>如果B类依赖于A类，那么就会先调用一次getBean(“A”)，这里是不要求有返回结果</li>
 </ol>
-<h2 id="bean初始化的细节"><a href="#bean初始化的细节" class="headerlink" title="bean初始化的细节"></a>bean初始化的细节</h2><h3 id="Singleton-scope"><a href="#Singleton-scope" class="headerlink" title="Singleton scope"></a>Singleton scope</h3><ol>
+<h2 id="bean初始化的细节"><a class="header-anchor" href="#bean初始化的细节"></a>bean初始化的细节</h2>
+<h3 id="Singleton-scope"><a class="header-anchor" href="#Singleton-scope"></a>Singleton scope</h3>
+<ol>
 <li>再次检查缓存中是否有bean</li>
 <li>初始化bean的前置处理</li>
 <li>**singletonFactory.getObject();**初始化bean</li>
 <li>初始化bean的后置处理</li>
-<li>放入缓存及处理<br> 5.1 【put】singletonObjects 属性，单例 bean 的缓存。<br> 5.2 【remove】singletonFactories 属性，单例 bean Factory 的缓存。<br> 5.3 【remove】earlySingletonObjects 属性，“早期”创建的单例 bean 的缓存。<br> 5.4 【add】registeredSingletons 属性，已经注册的单例缓存。</li>
+<li>放入缓存及处理<br>
+5.1 【put】singletonObjects 属性，单例 bean 的缓存。<br>
+5.2 【remove】singletonFactories 属性，单例 bean Factory 的缓存。<br>
+5.3 【remove】earlySingletonObjects 属性，“早期”创建的单例 bean 的缓存。<br>
+5.4 【add】registeredSingletons 属性，已经注册的单例缓存。</li>
 </ol>
-<h3 id="prototype-scope"><a href="#prototype-scope" class="headerlink" title="prototype scope"></a>prototype scope</h3><ol>
+<h3 id="prototype-scope"><a class="header-anchor" href="#prototype-scope"></a>prototype scope</h3>
+<ol>
 <li>初始化bean的前置处理</li>
 <li>**createBean();**初始化bean</li>
 <li>初始化bean的后置处理</li>
 </ol>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p> Bean的加载的加载主要分为两个大流程：</p>
+<h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2>
+<p>Bean的加载的加载主要分为两个大流程：</p>
 <ol>
-<li>容器环境的初始化<br>1.1 资源文件加载<br>1.2 资源文件 -&gt; BeanDefinition<br>1.3 注册BeanDefinition</li>
-<li>Bean的初始化<br> 2.1 对注册的BeanDefinition的再次处理(属性合并、加载顺序等)<br> 2.2 加载Bean(解决循环依赖、前置后置操作、初始化bean)</li>
+<li>容器环境的初始化<br>
+1.1 资源文件加载<br>
+1.2 资源文件 -&gt; BeanDefinition<br>
+1.3 注册BeanDefinition<br>
+2.Bean的初始化<br>
+2.1 对注册的BeanDefinition的再次处理(属性合并、加载顺序等)<br>
+2.2 加载Bean(解决循环依赖、前置后置操作、初始化bean)</li>
 </ol>
 
                 

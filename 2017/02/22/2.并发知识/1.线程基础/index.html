@@ -433,48 +433,32 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="线程基础"><a href="#线程基础" class="headerlink" title="线程基础"></a>线程基础</h1><p>介绍多线程中的基础知识，包含线程创建、线程运行状态和线程中断</p>
-<h2 id="线程创建"><a href="#线程创建" class="headerlink" title="线程创建"></a>线程创建</h2><p>线程创建只有一种方式，继承<strong>Thread</strong>接口实现**Run()**方法</p>
+                <h1>线程基础</h1>
+<p>介绍多线程中的基础知识，包含线程创建、线程运行状态和线程中断</p>
+<h2 id="线程创建"><a class="header-anchor" href="#线程创建"></a>线程创建</h2>
+<p>线程创建只有一种方式，继承<strong>Thread</strong>接口实现**Run()**方法</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
 <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
 
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p>通过实现Runnable接口、创建线程池、Timer类等方式底层都是这种方式实现的。</p>
-<h2 id="线程执行的任务"><a href="#线程执行的任务" class="headerlink" title="线程执行的任务"></a>线程执行的任务</h2><ol>
-<li><p>实现<strong>Runable</strong>接口</p>
+<h2 id="线程执行的任务"><a class="header-anchor" href="#线程执行的任务"></a>线程执行的任务</h2>
+<ol>
+<li>实现<strong>Runable</strong>接口</li>
+</ol>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
 <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
 
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><p>实现**Callable<Objetc>**接口</p>
+<ol start="2">
+<li>实现**Callable<Objetc>**接口</li>
+</ol>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">new</span> <span class="token class-name">Callable</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Object</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
     <span class="token annotation punctuation">@Override</span>
     <span class="token keyword">public</span> <span class="token class-name">Object</span> <span class="token function">call</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
         <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><p>继承<strong>ForkJoinTask</strong>接口</p>
-</li>
-</ol>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">new</span> <span class="token class-name">ForkJoinTask</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Object</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token annotation punctuation">@Override</span>
-    <span class="token keyword">public</span> <span class="token class-name">Object</span> <span class="token function">getRawResult</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-
-    <span class="token annotation punctuation">@Override</span>
-    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">setRawResult</span><span class="token punctuation">(</span><span class="token class-name">Object</span> value<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-
-    <span class="token punctuation">&#125;</span>
-
-    <span class="token annotation punctuation">@Override</span>
-    <span class="token keyword">protected</span> <span class="token keyword">boolean</span> <span class="token function">exec</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ol start="3">
 <li>继承<strong>ForkJoinTask</strong>接口</li>
 </ol>
@@ -494,9 +478,28 @@
         <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="3">
+<li>继承<strong>ForkJoinTask</strong>接口</li>
+</ol>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">new</span> <span class="token class-name">ForkJoinTask</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Object</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">public</span> <span class="token class-name">Object</span> <span class="token function">getRawResult</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
 
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">setRawResult</span><span class="token punctuation">(</span><span class="token class-name">Object</span> value<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token annotation punctuation">@Override</span>
+    <span class="token keyword">protected</span> <span class="token keyword">boolean</span> <span class="token function">exec</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>通过实现Runnable接口的方式来执行任务比直接创建线程要好的多，这样可以复用线程。</p>
-<h2 id="线程创建-1"><a href="#线程创建-1" class="headerlink" title="线程创建"></a>线程创建</h2><p>线程的状态可以分为</p>
+<h2 id="线程创建-v2"><a class="header-anchor" href="#线程创建-v2"></a>线程创建</h2>
+<p>线程的状态可以分为</p>
 <ol>
 <li>New(新创建)</li>
 <li>Runnable(可运行)</li>
@@ -506,7 +509,8 @@
 <li>Terminated(被终止)</li>
 </ol>
 <p><img src="https://s2.ax1x.com/2020/02/23/31vE4A.png" alt="线程状态"></p>
-<h2 id="中断线程"><a href="#中断线程" class="headerlink" title="中断线程"></a>中断线程</h2><p>在java中不提供强制停止线程的方式，因为线程的强制停止可能会造成数据异常或者业务中断，这是业务方和中断方都不愿意看到的方式。java提供的方式是希望线程之间可以相互的通知、相互协助。提供这个方式的是<strong>interrupt</strong>。</p>
+<h2 id="中断线程"><a class="header-anchor" href="#中断线程"></a>中断线程</h2>
+<p>在java中不提供强制停止线程的方式，因为线程的强制停止可能会造成数据异常或者业务中断，这是业务方和中断方都不愿意看到的方式。java提供的方式是希望线程之间可以相互的通知、相互协助。提供这个方式的是<strong>interrupt</strong>。</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java">
 <span class="token keyword">while</span><span class="token punctuation">(</span><span class="token operator">!</span><span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">isInterrupted</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span> more work <span class="token keyword">to</span> <span class="token keyword">do</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
 
@@ -514,17 +518,21 @@
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p>判断线程条件和业务规则都满足时，才会继续执行。</p>
 <p>在线程<strong>sleep</strong>期间，线程可以感受到中断信号，感受到中断信号后会清除中断位标志并且抛出<strong>InterruptedException</strong>异常。</p>
-<h2 id="volatile不能作为线程标记位"><a href="#volatile不能作为线程标记位" class="headerlink" title="volatile不能作为线程标记位"></a>volatile不能作为线程标记位</h2><p>volatile作为标记位的时候，当线程阻塞的时候，其他线程仍旧可以改变标记位的值，因此volatile不适合作为线程标记位。</p>
-<h2 id="wait-notify-notifyAll-方法使用注意"><a href="#wait-notify-notifyAll-方法使用注意" class="headerlink" title="wait/notify/notifyAll()方法使用注意"></a>wait/notify/notifyAll()方法使用注意</h2><ol>
+<h2 id="volatile不能作为线程标记位"><a class="header-anchor" href="#volatile不能作为线程标记位"></a>volatile不能作为线程标记位</h2>
+<p>volatile作为标记位的时候，当线程阻塞的时候，其他线程仍旧可以改变标记位的值，因此volatile不适合作为线程标记位。</p>
+<h2 id="wait-notify-notifyAll-方法使用注意"><a class="header-anchor" href="#wait-notify-notifyAll-方法使用注意"></a>wait/notify/notifyAll()方法使用注意</h2>
+<ol>
 <li>wait()方法，必须在<strong>synchronized</strong>中持有锁后才能使用，因为必须持有对象的<strong>monitor</strong>锁，这样才能防止在执行前后线程被切换。</li>
-<li><strong>sleep()**被定义在Thread中，wait/notify/notifyAll都要操作</strong>monitor**,属于对象级的锁。</li>
-<li>wait/notify与sleep的区别<ol>
-<li>相同点<br>都让线程阻塞、都可响应InterruptException异常</li>
-<li>不同点</li>
-<li>1 sleep不会释放monitor锁</li>
-<li>2 sleep方法必须定义一个等待时间，到期后可主动恢复，wait方法没时间参数意味着一直会等待下去</li>
-<li>3 wait/notify是Object的，sleep是Thread的方法</li>
-<li>4 wait必须在synchronized中使用</li>
+<li><strong>sleep()<strong>被定义在Thread中，wait/notify/notifyAll都要操作</strong>monitor</strong>,属于对象级的锁。</li>
+<li>wait/notify与sleep的区别
+<ol>
+<li>相同点<br>
+都让线程阻塞、都可响应InterruptException异常</li>
+<li>不同点<br>
+2.1 sleep不会释放monitor锁<br>
+2.2 sleep方法必须定义一个等待时间，到期后可主动恢复，wait方法没时间参数意味着一直会等待下去<br>
+2.3 wait/notify是Object的，sleep是Thread的方法<br>
+2.4 wait必须在synchronized中使用</li>
 </ol>
 </li>
 </ol>

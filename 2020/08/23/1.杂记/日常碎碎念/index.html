@@ -433,7 +433,8 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="碎碎念"><a href="#碎碎念" class="headerlink" title="碎碎念"></a>碎碎念</h2><ol>
+                <h2 id="碎碎念"><a class="header-anchor" href="#碎碎念"></a>碎碎念</h2>
+<ol>
 <li>TimerTask</li>
 </ol>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">Timer</span> timer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Timer</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -448,12 +449,13 @@ timer<span class="token punctuation">.</span><span class="token function">schedu
     <span class="token comment">// 拉去权限数据</span>
     <span class="token comment">// 更新缓存数据</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <blockquote>
 <p>TimerTask在执行时，如果抛出异常不进行捕获就直接终止，建议使用ScheduledThreadPoolExecutor来替代</p>
 </blockquote>
 <ol start="2">
-<li>mycat全局表插入的时抛出索引重复<br>现象是mycat在插入时，抛出了索引重复但是再次查询时，确有数据<br>原因是因为mycat在查询时候只会随机查询一个分库中的数据，由于不同分库的主键序列不一样，导致每次插入时，id不一样，随后又通过id来进行删除，这样只会删除一个表的数据，导致数据未被删除的库再次插入时抛出索引重复。</li>
+<li>mycat全局表插入的时抛出索引重复<br>
+现象是mycat在插入时，抛出了索引重复但是再次查询时，确有数据<br>
+原因是因为mycat在查询时候只会随机查询一个分库中的数据，由于不同分库的主键序列不一样，导致每次插入时，id不一样，随后又通过id来进行删除，这样只会删除一个表的数据，导致数据未被删除的库再次插入时抛出索引重复。</li>
 </ol>
 <ul>
 <li>mycat全局表随机选择库</li>
@@ -470,19 +472,17 @@ timer<span class="token punctuation">.</span><span class="token function">schedu
 		<span class="token comment">// all fail return default</span>
 		<span class="token keyword">return</span> tc<span class="token punctuation">.</span><span class="token function">getRandomDataNode</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 	<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ul>
 <li>对重复数据的不同处理在1.6.x上对于重复数据是直接抛出异常，最新的版本则是返回修改值</li>
 </ul>
 <ol start="3">
-<li>查询端口占用情况<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 端口占用情况</span>
+<li>查询端口占用情况</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 端口占用情况</span>
 <span class="token function">netstat</span> -nap <span class="token operator">|</span><span class="token function">grep</span> <span class="token number">2181</span>
 
 <span class="token comment"># 端口连接数</span>
 <span class="token function">netstat</span> -na <span class="token operator">|</span> <span class="token function">grep</span> <span class="token number">2181</span> <span class="token operator">|</span> <span class="token function">wc</span> -l<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-</li>
-</ol>
 
                 
             </div>

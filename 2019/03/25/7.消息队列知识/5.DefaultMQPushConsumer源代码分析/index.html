@@ -433,8 +433,10 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="DefaultMQPushConsumer源代码分析"><a href="#DefaultMQPushConsumer源代码分析" class="headerlink" title="DefaultMQPushConsumer源代码分析"></a>DefaultMQPushConsumer源代码分析</h1><h2 id="基本使用"><a href="#基本使用" class="headerlink" title="基本使用"></a>基本使用</h2><p> <strong>DefaultMQPushConsumer</strong>是默认进行消费的工具类，类图如下：</p>
-<p> <img src="https://s1.ax1x.com/2020/03/25/8x1zJP.png" alt="8x1zJP.png"></p>
+                <h1>DefaultMQPushConsumer源代码分析</h1>
+<h2 id="基本使用"><a class="header-anchor" href="#基本使用"></a>基本使用</h2>
+<p><strong>DefaultMQPushConsumer</strong>是默认进行消费的工具类，类图如下：</p>
+<p><img src="https://s1.ax1x.com/2020/03/25/8x1zJP.png" alt="8x1zJP.png"></p>
  <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">DefaultMQPushConsumer</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token class-name">String</span> namespace<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token class-name">String</span> consumerGroup<span class="token punctuation">,</span> <span class="token class-name">RPCHook</span> rpcHook<span class="token punctuation">,</span>
     <span class="token class-name">AllocateMessageQueueStrategy</span> allocateMessageQueueStrategy<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">this</span><span class="token punctuation">.</span>consumerGroup <span class="token operator">=</span> consumerGroup<span class="token punctuation">;</span>
@@ -442,7 +444,6 @@
     <span class="token keyword">this</span><span class="token punctuation">.</span>allocateMessageQueueStrategy <span class="token operator">=</span> allocateMessageQueueStrategy<span class="token punctuation">;</span>
     defaultMQPushConsumerImpl <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DefaultMQPushConsumerImpl</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> rpcHook<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <blockquote>
 <p>默认的构造函数参数如下</p>
 </blockquote>
@@ -453,7 +454,8 @@
 <th>含义</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>namespace</td>
 <td>指定producer/consumer实例,只有在同一个实例下的消息才能被消费到</td>
 </tr>
@@ -477,8 +479,10 @@
 <td>subscribe(topic,subExpression)</td>
 <td>订阅的主题和tag过滤的规则</td>
 </tr>
-</tbody></table>
-<h2 id="底层原理"><a href="#底层原理" class="headerlink" title="底层原理"></a>底层原理</h2><p>主要是一下几个步骤</p>
+</tbody>
+</table>
+<h2 id="底层原理"><a class="header-anchor" href="#底层原理"></a>底层原理</h2>
+<p>主要是一下几个步骤</p>
 <ol start="0">
 <li>准备环境，设置各种环境变量(例如topic,过滤策略)，根据环境变量初始化<strong>pullRequest</strong></li>
 <li>从本地或者Broker中获取到offerSet偏移量</li>
@@ -487,7 +491,8 @@
 <li>底层调用<strong>NettyRemotingClient</strong>进行网络连接，<strong>特殊的报文结构</strong></li>
 </ol>
 <p>消息的方式是通过“长轮询”的方式进行处理的，通过服务端hold住请求(默认是15s)来实现的</p>
-<h1 id="ConsumerMessageConcurrentlyService源代码分析"><a href="#ConsumerMessageConcurrentlyService源代码分析" class="headerlink" title="ConsumerMessageConcurrentlyService源代码分析"></a>ConsumerMessageConcurrentlyService源代码分析</h1><p>上面讲到如何初始化一个<strong>DefaultMQPushConsumer</strong>,但是在实际执行获取动作的是<strong>ConsumerMessageConcurrentlyService</strong>来进行的。</p>
+<h1>ConsumerMessageConcurrentlyService源代码分析</h1>
+<p>上面讲到如何初始化一个<strong>DefaultMQPushConsumer</strong>,但是在实际执行获取动作的是<strong>ConsumerMessageConcurrentlyService</strong>来进行的。</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">ConsumeMessageConcurrentlyService</span><span class="token punctuation">(</span><span class="token class-name">DefaultMQPushConsumerImpl</span> defaultMQPushConsumerImpl<span class="token punctuation">,</span>
     <span class="token class-name">MessageListenerConcurrently</span> messageListener<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">this</span><span class="token punctuation">.</span>defaultMQPushConsumerImpl <span class="token operator">=</span> defaultMQPushConsumerImpl<span class="token punctuation">;</span>
@@ -512,9 +517,10 @@
     <span class="token keyword">this</span><span class="token punctuation">.</span>cleanExpireMsgExecutors <span class="token operator">=</span> <span class="token class-name">Executors</span><span class="token punctuation">.</span><span class="token function">newSingleThreadScheduledExecutor</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">ThreadFactoryImpl</span><span class="token punctuation">(</span><span class="token string">"CleanExpireMsgScheduledThread_"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ul>
-<li>主线程池执行的逻辑<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
+<li>主线程池执行的逻辑</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
 <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">submitConsumeRequest</span><span class="token punctuation">(</span>
     <span class="token keyword">final</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">MessageExt</span><span class="token punctuation">></span></span> msgs<span class="token punctuation">,</span>
     <span class="token keyword">final</span> <span class="token class-name">ProcessQueue</span> processQueue<span class="token punctuation">,</span>
@@ -557,23 +563,22 @@
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-</li>
-</ul>
 <p>消费的逻辑：</p>
 <ol>
 <li>创建三个不同的线程池分别是正常消费的线程池、等待消费的线程池、清理消息的线程池</li>
 <li>判断当前消息数量是否大于最大处理数量</li>
 <li>尝试使用正常消费的线程池进行消费 如果失败 -&gt; 等待消费的线程池</li>
 </ol>
-<h1 id="消费消息的线程池逻辑"><a href="#消费消息的线程池逻辑" class="headerlink" title="消费消息的线程池逻辑"></a>消费消息的线程池逻辑</h1><ul>
+<h1>消费消息的线程池逻辑</h1>
+<ul>
 <li><strong>ConsumeRequest</strong></li>
 </ul>
 <ol>
 <li>线程调用消息的处理逻辑，根据消息从处理逻辑返回结果进行下一步操作</li>
 </ol>
 <ul>
-<li><p>调用消息的逻辑</p>
+<li>调用消息的逻辑</li>
+</ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">ConsumeReturnType</span> returnType <span class="token operator">=</span> <span class="token class-name">ConsumeReturnType</span><span class="token punctuation">.</span>SUCCESS<span class="token punctuation">;</span>
     <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
         <span class="token keyword">if</span> <span class="token punctuation">(</span>msgs <span class="token operator">!=</span> <span class="token keyword">null</span> <span class="token operator">&amp;&amp;</span> <span class="token operator">!</span>msgs<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
@@ -592,9 +597,8 @@
         hasException <span class="token operator">=</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><p>处理消息的逻辑</p>
-</li>
+<ul>
+<li>处理消息的逻辑</li>
 </ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">switch</span> <span class="token punctuation">(</span>status<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">case</span> CONSUME_SUCCESS<span class="token operator">:</span>
@@ -635,14 +639,17 @@
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <ol>
 <li>将不同返回值的消息写入不同的队列中</li>
-<li>根据不同的消费方式做不同的处理<br> 2.1 广播模式 消费不成功不处理<br> 2.2 集群模式消费不成功，推送broker，让broker通知其他consumer进行消费，还是失败进入延迟队列</li>
+<li>根据不同的消费方式做不同的处理<br>
+2.1 广播模式 消费不成功不处理<br>
+2.2 集群模式消费不成功，推送broker，让broker通知其他consumer进行消费，还是失败进入延迟队列</li>
 </ol>
-<h1 id="ProcessQueue"><a href="#ProcessQueue" class="headerlink" title="ProcessQueue"></a>ProcessQueue</h1><p><strong>ProcessQueue</strong>是consumer中每一个MessageQueue所对应的队列消耗快照。</p>
+<h1>ProcessQueue</h1>
+<p><strong>ProcessQueue</strong>是consumer中每一个MessageQueue所对应的队列消耗快照。</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">ReadWriteLock</span> lockTreeMap <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ReentrantReadWriteLock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">TreeMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Long</span><span class="token punctuation">,</span> <span class="token class-name">MessageExt</span><span class="token punctuation">></span></span> msgTreeMap <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">TreeMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Long</span><span class="token punctuation">,</span> <span class="token class-name">MessageExt</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
 <p>主要是由一个TreeMep和ReadWriteLock锁组成，TreeMap里以MessageQueue的Offset作为Key，以消息内容的引用为Value，保存了所有从MessageQueue获取到但是还未被处理的消息，读写锁控制着多个线程对TreeMap对象的并发访问。</p>
-<h1 id="MessageQueue的分析"><a href="#MessageQueue的分析" class="headerlink" title="MessageQueue的分析"></a>MessageQueue的分析</h1>
+<h1>MessageQueue的分析</h1>
+
                 
             </div>
             <hr/>

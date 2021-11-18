@@ -433,30 +433,34 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="jdk的类加载机制"><a href="#jdk的类加载机制" class="headerlink" title="jdk的类加载机制"></a>jdk的类加载机制</h1><h2 id="类加载的过程"><a href="#类加载的过程" class="headerlink" title="类加载的过程"></a>类加载的过程</h2><p><a target="_blank" rel="noopener" href="https://imgchr.com/i/t7kEid"><img src="https://s1.ax1x.com/2020/06/10/t7kEid.png" alt="t7kEid.png"></a></p>
+                <h1>jdk的类加载机制</h1>
+<h2 id="类加载的过程"><a class="header-anchor" href="#类加载的过程"></a>类加载的过程</h2>
+<p><a target="_blank" rel="noopener" href="https://imgchr.com/i/t7kEid"><img src="https://s1.ax1x.com/2020/06/10/t7kEid.png" alt="t7kEid.png"></a></p>
 <p>类加载主要分为：</p>
 <p><strong>加载</strong> -&gt; <strong>验证</strong> -&gt; <strong>准备</strong> -&gt; <strong>解析</strong> -&gt; <strong>初始化</strong></p>
 <ul>
-<li><p>加载</p>
+<li>加载</li>
+</ul>
 <blockquote>
 <p>加载的主要作用是将外部的 .class 文件，加载到 Java 的方法区内</p>
 </blockquote>
-</li>
-<li><p>验证</p>
+<ul>
+<li>验证</li>
+</ul>
 <blockquote>
 <p>验证class文件，是否符合jvm虚拟机的规范</p>
 </blockquote>
-</li>
-<li><p>准备</p>
+<ul>
+<li>准备</li>
+</ul>
 <blockquote>
 <p>类变量分配内存，并将其初始化为默认值</p>
 </blockquote>
-</li>
-</ul>
 <p><img src="https://s1.ax1x.com/2020/06/10/t7mcSH.png" alt="t7mcSH.png"></p>
 <p>类变量在准备阶段就进行了初始化，但是在方法内部定义的变量不会在准备阶段进行初始化，因此ide提示局部变量未进行</p>
 <ul>
-<li>解析<br>解析是将符号引用替换为直接引用的过程。符号引用是一种定义，可以是任何字面上的含义，而直接引用就是直接指向目标的指针、相对偏移量。主要分为以下几个步骤：</li>
+<li>解析<br>
+解析是将符号引用替换为直接引用的过程。符号引用是一种定义，可以是任何字面上的含义，而直接引用就是直接指向目标的指针、相对偏移量。主要分为以下几个步骤：</li>
 <li>类或接口的解析</li>
 <li>类方法解析</li>
 <li>接口方法解析</li>
@@ -470,7 +474,10 @@
 </ul>
 <p>解析过程保证了相互引用的完整性，把继承与组合推进到运行时</p>
 <ul>
-<li>初始化<br>先来看一端代码<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">A</span> <span class="token punctuation">&#123;</span>
+<li>初始化<br>
+先来看一端代码</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">class</span> <span class="token class-name">A</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">static</span> <span class="token keyword">int</span> a <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
     <span class="token keyword">static</span> <span class="token punctuation">&#123;</span>
         a <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
@@ -484,40 +491,49 @@
         <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-</li>
-</ul>
 <blockquote>
 <p>b = b + 1;由于b + 1中b中是变量，在静态代码块中无法引用</p>
 </blockquote>
 <ul>
-<li><p><strong>static 语句块，只能访问到定义在 static 语句块之前的变量</strong></p>
+<li>
+<p><strong>static 语句块，只能访问到定义在 static 语句块之前的变量</strong></p>
 </li>
-<li><p><strong>JVM 会保证在子类的初始化方法执行之前，父类的初始化方法已经执行完毕</strong></p>
+<li>
+<p><strong>JVM 会保证在子类的初始化方法执行之前，父类的初始化方法已经执行完毕</strong></p>
 </li>
 </ul>
-<h2 id="类加载器"><a href="#类加载器" class="headerlink" title="类加载器"></a>类加载器</h2><p>类加载器所做的事情就将class文件进行解析，加载到jvm的方法区；主要分为<strong>Bootstrap ClassLoader</strong>、<strong>Extention ClassLoader</strong>、<strong>App ClassLoader</strong>、<strong>Custom ClassLoader</strong></p>
+<h2 id="类加载器"><a class="header-anchor" href="#类加载器"></a>类加载器</h2>
+<p>类加载器所做的事情就将class文件进行解析，加载到jvm的方法区；主要分为<strong>Bootstrap ClassLoader</strong>、<strong>Extention ClassLoader</strong>、<strong>App ClassLoader</strong>、<strong>Custom ClassLoader</strong></p>
 <ul>
-<li><p>Bootstrap ClassLoader<br>用于加载<strong>加载核心类库</strong>也就是 rt.jar、resources.jar、charsets.jar等</p>
+<li>
+<p>Bootstrap ClassLoader<br>
+用于加载<strong>加载核心类库</strong>也就是 rt.jar、resources.jar、charsets.jar等</p>
 </li>
-<li><p>Extention ClassLoader<br>扩展类加载器，主要用于加载lib/ext目录下的jar包和.class文件</p>
+<li>
+<p>Extention ClassLoader<br>
+扩展类加载器，主要用于加载lib/ext目录下的jar包和.class文件</p>
 </li>
-<li><p>App ClassLoader<br>这是我们写的 Java 类的默认加载器，有时候也叫作 System ClassLoader。一般用来加载 classpath 下的其他所有 jar 包和 .class 文件，我们写的代码，会首先尝试使用这个类加载器进行加载</p>
+<li>
+<p>App ClassLoader<br>
+这是我们写的 Java 类的默认加载器，有时候也叫作 System ClassLoader。一般用来加载 classpath 下的其他所有 jar 包和 .class 文件，我们写的代码，会首先尝试使用这个类加载器进行加载</p>
 </li>
-<li><p>Custom ClassLoader<br>自定义加载器，支持一些个性化的扩展功能。</p>
+<li>
+<p>Custom ClassLoader<br>
+自定义加载器，支持一些个性化的扩展功能。</p>
 </li>
 </ul>
-<h2 id="双亲委派加载机制"><a href="#双亲委派加载机制" class="headerlink" title="双亲委派加载机制"></a>双亲委派加载机制</h2><p>双亲委派机制的意思是除了顶层的启动类加载器以外，其余的类加载器，在加载之前，都会委派给它的父加载器进行加载。这样一层层向上传递，直到祖先们都无法胜任，它才会真正的加载。</p>
+<h2 id="双亲委派加载机制"><a class="header-anchor" href="#双亲委派加载机制"></a>双亲委派加载机制</h2>
+<p>双亲委派机制的意思是除了顶层的启动类加载器以外，其余的类加载器，在加载之前，都会委派给它的父加载器进行加载。这样一层层向上传递，直到祖先们都无法胜任，它才会真正的加载。</p>
 <p>ps:这样做的目的主要是解决同一个jvm中只能加载同一个类一次</p>
-<h2 id="自定义加载器"><a href="#自定义加载器" class="headerlink" title="自定义加载器"></a>自定义加载器</h2><ul>
+<h2 id="自定义加载器"><a class="header-anchor" href="#自定义加载器"></a>自定义加载器</h2>
+<ul>
 <li>tomcat的类加载机制</li>
 </ul>
 <p><strong>WebAppClassLoader</strong>的类加载器优先加载。等它加载不到的时候，再交给上层的 ClassLoader 进行加载。这个加载器用来隔绝不同应用的 .class 文件，比如你的两个应用，可能会依赖同一个第三方的不同版本，它们是相互没有影响的。</p>
 <ul>
-<li>SPI机制<pre class="line-numbers language-none"><code class="language-none">SPI 实际上是“基于接口的编程＋策略模式＋配置文件”组合实现的动态加载机制，主要使用 java.util.ServiceLoader 类进行动态装载。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-</li>
+<li>SPI机制</li>
 </ul>
+<pre class="line-numbers language-none"><code class="language-none">SPI 实际上是“基于接口的编程＋策略模式＋配置文件”组合实现的动态加载机制，主要使用 java.util.ServiceLoader 类进行动态装载。<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>spi机制的实现是基于让线程的上下文类加载器去加载ServiceLoader，由于当前线程上下文类加载器是基于App ClassLoader的，因此并不违反双亲加载机制。</p>
 
                 

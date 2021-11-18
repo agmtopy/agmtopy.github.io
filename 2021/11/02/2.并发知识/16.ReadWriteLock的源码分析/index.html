@@ -433,12 +433,18 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="ReadWriteLock的源码分析"><a href="#ReadWriteLock的源码分析" class="headerlink" title="ReadWriteLock的源码分析"></a>ReadWriteLock的源码分析</h1><p> ReadWriteLock是JUC包下的定义的读写锁的接口,定义两个接口<B>readLock()</B>、<B>writeLock()</B>分别是返回读锁和返回一个写锁。<br> ReadWriteLock默认有两个实现分别是<B>ReadWriteLockView</B>、<B>ReentrantReadWriteLock</B>。</p>
-<p> ReentrantReadWriteLock是默认的读写锁的实现<br> ReadWriteLockView是<B>StampedLock</B>的内部类，StampedLock是JDK 1.8中对ReentrantReadWriteLock的一个增强的实现<br> 下面会先分析ReentrantReadWriteLock，在对StampedLock进行分析</p>
-<h2 id="ReentrantReadWriteLock"><a href="#ReentrantReadWriteLock" class="headerlink" title="ReentrantReadWriteLock"></a>ReentrantReadWriteLock</h2><blockquote>
+                <h1>ReadWriteLock的源码分析</h1>
+<p>ReadWriteLock是JUC包下的定义的读写锁的接口,定义两个接口<B>readLock()</B>、<B>writeLock()</B>分别是返回读锁和返回一个写锁。<br>
+ReadWriteLock默认有两个实现分别是<B>ReadWriteLockView</B>、<B>ReentrantReadWriteLock</B>。</p>
+<p>ReentrantReadWriteLock是默认的读写锁的实现<br>
+ReadWriteLockView是<B>StampedLock</B>的内部类，StampedLock是JDK 1.8中对ReentrantReadWriteLock的一个增强的实现<br>
+下面会先分析ReentrantReadWriteLock，在对StampedLock进行分析</p>
+<h2 id="ReentrantReadWriteLock"><a class="header-anchor" href="#ReentrantReadWriteLock"></a>ReentrantReadWriteLock</h2>
+<blockquote>
 <p>ReentrantReadWriteLock是实现ReadWriteLock接口,对外提供read()和wirte()方法。特点主要是支持公平锁选择、可重入、锁降级的分类</p>
 </blockquote>
-<h3 id="用例"><a href="#用例" class="headerlink" title="用例"></a>用例</h3><p>这个用例是对ReentrantReadWriteLock提供的用例CachedData的简化版本</p>
+<h3 id="用例"><a class="header-anchor" href="#用例"></a>用例</h3>
+<p>这个用例是对ReentrantReadWriteLock提供的用例CachedData的简化版本</p>
 <ul>
 <li>CachedData</li>
 </ul>
@@ -477,7 +483,6 @@
         <span class="token punctuation">&#125;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ul>
 <li>main</li>
 </ul>
@@ -496,12 +501,14 @@
         <span class="token punctuation">&#125;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ul>
 <li>执行结果</li>
 </ul>
-<p><img src="https://i.loli.net/2021/11/12/wNerlsGfKLpEhzd.jpg" alt="执行结果"><br>可以看到两个线程对data的写锁进行竞争,但是只有一个线程成功执行set方法,另外的一个线程只能执行读锁的操作<br>从现象上来看一个<B>ReentrantReadWriteLock</B>对外提供了读锁和写锁两个功能,下面就开始对代码进行详细的分析</p>
-<h3 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h3>  <pre class="line-numbers language-java" data-language="java"><code class="language-java">
+<p><img src="https://i.loli.net/2021/11/12/wNerlsGfKLpEhzd.jpg" alt="执行结果"><br>
+可以看到两个线程对data的写锁进行竞争,但是只有一个线程成功执行set方法,另外的一个线程只能执行读锁的操作<br>
+从现象上来看一个<B>ReentrantReadWriteLock</B>对外提供了读锁和写锁两个功能,下面就开始对代码进行详细的分析</p>
+<h3 id="构造函数"><a class="header-anchor" href="#构造函数"></a>构造函数</h3>
+  <pre class="line-numbers language-java" data-language="java"><code class="language-java">
 <span class="token comment">/**
  * Creates a new &#123;@code ReentrantReadWriteLock&#125; with
  * default (nonfair) ordering properties.
@@ -522,8 +529,7 @@
     writerLock <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">WriteLock</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>  可以看到无参的构造函数是非公平锁的策略,在构造方法中主要是创建了三个成员变量</p>
+<p>可以看到无参的构造函数是非公平锁的策略,在构造方法中主要是创建了三个成员变量</p>
   <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">ReentrantReadWriteLock</span><span class="token punctuation">&#123;</span>
     <span class="token comment">//公平锁类型</span>
     <span class="token keyword">final</span> <span class="token class-name">Sync</span> sync<span class="token punctuation">;</span>
@@ -532,20 +538,22 @@
     <span class="token comment">//内部写锁</span>
     <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">ReentrantReadWriteLock<span class="token punctuation">.</span>WriteLock</span> writerLock<span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-<h3 id="源码解析"><a href="#源码解析" class="headerlink" title="源码解析"></a>源码解析</h3><h4 id="构造方法"><a href="#构造方法" class="headerlink" title="构造方法"></a>构造方法</h4><ul>
-<li>获取锁的方法<br>  获取读锁/写锁就是直接返回内部的读锁/写锁变量</li>
+<h3 id="源码解析"><a class="header-anchor" href="#源码解析"></a>源码解析</h3>
+<h4 id="构造方法"><a class="header-anchor" href="#构造方法"></a>构造方法</h4>
+<ul>
+<li>获取锁的方法<br>
+获取读锁/写锁就是直接返回内部的读锁/写锁变量</li>
 </ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">ReentrantReadWriteLock<span class="token punctuation">.</span>WriteLock</span> <span class="token function">writeLock</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> writerLock<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
 <span class="token keyword">public</span> <span class="token class-name">ReentrantReadWriteLock<span class="token punctuation">.</span>ReadLock</span>  <span class="token function">readLock</span><span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token punctuation">&#123;</span> <span class="token keyword">return</span> readerLock<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
 <p>可以看到锁的类型分别是ReadLock和WriteLock,继续分析ReadLock/WriteLock</p>
 <ul>
-<li>ReadLock与WriteLock对比</li>
-</ul>
-<ul>
-<li>ReadLock</li>
+<li>
+<p>ReadLock与WriteLock对比</p>
+</li>
+<li>
+<p>ReadLock</p>
+</li>
 </ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">ReadLock</span> <span class="token keyword">implements</span> <span class="token class-name">Lock</span><span class="token punctuation">,</span> <span class="token class-name"><span class="token namespace">java<span class="token punctuation">.</span>io<span class="token punctuation">.</span></span>Serializable</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">long</span> serialVersionUID <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">5992448646407690164L</span><span class="token punctuation">;</span>
@@ -586,7 +594,6 @@
             <span class="token string">"[Read locks = "</span> <span class="token operator">+</span> r <span class="token operator">+</span> <span class="token string">"]"</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ul>
 <li>WriteLock</li>
 </ul>
@@ -643,11 +650,12 @@
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p>通过对比可知<B>WriteLock</B>只是比<B>ReadLock</B>多两个方法</p>
 <ul>
-<li>isHeldByCurrentThread()<br>  查询当前线程是否持有写锁</li>
-<li>getHoldCount()<br>  当前写锁的锁定次数</li>
+<li>isHeldByCurrentThread()<br>
+查询当前线程是否持有写锁</li>
+<li>getHoldCount()<br>
+当前写锁的锁定次数</li>
 </ul>
 <p>同时可以看到不管是<B>WriteLock</B>、<B>ReadLock</B>都是使用<B>Sync</B>来实现的功能，下面详细的分析一下<B>Sync</B>类的实现</p>
 <ul>
@@ -665,13 +673,16 @@
     <span class="token punctuation">&#125;</span>
     
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p>从上面代码可以看出<B>Sync</B>是继承自<B>AbstractQueuedSynchronizer</B>，在构造方法中创建<B>ThreadLocalHoldCounter</B>和调用AQS的<B>setState()</B>方法</p>
-<p>有关<B>AbstractQueuedSynchronizer</B>的内容可以参考之前写的<br><a href="../../../../../2020/05/22/2.%E5%B9%B6%E5%8F%91%E7%9F%A5%E8%AF%86/13.AbstractQueuedSynchronizer%E7%9A%84%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">AbstractQueuedSynchronizer的源码分析</a></p>
+<p>有关<B>AbstractQueuedSynchronizer</B>的内容可以参考之前写的<br>
+<a href="../../../../../2020/05/22/2.%E5%B9%B6%E5%8F%91%E7%9F%A5%E8%AF%86/13.AbstractQueuedSynchronizer%E7%9A%84%E6%BA%90%E7%A0%81%E5%88%86%E6%9E%90/">AbstractQueuedSynchronizer的源码分析</a></p>
 <ul>
-<li><p>ThreadLocalHoldCounter<br>ThreadLocalHoldCounter的代码如下所示</p>
+<li>
+<p>ThreadLocalHoldCounter<br>
+ThreadLocalHoldCounter的代码如下所示</p>
 </li>
-<li><p>ThreadLocalHoldCounter</p>
+<li>
+<p>ThreadLocalHoldCounter</p>
 </li>
 </ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">class</span> <span class="token class-name">ThreadLocalHoldCounter</span>
@@ -680,7 +691,6 @@
         <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">HoldCounter</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ul>
 <li>HoldCounter</li>
 </ul>
@@ -690,8 +700,8 @@
     <span class="token comment">//使用id来标识Thread而不是引用,避免引用逃逸</span>
     <span class="token keyword">final</span> <span class="token keyword">long</span> tid <span class="token operator">=</span> <span class="token class-name">LockSupport</span><span class="token punctuation">.</span><span class="token function">getThreadId</span><span class="token punctuation">(</span><span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>ThreadLocalHoldCounter继承于ThreadLocal然后在初始化时用initialValue()方法返回一个<B>HoldCounter</B>引用<br>HoldCounter是用来记录线程中加锁的统计与线程id相关联,这里关联线程引用是比较优秀的,通过<B>LockSupport.getThreadId</B>获取一个long类型的线程标识</p>
+<p>ThreadLocalHoldCounter继承于ThreadLocal然后在初始化时用initialValue()方法返回一个<B>HoldCounter</B>引用<br>
+HoldCounter是用来记录线程中加锁的统计与线程id相关联,这里关联线程引用是比较优秀的,通过<B>LockSupport.getThreadId</B>获取一个long类型的线程标识</p>
 <ul>
 <li>LockSupport.getThreadId</li>
 </ul>
@@ -699,7 +709,6 @@
     <span class="token comment">//U是Unsafe类型的对象</span>
     <span class="token keyword">return</span> <span class="token class-name">U</span><span class="token punctuation">.</span><span class="token function">getLong</span><span class="token punctuation">(</span>thread<span class="token punctuation">,</span> TID<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p><B>Sync</B>除了通过构造函数初始化上述的ThreadLocalHoldCounter对象以外,还有一些静态成员变量来完成一些例如控制允许线程重复持有锁的次数等</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> SHARED_SHIFT   <span class="token operator">=</span> <span class="token number">16</span><span class="token punctuation">;</span>
 <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> SHARED_UNIT    <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token number">1</span> <span class="token operator">&lt;&lt;</span> SHARED_SHIFT<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -720,7 +729,8 @@
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>这里是对同一个线程持有的锁超过阈值的演示</p>
 <p><img src="https://i.loli.net/2021/11/13/uon9IW6fcLxPRv5.jpg" alt="超过锁阈值场景"></p>
-<h4 id="readLock"><a href="#readLock" class="headerlink" title="readLock()"></a>readLock()</h4><ul>
+<h4 id="readLock"><a class="header-anchor" href="#readLock"></a>readLock()</h4>
+<ul>
 <li>lock</li>
 </ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
@@ -737,7 +747,6 @@
         <span class="token function">acquire</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">,</span> arg<span class="token punctuation">,</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token boolean">false</span><span class="token punctuation">,</span> <span class="token number">0L</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ul>
 <li>ReentrantReadWriteLock.tryAcquireShared()</li>
 </ul>
@@ -782,7 +791,6 @@
     <span class="token comment">//重复处理</span>
     <span class="token keyword">return</span> <span class="token function">fullTryAcquireShared</span><span class="token punctuation">(</span>current<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p><B>tryAcquireShared</B>是会执行锁的计数、初始线程的绑定等工作，并且会对执行失败进行自旋重试</p>
 <ul>
 <li>unlock</li>
@@ -825,9 +833,8 @@
             <span class="token keyword">return</span> nextc <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-<h4 id="writeLock"><a href="#writeLock" class="headerlink" title="writeLock()"></a>writeLock()</h4><ul>
+<h4 id="writeLock"><a class="header-anchor" href="#writeLock"></a>writeLock()</h4>
+<ul>
 <li>lock</li>
 </ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">lock</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
@@ -845,10 +852,15 @@
 <ul>
 <li>加锁(共享/独占)</li>
 <li>解锁(共享/独占)</li>
-<li>计数(共享/独占)<br>然后AQS作为入口也会通过调用<B>ReentrantReadWriteLock</B>的具体的加锁/解锁/计数的进行操作。<br>读锁不进行排队，写锁会进行排队阻塞<br><B>ReentrantReadWriteLock</B>中有趣的操作是把state的高16位作为读锁标识，低16位作为写锁标识，因此也是只能加锁2^16的原因</li>
+<li>计数(共享/独占)<br>
+然后AQS作为入口也会通过调用<B>ReentrantReadWriteLock</B>的具体的加锁/解锁/计数的进行操作。<br>
+读锁不进行排队，写锁会进行排队阻塞<br>
+<B>ReentrantReadWriteLock</B>中有趣的操作是把state的高16位作为读锁标识，低16位作为写锁标识，因此也是只能加锁2^16的原因</li>
 </ul>
-<h2 id="StampedLock"><a href="#StampedLock" class="headerlink" title="StampedLock"></a>StampedLock</h2><p><B>StampedLock</B>是对ReentrantReadWriteLock的迭代，在对StampedLock中优化了写锁饥饿的问题</p>
-<h3 id="用例-1"><a href="#用例-1" class="headerlink" title="用例"></a>用例</h3><ul>
+<h2 id="StampedLock"><a class="header-anchor" href="#StampedLock"></a>StampedLock</h2>
+<p><B>StampedLock</B>是对ReentrantReadWriteLock的迭代，在对StampedLock中优化了写锁饥饿的问题</p>
+<h3 id="用例-v2"><a class="header-anchor" href="#用例-v2"></a>用例</h3>
+<ul>
 <li>StampedLockDemo</li>
 </ul>
 <pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token keyword">class</span> StampedLockDemo <span class="token punctuation">&#123;</span>
@@ -886,24 +898,29 @@
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p><B>StampedLock</B>在加锁时会返回一个戳(stamp),可以把它理解为版本号/时间戳，在后续解锁时会用到.</p>
 <ul>
-<li><p>提供了乐观锁和悲观锁的实现</p>
+<li>
+<p>提供了乐观锁和悲观锁的实现</p>
 <ul>
 <li>tryOptimisticRead()</li>
 <li>tryReadLock()</li>
 </ul>
 </li>
-<li><p>锁降/升级</p>
+<li>
+<p>锁降/升级</p>
 <ul>
 <li>tryConvertToWriteLock()</li>
 <li>tryConvertToReadLock()</li>
 </ul>
 </li>
 </ul>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>ReadWriteLock是读写锁的接口，默认有两个实现分别是<B>ReentrantReadWriteLock</B>、<B>StampedLock</B>,分别是针对读多写少的场景和需要使用乐观锁的场景。<br>底层都采用一个标志位来进行区分读锁/写锁标识,一个是Int(32位),一个是Long(64位)，并且都继承与<B>AbstractQueuedSynchronizer</B>来进行实现的。</p>
-<h2 id="参考资料"><a href="#参考资料" class="headerlink" title="参考资料"></a>参考资料</h2><p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zxporz/p/11642176.html">StampedLock的理解和使用</a><br><a target="_blank" rel="noopener" href="https://zxs.io/article/1667">StampedLock源码分析</a></p>
+<h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2>
+<p>ReadWriteLock是读写锁的接口，默认有两个实现分别是<B>ReentrantReadWriteLock</B>、<B>StampedLock</B>,分别是针对读多写少的场景和需要使用乐观锁的场景。<br>
+底层都采用一个标志位来进行区分读锁/写锁标识,一个是Int(32位),一个是Long(64位)，并且都继承与<B>AbstractQueuedSynchronizer</B>来进行实现的。</p>
+<h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/zxporz/p/11642176.html">StampedLock的理解和使用</a><br>
+<a target="_blank" rel="noopener" href="https://zxs.io/article/1667">StampedLock源码分析</a></p>
 
                 
             </div>

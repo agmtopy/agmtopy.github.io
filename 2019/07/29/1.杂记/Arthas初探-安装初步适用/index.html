@@ -437,15 +437,23 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="Arthas初探–安装初步适用"><a href="#Arthas初探–安装初步适用" class="headerlink" title="Arthas初探–安装初步适用"></a>Arthas初探–安装初步适用</h1><p>由于在项目中遇到一种情况，某段代码在进行单元测试和在tomcat容器中运行的性能相差数百倍，因此需要分析在不同环境下某个方法执行的具体时间，从而确定问题。Arthas可以做到无侵入的监控应用远行情况。</p>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>githup项目地址：<strong><a target="_blank" rel="noopener" href="https://github.com/alibaba/arthas">https://github.com/alibaba/arthas</a></strong><br>文档地址：<strong><a target="_blank" rel="noopener" href="https://alibaba.github.io/arthas/">https://alibaba.github.io/arthas/</a></strong></p>
+                <h1>Arthas初探–安装初步适用</h1>
+<p>由于在项目中遇到一种情况，某段代码在进行单元测试和在tomcat容器中运行的性能相差数百倍，因此需要分析在不同环境下某个方法执行的具体时间，从而确定问题。Arthas可以做到无侵入的监控应用远行情况。</p>
+<h2 id="安装"><a class="header-anchor" href="#安装"></a>安装</h2>
+<p>githup项目地址：<strong><a target="_blank" rel="noopener" href="https://github.com/alibaba/arthas">https://github.com/alibaba/arthas</a></strong><br>
+文档地址：<strong><a target="_blank" rel="noopener" href="https://alibaba.github.io/arthas/">https://alibaba.github.io/arthas/</a></strong></p>
 <p>安装</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">wget</span> https://alibaba.github.io/arthas/arthas-boot.jar
 java -jar arthas-boot.jar<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>linux下直接执行，window下载文件后执行</p>
-<p><img src="https://img-blog.csdnimg.cn/20190630153613103.png" alt="在这里插入图片描述"><br>执行完成后，显示当前path中指定的JDK中正在运行的java进程<br>输入相应序号,进入sh命令，表示已连接成功<br><img src="https://img-blog.csdnimg.cn/2019063015385964.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAwMjk0Mzc=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
-<h2 id="初步使用"><a href="#初步使用" class="headerlink" title="初步使用"></a>初步使用</h2><p>Arthas命令初步使用，大概分为5类：</p>
-<h3 id="基础命令"><a href="#基础命令" class="headerlink" title="基础命令"></a>基础命令</h3><ul>
+<p><img src="https://img-blog.csdnimg.cn/20190630153613103.png" alt="在这里插入图片描述"><br>
+执行完成后，显示当前path中指定的JDK中正在运行的java进程<br>
+输入相应序号,进入sh命令，表示已连接成功<br>
+<img src="https://img-blog.csdnimg.cn/2019063015385964.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAwMjk0Mzc=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"></p>
+<h2 id="初步使用"><a class="header-anchor" href="#初步使用"></a>初步使用</h2>
+<p>Arthas命令初步使用，大概分为5类：</p>
+<h3 id="基础命令"><a class="header-anchor" href="#基础命令"></a>基础命令</h3>
+<ul>
 <li>help——查看命令帮助信息</li>
 <li>cat——打印文件内容，和linux里的cat命令类似</li>
 <li>pwd——返回当前的工作目录，和linux命令类似</li>
@@ -456,7 +464,10 @@ java -jar arthas-boot.jar<span aria-hidden="true" class="line-numbers-rows"><spa
 <li>history——打印命令历史</li>
 <li>quit——退出当前 Arthas 客户端，其他 Arthas 客户端不受影响</li>
 <li>shutdown——关闭 Arthas 服务端，所有 Arthas 客户端全部退出</li>
-<li>keymap——Arthas快捷键列表及自定义快捷键<h3 id="jvm相关"><a href="#jvm相关" class="headerlink" title="jvm相关"></a>jvm相关</h3></li>
+<li>keymap——Arthas快捷键列表及自定义快捷键</li>
+</ul>
+<h3 id="jvm相关"><a class="header-anchor" href="#jvm相关"></a>jvm相关</h3>
+<ul>
 <li>dashboard——当前系统的实时数据面板</li>
 <li>thread——查看当前 JVM 的线程堆栈信息</li>
 <li>jvm——查看当前 JVM 的信息</li>
@@ -466,7 +477,8 @@ java -jar arthas-boot.jar<span aria-hidden="true" class="line-numbers-rows"><spa
 <li>New! ognl——执行ognl表达式</li>
 <li>New! mbean——查看 Mbean 的信息</li>
 </ul>
-<h3 id="class-classloader相关"><a href="#class-classloader相关" class="headerlink" title="class/classloader相关"></a>class/classloader相关</h3><ul>
+<h3 id="class-classloader相关"><a class="header-anchor" href="#class-classloader相关"></a>class/classloader相关</h3>
+<ul>
 <li>sc——查看JVM已加载的类信息</li>
 <li>sm——查看已加载类的方法信息</li>
 <li>jad——反编译指定已加载类的源码</li>
@@ -475,7 +487,8 @@ java -jar arthas-boot.jar<span aria-hidden="true" class="line-numbers-rows"><spa
 <li>dump——dump 已加载类的 byte code 到特定目录</li>
 <li>classloader——查看classloader的继承树，urls，类加载信息，使用classloader去getResource</li>
 </ul>
-<h3 id="monitor-watch-trace相关"><a href="#monitor-watch-trace相关" class="headerlink" title="monitor/watch/trace相关"></a>monitor/watch/trace相关</h3><p>请注意，这些命令，都通过字节码增强技术来实现的，会在指定类的方法中插入一些切面来实现数据统计和观测，因此在线上、预发使用时，请尽量明确需要观测的类、方法以及条件，诊断结束要执行 shutdown 或将增强过的类执行 reset 命令。</p>
+<h3 id="monitor-watch-trace相关"><a class="header-anchor" href="#monitor-watch-trace相关"></a>monitor/watch/trace相关</h3>
+<p>请注意，这些命令，都通过字节码增强技术来实现的，会在指定类的方法中插入一些切面来实现数据统计和观测，因此在线上、预发使用时，请尽量明确需要观测的类、方法以及条件，诊断结束要执行 shutdown 或将增强过的类执行 reset 命令。</p>
 <ul>
 <li>monitor——方法执行监控</li>
 <li>watch——方法执行数据观测</li>
@@ -483,23 +496,27 @@ java -jar arthas-boot.jar<span aria-hidden="true" class="line-numbers-rows"><spa
 <li>stack——输出当前方法被调用的调用路径</li>
 <li>tt——方法执行数据的时空隧道，记录下指定方法每次调用的入参和返回信息，并能对这些不同的时间下调用进行观测</li>
 </ul>
-<h3 id="options"><a href="#options" class="headerlink" title="options"></a>options</h3><ul>
+<h3 id="options"><a class="header-anchor" href="#options"></a>options</h3>
+<ul>
 <li>options——查看或设置Arthas全局开关</li>
 </ul>
-<h2 id="使用实列"><a href="#使用实列" class="headerlink" title="使用实列"></a>使用实列</h2><ul>
-<li>trace 分析每个方法的具体执行时间<br><img src="https://img-blog.csdnimg.cn/20190630154629460.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAwMjk0Mzc=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>通过图示表明调用MongoTemplate.executeFindMultiInternal()方法时，最耗时的方法是在doWith()方法，总共执行10000次，耗时==252.3064ms==,最少一次调用耗时==0.0132ms==，最大一次耗时==38.4329ms==，分析原因还是在于数据量太大，MongoTemplate通过循环遍历出结果在进行序列化。</li>
-</ul>
+<h2 id="使用实列"><a class="header-anchor" href="#使用实列"></a>使用实列</h2>
 <ul>
-<li>jad 反编译代码工具<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">jad com.sankuai.inf.leaf.common.ZeroIDGen<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
+<li>
+<p>trace 分析每个方法的具体执行时间<br>
+<img src="https://img-blog.csdnimg.cn/20190630154629460.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L3UwMTAwMjk0Mzc=,size_16,color_FFFFFF,t_70" alt="在这里插入图片描述"><br>
+通过图示表明调用MongoTemplate.executeFindMultiInternal()方法时，最耗时的方法是在doWith()方法，总共执行10000次，耗时==252.3064ms==,最少一次调用耗时==0.0132ms==，最大一次耗时==38.4329ms==，分析原因还是在于数据量太大，MongoTemplate通过循环遍历出结果在进行序列化。</p>
+</li>
+<li>
+<p>jad 反编译代码工具</p>
 </li>
 </ul>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">jad com.sankuai.inf.leaf.common.ZeroIDGen<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="https://s1.ax1x.com/2020/07/28/aVeudO.png" alt="aVeudO.png"></p>
 <ul>
-<li>watch 查看输入参数与输出参数<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">watch</span> com.sankuai.inf.leaf.server.service.SegmentService getId <span class="token string">'&#123;params, target, returnObj&#125;'</span> -x <span class="token number">2</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-</li>
+<li>watch 查看输入参数与输出参数</li>
 </ul>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">watch</span> com.sankuai.inf.leaf.server.service.SegmentService getId <span class="token string">'&#123;params, target, returnObj&#125;'</span> -x <span class="token number">2</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <blockquote>
 <p><strong>params</strong>表示入参，<strong>target</strong>表示当前的类，<strong>returnObj</strong>表示返回值</p>
 </blockquote>
@@ -508,19 +525,16 @@ java -jar arthas-boot.jar<span aria-hidden="true" class="line-numbers-rows"><spa
 <li>stack 查看被调用的路径(向上)</li>
 </ul>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">stack com.sankuai.inf.leaf.server.service.SegmentService getId<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
 <p><img src="https://s1.ax1x.com/2020/07/28/aVKIUK.png" alt="aVKIUK.png"></p>
 <ul>
 <li>sc 查看JVM已加载的类信息</li>
 </ul>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">sc -d com.sankuai.inf.leaf.server.service.SegmentService getId<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
 <p><img src="https://s1.ax1x.com/2020/07/28/aVMArn.png" alt="aVMArn.png"></p>
 <ul>
-<li>thread 分析死锁<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">thread b<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-</li>
+<li>thread 分析死锁</li>
 </ul>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">thread b<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="https://s1.ax1x.com/2020/04/29/JHNalT.png" alt="JHNalT.png"></p>
 <p><img src="https://s1.ax1x.com/2020/04/30/JHUuNR.png" alt="JHUuNR.png"></p>
 <p>可以看出当前线程正在等待<strong>ReentrantLock$NonfairSync@118f1fb4</strong>，而持有这个对象的线程又在等待当前线程释放，从而形成死锁!</p>
@@ -528,7 +542,9 @@ java -jar arthas-boot.jar<span aria-hidden="true" class="line-numbers-rows"><spa
 <li>thread 分析CPU占用</li>
 </ul>
 <p><img src="https://s1.ax1x.com/2020/04/30/JH0HQx.png" alt="JH0HQx.png"></p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p> 先放一张官方的总结大图<br> <a target="_blank" rel="noopener" href="https://imgchr.com/i/JHBSfA"><img src="https://s1.ax1x.com/2020/04/30/JHBSfA.png" alt="JHBSfA.png"></a></p>
+<h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2>
+<p>先放一张官方的总结大图<br>
+<a target="_blank" rel="noopener" href="https://imgchr.com/i/JHBSfA"><img src="https://s1.ax1x.com/2020/04/30/JHBSfA.png" alt="JHBSfA.png"></a></p>
 <p>总结：Arthas是一个很优秀的java诊断工具，无论是安装还是使用都很简洁，并且使用文档全面、清晰明了，值得好好研究一番。</p>
 
                 

@@ -433,8 +433,10 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="AOP源代码分析"><a href="#AOP源代码分析" class="headerlink" title="AOP源代码分析"></a>AOP源代码分析</h1><p>阅读spring的源代码，来查看spring是如何实现AOP增强的</p>
-<h2 id="探寻bean初始化的方法"><a href="#探寻bean初始化的方法" class="headerlink" title="探寻bean初始化的方法"></a>探寻bean初始化的方法</h2><p>在普通bean的加载流程中，如果一个bean是被AOP拦截增强后<strong>doCreateBean</strong>方法返回的是CGLib动态代理类生成的对象</p>
+                <h1>AOP源代码分析</h1>
+<p>阅读spring的源代码，来查看spring是如何实现AOP增强的</p>
+<h2 id="探寻bean初始化的方法"><a class="header-anchor" href="#探寻bean初始化的方法"></a>探寻bean初始化的方法</h2>
+<p>在普通bean的加载流程中，如果一个bean是被AOP拦截增强后<strong>doCreateBean</strong>方法返回的是CGLib动态代理类生成的对象</p>
 <blockquote>
 <p>CGLib动态代理对象</p>
 </blockquote>
@@ -447,9 +449,8 @@
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">if</span> <span class="token punctuation">(</span>instanceWrapper <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
   instanceWrapper <span class="token operator">=</span> <span class="token function">createBeanInstance</span><span class="token punctuation">(</span>beanName<span class="token punctuation">,</span> mbd<span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
 <p>在这里创建出bean对象，继续向下看代码,<strong>initializeBean</strong>这个方法对bean创建后进行了后置操作后返回的是CGLib动态代理后的对象。跟踪方法到了<strong>applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName)</strong>,在这里完成了动态代理。</p>
-<p><strong>applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName)**方法分析这个方法主要是执行</strong>BeanPostProcessor.postProcessAfterInitialization<strong>这个方法，其中在初始化时候会执行</strong>AnnotationAwareAspectJAutoProxyCreator**这个实现类</p>
+<p><strong>applyBeanPostProcessorsAfterInitialization(wrappedBean, beanName)<strong>方法分析这个方法主要是执行</strong>BeanPostProcessor.postProcessAfterInitialization</strong>这个方法，其中在初始化时候会执行<strong>AnnotationAwareAspectJAutoProxyCreator</strong>这个实现类</p>
 <blockquote>
 <p>类图</p>
 </blockquote>
@@ -468,7 +469,6 @@
 	<span class="token punctuation">&#125;</span>
 	<span class="token keyword">return</span> bean<span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <blockquote>
 <p>wrapIfNecessary方法</p>
 </blockquote>
@@ -498,7 +498,9 @@
 	<span class="token keyword">return</span> bean<span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>wrapIfNecessary方法首先返回了目标对象需要增强的拦截器<br><img src="https://s1.ax1x.com/2020/03/11/8VkGRJ.png" alt="8VkGRJ.png"><br>如果目标对象有需要增强的拦截器，执行创建proxy的程序</p>
+<p>wrapIfNecessary方法首先返回了目标对象需要增强的拦截器<br>
+<img src="https://s1.ax1x.com/2020/03/11/8VkGRJ.png" alt="8VkGRJ.png"><br>
+如果目标对象有需要增强的拦截器，执行创建proxy的程序</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">protected</span> <span class="token class-name">Object</span> <span class="token function">createProxy</span><span class="token punctuation">(</span><span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> beanClass<span class="token punctuation">,</span> <span class="token annotation punctuation">@Nullable</span> <span class="token class-name">String</span> beanName<span class="token punctuation">,</span>
 		<span class="token annotation punctuation">@Nullable</span> <span class="token class-name">Object</span><span class="token punctuation">[</span><span class="token punctuation">]</span> specificInterceptors<span class="token punctuation">,</span> <span class="token class-name">TargetSource</span> targetSource<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
 
@@ -531,15 +533,21 @@
 	<span class="token keyword">return</span> proxyFactory<span class="token punctuation">.</span><span class="token function">getProxy</span><span class="token punctuation">(</span><span class="token function">getProxyClassLoader</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ol>
 <li>暴露目标的原始属性</li>
 <li>创建ProxyFactory对象</li>
 <li>获取到目标对象的<strong>Advisor</strong></li>
 <li>最后使用<strong>proxyFactory.getProxy</strong>来进行一个初始化工作，底层调用JDK的动态代理或者是CGLib的动态代理</li>
 </ol>
-<h2 id="AOP的底层原理"><a href="#AOP的底层原理" class="headerlink" title="AOP的底层原理"></a>AOP的底层原理</h2><p>通过JDK或者CGLib生成不同的AopProxy对象，从而构造了不同的回调方法来对拦截器链进行调用。<br>拦截器的调用调用的过程都是在ReflectiveMethodInvocation中通过proceed方法实现的。在proceed方法中，会逐个运行拦截器的拦截方法。在运行拦截器的拦截方法之前，需要对代理方法完成一个匹配判断，通过这个匹配判断来决定拦截器是否满足切面增强的要求。如果方法符合要求进行通知增强，依次调用拦截器链上的拦截器依次直到最后一个拦截器调用完毕执行目标方法</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>spring实现AOP的方式是在bean初始化过程中，一个<strong>BeanPostProcessor</strong>接口的<strong>postProcessAfterInitialization</strong>方法对bean进行一个处理。<strong>AbstractAutoProxyCreator</strong>是实际进行aop拦截增强的类，执行步骤依次是<br>1.暴露目标类的原始属性<br>2. 创建ProxyFactory对象<br>3. 获取到目标对象的<strong>Advisor</strong><br>4. 使用JDK或CGLib生成代理对象</p>
+<h2 id="AOP的底层原理"><a class="header-anchor" href="#AOP的底层原理"></a>AOP的底层原理</h2>
+<p>通过JDK或者CGLib生成不同的AopProxy对象，从而构造了不同的回调方法来对拦截器链进行调用。<br>
+拦截器的调用调用的过程都是在ReflectiveMethodInvocation中通过proceed方法实现的。在proceed方法中，会逐个运行拦截器的拦截方法。在运行拦截器的拦截方法之前，需要对代理方法完成一个匹配判断，通过这个匹配判断来决定拦截器是否满足切面增强的要求。如果方法符合要求进行通知增强，依次调用拦截器链上的拦截器依次直到最后一个拦截器调用完毕执行目标方法</p>
+<h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2>
+<p>spring实现AOP的方式是在bean初始化过程中，一个<strong>BeanPostProcessor</strong>接口的<strong>postProcessAfterInitialization</strong>方法对bean进行一个处理。<strong>AbstractAutoProxyCreator</strong>是实际进行aop拦截增强的类，执行步骤依次是<br>
+1.暴露目标类的原始属性<br>
+2. 创建ProxyFactory对象<br>
+3. 获取到目标对象的<strong>Advisor</strong><br>
+4. 使用JDK或CGLib生成代理对象</p>
 
                 
             </div>

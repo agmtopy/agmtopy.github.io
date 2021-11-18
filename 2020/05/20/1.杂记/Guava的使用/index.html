@@ -433,11 +433,15 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="Guava的使用"><a href="#Guava的使用" class="headerlink" title="Guava的使用"></a>Guava的使用</h1><h2 id="线程池的使用"><a href="#线程池的使用" class="headerlink" title="线程池的使用"></a>线程池的使用</h2><blockquote>
+                <h1>Guava的使用</h1>
+<h2 id="线程池的使用"><a class="header-anchor" href="#线程池的使用"></a>线程池的使用</h2>
+<blockquote>
 <p>ListenableFuture是基于装饰器模式实现的</p>
 </blockquote>
 <ul>
-<li>示例<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">String</span> nameFormat <span class="token operator">=</span> <span class="token string">"thread_factory_%d"</span><span class="token punctuation">;</span>
+<li>示例</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">String</span> nameFormat <span class="token operator">=</span> <span class="token string">"thread_factory_%d"</span><span class="token punctuation">;</span>
         <span class="token class-name">ThreadFactory</span> shardingThreadFactory <span class="token operator">=</span> <span class="token class-name">ShardingThreadFactoryBuilder</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span>nameFormat<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token class-name">ExecutorService</span> delegate <span class="token operator">=</span> <span class="token class-name">Executors</span><span class="token punctuation">.</span><span class="token function">newCachedThreadPool</span><span class="token punctuation">(</span>shardingThreadFactory<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token comment">//得到装饰器的线程池</span>
@@ -450,9 +454,7 @@
         future<span class="token punctuation">.</span><span class="token function">addListener</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">-></span><span class="token punctuation">&#123;</span>
                 <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"线程:"</span><span class="token operator">+</span><span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">"执行回调函数得到返回值为:"</span> <span class="token operator">+</span> future<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">&#125;</span><span class="token punctuation">,</span><span class="token class-name">Executors</span><span class="token punctuation">.</span><span class="token function">newSingleThreadExecutor</span><span class="token punctuation">(</span>shardingThreadFactory<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
-</ul>
-
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
                 
             </div>
             <hr/>

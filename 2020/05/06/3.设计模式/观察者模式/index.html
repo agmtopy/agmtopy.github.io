@@ -433,30 +433,38 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="设计模式之观察者模式"><a href="#设计模式之观察者模式" class="headerlink" title="设计模式之观察者模式"></a>设计模式之观察者模式</h1><blockquote>
+                <h1>设计模式之观察者模式</h1>
+<blockquote>
 <p>观察者模式的定义是一个一对多的依赖关系，让一个或多个观察者对象监控一个主题对象。当主题对象在状态上发生变化时，能够通知所有依赖此主题的观察者对象，使这些观察者对象能够处理此次更新</p>
 </blockquote>
-<h2 id="参与对象"><a href="#参与对象" class="headerlink" title="参与对象"></a>参与对象</h2><ul>
+<h2 id="参与对象"><a class="header-anchor" href="#参与对象"></a>参与对象</h2>
+<ul>
 <li>Subject</li>
 <li>Observer</li>
 <li>Client</li>
 </ul>
-<h3 id="Subject"><a href="#Subject" class="headerlink" title="Subject"></a>Subject</h3><blockquote>
+<h3 id="Subject"><a class="header-anchor" href="#Subject"></a>Subject</h3>
+<blockquote>
 <p>主题对象主体是基于被观察者，并且在内部保存一个或多个被观察者的处理对象</p>
 </blockquote>
-<h3 id="Observer"><a href="#Observer" class="headerlink" title="Observer"></a>Observer</h3><blockquote>
+<h3 id="Observer"><a class="header-anchor" href="#Observer"></a>Observer</h3>
+<blockquote>
 <p>Observer对象是抽象出来对事件进行处理的对象</p>
 </blockquote>
-<h3 id="client"><a href="#client" class="headerlink" title="client"></a>client</h3><blockquote>
+<h3 id="client"><a class="header-anchor" href="#client"></a>client</h3>
+<blockquote>
 <p>客户端对象的作用是触发事件的发生，并且将观察者注册到被观察者中</p>
 </blockquote>
-<h2 id="使用场景"><a href="#使用场景" class="headerlink" title="使用场景"></a>使用场景</h2><ul>
+<h2 id="使用场景"><a class="header-anchor" href="#使用场景"></a>使用场景</h2>
+<ul>
 <li>一个抽象模型有两个方面，其中一个方面依赖于另一个方面。将这些方面封装在独立的对象中使它们可以各自独立地改变和复用。</li>
 <li>一个对象的改变将导致其他一个或多个对象也发生改变，而不知道具体有多少对象将发生改变，可以降低对象之间的耦合度。</li>
 <li>一个对象必须通知其他对象，而并不知道这些对象是谁。</li>
 </ul>
-<h2 id="基本的观察者模式"><a href="#基本的观察者模式" class="headerlink" title="基本的观察者模式"></a>基本的观察者模式</h2><ul>
-<li><p>Subject</p>
+<h2 id="基本的观察者模式"><a class="header-anchor" href="#基本的观察者模式"></a>基本的观察者模式</h2>
+<ul>
+<li>Subject</li>
+</ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Subject</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">private</span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Observer</span><span class="token punctuation">></span></span> observerList <span class="token operator">=</span> <span class="token class-name">Lists</span><span class="token punctuation">.</span><span class="token function">newArrayList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
@@ -481,9 +489,8 @@
         <span class="token punctuation">&#125;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><p>Observer</p>
-</li>
+<ul>
+<li>Observer</li>
 </ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Observer</span> <span class="token punctuation">&#123;</span>
 
@@ -506,7 +513,6 @@
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ul>
 <li>client</li>
 </ul>
@@ -523,18 +529,19 @@
         subject<span class="token punctuation">.</span><span class="token function">setState</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-<h2 id="Guava中的观察者模式-EventBus"><a href="#Guava中的观察者模式-EventBus" class="headerlink" title="Guava中的观察者模式(EventBus)"></a>Guava中的观察者模式(EventBus)</h2><ul>
-<li><p>Observer</p>
+<h2 id="Guava中的观察者模式-EventBus"><a class="header-anchor" href="#Guava中的观察者模式-EventBus"></a>Guava中的观察者模式(EventBus)</h2>
+<ul>
+<li>Observer</li>
+</ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">Event</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">action</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
         <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"执行事件..."</span><span class="token punctuation">)</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><p>Subject </p>
+<ul>
+<li>Subject</li>
+</ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"> <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">EventListener</span> <span class="token punctuation">&#123;</span>
     <span class="token annotation punctuation">@Subscribe</span>
     <span class="token annotation punctuation">@AllowConcurrentEvents</span>
@@ -552,17 +559,16 @@
         <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"->订阅错误的事件,接收到:"</span> <span class="token operator">+</span> deadEvent<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><p>client</p>
-</li>
+<ul>
+<li>client</li>
 </ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">EventBus</span> ebSyc <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">EventBus</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token comment">//注册监听器</span>
 ebSyc<span class="token punctuation">.</span><span class="token function">register</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">EventListener</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token comment">//执行相应事件</span>
 ebSyc<span class="token punctuation">.</span><span class="token function">post</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Event2</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>观察者模式适用于一个事件的发生会启动多个事件的响应。如果在源事件中依次调用启动关联事件的，这样每次增加关联事件都会在源事件中进行同步修改。一个动作可能会影响多个关联动作的场景适用于观察者模式，例如在一个系统中业务执行完毕后会触发下游多个业务的场景(电商中的订单付款成功就会触发下游物流、商品、财务等多个系统)</p>
+<h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2>
+<p>观察者模式适用于一个事件的发生会启动多个事件的响应。如果在源事件中依次调用启动关联事件的，这样每次增加关联事件都会在源事件中进行同步修改。一个动作可能会影响多个关联动作的场景适用于观察者模式，例如在一个系统中业务执行完毕后会触发下游多个业务的场景(电商中的订单付款成功就会触发下游物流、商品、财务等多个系统)</p>
 
                 
             </div>

@@ -433,10 +433,15 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="spring中资源的加载"><a href="#spring中资源的加载" class="headerlink" title="spring中资源的加载"></a>spring中资源的加载</h1><p>对于资源的加载这个场景首先要划分<strong>边界</strong>,spring抽象出两个组件：<strong>Resource</strong>、<strong>ResourceLoader</strong></p>
-<h2 id="Resource接口"><a href="#Resource接口" class="headerlink" title="Resource接口"></a>Resource接口</h2><p><strong>Resource</strong>是对资源的一种抽象，提供一系列操作文件的方法</p>
-<h3 id="定义"><a href="#定义" class="headerlink" title="定义"></a>定义</h3><ul>
-<li>resource.java<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Resource</span> <span class="token keyword">extends</span> <span class="token class-name">InputStreamSource</span> <span class="token punctuation">&#123;</span>
+                <h1>spring中资源的加载</h1>
+<p>对于资源的加载这个场景首先要划分<strong>边界</strong>,spring抽象出两个组件：<strong>Resource</strong>、<strong>ResourceLoader</strong></p>
+<h2 id="Resource接口"><a class="header-anchor" href="#Resource接口"></a>Resource接口</h2>
+<p><strong>Resource</strong>是对资源的一种抽象，提供一系列操作文件的方法</p>
+<h3 id="定义"><a class="header-anchor" href="#定义"></a>定义</h3>
+<ul>
+<li>resource.java</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">Resource</span> <span class="token keyword">extends</span> <span class="token class-name">InputStreamSource</span> <span class="token punctuation">&#123;</span>
     <span class="token comment">//文件是否存在</span>
     <span class="token keyword">boolean</span> <span class="token function">exists</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token comment">//文件是否可读</span>
@@ -458,17 +463,16 @@
     <span class="token comment">//返回文件描述</span>
     <span class="token class-name">String</span> <span class="token function">getDescription</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-</li>
-</ul>
-<h3 id="子类"><a href="#子类" class="headerlink" title="子类"></a>子类</h3><table>
+<h3 id="子类"><a class="header-anchor" href="#子类"></a>子类</h3>
+<table>
 <thead>
 <tr>
 <th>类名</th>
 <th>作用</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td>FileSystemResource</td>
 <td>对 java.io.File 类型资源的封装</td>
 </tr>
@@ -488,10 +492,14 @@
 <td>InputStreamResource</td>
 <td>将给定的 InputStream 作为一种资源的 Resource 的实现类</td>
 </tr>
-</tbody></table>
-<h3 id="AbstractResource"><a href="#AbstractResource" class="headerlink" title="AbstractResource"></a>AbstractResource</h3><p><strong>AbstractResource</strong>是Resource的默认抽象类，实现了大部分公共方法；</p>
-<h2 id="ResourceLoader"><a href="#ResourceLoader" class="headerlink" title="ResourceLoader"></a>ResourceLoader</h2><p><strong>ResourceLoader</strong>定义如何加载Resource的接口</p>
-<h3 id="定义-1"><a href="#定义-1" class="headerlink" title="定义"></a>定义</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">ResourceLoader</span> <span class="token punctuation">&#123;</span>
+</tbody>
+</table>
+<h3 id="AbstractResource"><a class="header-anchor" href="#AbstractResource"></a>AbstractResource</h3>
+<p><strong>AbstractResource</strong>是Resource的默认抽象类，实现了大部分公共方法；</p>
+<h2 id="ResourceLoader"><a class="header-anchor" href="#ResourceLoader"></a>ResourceLoader</h2>
+<p><strong>ResourceLoader</strong>定义如何加载Resource的接口</p>
+<h3 id="定义-v2"><a class="header-anchor" href="#定义-v2"></a>定义</h3>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">ResourceLoader</span> <span class="token punctuation">&#123;</span>
 
 	<span class="token comment">/** Pseudo URL prefix for loading from the class path: "classpath:". */</span>
 	<span class="token class-name">String</span> CLASSPATH_URL_PREFIX <span class="token operator">=</span> <span class="token class-name">ResourceUtils</span><span class="token punctuation">.</span>CLASSPATH_URL_PREFIX<span class="token punctuation">;</span>
@@ -503,14 +511,18 @@
 
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <ul>
-<li><p>Resource getResource(String location)<br>根据地址返回Resource,不保证文件是否存在，因此需要调用**exists()**进行判断</p>
+<li>
+<p>Resource getResource(String location)<br>
+根据地址返回Resource,不保证文件是否存在，因此需要调用**exists()**进行判断</p>
 </li>
-<li><p>getClassLoader()<br>getClassLoader() 方法，返回 ClassLoader 实例</p>
+<li>
+<p>getClassLoader()<br>
+getClassLoader() 方法，返回 ClassLoader 实例</p>
 </li>
 </ul>
-<h3 id="DefaultResourceLoader-java"><a href="#DefaultResourceLoader-java" class="headerlink" title="DefaultResourceLoader.java"></a>DefaultResourceLoader.java</h3><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
+<h3 id="DefaultResourceLoader-java"><a class="header-anchor" href="#DefaultResourceLoader-java"></a>DefaultResourceLoader.java</h3>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
 	<span class="token keyword">public</span> <span class="token class-name">Resource</span> <span class="token function">getResource</span><span class="token punctuation">(</span><span class="token class-name">String</span> location<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
 		<span class="token class-name">Assert</span><span class="token punctuation">.</span><span class="token function">notNull</span><span class="token punctuation">(</span>location<span class="token punctuation">,</span> <span class="token string">"Location must not be null"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
@@ -543,8 +555,10 @@
 		<span class="token punctuation">&#125;</span>
 	<span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h4 id="ProtocolResolver"><a href="#ProtocolResolver" class="headerlink" title="ProtocolResolver"></a>ProtocolResolver</h4><p><strong>ProtocolResolver</strong>用户自定义协议资源解决策略</p>
-<h4 id="代码演示"><a href="#代码演示" class="headerlink" title="代码演示"></a>代码演示</h4><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">ResourceLoader</span> loader <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DefaultResourceLoader</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<h4 id="ProtocolResolver"><a class="header-anchor" href="#ProtocolResolver"></a>ProtocolResolver</h4>
+<p><strong>ProtocolResolver</strong>用户自定义协议资源解决策略</p>
+<h4 id="代码演示"><a class="header-anchor" href="#代码演示"></a>代码演示</h4>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">ResourceLoader</span> loader <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DefaultResourceLoader</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
 <span class="token class-name">Resource</span> fileResource1 <span class="token operator">=</span> loader<span class="token punctuation">.</span><span class="token function">getResource</span><span class="token punctuation">(</span><span class="token string">"D:/text.txt"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token class-name">Resource</span> fileResource2 <span class="token operator">=</span> loader<span class="token punctuation">.</span><span class="token function">getResource</span><span class="token punctuation">(</span><span class="token string">"/text.txt"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -557,13 +571,13 @@
 
 <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"urlResource1.class = "</span> <span class="token operator">+</span> urlResource1<span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getSimpleName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"urlResource2.class = "</span> <span class="token operator">+</span> urlResource2<span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getSimpleName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <blockquote>
 <p>运行结果</p>
 </blockquote>
 <p><img src="https://s1.ax1x.com/2020/03/18/8dJXjg.png" alt="8dJXjg.png"></p>
 <p>由于fileResource1资源不存在，因此抛出异常，使用<strong>ClassPathResource</strong>来加载资源</p>
-<h3 id="FileSystemResourceLoader"><a href="#FileSystemResourceLoader" class="headerlink" title="FileSystemResourceLoader"></a>FileSystemResourceLoader</h3><p><strong>FileSystemResourceLoader</strong>是对file文件的加载的优化</p>
+<h3 id="FileSystemResourceLoader"><a class="header-anchor" href="#FileSystemResourceLoader"></a>FileSystemResourceLoader</h3>
+<p><strong>FileSystemResourceLoader</strong>是对file文件的加载的优化</p>
 <ul>
 <li>getResourceByPath(String path)</li>
 </ul>
@@ -574,19 +588,20 @@
 
     <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">FileSystemResourceLoader<span class="token punctuation">.</span>FileSystemContextResource</span><span class="token punctuation">(</span>path<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p>对<strong>getResourceByPath</strong>方法针对file的<strong>重写</strong>,自然返回的都是<strong>FileSystemContextResource</strong>类型的Resource</p>
-<h3 id="ClassRelativeResourceLoader"><a href="#ClassRelativeResourceLoader" class="headerlink" title="ClassRelativeResourceLoader"></a>ClassRelativeResourceLoader</h3><ul>
+<h3 id="ClassRelativeResourceLoader"><a class="header-anchor" href="#ClassRelativeResourceLoader"></a>ClassRelativeResourceLoader</h3>
+<ul>
 <li>getResourceByPath(String path)</li>
 </ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
 <span class="token keyword">protected</span> <span class="token class-name">Resource</span> <span class="token function">getResourceByPath</span><span class="token punctuation">(</span><span class="token class-name">String</span> path<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
 	<span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">ClassRelativeContextResource</span><span class="token punctuation">(</span>path<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>clazz<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
 <p><strong>ClassRelativeResourceLoader</strong>是针对加载ClassPathResource子类ClassRelativeContextResource文件的重写</p>
-<h3 id="ResourcePatternResolver"><a href="#ResourcePatternResolver" class="headerlink" title="ResourcePatternResolver"></a>ResourcePatternResolver</h3><p><strong>ResourcePatternResolver</strong>是针对ResourceLoader的增强，定义返回多个Resource的方法</p>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ol>
+<h3 id="ResourcePatternResolver"><a class="header-anchor" href="#ResourcePatternResolver"></a>ResourcePatternResolver</h3>
+<p><strong>ResourcePatternResolver</strong>是针对ResourceLoader的增强，定义返回多个Resource的方法</p>
+<h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2>
+<ol>
 <li>srping通过设计出抽象的资源(Resource)和资源加载器(ResourceLoader)让加载资源这个业务场景，变的更加的边界清晰和松耦合</li>
 <li><strong>AbstrctResource</strong>是Resource的抽象实现类，实现了Resource大部分接口，使用模板方法</li>
 <li><strong>DefaultResourceLoader</strong>是ResourceLoader默认实现，实现了最级别的方法资源的方法，并提供了一些公共接口为子类的扩展提供便利。</li>
