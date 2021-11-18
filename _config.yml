@@ -105,8 +105,8 @@ theme: hexo-theme-matery
 deploy:
   type: git
   repo: 
-    gitee: https://gitee.com/agmtopy/agmtopy.git
     github: https://github.com/agmtopy/agmtopy.github.io.git
+    gitee: https://gitee.com/agmtopy/agmtopy.git
   branch: master
 
 # 文章字数统计
