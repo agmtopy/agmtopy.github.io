@@ -464,6 +464,11 @@ db.grantRolesToUser<span class="token punctuation">(</span><span class="token st
 <li>启动RabbitMQ admin命令</li>
 </ol>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java">docker exec <span class="token operator">-</span>it rabbitmq rabbitmq<span class="token operator">-</span>plugins enable rabbitmq_management<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<ol start="6">
+<li>WSL 切换默认的登录用户,需要在ps管理用户下执行</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ubuntu1804.exe config --default-user root<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
                 
             </div>
             <hr/>

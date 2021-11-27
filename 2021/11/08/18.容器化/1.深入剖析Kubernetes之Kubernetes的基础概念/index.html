@@ -452,7 +452,68 @@
 <p>插件是是对Kubernetes资源（DaemonSet、 Deployment等）实现管理的功能。 因为这些插件提供集群级别的功能，插件中命名空间域的资源属于kube-system命名空间。</p>
 <h2 id="部署"><a class="header-anchor" href="#部署"></a>部署</h2>
 <p>Kubernetes的部署工具目前有<B>kubeadm</B>、<B>kops</B>、<B>Kubespray</B></p>
-<p><img src="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/" alt="kubernetes的部署工具"></p>
+<p><a target="_blank" rel="noopener" href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/">kubernetes的部署工具文档</a></p>
+<h2 id="实例"><a class="header-anchor" href="#实例"></a>实例</h2>
+<p>如何创建一个简单的kubernetes的本地环境</p>
+<h3 id="前置准备"><a class="header-anchor" href="#前置准备"></a>前置准备</h3>
+<ul>
+<li>
+<p>工具</p>
+<ol>
+<li>minikube</li>
+<li>kubectl</li>
+</ol>
+</li>
+<li>
+<p>步骤</p>
+<ol>
+<li>安装minikube</li>
+</ol>
+<ul>
+<li>检查是否支持虚拟化</li>
+</ul>
+<blockquote>
+<p>grep -E --color ‘vmx|svm’ /proc/cpuinfo</p>
+</blockquote>
+<ul>
+<li>安装配置 kubectl</li>
+</ul>
+  <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt-get</span> update <span class="token operator">&amp;&amp;</span> <span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> -y apt-transport-https
+<span class="token function">curl</span> -s https://packages.cloud.google.com/apt/doc/apt-key.gpg <span class="token operator">|</span> <span class="token function">sudo</span> apt-key <span class="token function">add</span> -
+<span class="token builtin class-name">echo</span> <span class="token string">"deb https://apt.kubernetes.io/ kubernetes-xenial main"</span> <span class="token operator">|</span> <span class="token function">sudo</span> <span class="token function">tee</span> -a /etc/apt/sources.list.d/kubernetes.list
+<span class="token function">sudo</span> <span class="token function">apt-get</span> update
+<span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> -y kubectl<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>安装minikube</li>
+</ul>
+  <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">curl</span> -LO https://storage.googleapis.com/minikube/releases/latest/minikube-linux-amd64
+<span class="token function">sudo</span> <span class="token function">install</span> minikube-linux-amd64 /usr/local/bin/minikube<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<ol start="2">
+<li>启动</li>
+</ol>
+<ul>
+<li>查看所有namespace下的pod</li>
+</ul>
+<blockquote>
+<p>kubectl get po -A</p>
+</blockquote>
+<ul>
+<li>安装仪表盘</li>
+</ul>
+<blockquote>
+<p>minikube dashboard</p>
+</blockquote>
+<p>启动控制台后可以看到<br>
+<img src="https://i.loli.net/2021/11/27/iYAxaecJMdFurZQ.jpg" alt="kubernetes控制台"></p>
+<ol start="3">
+<li></li>
+</ol>
+</li>
+</ul>
+<h2 id="参考文档"><a class="header-anchor" href="#参考文档"></a>参考文档</h2>
+<p><a target="_blank" rel="noopener" href="https://kubernetes.io/zh">kubernetes中文官网</a><br>
+<a target="_blank" rel="noopener" href="https://kubernetes.io/zh/docs/tutorials/kubernetes-basics/create-cluster/cluster-interactive/">kubernetes交互文档</a><br>
+<a target="_blank" rel="noopener" href="https://minikube.sigs.k8s.io/docs/handbook/">minikube官网</a></p>
 
                 
             </div>
