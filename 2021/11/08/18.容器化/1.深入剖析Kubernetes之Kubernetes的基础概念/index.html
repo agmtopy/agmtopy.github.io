@@ -451,7 +451,7 @@
 <h3 id="插件（Addons）"><a class="header-anchor" href="#插件（Addons）"></a>插件（Addons）</h3>
 <p>插件是是对Kubernetes资源（DaemonSet、 Deployment等）实现管理的功能。 因为这些插件提供集群级别的功能，插件中命名空间域的资源属于kube-system命名空间。</p>
 <h2 id="部署"><a class="header-anchor" href="#部署"></a>部署</h2>
-<p>Kubernetes的部署工具目前有<B>kubeadm</B>、<B>kops</B>、<B>Kubespray</B></p>
+<p>Kubernetes的部署工具目前有<B>kubectl</B>、<B>kind</B>、<B>minikube</B>、<B>kubeadm</B></p>
 <p><a target="_blank" rel="noopener" href="https://kubernetes.io/docs/setup/production-environment/tools/kubeadm/">kubernetes的部署工具文档</a></p>
 <h2 id="实例"><a class="header-anchor" href="#实例"></a>实例</h2>
 <p>如何创建一个简单的kubernetes的本地环境</p>
@@ -505,15 +505,178 @@
 </blockquote>
 <p>启动控制台后可以看到<br>
 <img src="https://i.loli.net/2021/11/27/iYAxaecJMdFurZQ.jpg" alt="kubernetes控制台"></p>
-<ol start="3">
-<li></li>
-</ol>
 </li>
 </ul>
+<h3 id="配置文件"><a class="header-anchor" href="#配置文件"></a>配置文件</h3>
+<p>kubernetes不推荐使用命令行来操作容器，而是推荐使用YAML文件来进行配置</p>
+<p>下面是一个典型的zk集群的配置文件</p>
+<ul>
+<li>application/zookeeper/zookeeper.yaml</li>
+</ul>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Service
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> zk<span class="token punctuation">-</span>hs
+  <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+    <span class="token key atrule">app</span><span class="token punctuation">:</span> zk
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">port</span><span class="token punctuation">:</span> <span class="token number">2888</span>
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> server
+  <span class="token punctuation">-</span> <span class="token key atrule">port</span><span class="token punctuation">:</span> <span class="token number">3888</span>
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> leader<span class="token punctuation">-</span>election
+  <span class="token key atrule">clusterIP</span><span class="token punctuation">:</span> None
+  <span class="token key atrule">selector</span><span class="token punctuation">:</span>
+    <span class="token key atrule">app</span><span class="token punctuation">:</span> zk
+<span class="token punctuation">---</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> Service
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> zk<span class="token punctuation">-</span>cs
+  <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+    <span class="token key atrule">app</span><span class="token punctuation">:</span> zk
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">port</span><span class="token punctuation">:</span> <span class="token number">2181</span>
+    <span class="token key atrule">name</span><span class="token punctuation">:</span> client
+  <span class="token key atrule">selector</span><span class="token punctuation">:</span>
+    <span class="token key atrule">app</span><span class="token punctuation">:</span> zk
+<span class="token punctuation">---</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> policy/v1beta1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> PodDisruptionBudget
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> zk<span class="token punctuation">-</span>pdb
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">selector</span><span class="token punctuation">:</span>
+    <span class="token key atrule">matchLabels</span><span class="token punctuation">:</span>
+      <span class="token key atrule">app</span><span class="token punctuation">:</span> zk
+  <span class="token key atrule">maxUnavailable</span><span class="token punctuation">:</span> <span class="token number">1</span>
+<span class="token punctuation">---</span>
+<span class="token key atrule">apiVersion</span><span class="token punctuation">:</span> apps/v1
+<span class="token key atrule">kind</span><span class="token punctuation">:</span> StatefulSet
+<span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+  <span class="token key atrule">name</span><span class="token punctuation">:</span> zk
+<span class="token key atrule">spec</span><span class="token punctuation">:</span>
+  <span class="token key atrule">selector</span><span class="token punctuation">:</span>
+    <span class="token key atrule">matchLabels</span><span class="token punctuation">:</span>
+      <span class="token key atrule">app</span><span class="token punctuation">:</span> zk
+  <span class="token key atrule">serviceName</span><span class="token punctuation">:</span> zk<span class="token punctuation">-</span>hs
+  <span class="token key atrule">replicas</span><span class="token punctuation">:</span> <span class="token number">3</span>
+  <span class="token key atrule">updateStrategy</span><span class="token punctuation">:</span>
+    <span class="token key atrule">type</span><span class="token punctuation">:</span> RollingUpdate
+  <span class="token key atrule">podManagementPolicy</span><span class="token punctuation">:</span> OrderedReady
+  <span class="token key atrule">template</span><span class="token punctuation">:</span>
+    <span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+      <span class="token key atrule">labels</span><span class="token punctuation">:</span>
+        <span class="token key atrule">app</span><span class="token punctuation">:</span> zk
+    <span class="token key atrule">spec</span><span class="token punctuation">:</span>
+      <span class="token key atrule">affinity</span><span class="token punctuation">:</span>
+        <span class="token key atrule">podAntiAffinity</span><span class="token punctuation">:</span>
+          <span class="token key atrule">requiredDuringSchedulingIgnoredDuringExecution</span><span class="token punctuation">:</span>
+            <span class="token punctuation">-</span> <span class="token key atrule">labelSelector</span><span class="token punctuation">:</span>
+                <span class="token key atrule">matchExpressions</span><span class="token punctuation">:</span>
+                  <span class="token punctuation">-</span> <span class="token key atrule">key</span><span class="token punctuation">:</span> <span class="token string">"app"</span>
+                    <span class="token key atrule">operator</span><span class="token punctuation">:</span> In
+                    <span class="token key atrule">values</span><span class="token punctuation">:</span>
+                    <span class="token punctuation">-</span> zk
+              <span class="token key atrule">topologyKey</span><span class="token punctuation">:</span> <span class="token string">"kubernetes.io/hostname"</span>
+      <span class="token key atrule">containers</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> kubernetes<span class="token punctuation">-</span>zookeeper
+        <span class="token key atrule">imagePullPolicy</span><span class="token punctuation">:</span> Always
+        <span class="token key atrule">image</span><span class="token punctuation">:</span> <span class="token string">"k8s.gcr.io/kubernetes-zookeeper:1.0-3.4.10"</span>
+        <span class="token key atrule">resources</span><span class="token punctuation">:</span>
+          <span class="token key atrule">requests</span><span class="token punctuation">:</span>
+            <span class="token key atrule">memory</span><span class="token punctuation">:</span> <span class="token string">"1Gi"</span>
+            <span class="token key atrule">cpu</span><span class="token punctuation">:</span> <span class="token string">"0.5"</span>
+        <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+        <span class="token punctuation">-</span> <span class="token key atrule">containerPort</span><span class="token punctuation">:</span> <span class="token number">2181</span>
+          <span class="token key atrule">name</span><span class="token punctuation">:</span> client
+        <span class="token punctuation">-</span> <span class="token key atrule">containerPort</span><span class="token punctuation">:</span> <span class="token number">2888</span>
+          <span class="token key atrule">name</span><span class="token punctuation">:</span> server
+        <span class="token punctuation">-</span> <span class="token key atrule">containerPort</span><span class="token punctuation">:</span> <span class="token number">3888</span>
+          <span class="token key atrule">name</span><span class="token punctuation">:</span> leader<span class="token punctuation">-</span>election
+        <span class="token key atrule">command</span><span class="token punctuation">:</span>
+        <span class="token punctuation">-</span> sh
+        <span class="token punctuation">-</span> <span class="token punctuation">-</span>c
+        <span class="token punctuation">-</span> "start<span class="token punctuation">-</span>zookeeper \
+          <span class="token punctuation">-</span><span class="token punctuation">-</span>servers=3 \
+          <span class="token punctuation">-</span><span class="token punctuation">-</span>data_dir=/var/lib/zookeeper/data \
+          <span class="token punctuation">-</span><span class="token punctuation">-</span>data_log_dir=/var/lib/zookeeper/data/log \
+          <span class="token punctuation">-</span><span class="token punctuation">-</span>conf_dir=/opt/zookeeper/conf \
+          <span class="token punctuation">-</span><span class="token punctuation">-</span>client_port=2181 \
+          <span class="token punctuation">-</span><span class="token punctuation">-</span>election_port=3888 \
+          <span class="token punctuation">-</span><span class="token punctuation">-</span>server_port=2888 \
+          <span class="token punctuation">-</span><span class="token punctuation">-</span>tick_time=2000 \
+          <span class="token punctuation">-</span><span class="token punctuation">-</span>init_limit=10 \
+          <span class="token punctuation">-</span><span class="token punctuation">-</span>sync_limit=5 \
+          <span class="token punctuation">-</span><span class="token punctuation">-</span>heap=512M \
+          <span class="token punctuation">-</span><span class="token punctuation">-</span>max_client_cnxns=60 \
+          <span class="token punctuation">-</span><span class="token punctuation">-</span>snap_retain_count=3 \
+          <span class="token punctuation">-</span><span class="token punctuation">-</span>purge_interval=12 \
+          <span class="token punctuation">-</span><span class="token punctuation">-</span>max_session_timeout=40000 \
+          <span class="token punctuation">-</span><span class="token punctuation">-</span>min_session_timeout=4000 \
+          <span class="token punctuation">-</span><span class="token punctuation">-</span>log_level=INFO"
+        <span class="token key atrule">readinessProbe</span><span class="token punctuation">:</span>
+          <span class="token key atrule">exec</span><span class="token punctuation">:</span>
+            <span class="token key atrule">command</span><span class="token punctuation">:</span>
+            <span class="token punctuation">-</span> sh
+            <span class="token punctuation">-</span> <span class="token punctuation">-</span>c
+            <span class="token punctuation">-</span> <span class="token string">"zookeeper-ready 2181"</span>
+          <span class="token key atrule">initialDelaySeconds</span><span class="token punctuation">:</span> <span class="token number">10</span>
+          <span class="token key atrule">timeoutSeconds</span><span class="token punctuation">:</span> <span class="token number">5</span>
+        <span class="token key atrule">livenessProbe</span><span class="token punctuation">:</span>
+          <span class="token key atrule">exec</span><span class="token punctuation">:</span>
+            <span class="token key atrule">command</span><span class="token punctuation">:</span>
+            <span class="token punctuation">-</span> sh
+            <span class="token punctuation">-</span> <span class="token punctuation">-</span>c
+            <span class="token punctuation">-</span> <span class="token string">"zookeeper-ready 2181"</span>
+          <span class="token key atrule">initialDelaySeconds</span><span class="token punctuation">:</span> <span class="token number">10</span>
+          <span class="token key atrule">timeoutSeconds</span><span class="token punctuation">:</span> <span class="token number">5</span>
+        <span class="token key atrule">volumeMounts</span><span class="token punctuation">:</span>
+        <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> datadir
+          <span class="token key atrule">mountPath</span><span class="token punctuation">:</span> /var/lib/zookeeper
+      <span class="token key atrule">securityContext</span><span class="token punctuation">:</span>
+        <span class="token key atrule">runAsUser</span><span class="token punctuation">:</span> <span class="token number">1000</span>
+        <span class="token key atrule">fsGroup</span><span class="token punctuation">:</span> <span class="token number">1000</span>
+  <span class="token key atrule">volumeClaimTemplates</span><span class="token punctuation">:</span>
+  <span class="token punctuation">-</span> <span class="token key atrule">metadata</span><span class="token punctuation">:</span>
+      <span class="token key atrule">name</span><span class="token punctuation">:</span> datadir
+    <span class="token key atrule">spec</span><span class="token punctuation">:</span>
+      <span class="token key atrule">accessModes</span><span class="token punctuation">:</span> <span class="token punctuation">[</span> <span class="token string">"ReadWriteOnce"</span> <span class="token punctuation">]</span>
+      <span class="token key atrule">resources</span><span class="token punctuation">:</span>
+        <span class="token key atrule">requests</span><span class="token punctuation">:</span>
+          <span class="token key atrule">storage</span><span class="token punctuation">:</span> 10Gi<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>配置文件以’—'作为容器配置分割符，分别创建了4个容器从而创建一个完整的ZK集群</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">service/zk-hs created
+service/zk-cs created
+poddisruptionbudget.policy/zk-pdb created
+statefulset.apps/zk created<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2>
+<ol>
+<li>kubernetes内部是由四个组件组成</li>
+</ol>
+<ul>
+<li>控制平面组件</li>
+<li>Node节点组件</li>
+<li>插件</li>
+</ul>
+<ol start="2">
+<li>部署工具</li>
+</ol>
+<ul>
+<li>minikube</li>
+<li>kind</li>
+<li>kubeadm</li>
+</ul>
+<ol start="3">
+<li>配置文件<br>
+配置文件将容器中按照集群部署的方式根据应用维度打包形成一个配置文件,后续就可以读取这个配置文件进行启动</li>
+</ol>
 <h2 id="参考文档"><a class="header-anchor" href="#参考文档"></a>参考文档</h2>
 <p><a target="_blank" rel="noopener" href="https://kubernetes.io/zh">kubernetes中文官网</a><br>
 <a target="_blank" rel="noopener" href="https://kubernetes.io/zh/docs/tutorials/kubernetes-basics/create-cluster/cluster-interactive/">kubernetes交互文档</a><br>
-<a target="_blank" rel="noopener" href="https://minikube.sigs.k8s.io/docs/handbook/">minikube官网</a></p>
+<a target="_blank" rel="noopener" href="https://minikube.sigs.k8s.io/docs/handbook/">minikube官网</a><br>
+<a target="_blank" rel="noopener" href="https://kubernetes.io/zh/docs/tutorials/stateful-application/zookeeper/">部署运行ZooKeeper集群</a></p>
 
                 
             </div>
