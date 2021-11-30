@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="设计模式-可复用面向对象软件设计的基础, agmtopy博客">
+    <meta name="keywords" content="深入剖析Kubernetes之编排能力, agmtopy博客">
     <meta name="description" content="你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>设计模式-可复用面向对象软件设计的基础 | agmtopy博客</title>
+    <title>深入剖析Kubernetes之编排能力 | agmtopy博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -267,12 +267,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/25.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/16.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">设计模式-可复用面向对象软件设计的基础</h1>
+                    <h1 class="description center-align post-title">深入剖析Kubernetes之编排能力</h1>
                 </div>
             </div>
         </div>
@@ -388,8 +388,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
-                                <span class="chip bg-color">设计模式</span>
+                            <a href="/tags/Kubernetes/">
+                                <span class="chip bg-color">Kubernetes</span>
                             </a>
                         
                     </div>
@@ -400,8 +400,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="post-category">
-                                设计模式
+                            <a href="/categories/%E5%AE%B9%E5%99%A8%E5%8C%96/" class="post-category">
+                                容器化
                             </a>
                         
                     </div>
@@ -413,7 +413,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-04-15
+                    2021-11-28
                 </div>
                 
 
@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    1.1k
+                    18
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    3 分钟
+                    1 分钟
                 </div>
                 
 
@@ -443,190 +443,10 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1>设计模式-可复用面向对象软件设计的基础</h1>
-<h2 id="设计模式简介"><a class="header-anchor" href="#设计模式简介"></a>设计模式简介</h2>
-<ul>
-<li>设计模式列表</li>
-</ul>
-<ol>
-<li>Abstract Factory</li>
-</ol>
-<blockquote>
-<p>提供一个<b>创建</b>一系列相关或相互依赖对象的接口,而无需指定它们具体的类</p>
-</blockquote>
-<ol start="2">
-<li>Adapter</li>
-</ol>
-<blockquote>
-<p>将一个类的接口转换成客户端希望的另外一个接口.Adapter模式使得原本由于接口不兼容而不能在一起工作的那些类可以在一起工作</p>
-</blockquote>
-<ol start="3">
-<li>Bridge</li>
-</ol>
-<blockquote>
-<p>使得抽象部分与它的实现部分分离,使得它们都可以独立的变化</p>
-</blockquote>
-<ol start="4">
-<li>Builder</li>
-</ol>
-<blockquote>
-<p>将一个复杂对象的构建与它的表示分离,使得同样的构建过程可以创建不同的对象</p>
-</blockquote>
-<ol start="5">
-<li>Chain of Responsibility</li>
-</ol>
-<blockquote>
-<p>为解除请求的发送者和接受者之间的耦合,使得多个对象都有机会处理这个请求.将这些处理对象连成链,并沿着这条链传递该请求,直到链尾</p>
-</blockquote>
-<ol start="6">
-<li>Command</li>
-</ol>
-<blockquote>
-<p>将一个请求封装成为一个对象,从而使你可用不同的请求对客户进行参数化;对请求排队或记录日志,以及支持可取消的操作</p>
-</blockquote>
-<ol start="7">
-<li>Composite</li>
-</ol>
-<blockquote>
-<p>将对象组合成树形结构以表示’部分-整体’的层次机构.Composite使得客户对单个或复合对象的使用具有一致性</p>
-</blockquote>
-<ol start="8">
-<li>Decorator</li>
-</ol>
-<blockquote>
-<p>动态的给一个对象添加一些额外的职责.就扩展功能而言Decorator比字节生产子类更为灵活</p>
-</blockquote>
-<ol start="9">
-<li>Facade</li>
-</ol>
-<blockquote>
-<p>为子系统中的一组接口提供一个一致的界面,Facade定义了一个高层次的接口,这个接口使得子系统更加易用</p>
-</blockquote>
-<ol start="10">
-<li>Factory Method</li>
-</ol>
-<blockquote>
-<p>定义一个用于创建对象的接口,让子类去决定将那个类进行实列化,Factory Method使得类的实例化延迟到了子类中</p>
-</blockquote>
-<ol start="11">
-<li>Flyweight</li>
-</ol>
-<blockquote>
-<p>运用共享技术有效的支持大量细粒度的对象</p>
-</blockquote>
-<ol start="12">
-<li>Interpreter</li>
-</ol>
-<blockquote>
-<p>给定一个语言,定义它的文法的一种表示,并定义一个解释器,该解释器使用该表示来解释语言中的句子</p>
-</blockquote>
-<ol start="13">
-<li>Iterator</li>
-</ol>
-<blockquote>
-<p>提供一种方法顺序访问一个聚合对象中的各个元素,而又不需要暴露该对象的内部表示</p>
-</blockquote>
-<ol start="14">
-<li>Mediator</li>
-</ol>
-<blockquote>
-<p>用一个中介对象来封装一系列的对象交互.中介者使得各个对象不需要显示的相互引用,从而使得其耦合松散,而且可用独立地改变它们之间的交互</p>
-</blockquote>
-<ol start="15">
-<li>Memento</li>
-</ol>
-<blockquote>
-<p>在不破坏封装性的前提下,捕获一个对象的内部状态,并在该对象之外保存这个状态.这样以后就可以将该对象恢复到保存状态</p>
-</blockquote>
-<ol start="16">
-<li>Observer</li>
-</ol>
-<blockquote>
-<p>定义对象间的一种一对多的依赖关系,以便于当一个对象的状态发生改变时,所有依赖于它的对象都可以得到通知并自动刷新</p>
-</blockquote>
-<ol start="17">
-<li>Prototype</li>
-</ol>
-<blockquote>
-<p>用原型实例指定创建对象的种类,并通过拷贝这个原型来创建新的对象</p>
-</blockquote>
-<ol start="18">
-<li>Proxy</li>
-</ol>
-<blockquote>
-<p>为其他对象提供一个代理以控制这个对象的访问</p>
-</blockquote>
-<ol start="19">
-<li>Singleton</li>
-</ol>
-<blockquote>
-<p>保证一个类仅有一个实例.并提供一个访问它的全局访问点</p>
-</blockquote>
-<ol start="20">
-<li>State</li>
-</ol>
-<blockquote>
-<p>允许一个对象在其内部状态改变时改变它的行为.对象看起来似乎修改了它所属的类.</p>
-</blockquote>
-<ol start="21">
-<li>Strategy</li>
-</ol>
-<blockquote>
-<p>定义一系列的算法,把它们封装起来,使得它们之间可以相互替换,使得算法的变化可以独立与客户</p>
-</blockquote>
-<ol start="22">
-<li>Template Method</li>
-</ol>
-<blockquote>
-<p>定义一个操作中算法的骨架,而将一些具体步骤延迟到子类中去实现.Template Method使得之类可以复用父类定义的算法,并且进行细节的修改</p>
-</blockquote>
-<ol start="23">
-<li>visitor</li>
-</ol>
-<blockquote>
-<p>表示一个作用于某对象结构中的各元素的操作.使得你可以在不改变各元素类的前提下定义作用于这些元素的新操作</p>
-</blockquote>
-<ul>
-<li>根据类型划分</li>
-</ul>
-<table>
-<thead>
-<tr>
-<th></th>
-<th></th>
-<th>目的</th>
-<th></th>
-<th></th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td></td>
-<td></td>
-<td>创建型</td>
-<td>结构型</td>
-<td>行为型</td>
-</tr>
-<tr>
-<td>范围</td>
-<td>类</td>
-<td>Factory Method</td>
-<td>Adapter(类)</td>
-<td>Interpreter</br>Template Method</td>
-</tr>
-<tr>
-<td></td>
-<td>对象</td>
-<td>Abstract Factory</br>Builder</br>Prototype</br>Singleton</td>
-<td>Adapter(对象)</br>Bridge</br>Composite</br>Decorator</br>Facade</br>Flyweight</br>Proxy</br></td>
-<td>Chain of Responsibility</br>Command</br>Iterator</br>Mediator</br>Memento</br>Observer</br>State</br>Strategy</br>Visitor</td>
-</tr>
-</tbody>
-</table>
-<ul>
-<li>设计模式之间的关系<br>
-<a target="_blank" rel="noopener" href="https://imgtu.com/i/cRdD4H"><img src="https://z3.ax1x.com/2021/04/15/cRdD4H.jpg" alt=""></a></li>
-</ul>
+                <h1>深入剖析Kubernetes之编排能力</h1>
+<blockquote></blockquote>
+<h2 id="编排能力"><a class="header-anchor" href="#编排能力"></a>编排能力</h2>
+<h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
 
                 
             </div>
@@ -640,8 +460,8 @@
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
-                                    <span class="chip bg-color">设计模式</span>
+                                <a href="/tags/Kubernetes/">
+                                    <span class="chip bg-color">Kubernetes</span>
                                 </a>
                             
                         </div>
@@ -687,17 +507,18 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
             <div class="card">
-                <a href="/2021/04/17/3.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F-%E5%8F%AF%E5%A4%8D%E7%94%A8%E9%9D%A2%E5%90%91%E5%AF%B9%E8%B1%A1%E8%BD%AF%E4%BB%B6%E8%AE%BE%E8%AE%A1%E7%9A%84%E5%9F%BA%E7%A1%80-%E5%AF%B9%E8%B1%A1%E5%88%9B%E5%BB%BA%E5%9E%8B%E6%A8%A1%E5%BC%8F/">
+                <a href="/2021/11/28/18.%E5%AE%B9%E5%99%A8%E5%8C%96/3.%E6%B7%B1%E5%85%A5%E5%89%96%E6%9E%90Kubernetes%E4%B9%8B%E7%BC%96%E6%8E%92%E8%83%BD%E5%8A%9B/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/18.jpg" class="responsive-img" alt="设计模式-可复用面向对象软件设计的基础-对象创建型模式">
+                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="深入剖析Kubernetes之编排能力">
                         
-                        <span class="card-title">设计模式-可复用面向对象软件设计的基础-对象创建型模式</span>
+                        <span class="card-title">深入剖析Kubernetes之编排能力</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -707,26 +528,27 @@
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-04-17
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-11-28
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/" class="post-category">
-                                    设计模式
+                            <a href="/categories/%E5%AE%B9%E5%99%A8%E5%8C%96/" class="post-category">
+                                    容器化
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/">
-                        <span class="chip bg-color">设计模式</span>
+                    <a href="/tags/Kubernetes/">
+                        <span class="chip bg-color">Kubernetes</span>
                     </a>
                     
                 </div>
@@ -740,13 +562,13 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/04/02/13.LeetCode/10.%E5%AF%BB%E6%89%BE%E4%B8%A4%E4%B8%AA%E6%AD%A3%E5%BA%8F%E6%95%B0%E7%BB%84%E4%B8%AD%E7%9A%84%E4%B8%AD%E4%BD%8D%E6%95%B0/">
+                <a href="/2021/11/28/18.%E5%AE%B9%E5%99%A8%E5%8C%96/2.%E6%B7%B1%E5%85%A5%E5%89%96%E6%9E%90Kubernetes%E4%B9%8BPod%E7%9A%84%E6%A6%82%E5%BF%B5/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="寻找两个正序数组中的中位数">
+                        <img src="/medias/featureimages/14.jpg" class="responsive-img" alt="深入剖析Kubernetes之Pods的概念">
                         
-                        <span class="card-title">寻找两个正序数组中的中位数</span>
+                        <span class="card-title">深入剖析Kubernetes之Pods的概念</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -757,14 +579,14 @@
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-04-02
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-11-28
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E7%AE%97%E6%B3%95/" class="post-category">
-                                    算法
+                            <a href="/categories/%E5%AE%B9%E5%99%A8%E5%8C%96/" class="post-category">
+                                    容器化
                                 </a>
                             
                             
@@ -774,8 +596,8 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/LeetCode/">
-                        <span class="chip bg-color">LeetCode</span>
+                    <a href="/tags/Kubernetes/">
+                        <span class="chip bg-color">Kubernetes</span>
                     </a>
                     
                 </div>
