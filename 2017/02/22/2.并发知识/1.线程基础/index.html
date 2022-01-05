@@ -422,7 +422,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    660
+                    713
                 </div>
                 
 
@@ -446,12 +446,36 @@
                 <h1>线程基础</h1>
 <p>介绍多线程中的基础知识，包含线程创建、线程运行状态和线程中断</p>
 <h2 id="线程创建"><a class="header-anchor" href="#线程创建"></a>线程创建</h2>
-<p>线程创建只有一种方式，继承<strong>Thread</strong>接口实现**Run()**方法</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
-<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+<p>线程创建有且/只有一种方式，继承<strong>Thread</strong>类,重写 <strong>Run()</strong> 方法</p>
+<pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token keyword">class</span> TaskDemoKt<span class="token operator">:</span> <span class="token function">Thread</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">override</span> <span class="token keyword">fun</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">super</span><span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token function">println</span><span class="token punctuation">(</span> <span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>name <span class="token operator">+</span> <span class="token string">"执行任务"</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
 
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p>通过实现Runnable接口、创建线程池、Timer类等方式底层都是这种方式实现的。</p>
+<span class="token keyword">fun</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token keyword">val</span> demoKt <span class="token operator">=</span> <span class="token function">TaskDemoKt</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    demoKt<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>通过实现Runnable接口、创建线程池、Timer类等方式底层都是这种方式实现的.下面分别翻一下这三种方式的源代码</p>
+<ul>
+<li>实现Runnable接口</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<ul>
+<li>创建线程池</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<ul>
+<li>继承timer类</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <h2 id="线程执行的任务"><a class="header-anchor" href="#线程执行的任务"></a>线程执行的任务</h2>
 <ol>
 <li>实现<strong>Runable</strong>接口</li>
@@ -847,7 +871,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            134.6k
+                                            135.4k
                                         </span>&nbsp;字
                                         
                                             
