@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    1.6k
+                    2.3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    6 分钟
+                    9 分钟
                 </div>
                 
 
@@ -599,7 +599,7 @@ zskiplistNode *zslFirstInRange(zskiplist *zsl, zrangespec *range)
 <li>有序集合元素数量小于128个时</li>
 <li>元素大小不超过64字节时</li>
 <li>集合大小操作1G时<br>
-如果不同时满足这两个条件时,则使用skipList-跳跃列表主要是作为</li>
+如果不同时满足这三个条件时,则使用skipList-跳跃列表作为底层数据结构,这里需要注意的是zset底层结构转换成为skipList以后,就不会在转换成为ziplist</li>
 </ol>
 <ul>
 <li>zset</li>
@@ -620,11 +620,63 @@ zskiplistNode *zslFirstInRange(zskiplist *zsl, zrangespec *range)
       <span class="token operator">*</span>out_flags <span class="token operator">|=</span> ZADD_OUT_ADDED<span class="token punctuation">;</span>
       <span class="token keyword">return</span> <span class="token number">1</span><span class="token punctuation">;</span>
   <span class="token punctuation">&#125;</span>
-
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="压缩列表"><a class="header-anchor" href="#压缩列表"></a>压缩列表</h2>
+<blockquote>
+<p>压缩列表本质上是一个字节数组,是redis为了节省内存空间而设计的紧凑性数据结构,可以包含多个元素.压缩列表可以作为有序集合(zset)、散列(hash)、列表(list)</p>
+</blockquote>
+<h3 id="数据结构-v2"><a class="header-anchor" href="#数据结构-v2"></a>数据结构</h3>
+<p><img src="https://s2.loli.net/2022/01/10/79cA85aCil3IzJf.png" alt="ziplist结构"></p>
+<ul>
+<li>zlbytes：压缩列表的字节长度，占4个字节，因此压缩列表最多有232-1个字节</li>
+<li>zltail：压缩列表尾元素相对于压缩列表起始地址的偏移量，占4个字节</li>
+<li>zllen：压缩列表的元素个数，占2个字节。zllen无法存储元素个数超过65535（216-1）的压缩列表，必须遍历整个压缩列表才能获取到元素个数</li>
+<li>entryX：压缩列表存储的元素，可以是字节数组或者整数，长度不限。entry的编码结构将在后面详细介绍</li>
+<li>zlend：压缩列表的结尾，占1个字节，恒为0xFF</li>
+</ul>
+<p>以下是创建ziplist的代码</p>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">
+&#x2F;* 创建一个空白的ziplist *&#x2F;
+  unsigned char *ziplistNew(void) &#123;
+      &#x2F;&#x2F;ZIPLIST_HEADER_SIZE &#x3D; (sizeof(uint32_t)*2+sizeof(uint16_t))  + (sizeof(uint8_t))
+      &#x2F;&#x2F;8个字节 + 2个字节 + 1个字节
+      unsigned int bytes &#x3D; ZIPLIST_HEADER_SIZE+ZIPLIST_END_SIZE;
+      &#x2F;&#x2F;分配内存,返回列表指针
+      unsigned char *zl &#x3D; zmalloc(bytes);
+      &#x2F;&#x2F;尝试将大端数据转换成小端数据
+      ZIPLIST_BYTES(zl) &#x3D; intrev32ifbe(bytes);
+      ZIPLIST_TAIL_OFFSET(zl) &#x3D; intrev32ifbe(ZIPLIST_HEADER_SIZE);
+      &#x2F;&#x2F;初始化列表长度
+      ZIPLIST_LENGTH(zl) &#x3D; 0;
+      &#x2F;&#x2F;设置列表尾部字符为hex_ff
+      zl[bytes-1] &#x3D; ZIP_END;
+      return zl;
+  &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里需要注意的是第三个步骤使用<B>intrev32ifbe()</B>尝试将大端数据转换成为小段数据;</p>
+<p>大小端数据定义</p>
+<blockquote>
+<p>字节的排列方式有两个通用规则。例如，将一个多位数的低位放在较小的地址处，高位放在较大的地址处，则称小端序；反之则称大端序。在网络应用中，字节序是一个必须被考虑的因素，因为不同机器类型可能采用不同标准的字节序，所以均按照网络标准转化。<br>
+这里redis尽量采用小端的原因是在于<B>X86架构</B>和<B>ARM架构</B>是采用的小端模式,但是网络传输采用的是大端模式.</p>
+</blockquote>
+<h3 id="Entry的内部结构"><a class="header-anchor" href="#Entry的内部结构"></a>Entry的内部结构</h3>
+<p>entry的结构体定义如下:</p>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">&#x2F;* 我们使用这个函数来接收有关 ziplist 条目的信息。
+   请注意，这不是数据的实际编码方式，这是我们
+  被一个函数填充以便更容易操作。 *&#x2F;
+typedef struct zlentry &#123;
+    unsigned int prevrawlensize; &#x2F;* 对prevrawlen编码后的字节大小*&#x2F;
+    unsigned int prevrawlen;     &#x2F;* 上一个节点的长度 *&#x2F;
+    unsigned int lensize;        &#x2F;* 对len编码后的长度*&#x2F;
+    unsigned int len;            &#x2F;* 当前节点的长度 *&#x2F;
+    unsigned int headersize;     &#x2F;* prevrawlensize + lensize. *&#x2F;
+    unsigned char encoding;      &#x2F;* 当前节点所使用的编码类型:ZIP_STR_* or ZIP_INT *&#x2F;
+    unsigned char *p;            &#x2F;* 指向列表第一个元素的指针 *&#x2F;
+&#125; zlentry;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
-<p><a target="_blank" rel="noopener" href="https://redis.io/topics/internals-sds">Hacking Strings</a></p>
-<p><a target="_blank" rel="noopener" href="http://www.itabin.com/redis-zskiplist/">zskiplist</a></p>
+<p><a target="_blank" rel="noopener" href="https://redis.io/topics/internals-sds">Hacking Strings</a><br>
+<a target="_blank" rel="noopener" href="http://www.itabin.com/redis-zskiplist/">zskiplist</a><br>
+<a target="_blank" rel="noopener" href="https://www.geek-share.com/detail/2714589322.html">redisd源代码的大端与小端</a></p>
+<p><a target="_blank" rel="noopener" href="https://cache.one/read/2884987">https://cache.one/read/2884987</a></p>
 
                 
             </div>
@@ -927,7 +979,7 @@ zskiplistNode *zslFirstInRange(zskiplist *zsl, zrangespec *range)
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            136.2k
+                                            137k
                                         </span>&nbsp;字
                                         
                                             
