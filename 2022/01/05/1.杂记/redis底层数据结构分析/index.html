@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    2.3k
+                    2.8k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    9 分钟
+                    10 分钟
                 </div>
                 
 
@@ -519,6 +519,7 @@ void sdsclear(sds s) &#123;
 </ol>
 <p>默认情况下是不会使用SDS5的类型,因为Redis认为扩容是一种常见的操作,因此SDS5很大的几率会更新成为SDS8类型.</p>
 <h2 id="跳跃列表"><a class="header-anchor" href="#跳跃列表"></a>跳跃列表</h2>
+<h3 id="数据结构-v2"><a class="header-anchor" href="#数据结构-v2"></a>数据结构</h3>
 <p>跳跃列表指的是通过维护一个多层的链表结构来实现快速查找的数据结构<br>
 <a target="_blank" rel="noopener" href="https://zh.wikipedia.org/wiki/%E8%B7%B3%E8%B7%83%E5%88%97%E8%A1%A8">跳跃列表</a>的解释.<br>
 下面是一个跳跃列表的数据结构</p>
@@ -558,6 +559,7 @@ typedef struct zskiplistNode &#123;
     &#x2F;&#x2F;列表的高度
     int level;
 &#125; zskiplist;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="操作-v2"><a class="header-anchor" href="#操作-v2"></a>操作</h3>
 <ul>
 <li>查找过程</li>
 </ul>
@@ -625,7 +627,7 @@ zskiplistNode *zslFirstInRange(zskiplist *zsl, zrangespec *range)
 <blockquote>
 <p>压缩列表本质上是一个字节数组,是redis为了节省内存空间而设计的紧凑性数据结构,可以包含多个元素.压缩列表可以作为有序集合(zset)、散列(hash)、列表(list)</p>
 </blockquote>
-<h3 id="数据结构-v2"><a class="header-anchor" href="#数据结构-v2"></a>数据结构</h3>
+<h3 id="数据结构-v3"><a class="header-anchor" href="#数据结构-v3"></a>数据结构</h3>
 <p><img src="https://s2.loli.net/2022/01/10/79cA85aCil3IzJf.png" alt="ziplist结构"></p>
 <ul>
 <li>zlbytes：压缩列表的字节长度，占4个字节，因此压缩列表最多有232-1个字节</li>
@@ -672,6 +674,57 @@ typedef struct zlentry &#123;
     unsigned char encoding;      &#x2F;* 当前节点所使用的编码类型:ZIP_STR_* or ZIP_INT *&#x2F;
     unsigned char *p;            &#x2F;* 指向列表第一个元素的指针 *&#x2F;
 &#125; zlentry;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>ziplist中需要注意的是’连锁更新’问题,由于ziplist的结构并不是链表结构而是连续内存结构,导致在删除上一个大节点时会导致数组整体移动的问题</p>
+<h2 id="字典"><a class="header-anchor" href="#字典"></a>字典</h2>
+<blockquote>
+<p>字典又称散列表，是用来存储键值（key-value）对的一种数据结构.</p>
+</blockquote>
+<h3 id="数据结构-v4"><a class="header-anchor" href="#数据结构-v4"></a>数据结构</h3>
+<p>Redis字典实现依赖的数据结构主要包含了三部分：字典、Hash表、Hash表节点。字典中嵌入了两个Hash表，Hash表中的table字段存放着Hash表节点，Hash表节点对应存储的是键值对。</p>
+<p>结构如下:<br>
+<img src="https://s2.loli.net/2022/01/16/sbcuXE1oLvhFzi9.jpg" alt="空Hash表结构示意"></p>
+<ul>
+<li>dict</li>
+</ul>
+<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">&#x2F;*
+* hash结构体
+* 会同时使用两个hash结构体,以便实现增量扩容
+*&#x2F;
+typedef struct dictht &#123;
+    &#x2F;&#x2F;指针数组,用于存储键值对
+    dictEntry **table;
+    &#x2F;&#x2F;table数组的大小
+    unsigned long size;
+    &#x2F;&#x2F;掩码(size-1)
+    unsigned long sizemask;
+    &#x2F;&#x2F;已存储的元素数量
+    unsigned long used;
+&#125; dictht;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里着重介绍一下掩码(sizemask)这个字段,sizemask的计算方式为取(size-1)这样的好处是通过<br>
+<B>hash_key&amp;sizemask = hash_key/size</B><br>
+位操作的性能要高于取余操作</p>
+<ul>
+<li>dictEntry</li>
+</ul>
+<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">typedef struct dictEntry &#123;
+    void *key;
+    union &#123;
+        void *val;
+        uint64_t u64;
+        int64_t s64;
+        double d;
+    &#125; v;
+    struct dictEntry *next;
+&#125; dictEntry;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>dictEntry是hash的节点元素结构,需要注意的是<B>V</B>是一种联合体结构,根据使用场景使用不同类型<br>
+*next是用来解决hash冲突的,采用的是头插法</p>
+<ul>
+<li>渐进式reHash</li>
+</ul>
+<ol>
+<li>当执行插入\删除\查找\修改时都会先判断当前字典是否在进行rehash,然后尝试进行rehash后才会执行操作</li>
+<li>线程空闲时会每次对100个节点进行rehash</li>
+</ol>
 <h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
 <p><a target="_blank" rel="noopener" href="https://redis.io/topics/internals-sds">Hacking Strings</a><br>
 <a target="_blank" rel="noopener" href="http://www.itabin.com/redis-zskiplist/">zskiplist</a><br>
@@ -979,7 +1032,7 @@ typedef struct zlentry &#123;
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            137k
+                                            137.4k
                                         </span>&nbsp;字
                                         
                                             
