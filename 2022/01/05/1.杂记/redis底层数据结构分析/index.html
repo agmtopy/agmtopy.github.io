@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    2.8k
+                    3.5k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    10 分钟
+                    14 分钟
                 </div>
                 
 
@@ -725,6 +725,98 @@ typedef struct dictht &#123;
 <li>当执行插入\删除\查找\修改时都会先判断当前字典是否在进行rehash,然后尝试进行rehash后才会执行操作</li>
 <li>线程空闲时会每次对100个节点进行rehash</li>
 </ol>
+<h3 id="操作-v3"><a class="header-anchor" href="#操作-v3"></a>操作</h3>
+<ul>
+<li>迭代操作</li>
+</ul>
+<p>redis中的数据迭代分为两种类型</p>
+<ol>
+<li>普通迭代器<br>
+普通迭代器只会遍历数据</li>
+<li>安全迭代器<br>
+安全迭代器,在遍历过程中会删除数据</li>
+</ol>
+<p>这两种迭代器对迭代过程中可能会产生重复数据的处理方式不一样</p>
+<ol>
+<li>普通迭代器<br>
+普通迭代器是通过标志位来限制字典结构的变化</li>
+<li>安全迭代器<br>
+安全迭代器是通过限制rehash来保证数据的准确性</li>
+</ol>
+<h2 id="quicklist"><a class="header-anchor" href="#quicklist"></a>quicklist</h2>
+<p>quicklist是为优化处理<B>List</B>的底层存储结构ziplist和adlist而来,关于List的定义这个描述的比较好</p>
+<blockquote>
+<p>链表是这样一种数据结构，其中的各对象按线性顺序排列。链表与数组的不同点在于，数组的顺序由下标决定，链表的顺序由对象中的指针决定。</p>
+</blockquote>
+<p>关于quicklist的定义如下</p>
+<blockquote>
+<p>Redis中对quciklist的注释为A doubly linked list of ziplists。quicklist是一个双向链表，链表中的每个节点是一个ziplist结构。quicklist可以看成是用双向链表将若干小型的ziplist连接到一起组成的一种数据结构。</p>
+</blockquote>
+<h3 id="数据结构-v5"><a class="header-anchor" href="#数据结构-v5"></a>数据结构</h3>
+<ul>
+<li>quicklist</li>
+</ul>
+<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">&#x2F;**
+* quickList结构体
+* 大小为40字节
+*&#x2F;
+typedef struct quicklist &#123;
+    &#x2F;&#x2F;首尾节点
+    quicklistNode *head;
+    quicklistNode *tail;
+    &#x2F;&#x2F;总条数
+    unsigned long count;
+    &#x2F;&#x2F;节点数量
+    unsigned long len;
+    &#x2F;&#x2F;单个节点的填充因子
+    int fill : QL_FILL_BITS;
+    &#x2F;&#x2F;不同节点的深度
+    unsigned int compress : QL_COMP_BITS;
+    unsigned int bookmark_count: QL_BM_BITS;
+    &#x2F;&#x2F;书签列表(用于快速查找节点使用)
+    quicklistBookmark bookmarks[];
+&#125; quicklist;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>对于超大型列表会采用列表尾部使用书签这种数据结构来进行快速查找</p>
+<ul>
+<li>quicklistBookmark</li>
+</ul>
+<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">typedef struct quicklistBookmark &#123;
+    quicklistNode *node;
+    char *name;
+&#125; quicklistBookmark;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>可以从quicklist/quicklistBookmark的结构体中看到<B>quicklistNode</B>是底层元素存储节点的结构体</p>
+<ul>
+<li>quicklistNode</li>
+</ul>
+<pre class="line-numbers language-C++" data-language="C++"><code class="language-C++">&#x2F;**
+* quicklistNode 是一个 32 字节的结构，用于描述一个快速列表的ziplist。
+* 我们使用sz(位域)将 quicklistNode 保持在 32 字节。
+* count: 16位，最大 65536（最大 zl 字节为 65k，因此最大计数实际上 &lt; 32k）。
+* encoding: 2位，RAW&#x3D;1，LZF&#x3D;2。
+* container: 2 位，NONE&#x3D;1，ZIPLIST&#x3D;2。
+* recompress: 1 位，布尔值，如果节点临时解压缩以供使用，则为 true。
+* attempted_compress: 1 位，布尔值，用于测试期间的验证。
+* extra: 10 位，免费供以后使用； 填充剩余的 32 位
+*&#x2F;
+typedef struct quicklistNode &#123;
+    struct quicklistNode *prev;
+    struct quicklistNode *next;
+    unsigned char *zl;
+    unsigned int sz;             &#x2F;* ziplist size in bytes *&#x2F;
+    unsigned int count : 16;     &#x2F;* count of items in ziplist *&#x2F;
+    unsigned int encoding : 2;   &#x2F;* RAW&#x3D;&#x3D;1 or LZF&#x3D;&#x3D;2 *&#x2F;
+    unsigned int container : 2;  &#x2F;* NONE&#x3D;&#x3D;1 or ZIPLIST&#x3D;&#x3D;2 *&#x2F;
+    unsigned int recompress : 1; &#x2F;* was this node previous compressed? *&#x2F;
+    unsigned int attempted_compress : 1; &#x2F;* node can&#39;t compress; too small *&#x2F;
+    unsigned int extra : 10; &#x2F;* more bits to steal for future usage *&#x2F;
+&#125; quicklistNode;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>解析quicklistNode:</p>
+<ol>
+<li>结构上于ziplist不相同,采用的是列表格式记录数据</li>
+<li>单个node最大链表数量不操作32K</li>
+<li>encoding:LZF进行压缩编码</li>
+</ol>
+<h3 id="操作-v4"><a class="header-anchor" href="#操作-v4"></a>操作</h3>
 <h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
 <p><a target="_blank" rel="noopener" href="https://redis.io/topics/internals-sds">Hacking Strings</a><br>
 <a target="_blank" rel="noopener" href="http://www.itabin.com/redis-zskiplist/">zskiplist</a><br>
@@ -1032,7 +1124,7 @@ typedef struct dictht &#123;
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            137.4k
+                                            138.2k
                                         </span>&nbsp;字
                                         
                                             
