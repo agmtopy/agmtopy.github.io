@@ -480,7 +480,7 @@ struct __attribute__ ((__packed__)) sdshdr8 &#123;
     char buf[];
 &#125;;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>可以看到SDS的类型还是*char，但是在内部重新定义了len-占用长度、alloc-最大长度、flags-标识等。</p>
-<p><img src="http://zhangtielei.com/assets/photos_redis/redis_sds_structure.png" alt="sds的数据结构"></p>
+<p><img src="https://s2.loli.net/2022/01/17/VpmsYwhPUc9KBCq.png" alt="sds的数据结构"></p>
 <p>在这张图中的<B>sdshdr8</B>、<B>sdshdr16</B>,flags的低三位存储的是SDS的类型，高5位没有含义，在SDS5中高5位存储的是长度。<br>
 实际存储数据的是<B>buf[]</B>,buf[]是一个柔性数组，柔性数组指的是数据结构和内容在内存上是连续的，这样的结构查询更快速(因为不需要额外进行指针操作)<br>
 使用<B><strong>attribute</strong></B>让编译器以紧凑模式进行内存分配,这样可以节省<B>flags</B>的3个字节，默认内存分配是以4个字节进行分配的</p>
@@ -1013,18 +1013,17 @@ quicklist是一个双向链表结构,每个节点又是ziplist组成</p>
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;Current
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2022/01/05/1.%E6%9D%82%E8%AE%B0/redis%E5%BA%95%E5%B1%82%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E5%88%86%E6%9E%90/">
+                <a href="/2022/01/19/1.%E6%9D%82%E8%AE%B0/redis%E6%BA%90%E4%BB%A3%E7%A0%81%E6%9E%84%E5%BB%BA/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="redis底层数据结构分析">
+                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="redis源代码构建">
                         
-                        <span class="card-title">redis底层数据结构分析</span>
+                        <span class="card-title">redis源代码构建</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -1034,9 +1033,9 @@ quicklist是一个双向链表结构,每个节点又是ziplist组成</p>
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-01-05
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2022-01-19
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -1049,7 +1048,6 @@ quicklist是一个双向链表结构,每个节点又是ziplist组成</p>
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
@@ -1255,7 +1253,7 @@ quicklist是一个双向链表结构,每个节点又是ziplist组成</p>
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            139.2k
+                                            139.5k
                                         </span>&nbsp;字
                                         
                                             
