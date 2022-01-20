@@ -477,43 +477,37 @@ JetBrains的C/C++ IDE,这一项也不是必须的</p>
 <p>以上两个步骤就完成redis源代码的编译,接下来让我们把源代码导入CLion中进行debug</p>
 <h2 id="调试过程"><a class="header-anchor" href="#调试过程"></a>调试过程</h2>
 <ul>
-<li>
-<p>导入项目<br>
-<img src="https://hexo-1254947285.cos.ap-chengdu.myqcloud.com/hexo/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202022-01-19%20231623.jpg" alt="导入项目"></p>
-</li>
-<li>
-<p>设置远程部署</p>
-</li>
+<li>导入项目</li>
+</ul>
+<p><img src="https://hexo-1254947285.cos.ap-chengdu.myqcloud.com/hexo/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202022-01-19%20231623.jpg" alt="导入项目"></p>
+<ul>
+<li>设置远程部署</li>
 </ul>
 <ol>
 <li>设置远程部署工具链</li>
 </ol>
 <p><img src="https://hexo-1254947285.cos.ap-chengdu.myqcloud.com/hexo/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202022-01-19%20231847.jpg" alt="工具链"></p>
 <ol start="2">
-<li>
-<p>设置CMake<br>
-<img src="https://hexo-1254947285.cos.ap-chengdu.myqcloud.com/hexo/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202022-01-19%20231912.jpg" alt="CMake"></p>
-</li>
-<li>
-<p>设置MakeFile<br>
-<img src="https://hexo-1254947285.cos.ap-chengdu.myqcloud.com/hexo/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202022-01-19%20232004.jpg" alt="MakeFile"></p>
-</li>
+<li>设置CMake</li>
 </ol>
+<p><img src="https://hexo-1254947285.cos.ap-chengdu.myqcloud.com/hexo/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202022-01-19%20231912.jpg" alt="CMake"></p>
+<ol start="3">
+<li>设置MakeFile</li>
+</ol>
+<p><img src="https://hexo-1254947285.cos.ap-chengdu.myqcloud.com/hexo/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202022-01-19%20232004.jpg" alt="MakeFile"></p>
 <ul>
 <li>设置调试器</li>
 </ul>
 <p><img src="https://hexo-1254947285.cos.ap-chengdu.myqcloud.com/hexo/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202022-01-19%20232030.jpg" alt="设置调试器"></p>
 <h2 id="debug"><a class="header-anchor" href="#debug"></a>debug</h2>
 <ul>
-<li>
-<p>启动redis-server<br>
-<img src="https://hexo-1254947285.cos.ap-chengdu.myqcloud.com/hexo/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202022-01-19%20232618.jpg" alt="启动redis-server"></p>
-</li>
-<li>
-<p>设置断点<br>
-<img src="https://hexo-1254947285.cos.ap-chengdu.myqcloud.com/hexo/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202022-01-19%20235133.jpg" alt="设置断点"></p>
-</li>
+<li>启动redis-server</li>
 </ul>
+<p><img src="https://hexo-1254947285.cos.ap-chengdu.myqcloud.com/hexo/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202022-01-19%20232618.jpg" alt="启动redis-server"></p>
+<ul>
+<li>设置断点</li>
+</ul>
+<p><img src="https://hexo-1254947285.cos.ap-chengdu.myqcloud.com/hexo/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202022-01-19%20235133.jpg" alt="设置断点"></p>
 <p>以set为例,基本调用过程为<br>
 <B>server.c</B> -&gt; <B>connection.c</B> -&gt; <B>t_set.c</B></p>
 <h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2>
@@ -578,18 +572,17 @@ JetBrains的C/C++ IDE,这一项也不是必须的</p>
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;Current
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2022/01/19/1.%E6%9D%82%E8%AE%B0/redis%E6%BA%90%E4%BB%A3%E7%A0%81%E6%9E%84%E5%BB%BA/">
+                <a href="/2022/01/20/1.%E6%9D%82%E8%AE%B0/redis%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E6%8C%81%E4%B9%85%E5%8C%96%E7%9A%84/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="redis源代码构建">
+                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="redis如何实现持久化的">
                         
-                        <span class="card-title">redis源代码构建</span>
+                        <span class="card-title">redis如何实现持久化的</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -599,9 +592,9 @@ JetBrains的C/C++ IDE,这一项也不是必须的</p>
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-01-19
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2022-01-20
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -614,7 +607,6 @@ JetBrains的C/C++ IDE,这一项也不是必须的</p>
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
@@ -820,7 +812,7 @@ JetBrains的C/C++ IDE,这一项也不是必须的</p>
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            139.5k
+                                            139.8k
                                         </span>&nbsp;字
                                         
                                             
