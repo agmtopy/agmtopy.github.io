@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    481
+                    1.4k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    1 分钟
+                    5 分钟
                 </div>
                 
 
@@ -518,19 +518,184 @@ fork子进程异步生成RDB文件</li>
 </li>
 </ul>
 <h3 id="源码解析"><a class="header-anchor" href="#源码解析"></a>源码解析</h3>
-<p>TODO<br>
-redis fork子进程失败后会直接使用主进程进行RDB文件操作</p>
+<ul>
+<li>bgsave的执行调用链</li>
+</ul>
+<p><img src="https://hexo-1254947285.cos.ap-chengdu.myqcloud.com/hexo/%E5%B1%8F%E5%B9%95%E6%88%AA%E5%9B%BE%202022-01-22%20230847.jpg" alt="bgsave的执行链"></p>
+<blockquote>
+<p><B>server.main()</B> -&gt; <B>server.processCommand()</B> -&gt; <B>rdb.rdbSaveBackground()</B> -&gt; <B>rdb.redisFork()</B></p>
+</blockquote>
+<p>下面自底向上依次分析下这个四个方法</p>
+<ul>
+<li><B>rdbSave()</B></li>
+</ul>
+  <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">/* 将数据保存在磁盘上 */</span>
+<span class="token keyword">int</span> <span class="token function">rdbSave</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>filename<span class="token punctuation">,</span> rdbSaveInfo <span class="token operator">*</span>rsi<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">char</span> tmpfile<span class="token punctuation">[</span><span class="token number">256</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token keyword">char</span> cwd<span class="token punctuation">[</span>MAXPATHLEN<span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment">/* Current working dir path for error messages. */</span>
+    FILE <span class="token operator">*</span>fp <span class="token operator">=</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
+    rio rdb<span class="token punctuation">;</span>
+    <span class="token keyword">int</span> error <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+    <span class="token function">snprintf</span><span class="token punctuation">(</span>tmpfile<span class="token punctuation">,</span><span class="token number">256</span><span class="token punctuation">,</span><span class="token string">"temp-%d.rdb"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span> <span class="token function">getpid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    fp <span class="token operator">=</span> <span class="token function">fopen</span><span class="token punctuation">(</span>tmpfile<span class="token punctuation">,</span><span class="token string">"w"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>fp<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">char</span> <span class="token operator">*</span>cwdp <span class="token operator">=</span> <span class="token function">getcwd</span><span class="token punctuation">(</span>cwd<span class="token punctuation">,</span>MAXPATHLEN<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">serverLog</span><span class="token punctuation">(</span>LL_WARNING<span class="token punctuation">,</span>
+            <span class="token string">"Failed opening the RDB file %s (in server root dir %s) "</span>
+            <span class="token string">"for saving: %s"</span><span class="token punctuation">,</span>
+            filename<span class="token punctuation">,</span>
+            cwdp <span class="token operator">?</span> cwdp <span class="token operator">:</span> <span class="token string">"unknown"</span><span class="token punctuation">,</span>
+            <span class="token function">strerror</span><span class="token punctuation">(</span>errno<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> C_ERR<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token function">rioInitWithFile</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>rdb<span class="token punctuation">,</span>fp<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">startSaving</span><span class="token punctuation">(</span>RDBFLAGS_NONE<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>server<span class="token punctuation">.</span>rdb_save_incremental_fsync<span class="token punctuation">)</span>
+        <span class="token function">rioSetAutoSync</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>rdb<span class="token punctuation">,</span>REDIS_AUTOSYNC_BYTES<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">rdbSaveRio</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>rdb<span class="token punctuation">,</span><span class="token operator">&amp;</span>error<span class="token punctuation">,</span>RDBFLAGS_NONE<span class="token punctuation">,</span>rsi<span class="token punctuation">)</span> <span class="token operator">==</span> C_ERR<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        errno <span class="token operator">=</span> error<span class="token punctuation">;</span>
+        <span class="token keyword">goto</span> werr<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">/* Make sure data will not remain on the OS's output buffers */</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">fflush</span><span class="token punctuation">(</span>fp<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">goto</span> werr<span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">fsync</span><span class="token punctuation">(</span><span class="token function">fileno</span><span class="token punctuation">(</span>fp<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">goto</span> werr<span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">fclose</span><span class="token punctuation">(</span>fp<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> fp <span class="token operator">=</span> <span class="token constant">NULL</span><span class="token punctuation">;</span> <span class="token keyword">goto</span> werr<span class="token punctuation">;</span> <span class="token punctuation">&#125;</span>
+    fp <span class="token operator">=</span> <span class="token constant">NULL</span><span class="token punctuation">;</span>
+    
+    <span class="token comment">//重命名文件来实现写入文件的原子性</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">rename</span><span class="token punctuation">(</span>tmpfile<span class="token punctuation">,</span>filename<span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">char</span> <span class="token operator">*</span>cwdp <span class="token operator">=</span> <span class="token function">getcwd</span><span class="token punctuation">(</span>cwd<span class="token punctuation">,</span>MAXPATHLEN<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">serverLog</span><span class="token punctuation">(</span>LL_WARNING<span class="token punctuation">,</span>
+            <span class="token string">"Error moving temp DB file %s on the final "</span>
+            <span class="token string">"destination %s (in server root dir %s): %s"</span><span class="token punctuation">,</span>
+            tmpfile<span class="token punctuation">,</span>
+            filename<span class="token punctuation">,</span>
+            cwdp <span class="token operator">?</span> cwdp <span class="token operator">:</span> <span class="token string">"unknown"</span><span class="token punctuation">,</span>
+            <span class="token function">strerror</span><span class="token punctuation">(</span>errno<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">unlink</span><span class="token punctuation">(</span>tmpfile<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">stopSaving</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">return</span> C_ERR<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token function">serverLog</span><span class="token punctuation">(</span>LL_NOTICE<span class="token punctuation">,</span><span class="token string">"RDB落盘成功"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    server<span class="token punctuation">.</span>dirty <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    server<span class="token punctuation">.</span>lastsave <span class="token operator">=</span> <span class="token function">time</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    server<span class="token punctuation">.</span>lastbgsave_status <span class="token operator">=</span> C_OK<span class="token punctuation">;</span>
+    <span class="token function">stopSaving</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> C_OK<span class="token punctuation">;</span>
+
+werr<span class="token operator">:</span>
+    <span class="token function">serverLog</span><span class="token punctuation">(</span>LL_WARNING<span class="token punctuation">,</span><span class="token string">"Write error saving DB on disk: %s"</span><span class="token punctuation">,</span> <span class="token function">strerror</span><span class="token punctuation">(</span>errno<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>fp<span class="token punctuation">)</span> <span class="token function">fclose</span><span class="token punctuation">(</span>fp<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">unlink</span><span class="token punctuation">(</span>tmpfile<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">stopSaving</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> C_ERR<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><B>rdbSave()</B>完成对RDB文件的写入操作:</p>
+<ol>
+<li>创建一个临时文件,将内存中的数据进行写入,然后刷盘</li>
+<li>对临时文件进行rename(👍写入文件不一定是原子,但是rename file一定是原子性的),来保证文件写入的原子性</li>
+</ol>
+<ul>
+<li><B>rdbSaveBackground</B></li>
+</ul>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">rdbSaveBackground</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>filename<span class="token punctuation">,</span> rdbSaveInfo <span class="token operator">*</span>rsi<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token class-name">pid_t</span> childpid<span class="token punctuation">;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">hasActiveChildProcess</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">return</span> C_ERR<span class="token punctuation">;</span>
+
+    server<span class="token punctuation">.</span>dirty_before_bgsave <span class="token operator">=</span> server<span class="token punctuation">.</span>dirty<span class="token punctuation">;</span>
+    server<span class="token punctuation">.</span>lastbgsave_try <span class="token operator">=</span> <span class="token function">time</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">//fork子进程进行处理RDB文件,这里的fork()返回值-1表示没有创建新进程成功,0表示创建新进程成功</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>childpid <span class="token operator">=</span> <span class="token function">redisFork</span><span class="token punctuation">(</span>CHILD_TYPE_RDB<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">int</span> retval<span class="token punctuation">;</span>
+
+        <span class="token comment">/* Child */</span>
+        <span class="token function">redisSetProcTitle</span><span class="token punctuation">(</span><span class="token string">"redis-rdb-bgsave"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">redisSetCpuAffinity</span><span class="token punctuation">(</span>server<span class="token punctuation">.</span>bgsave_cpulist<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">serverLog</span><span class="token punctuation">(</span>LL_WARNING<span class="token punctuation">,</span><span class="token string">"RDB文件为: %s"</span><span class="token punctuation">,</span>filename<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        retval <span class="token operator">=</span> <span class="token function">rdbSave</span><span class="token punctuation">(</span>filename<span class="token punctuation">,</span>rsi<span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">//生成rdb文件</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>retval <span class="token operator">==</span> C_OK<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token function">sendChildCowInfo</span><span class="token punctuation">(</span>CHILD_INFO_TYPE_RDB_COW_SIZE<span class="token punctuation">,</span> <span class="token string">"RDB"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token function">exitFromChild</span><span class="token punctuation">(</span><span class="token punctuation">(</span>retval <span class="token operator">==</span> C_OK<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token number">0</span> <span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">/* 父进程处理 */</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>childpid <span class="token operator">==</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            server<span class="token punctuation">.</span>lastbgsave_status <span class="token operator">=</span> C_ERR<span class="token punctuation">;</span>
+            <span class="token function">serverLog</span><span class="token punctuation">(</span>LL_WARNING<span class="token punctuation">,</span><span class="token string">"Can't save in background: fork: %s"</span><span class="token punctuation">,</span>
+                <span class="token function">strerror</span><span class="token punctuation">(</span>errno<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">return</span> C_ERR<span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token function">serverLog</span><span class="token punctuation">(</span>LL_NOTICE<span class="token punctuation">,</span><span class="token string">"Background saving started by pid %ld"</span><span class="token punctuation">,</span><span class="token punctuation">(</span><span class="token keyword">long</span><span class="token punctuation">)</span> childpid<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        server<span class="token punctuation">.</span>rdb_save_time_start <span class="token operator">=</span> <span class="token function">time</span><span class="token punctuation">(</span><span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        server<span class="token punctuation">.</span>rdb_child_type <span class="token operator">=</span> RDB_CHILD_TYPE_DISK<span class="token punctuation">;</span>
+        <span class="token keyword">return</span> C_OK<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span> C_OK<span class="token punctuation">;</span> <span class="token comment">/* unreached */</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在这个方法内部通过<B>redisFork()</B>创建了一个子进程来完成<B>rdbSave()</B>的调用</p>
+<p>父进程不会阻塞而是直接打印RDB文件开始处理的消息</p>
+<p>需要注意一点的是fork()进程的方法返回值是0-成功/-1-失败</p>
+<p>在这一步的调用中省略<B>rdb.bgsaveCommand()</B>的调用逻辑,直接分析<B>server.c</B>中的逻辑</p>
+<ul>
+<li><B>server.c()</B></li>
+</ul>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">redisCommand</span> redisCommandTable<span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+    <span class="token punctuation">&#123;</span><span class="token string">"module"</span><span class="token punctuation">,</span>moduleCommand<span class="token punctuation">,</span><span class="token operator">-</span><span class="token number">2</span><span class="token punctuation">,</span>
+     <span class="token string">"admin no-script"</span><span class="token punctuation">,</span>
+     <span class="token number">0</span><span class="token punctuation">,</span><span class="token constant">NULL</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+
+    <span class="token punctuation">&#123;</span><span class="token string">"get"</span><span class="token punctuation">,</span>getCommand<span class="token punctuation">,</span><span class="token number">2</span><span class="token punctuation">,</span>
+     <span class="token string">"read-only fast @string"</span><span class="token punctuation">,</span>
+     <span class="token number">0</span><span class="token punctuation">,</span><span class="token constant">NULL</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">1</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token punctuation">&#123;</span><span class="token string">"bgsave"</span><span class="token punctuation">,</span>bgsaveCommand<span class="token punctuation">,</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">,</span>
+     <span class="token string">"admin no-script"</span><span class="token punctuation">,</span>
+     <span class="token number">0</span><span class="token punctuation">,</span><span class="token constant">NULL</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">,</span><span class="token number">0</span><span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+    <span class="token comment">//省略其他命令</span>
+<span class="token punctuation">&#125;</span>
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这里使用命令模式将所有客户端命令以及命令的处理方式放到<B>redisCommandTable</B>中进行处理,然后在和网络时间绑定就形成最开始说的调用链结构</p>
+<ul>
+<li>cron方式启动<br>
+cron方式启动的逻辑位于<B>server.serverCron()</B>中</li>
+</ul>
 <h3 id="小结"><a class="header-anchor" href="#小结"></a>小结</h3>
+<p>RDB文件是通过fork()子进程来处理文件,采用的是rename temp file的方式保证原子性. 父进程并不会阻塞,而是启动子进程后立即返回</p>
 <h2 id="AOF文件"><a class="header-anchor" href="#AOF文件"></a>AOF文件</h2>
 <p>AOF文件就类似于MySql中的binlog使用的Statement格式记录数据变化,每次只记录指令,并且超过设定的大小后会进行覆盖</p>
 <h3 id="使用实例-v2"><a class="header-anchor" href="#使用实例-v2"></a>使用实例</h3>
+<ul>
+<li>配置文件</li>
+</ul>
+<pre class="line-numbers language-config" data-language="config"><code class="language-config">#开启redis aof
+appendonly yes
+
+#aof刷新机制 always:每一条都写入磁盘,everysec:每秒写入磁盘一次,no:文件系统刷新
+appendfsync everysec
+
+#aof文件扩容的阀值比例
+auto-aof-rewrite-percentage 100
+
+#aof文件重写后的初始大小
+auto-aof-rewrite-min-size 64mb
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="源码解析-v2"><a class="header-anchor" href="#源码解析-v2"></a>源码解析</h3>
 <h3 id="小结-v2"><a class="header-anchor" href="#小结-v2"></a>小结</h3>
 <h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2>
 <h2 id="参考文章"><a class="header-anchor" href="#参考文章"></a>参考文章</h2>
 <p><a target="_blank" rel="noopener" href="https://redis.io/topics/persistence">Redis Persistence</a><br>
 <a target="_blank" rel="noopener" href="http://oldblog.antirez.com/post/redis-persistence-demystified.html">Redis persistence demystified</a><br>
-<a target="_blank" rel="noopener" href="https://redis.io/topics/latency">Redis 延迟问题排查</a></p>
+<a target="_blank" rel="noopener" href="https://redis.io/topics/latency">Redis 延迟问题排查</a><br>
+<a target="_blank" rel="noopener" href="https://dl.acm.org/doi/fullHtml/10.1145/3318159">TxFS：利用文件系统崩溃一致性来提供 ACID 事务</a></p>
 
                 
             </div>
@@ -833,7 +998,7 @@ redis fork子进程失败后会直接使用主进程进行RDB文件操作</p>
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            139.9k
+                                            141.4k
                                         </span>&nbsp;字
                                         
                                             
