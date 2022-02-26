@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    526
+                    562
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    1 分钟
+                    2 分钟
                 </div>
                 
 
@@ -465,6 +465,7 @@ InnoDB提供一个参数’innodb_flush_log_at_trx_commit’来控制redo log的
 <h2 id="MVVC"><a class="header-anchor" href="#MVVC"></a>MVVC</h2>
 <p>多版本控制,InnoDB会在行记录上默认增加两个隐藏列来作为MVVC实现的基础,分别是DB_TRX_ID-最新一次事务提交版本号/DB_ROLL_PTR-删除事务的版本号<br>
 数据行和undo log组成了不同版本之间的数据链,通过对比版本号和undo log日志将所需要的数据还原出来</p>
+<p>undo log还会采用段的方式进行保存,在不同的段中存放undo log page,通过这样的方式进行存储</p>
 
                 
             </div>
@@ -765,7 +766,7 @@ InnoDB提供一个参数’innodb_flush_log_at_trx_commit’来控制redo log的
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            141.5k
+                                            141.8k
                                         </span>&nbsp;字
                                         
                                             

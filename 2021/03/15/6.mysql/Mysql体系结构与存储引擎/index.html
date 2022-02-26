@@ -447,8 +447,8 @@
 <p>主要介绍MySql的整体体系结构和存储引擎</p>
 </blockquote>
 <h2 id="体系结构"><a class="header-anchor" href="#体系结构"></a>体系结构</h2>
-<p>概念上’数据库’是文件的集合,是依照某种数据模型组织起来并存放与存储器中的数据;'数据库实列’是程序是一个用户进程,是用户对’数据库’操作的软件.<br>
-MySql主要由以下几部分组成</p>
+<p>概念上<B>数据库</B>是文件的集合,是按照一定的文件模型组织起来存放数据的结构;<B>数据库实列</B>是程序是一个用户进程,是用户对<B>数据库</B>进行操作的软件.</p>
+<p>MySql主要由以下几部分组成</p>
 <ol>
 <li>连接池组件</li>
 <li>管理服务和工具组件</li>
@@ -466,13 +466,14 @@ MySql主要由以下几部分组成</p>
 存储引擎是与MySql物理文件进行交互的一种插件,存储引擎的底部是物理存储层,包括二进制日志文件,数据文件,错误文件,慢查询日志,undo/redo日志等</p>
 </li>
 <li>
-<p>一次select的过程<br>
-下图是一次select的过程,从图中得知存储引擎位于是物理文件和程序数据之间<br>
-<a target="_blank" rel="noopener" href="https://imgtu.com/i/6r8Q7q"><img src="https://s3.ax1x.com/2021/03/15/6r8Q7q.png" alt="6r8Q7q.png"></a></p>
+<p>select的过程</p>
 </li>
-<li>
-<p>InnoDB的体系架构</p>
-</li>
+</ul>
+<p>下图是一次select的过程<br>
+<img src="https://s3.ax1x.com/2021/03/15/6r8Q7q.png" alt="select执行过程"></p>
+<p>从图中得知存储引擎位于是物理文件和程序数据之间</p>
+<ul>
+<li>InnoDB的体系架构</li>
 </ul>
 <p><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/innodb-architecture.html"><img src="https://dev.mysql.com/doc/refman/8.0/en/images/innodb-architecture.png" alt="InnoDB架构"></a></p>
 <ol>
@@ -869,7 +870,7 @@ Insert Buffer的非叶子节点是由space(待插入记录表的表空间id),off
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            141.5k
+                                            141.8k
                                         </span>&nbsp;字
                                         
                                             

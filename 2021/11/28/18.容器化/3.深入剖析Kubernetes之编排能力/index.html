@@ -422,7 +422,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    18
+                    332
                 </div>
                 
 
@@ -444,9 +444,41 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h1>深入剖析Kubernetes之编排能力</h1>
-<blockquote></blockquote>
+<ul>
+<li>名词解释</li>
+</ul>
+<blockquote>
+<p>编排: 引申为描述复杂计算机系统、中间件 (middleware) 和业务的自动化的安排、协调和管理。</p>
+</blockquote>
 <h2 id="编排能力"><a class="header-anchor" href="#编排能力"></a>编排能力</h2>
+<ul>
+<li>
+<p>为什么需要编排能力?<br>
+在应用大规模的拆分实施微服务化以后,需要解决微服务之间的服务依赖/注册发现/资源管理等问题.</p>
+</li>
+<li>
+<p>编排能力需要那一层来实现?<br>
+之所以需要提出这个问题是因为,目前应用的按层划分,可以在每一层都实现相同的能力,但是为什么目前主流的解决编排问题是在基础设施层解决,主要是依据责任的划分,基础能力的下沉</p>
+</li>
+</ul>
+<h2 id="编排对象"><a class="header-anchor" href="#编排对象"></a>编排对象</h2>
+<ul>
+<li>
+<p>资源编排<br>
+资源编排指的是对具体容器的NameSpace\Cgroup\网络的管理,文件系统的管理等</p>
+</li>
+<li>
+<p>工作负载编排<br>
+工作负载编排指的是对pod生命周期的管理</p>
+</li>
+<li>
+<p>服务编排<br>
+服务编排是应用开发人员比较熟悉的一个领域,指的是对具体的服务的服务发现/高可用的管理</p>
+</li>
+</ul>
 <h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
+<p><a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/36062500">编排的艺术| K8S 中的容器编排和应用编排</a><br>
+<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/144452103">云原生时代（五）：Kubernetes与容器编排之战</a></p>
 
                 
             </div>
@@ -747,7 +779,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            141.5k
+                                            141.8k
                                         </span>&nbsp;字
                                         
                                             
