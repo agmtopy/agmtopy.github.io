@@ -422,7 +422,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    754
+                    771
                 </div>
                 
 
@@ -444,7 +444,7 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h1>数据库事务理解</h1>
-<p>数据库事务是一种本地的刚性事务，支持ACID</p>
+<p>数据库事务是一种本地的刚性事务，特点是必须支持’ACID’四个特性</p>
 <h2 id="ACID理论"><a class="header-anchor" href="#ACID理论"></a><strong>ACID</strong>理论</h2>
 <table>
 <thead>
@@ -456,11 +456,11 @@
 <tbody>
 <tr>
 <td>原子性(Atomicity)</td>
-<td>指的是在事务是最小的不可分割的执行单元，事务内的操作要么__都__成功，要么__都__失败</td>
+<td>指的是在事务是最小的不可分割的执行单元，事务内的操作要么都<B>成功</B>，要么都<B>失败</B></td>
 </tr>
 <tr>
 <td>一致性(Consistency)</td>
-<td>指的是在事务执行前后数据上的完整性保存一致，不会因为数据库事务的执行而改变数据在业务模型上的完整性</td>
+<td>指的是在事务执行前后数据上的完整性保存一致，不会因为数据库事务的执行结果(成功/失败)而改变数据在业务模型上的完整性</td>
 </tr>
 <tr>
 <td>隔离性(isolation)</td>
@@ -587,7 +587,7 @@
 <li>查询结果<br>
 <img src="https://s2.ax1x.com/2020/03/01/3c8EEq.png" alt="查询结果"></li>
 </ul>
-<p>mysql的默认事务是<strong>REPEATABLE-READ</strong></p>
+<p>mysql的默认事务是<strong>REPEATABLE-READ</strong>-<B>可重复读</B></p>
 <h3 id="脏读"><a class="header-anchor" href="#脏读"></a>脏读</h3>
 <ul>
 <li>设置隔离级别为<strong>读未提交</strong>(read uncommitted)</li>
@@ -945,7 +945,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            141.4k
+                                            141.5k
                                         </span>&nbsp;字
                                         
                                             
