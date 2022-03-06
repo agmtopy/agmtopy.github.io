@@ -6,7 +6,7 @@
   <link href="https://agmtopy.gitee.io/atom.xml" rel="self"/>
   
   <link href="https://agmtopy.gitee.io/"/>
-  <updated>2022-03-05T04:20:41.722Z</updated>
+  <updated>2022-03-06T09:42:22.167Z</updated>
   <id>https://agmtopy.gitee.io/</id>
   
   <author>
@@ -17,11 +17,37 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
+    <title>编译原理笔记-第二章</title>
+    <link href="https://agmtopy.gitee.io/2022/03/05/20.%E7%AC%94%E8%AE%B0/1.%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86-%E7%AC%AC%E4%BA%8C%E7%AB%A0/"/>
+    <id>https://agmtopy.gitee.io/2022/03/05/20.%E7%AC%94%E8%AE%B0/1.%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86-%E7%AC%AC%E4%BA%8C%E7%AB%A0/</id>
+    <published>2022-03-05T07:01:11.908Z</published>
+    <updated>2022-03-06T09:42:22.167Z</updated>
+    
+    <content type="html"><![CDATA[<h1>编译原理笔记(第二章))</h1><p>第二章<B>创建一个简单的语法指导器</B>里面设计了很多理论知识,暂时只记录关键概念。这一章看的很困，外面阳光明媚，只能通过打字来压制一下困意😂😂😂</p><h2 id="关键概念"><a class="header-anchor" href="#关键概念"></a>关键概念</h2><ul><li><p>语法制导翻译器<br><B>语法制导翻译器</B>是用于构建语法翻译器的程序</p></li><li><p>语法的定义</p></li></ul><blockquote><p>一种用于描述程序设计语言语法的表示方法 - “上下文无关文法”,这种文法用于前端编译器</p></blockquote><ul><li>语法分析器</li></ul><p>语法分析是决定如何通过一个文法生成一个终结符号的过程。语法分析有两个过程，分别是<B>自顶向下</B>、<B>自底向上</B>两种方法，指的是语法分析对语法分析的构造顺序。</p><h2 id="词法分析器"><a class="header-anchor" href="#词法分析器"></a>词法分析器</h2><blockquote><p>词法分析是编译的第一个阶段.主要是将输入的源代码生成一个词法单元序列,每个词法单元对应一个词素</p></blockquote><p>如下图所示:<br>@TODO</p><p>词法分析器还会完成一些辅助功能例如过滤空白字符、记录源代码行号</p><h3 id="词素的识别"><a class="header-anchor" href="#词素的识别"></a>词素的识别</h3><p>源代码是由不同的字符组成的，在进行编译时首先要将输入的字符串进行拆分，拆分成为不同的词素。</p><p>对于无法识别成为词素的字符，其实可以通过变化字符来进行匹配，但是这种方案代价太高，不值得使用。我赞同这种观点，编译器的功能就是编译代码而不是尝试对代码进行修复，也是单一职责的表现</p><ul><li><p>加载源代码是否会使用完缓冲区?.<br>不会,词素只需要根据前后一两个字符就可以确定了,因此只需要数千个字节就可以完成这个工作了.</p></li><li><p>如何鉴定语言的保留字?<br>通过在初始化时将各个保留字填入符号表中,符号表会标识这些保留字不是普通的标识符,并且会指向他们说代表的词法单元去</p></li></ul><h3 id="词素识别工具"><a class="header-anchor" href="#词素识别工具"></a>词素识别工具</h3><ul><li>Lex/Yacc</li></ul><blockquote><p>Lex是Unix环境下非常著名的工具,主要功能是生成一个扫描器(Scanner)的C源码。扫描器是一种识别文本中的词汇模式的程序。 这些词汇模式（或者常规表达式）在一种特殊的句子结构中定义。一种匹配的常规表达式可能会包含相关的动作。这一动作可能还包括返回一个标记。 当 Lex 接收到文件或文本形式的输入时，它试图将文本与常规表达式进行匹配。 它一次读入一个输入字符，直到找到一个匹配的模式。 如果能够找到一个匹配的模式，Lex 就执行相关的动作（可能包括返回一个标记）。 另一方面，如果没有可以匹配的常规表达式，将会停止进一步的处理，Lex 将显示一个错误消息。</p></blockquote><p>也就是通过Lex来生成一个’正则表达式’,并进行后续操作</p><h2 id="语法分析器"><a class="header-anchor" href="#语法分析器"></a>语法分析器</h2><p>下图所示的是语法分析器在编译器中的过程<br>@TODO</p><h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2><p><img src="https://sighingnow.github.io/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/lex_yacc.html" alt="Lex和Yacc"></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;编译原理笔记(第二章))&lt;/h1&gt;
+&lt;p&gt;第二章&lt;B&gt;创建一个简单的语法指导器&lt;/B&gt;里面设计了很多理论知识,暂时只记录关键概念。这一章看的很困，外面阳光明媚，只能通过打字来压制一下困意😂😂😂&lt;/p&gt;
+&lt;h2 id=&quot;关键概念&quot;&gt;&lt;a class=&quot;header-a</summary>
+      
+    
+    
+    
+    <category term="笔记" scheme="https://agmtopy.gitee.io/categories/%E7%AC%94%E8%AE%B0/"/>
+    
+    
+    <category term="基础" scheme="https://agmtopy.gitee.io/tags/%E5%9F%BA%E7%A1%80/"/>
+    
+  </entry>
+  
+  <entry>
     <title>编译原理笔记(一)</title>
-    <link href="https://agmtopy.gitee.io/2022/03/03/20.%E7%AC%94%E8%AE%B0/0.%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E7%AC%94%E8%AE%B0/"/>
-    <id>https://agmtopy.gitee.io/2022/03/03/20.%E7%AC%94%E8%AE%B0/0.%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E7%AC%94%E8%AE%B0/</id>
+    <link href="https://agmtopy.gitee.io/2022/03/03/20.%E7%AC%94%E8%AE%B0/0.%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E7%AC%94%E7%AC%AC%E4%B8%80%E7%AB%A0/"/>
+    <id>https://agmtopy.gitee.io/2022/03/03/20.%E7%AC%94%E8%AE%B0/0.%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E7%AC%94%E7%AC%AC%E4%B8%80%E7%AB%A0/</id>
     <published>2022-03-03T13:13:20.000Z</published>
-    <updated>2022-03-05T04:20:41.722Z</updated>
+    <updated>2022-03-05T07:00:39.292Z</updated>
     
     <content type="html"><![CDATA[<h1>编译原理笔记(一)</h1><p>大概是在开始学习编写程序的时候购入了一系列的计算机基础书籍,由于自己的原因导致很多书都只是寥寥翻开几页,就匆匆放下了.<br>近来这两年,随着年纪的增大忽然有了一个念头就是自己的程序生涯已经快要结束,但是还有那么多书未看未读,有一些惋惜和不舍.不舍的既有对知识的向往也有对年轻的奢望,惋惜的是荒废了大好年华.不如把既有的书籍看完,也是完成当初对自己的期待和结束吧.</p><p>碎碎念了很久,让我们接下来开始吧,笔记按照书籍的章节进行记录</p><h2 id="第一章"><a class="header-anchor" href="#第一章"></a>第一章</h2><blockquote><p>程序设计语言是向人以及计算机描述计算过程的记号</p></blockquote><p>这是这本书的第一句话,我觉得很好.程序/代码是由人编写给人阅读,拿给机器进行执行的,因此在编写的时候既要考虑到程序的可阅读性也要考虑到机器执行的效率.<br>但是机器是看不懂人类编写的语言,就需要一个’翻译家’将我们需要的计算过程转义后告诉计算机进行执行,这个’翻译家’就是我们的<B>编译器</B><br>研究这些编译原理,也许究其一生我们也不会使用到一次相关的知识,但是可以学习前人在处理复杂问题时候的解决思路,没有灵活的思维就只能通过经验来模仿大师的行为</p><h2 id="语言处理器"><a class="header-anchor" href="#语言处理器"></a>语言处理器</h2><p>编译器泛指语言处理器,通常由两部分组成<B>编译器</B>、<B>解释器</B></p><ol><li><p>编译器<br>编译器指的是将某一种语言翻译成为行为相同的另外一种语言(目标语言)</p></li><li><p>解释器<br>解释器指的是直接执行输入过来的语言</p><p>java语言的处理器就融合了这两个语言处理器,向通过编译器将源代码编译成为中间语言代码,在通过JVM解释执行中间语言代码</p></li></ol><ul><li>编译器结构<ol><li><p>分析部分(analysis)</p><blockquote><p>分析部分又被称为前端,指的是将源程序分解为多个组成要素,并在这些要素根据语法结构来创建出一个’中间输出’,提供给下一阶段作为输入,并且生成’符号表’</p></blockquote><p>以上是书上对前端编译器的定义,目前认为前端编译器就是执行语法规则/约束来将源代码翻译成为’中间代码’</p></li><li><p>综合部分(synthesis)</p><blockquote><p>综合部分是根据前端输入的中间代码和符号表来构造用户期望的目标代码</p></blockquote><p>对于这个的理解是从中间代码转换为目标代码的过程,例如生成目标代码为java的某A语言以及A-j的中间代码,最后才能生成java语言<br>前端编译器是与机器无关的,后端编译器是与机器相关的</p></li></ol></li></ul><h2 id="编译器的步骤"><a class="header-anchor" href="#编译器的步骤"></a>编译器的步骤</h2><p>编译器执行的步骤大致分为七个步骤,置顶向下分别是</p><ol><li>词法分析器</li><li>语法分析器</li><li>语义分析器</li><li>中间代码生成器</li><li>机器无关代码优化器</li><li>代码生成器</li><li>机器相关代码优化器</li></ol><p>下图所示:<br><img src="https://github.com/agmtopy/noteBook/blob/master/png/%E7%BC%96%E8%AF%91%E5%99%A8%E6%AD%A5%E9%AA%A4%E5%9B%BE.png?raw=true" alt="编译器步骤图"></p><p>下面就对这7个步骤进行分析</p><h3 id="1-词法分析器"><a class="header-anchor" href="#1-词法分析器"></a>1.词法分析器</h3><blockquote><p>词法分析器指的是将源代码的<B>词素(lexeme)</B>转义成为由<B>词法单元(token)</B>组成的<B>词法单元序列</B></p></blockquote><p>这里涉及到两个知识点:<br>以java代码为示例</p><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">String</span> name <span class="token operator">=</span> <span class="token string">"hello"</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><ol><li><p>词素(lexeme)<br>词素(lexeme)在语言领域等同与词汇,在这里指的是组成源代码的单个符号.<br>示例的源代码中的词素为’String’、‘name’、‘=’、‘&quot;’、‘hello’、‘&quot;’</p></li><li><p>词法单元<br>词法单元指的是编译器对词素的抽象承载对象,通过两部分组成&lt;token-name,attribute-value&gt;<br>token-name:语法分析步骤中使用到的抽象符号<br>attribute-value:指向符号表中关于这个词法单元的条目(可选)</p></li><li><p>符号表<br>符号表指的是用于记录源代码程序中使用到的变量名字，用于存储各种属性</p></li></ol><p>通过步骤1<B>语法分析器</B>可以将源代码转换成为<B>词法单元序列</B>，后续的操作是建立在词法单元序列的基础上的</p><h3 id="2-语法分析"><a class="header-anchor" href="#2-语法分析"></a>2.语法分析</h3><blockquote><p>编译器的第二个步骤是<B>语法分析</B>或<B>解析</B>.语法分析器使用上一步词法分析器的输出<B>词法单元序列</B>作为输入，通过使用词法单元来构建语法树结构。<br><B>语法树结构</B>是由树中的每一个内部节点表示一个<B>运算</B>组成，叶子节点表示该运算的分量 ，如下图所示中的第二个步骤，通过这个步骤将将’操作’和’分量’分离，以便下一步语义分析器使用</p></blockquote><p><img src="https://github.com/agmtopy/noteBook/blob/master/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86%E8%B5%84%E6%96%99/%E7%BC%96%E8%AF%91%E5%99%A8%E7%BC%96%E8%AF%91%E7%A4%BA%E4%BE%8B.jpg?raw=true" alt="编译器工作示例"></p><h3 id="3-语义分析器"><a class="header-anchor" href="#3-语义分析器"></a>3. 语义分析器</h3><blockquote><p>语义分析器是根据<B>语法树</B>和<B>符号表</B>中的信息来检查输入的源代码是否符合语言的定义，同时收集类型信息存放到语法树和符号表中，以便在随后生成中间代码的过程中进行使用</p></blockquote><p>在语义分析的过程中主要是做两方面的事情:<br>第一: 根据语言语义和符号表对语法树中的节点进行分析语义的正确性<br>第二：进行类型检查和自动类型转换</p><h3 id="4-中间代码的生成"><a class="header-anchor" href="#4-中间代码的生成"></a>4. 中间代码的生成</h3><p>通过以上三个步骤(词法分析/语法分析/语义分析)得到正确的语法树，通过这个语法树生成需要的中间代码<br>中间代码指的是是一种易于生成并且可以与目标代码进行转换的一种语言,生成一种伪指令的代码表述</p><h3 id="5-代码优化"><a class="header-anchor" href="#5-代码优化"></a>5. 代码优化</h3><p>这一步进行对中间代码的一个与机器无关的优化，由于在上一步中生成中间代码是完全按照源代码的逻辑，因此可以按照逻辑规则进行一些优化处理，由于是对逻辑的优化因此是与机器无关的</p><h3 id="6-代码生成"><a class="header-anchor" href="#6-代码生成"></a>6. 代码生成</h3><p><B>代码生成</B>是根据上一步中优化后的中间代码作为输入，然后根据不同的计算平台来生成操作具体的寄存器/内存地址的机器代码</p><h3 id="编译器处理过程小结"><a class="header-anchor" href="#编译器处理过程小结"></a>编译器处理过程小结</h3><p>编译器处理过程的过程划分为以上6个步骤(词法/语法/语义/中间代码生成/代码优化/机器代码生成)这几个步骤，在实现时可以将这几个步骤合并成为<B>“一趟”</B></p><h2 id="程序设计语言的历史"><a class="header-anchor" href="#程序设计语言的历史"></a>程序设计语言的历史</h2><p>我很喜欢了解这种技术的发展过程，虽然这段历史离我们很遥远，但是在阅读的过程中好像在历史的长流中一样，按照时间顺序</p><ul><li><p>机器指令</p></li><li><p>汇编语言</p><ul><li>宏指令</li></ul></li><li><p>高级程序语言</p><ul><li>lisp</li><li>C/C++</li><li>JAVA</li></ul></li><li><p>特定应用程序设计语言</p><ul><li>SQL</li></ul></li><li><p>基于逻辑和约束的语言</p><ul><li>prolog</li><li>ops5</li></ul></li></ul><p>语言的发展变化也在一定程度上到了编译器的方向,编译器的演化也会影响到语言的发展，两者是相辅相成的。</p><p>编译器也会对机器指令集的发展产生影响，例如编译器更喜欢RISC(精简指令集)因为RISC上的可以做更好的指令优化</p><h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2><p><a href="https://cs.nju.edu.cn/changxu/2_compiler/slides/Chapter_1.pdf">编译原理讲义-南京大学</a></p>]]></content>
     
@@ -537,33 +563,6 @@ RocketMQ的索引相关</summary>
     
     
     <category term="RocketMQ" scheme="https://agmtopy.gitee.io/tags/RocketMQ/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>关于消息队列的一些历史</title>
-    <link href="https://agmtopy.gitee.io/2021/05/08/1.%E6%9D%82%E8%AE%B0/%E5%85%B3%E4%BA%8E%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9A%84%E4%B8%80%E4%BA%9B%E5%8E%86%E5%8F%B2/"/>
-    <id>https://agmtopy.gitee.io/2021/05/08/1.%E6%9D%82%E8%AE%B0/%E5%85%B3%E4%BA%8E%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9A%84%E4%B8%80%E4%BA%9B%E5%8E%86%E5%8F%B2/</id>
-    <published>2021-05-08T14:03:28.000Z</published>
-    <updated>2021-05-09T08:43:52.000Z</updated>
-    
-    <content type="html"><![CDATA[<h1>关于消息队列的一些历史</h1><p>这是一篇关于消息队列的历史文章，有关消息队列的前世今生的一些信息。</p><h2 id="起源"><a class="header-anchor" href="#起源"></a>起源</h2><p>软件领域的消息队列最早是由Vivek Ranadive参考硬件中的系统总线提出来的,这老哥是一个印度裔,现在还是国王队的老板。<br>硬件领域中的系统总线主要分为数据总线、地址总线、控制总线这几个部分，用来连接不同的设备传输数据使用。<br><a href="https://imgtu.com/i/gJ4Q61"><img src="https://z3.ax1x.com/2021/05/09/gJ4Q61.png" alt="系统总线"></a><br>硬件上的系统总线着重在于通过线连接不同设备之间的交互，而消息队列是软件领域的连接不同系统之间交互的方式有应用层协议，现代的消息队列主要着重点是在于队列上。</p><h2 id="上古时期"><a class="header-anchor" href="#上古时期"></a>上古时期</h2><ul><li><p>1985<br>Vivek Ranadive根据系统总线设计出来的第一个消息系统叫The Information Bus(TIB)，TIB但是主要是在电信和金融领域进行使用。</p></li><li><p>1993<br>IBM MQ是由蓝色巨人IBM与1993年推出的消息队列产品，目前还保持更新现在迭代到了V9版本</p></li><li><p>1997<br>MS MQ是由微软推出的消息队列产品,不由感慨一句微软是真吊，为了.net硬是整了一个全家桶。</p></li></ul><p>这一时期由于各家的MQ产品都是为了旗下其他产品进行服务，为了形成壁垒，各家的MQ产品并未形成一个统一的规范，导致不同公司下的产品并不能使用其他公司的MQ。</p><h2 id="中古时期"><a class="header-anchor" href="#中古时期"></a>中古时期</h2><p>由于早期的MQ产品各自为政的场景下，这一时期主要统一了消息队列的协议，这些协议一直影响到了现在，主要诞生了以下几种协议以及接入规范：</p><ul><li><p>JMS<br>JMS是一套接入MQ中间件产品的接口规范，java为了黏合各家的消息队列试图通过类似于JDBC的方案在java端通过统一的协议，在根据不同产品的驱动去连接MQ。<br>各个厂商根据这套接口规范自行选择客户端进行实现，实现了这个接口规范的客户端可以在java应用程序内自由切换，类似于适配器模式</p></li><li><p>AMQP<br>AMQP是实现消息队列的一种协议，在协议层规定了消息队列应该有的逻辑规范。AMQP与具体的MQ(例如RabbitMQ、ActiveMQ)的关系类似与jvm规范和JVM实现(HotSpot)一样</p></li><li><p>MQTT<br>为嵌入式设备设计的一套消息队列协议</p></li><li><p>STOMP<br>Stomp协议，英文全名Streaming Text Orientated Message Protocol，中文名称为 ‘流文本定向消息协议’。是一种以纯文本为载体的协议（以文本为载体的意思是它的消息格式规范中没有类似XMPP协议那样的xml格式要求，你可以将它看作‘半结构化数据’）<br>双向消息通信协议还有很多，除了AMQP以外其他的大多都是即时消息协议。</p></li><li><p>ActiveMQ<br>在这一时期还有根据AMQP还诞生了ActiveMQ这一开源产品，ActiveMQ是第一个广泛使用到的开源MQ产品</p></li><li><p>RabbitMQ<br>RabbitMQ是2006年诞生的，现在和spring框架同属于vmware。由Erlang开发的。</p></li></ul><h2 id="现代时期"><a class="header-anchor" href="#现代时期"></a>现代时期</h2><p>由于ActiveMQ和RabbitMQ发展了多年，背负着沉重的历史包袱支持这非常全的MQ功能，在现代的MQ使用场景中这些消息队列不符合当下数据爆炸，小型机组成分布式系统的场景了。这时候出现了针对某个细分领域的消息队列框架Kafka、RocketMQ、Pulsar</p><ul><li><p>Kafka<br>Kafka是Linkedin为解决ActiveMQ性能问题而开发的分布式消息队列，目前已经成为大数据领域实际的消息传递组件</p></li><li><p>RocketMQ<br>RocketMQ是阿里开源的消息队列中间件，在设计上参考了kafka,通过java语言进行开发</p></li><li><p>Pulsar<br>Pulsar是雅虎开源的，天然支持多组成并且是计算和存储分离式的实现</p></li></ul><h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2><p>消息队列的诞生是从金融场景出发，发展到现在最开始的那几种消息队列在功能上已经变得非常臃肿。现代的消息队列根据某一方面的着重点开始进行发展。</p><h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2><p><a href="http://tryrabbitmq.com/">http://tryrabbitmq.com/</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1&gt;关于消息队列的一些历史&lt;/h1&gt;
-&lt;p&gt;这是一篇关于消息队列的历史文章，有关消息队列的前世今生的一些信息。&lt;/p&gt;
-&lt;h2 id=&quot;起源&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;#起源&quot;&gt;&lt;/a&gt;起源&lt;/h2&gt;
-&lt;p&gt;软件领域的消息队列最早是由Vi</summary>
-      
-    
-    
-    
-    <category term="杂记" scheme="https://agmtopy.gitee.io/categories/%E6%9D%82%E8%AE%B0/"/>
-    
-    
-    <category term="消息队列" scheme="https://agmtopy.gitee.io/tags/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/"/>
     
   </entry>
   
