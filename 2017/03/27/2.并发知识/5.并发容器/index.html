@@ -422,7 +422,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    445
+                    446
                 </div>
                 
 
@@ -454,11 +454,15 @@
 <li>死循环cpu占用100%。多个线程同时扩容时，会反转散列表的节点，会有死锁场景相互等待。</li>
 </ol>
 <h2 id="ConcurrentHashMap"><a class="header-anchor" href="#ConcurrentHashMap"></a>ConcurrentHashMap</h2>
-<p><strong>ConcurrentHashMap</strong>底层是采用CAS+synchronized的方式，来保证并发安全性。synchronized保证写操作时资源竞争激烈情况下的安全用CAS机制来保证写操作下轻量级的竞争的安全性。</p>
+<p><strong>ConcurrentHashMap</strong>底层是采用CAS+synchronized的方式，来保证并发安全性。</p>
+<ul>
+<li>synchronized保证写操作时资源竞争激烈情况下的安全</li>
+<li>用CAS机制来保证写操作下轻量级的竞争的安全性。</li>
+</ul>
 <p>map中链表红黑树的设计：红黑树在map中属于一种保底，防御性的编程方式。当hash()方法设计良好的时候，散列表中的元素是符合泊松分布，此时很难出现红黑树的情况，可能性为千万分之一，当出现这样的情况时。首先看容量，在考虑hash()方法是否设计良好。8个的限制是基于空间和时间权衡下得出的。</p>
 <h2 id="CopyOnWriteArrayList"><a class="header-anchor" href="#CopyOnWriteArrayList"></a>CopyOnWriteArrayList</h2>
 <p><strong>CopyOnWriteArrayList</strong>是线程安全的列表，适合于读多写少的场景，列入内存字典等。<br>
-CopyOnWriteArrayList底层是采用__ReentrantLock__和volatile修饰数组来保证并发的安全性的。<br>
+CopyOnWriteArrayList底层是采用<B>ReentrantLock</B>和volatile修饰数组来保证并发的安全性的。<br>
 特点：可在迭代器中进行修改列表，当时不会在此次迭代中体系。原因是内部采用双重数组的方式进行扩容，因此迭代器只能读取迭代开始时的元素集合。</p>
 
                 

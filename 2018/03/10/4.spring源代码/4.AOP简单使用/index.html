@@ -784,7 +784,7 @@
 <li>**args()<strong>用于绑定连接点方法的入参，</strong>@annotation()<strong>用于绑定连接点方法的注解对象，</strong>@args()**用于绑定连接点方法的入参注解。下例表示方法入参为(String, int, …)的方法匹配该切点，并将name和age两个参数绑定到切面方法的入参中</li>
 <li>AspectJ使用org.aspectj.lang.<strong>JointPoint</strong>接口表示目标类连接点对象。如果是环绕增强时，使用org.aspectj.lang.<strong>ProceedingJointPoint</strong>表示连接点对象，该类是JointPoint接口的子接口。任何一个增强方法都可以通过将第一个入参声明为JointPoint访问到连接点上下文的信息</li>
 <li>使用**this()<strong>或</strong>target()**可以绑定被代理对象的实例。下例表示代理对象为User类的所有方法匹配该切点，且代理对象绑定到user入参中</li>
-<li>**@within()**和__@target()__函数可以将目标类的注解对象绑定到增强方法中</li>
+<li>**@within()**和<B>@target()</B>函数可以将目标类的注解对象绑定到增强方法中</li>
 <li>通过<strong>returning</strong>绑定连接点方法的返回值</li>
 <li>使用<strong>AfterThrowing</strong>注解的<strong>throwing</strong>成员绑定</li>
 </ul>

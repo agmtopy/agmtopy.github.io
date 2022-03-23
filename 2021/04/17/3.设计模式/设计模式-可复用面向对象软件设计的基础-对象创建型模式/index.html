@@ -510,7 +510,7 @@
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>在客户端中主要有两步，第一个是获取具体的工厂类。第二个是根据工厂类获取对应的产品。从上面的代码中我们可以看到工厂的生成和产品的生成都需要按照不同的类型来选择生成的具体实现。抽象工厂模式管理的是工厂类。</p>
 <h4 id="Spring中的抽象工厂模式"><a class="header-anchor" href="#Spring中的抽象工厂模式"></a>Spring中的抽象工厂模式</h4>
-<p><strong>AbstractBeanFactory__主要有三个实现类__XmlBeanFactory(已过时)</strong>、<strong>AbstractAutowireCapableBeanFactory</strong>、<strong>DefaultListableBeanFactory</strong><br>
+<p><B>AbstractBeanFactory</B>主要有三个实现类<B>XmlBeanFactory(已过时)</B>、<B>AbstractAutowireCapableBeanFactory</B>、<B>DefaultListableBeanFactory</B><br>
 其中主要使用的是作为自动装配的工厂类AbstractAutowireCapableBeanFactory</p>
 <h2 id="build模式"><a class="header-anchor" href="#build模式"></a>build模式</h2>
 <h3 id="意图-v2"><a class="header-anchor" href="#意图-v2"></a>意图</h3>
@@ -568,7 +568,7 @@
             <span class="token punctuation">&#125;</span>
         <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>可以看到lombok的@Builder注解只是在内部设置了一个静态方法和静态类来生成build方式，将__Direct__的职责交给类的使用者去处理了。</p>
+<p>可以看到lombok的@Builder注解只是在内部设置了一个静态方法和静态类来生成build方式，将<B>Direct</B>的职责交给类的使用者去处理了。</p>
 <h2 id="工厂模式"><a class="header-anchor" href="#工厂模式"></a>工厂模式</h2>
 <h3 id="意图-v3"><a class="header-anchor" href="#意图-v3"></a>意图</h3>
 <blockquote>

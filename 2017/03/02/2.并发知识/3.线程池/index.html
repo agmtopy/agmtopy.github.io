@@ -579,8 +579,8 @@ task<span class="token punctuation">.</span><span class="token function">get</sp
 <p><strong>IO密集型</strong>任务，会执行IO任务，cpu进行等待，因此线程数可以尽量多一些。</p>
 <p>*<em>线程数 =  CPU核心数 <em>（1 + 平均等待时间/平均工作时间）</em></em></p>
 <h2 id="shutdown和shutdownNew的区别"><a class="header-anchor" href="#shutdown和shutdownNew的区别"></a>shutdown和shutdownNew的区别</h2>
-<p>__shutdown__不在允许提交任务，待执行线程池中正在执行的任务和任务队列中的任务后线程池关闭<br>
-__shutdownNow__立即暂停任务，向正在执行任务的线程发送中断信号，将等待队列中的任务转移出来，然后线程池关闭</p>
+<p><B>shutdown</B>不在允许提交任务，待执行线程池中正在执行的任务和任务队列中的任务后线程池关闭<br>
+<B>shutdownNow</B>立即暂停任务，向正在执行任务的线程发送中断信号，将等待队列中的任务转移出来，然后线程池关闭</p>
 <p>线程池复用线程的逻辑是，创建线程后不停的获取task进行执行（run）方法</p>
 
                 
