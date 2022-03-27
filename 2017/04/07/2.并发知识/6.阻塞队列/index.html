@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    994
+                    1.3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    4 分钟
+                    5 分钟
                 </div>
                 
 
@@ -445,12 +445,50 @@
             <div id="articleContent">
                 <h1>阻塞队列</h1>
 <h2 id="阻塞队列的定义"><a class="header-anchor" href="#阻塞队列的定义"></a>阻塞队列的定义</h2>
-<p><strong>阻塞队列</strong>是实现了BlockingQueue接口的之类，BlockingQueue的代码入下：</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">BlockingQueue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">E</span><span class="token punctuation">></span></span> <span class="token keyword">extends</span> <span class="token class-name">Queue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">E</span><span class="token punctuation">></span></span> <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p><strong>BlockingQueue</strong>的特点是有阻塞能力：</p>
+<p><strong>阻塞队列</strong>是实现了BlockingQueue接口的子类，BlockingQueue接口是继承自<B>Queue</B></p>
+<ul>
+<li>BlockingQueue</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">BlockingQueue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">E</span><span class="token punctuation">></span></span> <span class="token keyword">extends</span> <span class="token class-name">Queue</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">E</span><span class="token punctuation">></span></span> <span class="token punctuation">&#123;</span>
+    
+    <span class="token comment">// 阻塞队列的添加操作,如果队列已满，则抛出异常</span>
+    <span class="token keyword">boolean</span> <span class="token function">add</span><span class="token punctuation">(</span><span class="token class-name">E</span> e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    
+    <span class="token comment">// 阻塞队列的添加操作,如果队列已满，则返回false</span>
+    <span class="token keyword">boolean</span> <span class="token function">offer</span><span class="token punctuation">(</span><span class="token class-name">E</span> e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 阻塞队列的添加操作,如果队列已满，则等待至队列有空间</span>
+    <span class="token keyword">void</span> <span class="token function">put</span><span class="token punctuation">(</span><span class="token class-name">E</span> e<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 阻塞队列的添加操作,如果队列已满，则等待至队列有空间，或者超时</span>
+    <span class="token keyword">boolean</span> <span class="token function">offer</span><span class="token punctuation">(</span><span class="token class-name">E</span> e<span class="token punctuation">,</span> <span class="token keyword">long</span> timeout<span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span> unit<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 阻塞队列的弹出操作,如果deque为空，则等待</span>
+    <span class="token class-name">E</span> <span class="token function">take</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 阻塞队列的弹出操作,等待指定时间后超时,可响应中断</span>
+    <span class="token class-name">E</span> <span class="token function">poll</span><span class="token punctuation">(</span><span class="token keyword">long</span> timeout<span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span> unit<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 返回阻塞队列的大小    </span>
+    <span class="token keyword">int</span> <span class="token function">remainingCapacity</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 移除阻塞队列中的元素    </span>
+    <span class="token keyword">boolean</span> <span class="token function">remove</span><span class="token punctuation">(</span><span class="token class-name">Object</span> o<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 判断阻塞队列是否包含指定元素</span>
+    <span class="token keyword">boolean</span> <span class="token function">contains</span><span class="token punctuation">(</span><span class="token class-name">Object</span> o<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 将阻塞队列中的元素拷贝到指定的数组中</span>
+    <span class="token keyword">int</span> <span class="token function">drainTo</span><span class="token punctuation">(</span><span class="token class-name">Collection</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span> <span class="token keyword">super</span> <span class="token class-name">E</span><span class="token punctuation">></span></span> c<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// 将阻塞队列中的元素拷贝到指定的数组中，并返回拷贝的元素个数</span>
+    <span class="token keyword">int</span> <span class="token function">drainTo</span><span class="token punctuation">(</span><span class="token class-name">Collection</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span> <span class="token keyword">super</span> <span class="token class-name">E</span><span class="token punctuation">></span></span> c<span class="token punctuation">,</span> <span class="token keyword">int</span> maxElements<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>以上是阻塞队列<B>BlockingQueue</B>接口定义的方法,下面详细的分析一下,这几个主要的方法</p>
 <ol>
-<li>**take()**的功能是移除头节点，当队列为空时，则阻塞</li>
-<li>**put()**的功能是向对位添加元素，当队列满载时，则阻塞</li>
+<li><B>take()</B>的功能是移除头节点，当队列为空时，则阻塞</li>
+<li><B>put()</B>的功能是向对位添加元素，当队列满载时，则阻塞</li>
 </ol>
 <p>BlocakingQueue的实现类有：</p>
 <ol>
@@ -461,14 +499,17 @@
 <li>PriorityBlockingQueue</li>
 <li>LinkedTransferQueue</li>
 </ol>
-<p><img src="https://s2.ax1x.com/2020/03/07/3jrGTI.png" alt="3jrGTI.png"></p>
+<p><img src="https://s2.ax1x.com/2020/03/07/3jrGTI.png" alt="阻塞队列实现"></p>
 <h2 id="阻塞队列常用的方法"><a class="header-anchor" href="#阻塞队列常用的方法"></a>阻塞队列常用的方法</h2>
 <p>在阻塞队列中主要有8种方法，按照分类分为3大类：</p>
 <ol>
-<li><strong>抛出异常</strong> add、remove、element</li>
-<li><strong>返回结果但是不抛出异常</strong> offer、poll、peek</li>
-<li><strong>阻塞</strong> put、take</li>
+<li><strong>抛出异常</strong> : add、remove、element</li>
+<li><strong>返回结果但是不抛出异常</strong> : offer、poll、peek</li>
+<li><strong>阻塞</strong> : put、take</li>
 </ol>
+<ul>
+<li>分类</li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -499,6 +540,15 @@
 </tr>
 </tbody>
 </table>
+<ul>
+<li>
+<p>实例操作分析<br>
+下面使用<B>ArrayBlockingQueue</B>实例来进行演示</p>
+</li>
+<li>
+<p>ArrayBlockingQueueDemo</p>
+</li>
+</ul>
 <h2 id="常见的阻塞队列"><a class="header-anchor" href="#常见的阻塞队列"></a>常见的阻塞队列</h2>
 <ul>
 <li>ArrayBlockingQueue<br>
@@ -932,7 +982,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            146.8k
+                                            148.3k
                                         </span>&nbsp;字
                                         
                                             
