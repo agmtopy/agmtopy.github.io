@@ -422,7 +422,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    696
+                    698
                 </div>
                 
 
@@ -477,6 +477,10 @@ docker run -it  -p <span class="token number">9527</span>:9527 -p <span class="t
 <span class="token comment"># 修改密码</span>
 <span class="token function">curl</span>  -H <span class="token string">'X-XSRF-TOKEN: $CSRF_TOKEN'</span> -H <span class="token string">'Cookie: XSRF-TOKEN=$CSRF_TOKEN;'</span>  -H <span class="token string">"Content-Type: application/json"</span> -X PUT http://localhost:7750/pulsar-manager/users/superuser -d <span class="token string">'&#123;"name": "admin", "password": "apachepulsar", "description": "test", "email": "username@test.org"&#125;'</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>pulsar admin</li>
+</ul>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/pulsar/puslarAdmin.jpg?raw=true" alt="pulsar admin"></p>
 <h3 id="k8s中运行"><a class="header-anchor" href="#k8s中运行"></a>k8s中运行</h3>
 <p>k8s中需要使用helm来运行</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java">
