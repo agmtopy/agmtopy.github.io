@@ -33,8 +33,14 @@
       <link href="2022/03/25/1.%E6%9D%82%E8%AE%B0/GitLab_CI-CD%E4%BB%8B%E7%BB%8D%E5%92%8C%E4%BD%BF%E7%94%A8/"/>
       <url>2022/03/25/1.%E6%9D%82%E8%AE%B0/GitLab_CI-CD%E4%BB%8B%E7%BB%8D%E5%92%8C%E4%BD%BF%E7%94%A8/</url>
       
-        <content type="html"><![CDATA[<h1>GitLab CI/CD与GitHub Actions的介绍和使用</h1><p>本篇日志主要是用来记录<B>GitLab</B>的CI/CD与<B>GitHub Actions</B>的介绍和使用。先从操作GitLab的CI/CD开始</p><h2 id="GitLab-CI-CD"><a class="header-anchor" href="#GitLab-CI-CD"></a>GitLab CI/CD</h2><p>GitLab支持多种CI方式,本身有Ai DevOps的支持,如下所示</p><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/gitlab_ai_devops.jpg?raw=true" alt="GitLab AI DevOps"></p><p>启动Ai DevOps后gitlab会根据项目的语言使用一套预设的模板,具体可以参考<a href="https://docs.gitlab.com/ee/topics/autodevops/index.html">GitLab Ai DevOps</a></p><p>在我们的演示项目中,我们可以选择开启Ai DevOps,但是实际并不会使用,而是使用我们项目中自定义的<B>.gitlab-ci.yml</B>文件</p><p>接下来介绍,让我们开始学习如何自定义GitLab的CI/CD与gradle结合使用.</p><ul><li>前置条件:<ul><li>项目地址:<a href="https://github.com/agmtopy/testcontainers-simple">https://github.com/agmtopy/testcontainers-simple</a></li></ul></li><li>步骤:<ul><li>clone 项目到本地</li><li>修改.gitlab-ci.yml文件</li><li>上传到GitLab</li><li>执行构建</li></ul></li></ul><p>下面来详细的做一下步骤二和步骤四</p><h3 id="修改-gitlab-ci-yml文件"><a class="header-anchor" href="#修改-gitlab-ci-yml文件"></a>修改.gitlab-ci.yml文件</h3><pre class="line-numbers language-yml" data-language="yml"><code class="language-yml">services:  - name: docker:dind         # Testcontainers需要docker in docker    command: [&quot;--tls&#x3D;false&quot;]  # 禁用tls以避免docker启动中断variables:  DOCKER_HOST: &quot;tcp:&#x2F;&#x2F;docker:2375&quot;  DOCKER_TLS_CERTDIR: &quot;&quot;  DOCKER_DRIVER: overlay2  GRADLE_OPTS: &quot;-Dorg.gradle.daemon&#x3D;false&quot;stages:          # 作业的阶段列表及其执行顺序  - build  - test  - deploybuild-job:       # 此作业在构建阶段运行，构建阶段是最先执行的  image: gradle:7.4.1-jdk11-alpine  stage: build  script:    - echo &quot;开始编译代码...&quot;    - gradle clean compileJava    - echo &quot;编译代码完成...&quot;test-job:        # 此作业在测试阶段运行，测试阶段在第二阶段执行的  image: gradle:7.4.1-jdk11-alpine  stage: test  script:    -  echo &quot;开始测试代码...&quot;    - gradle test --info    - echo &quot;测试代码完成...&quot;deploy-job:      # 此作业在部署阶段运行  stage: deploy  # 只有当之前两个阶段都成功完成时，才会执行部署的。  script:    - echo &quot;开始部署代码...&quot;    - echo &quot;部署代码完成..&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>在上面这个.gitlab-ci.yml文件中,有一个稍微特殊一点的地方在于,由于我们的代码中使用到了testcontainers,所以我们需要在.gitlab-ci.yml文件中添加一个service,这个service是用来启动testcontainers相关容器的,具体可以参考<a href="https://docs.gitlab.com/runner/install/docker.html#install-the-docker-image-and-start-the-container">安装 Docker 镜像并启动容器</a></p><p>然后我们定义了三个阶段:build,test,deploy,这三个阶段的执行顺序是:build-job,test-job,deploy-job,这样我们就可以在GitLab中按照顺序执行这三个阶段的作业了,在流水线中我们也可以看到</p><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/%E6%B5%81%E6%B0%B4%E7%BA%BF.jpg?raw=true" alt="流水线"></p><p>由于我们没有资源,不能进行deploy,在这个阶段实际上只是打印一下,之前的build-job和test-job阶段分别是执行:<br>- gradle clean compileJava<br>- gradle test --info</p><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C.jpg?raw=true" alt="执行结果"></p><p>通过在流水线中点击相关的阶段,可以看到详细的日志</p><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/%E6%89%A7%E8%A1%8C%E6%97%A5%E5%BF%97.jpg?raw=true" alt="执行日志"></p><h2 id="GitHub-Actions"><a class="header-anchor" href="#GitHub-Actions"></a>GitHub Actions</h2><p>GitHub Actions是github推出的一套发现、创建和共享操作以执行您喜欢的任何作业（包括 CI/CD），并将操作合并到完全自定义的工作流程。</p><h3 id="创建Actions"><a class="header-anchor" href="#创建Actions"></a>创建Actions</h3><p>在Actions中,选择对应的模板进行创建</p><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/GitHub_Actions_1.jpg?raw=true" alt="创建workflows"></p><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/GitHub_Actions_2.jpg?raw=true" alt="选择模板"></p><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/GitHub_Actions_3.jpg?raw=true" alt="模板"></p><h3 id="执行Actions"><a class="header-anchor" href="#执行Actions"></a>执行Actions</h3><p>创建完成Actions后,会自动运行.运行结果可以在workflow中查看</p><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/GitHub_Actions_4.jpg?raw=true" alt="执行Actions"></p><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/GitHub_Actions_5.jpg?raw=true" alt="执行结果"></p><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/GitHub_Actions_5.jpg?raw=true" alt="执行日志"></p><p>注意:</p><ul><li>编译gradle项目出现’Error: Gradle script ‘/home/runner/work/testcontainers-simple/testcontainers-simple/gradlew’ is not executable.'的问题是由于我们项目中的gradlew文件不是可执行的,所以需要将其设置为可执行的,在项目中执行<B>git update-index --chmod=+x gradlew</B>即可</li></ul><h3 id="Actions配置解释"><a class="header-anchor" href="#Actions配置解释"></a>Actions配置解释</h3><ul><li>main.yml</li></ul><pre class="line-numbers language-yml文件" data-language="yml文件"><code class="language-yml文件"># This workflow uses actions that are not certified by GitHub.# They are provided by a third-party and are governed by# separate terms of service, privacy policy, and support# documentation.# This workflow will build a Java project with Gradle and cache&#x2F;restore any dependencies to improve the workflow execution time# For more information see: https:&#x2F;&#x2F;help.github.com&#x2F;actions&#x2F;language-and-framework-guides&#x2F;building-and-testing-java-with-gradlename: Java CI with Gradleon: push        # 触发事件jobs:  build:    runs-on: ubuntu-latest    steps:    - uses: actions&#x2F;checkout@v2    - name: Set up JDK 11      uses: actions&#x2F;setup-java@v2      with:        java-version: &#39;11&#39;        distribution: &#39;temurin&#39;    - name: Build with Gradle      uses: gradle&#x2F;gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee      with:        arguments: build<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>github的CI/CD配置就比gitlab的配置看起来要清爽很多,主要是分为三个部分:</p><ul><li><p>name<br>name主要是用来标识这个workflows的名称的</p></li><li><p>on<br>on主要是用来标识触发Actions的动作的</p></li><li><p>jobs<br>jobs又很为两个部分:</p><ul><li>runs-on<br>标识运行的基础环境</li><li>steps<br>标识运行的步骤,其中with.arguments是用来指定gradle的参数的</li></ul></li></ul><h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2><p>GitLab和GitHub的CI/CD在使用上都是比较简单的,只需要使用到专用的配置文件就可以触发,需要主要一点的是GitLab的配置文件中需要指定Docker in Docker配置,<br>而GitHub Actions使用上要比GitLab的.gitlab-ci.yml要方便,可以直接从marketplace下载已经预设好的模板,直接进行使用.配置文件中也不需要指定运行环境</p><h2 id="参考文档"><a class="header-anchor" href="#参考文档"></a>参考文档</h2><p><a href="https://about.gitlab.com/install/">gitlab install</a><br><a href="https://help.aliyun.com/document_detail/52857.html">安装和使用GitLab</a><br><a href="http://blinkfox.com/2018/11/22/ruan-jian-gong-ju/devops/gitlab-ci-jie-shao-he-shi-yong/#toc-heading-20">GitLab CI/CD 介绍和使用</a><br><a href="https://zq99299.github.io/note-combat/gitlab/cicd/">CI/CD</a><br><a href="https://docs.github.com/cn/actions/quickstart">GitHub Actions 快速开始</a></p>]]></content>
+        <content type="html"><![CDATA[<h1>GitLab CI/CD与GitHub Actions的介绍和使用</h1><p>本篇日志主要是用来记录<B>GitLab</B>的CI/CD与<B>GitHub Actions</B>的介绍和使用。先从操作GitLab的CI/CD开始</p><h2 id="GitLab-CI-CD"><a class="header-anchor" href="#GitLab-CI-CD"></a>GitLab CI/CD</h2><p>GitLab支持多种CI方式,本身有Ai DevOps的支持,如下所示</p><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/gitlab_ai_devops.jpg?raw=true" alt="GitLab AI DevOps"></p><p>启动Ai DevOps后gitlab会根据项目的语言使用一套预设的模板,具体可以参考<a href="https://docs.gitlab.com/ee/topics/autodevops/index.html">GitLab Ai DevOps</a></p><p>在我们的演示项目中,我们可以选择开启Ai DevOps,但是实际并不会使用,而是使用我们项目中自定义的<B>.gitlab-ci.yml</B>文件</p><p>接下来介绍,让我们开始学习如何自定义GitLab的CI/CD与gradle结合使用.</p><ul><li>前置条件:<ul><li>项目地址:<a href="https://github.com/agmtopy/testcontainers-simple">https://github.com/agmtopy/testcontainers-simple</a></li></ul></li><li>步骤:<ul><li>clone 项目到本地</li><li>修改.gitlab-ci.yml文件</li><li>上传到GitLab</li><li>执行构建</li></ul></li></ul><p>下面来详细的做一下步骤二和步骤四</p><h3 id="修改-gitlab-ci-yml文件"><a class="header-anchor" href="#修改-gitlab-ci-yml文件"></a>修改.gitlab-ci.yml文件</h3><pre class="line-numbers language-yml" data-language="yml"><code class="language-yml"><span class="token key atrule">services</span><span class="token punctuation">:</span>  <span class="token punctuation">-</span> <span class="token key atrule">name</span><span class="token punctuation">:</span> docker<span class="token punctuation">:</span>dind         <span class="token comment"># Testcontainers需要docker in docker</span>    <span class="token key atrule">command</span><span class="token punctuation">:</span> <span class="token punctuation">[</span><span class="token string">"--tls=false"</span><span class="token punctuation">]</span>  <span class="token comment"># 禁用tls以避免docker启动中断</span><span class="token key atrule">variables</span><span class="token punctuation">:</span>  <span class="token key atrule">DOCKER_HOST</span><span class="token punctuation">:</span> <span class="token string">"tcp://docker:2375"</span>  <span class="token key atrule">DOCKER_TLS_CERTDIR</span><span class="token punctuation">:</span> <span class="token string">""</span>  <span class="token key atrule">DOCKER_DRIVER</span><span class="token punctuation">:</span> overlay2  <span class="token key atrule">GRADLE_OPTS</span><span class="token punctuation">:</span> <span class="token string">"-Dorg.gradle.daemon=false"</span><span class="token key atrule">stages</span><span class="token punctuation">:</span>          <span class="token comment"># 作业的阶段列表及其执行顺序</span>  <span class="token punctuation">-</span> build  <span class="token punctuation">-</span> test  <span class="token punctuation">-</span> deploy<span class="token key atrule">build-job</span><span class="token punctuation">:</span>       <span class="token comment"># 此作业在构建阶段运行，构建阶段是最先执行的</span>  <span class="token key atrule">image</span><span class="token punctuation">:</span> gradle<span class="token punctuation">:</span>7.4.1<span class="token punctuation">-</span>jdk11<span class="token punctuation">-</span>alpine  <span class="token key atrule">stage</span><span class="token punctuation">:</span> build  <span class="token key atrule">script</span><span class="token punctuation">:</span>    <span class="token punctuation">-</span> echo "开始编译代码<span class="token punctuation">...</span>"    <span class="token punctuation">-</span> gradle clean compileJava    <span class="token punctuation">-</span> echo "编译代码完成<span class="token punctuation">...</span>"<span class="token key atrule">test-job</span><span class="token punctuation">:</span>        <span class="token comment"># 此作业在测试阶段运行，测试阶段在第二阶段执行的</span>  <span class="token key atrule">image</span><span class="token punctuation">:</span> gradle<span class="token punctuation">:</span>7.4.1<span class="token punctuation">-</span>jdk11<span class="token punctuation">-</span>alpine  <span class="token key atrule">stage</span><span class="token punctuation">:</span> test  <span class="token key atrule">script</span><span class="token punctuation">:</span>    <span class="token punctuation">-</span>  echo "开始测试代码<span class="token punctuation">...</span>"    <span class="token punctuation">-</span> gradle test <span class="token punctuation">-</span><span class="token punctuation">-</span>info    <span class="token punctuation">-</span> echo "测试代码完成<span class="token punctuation">...</span>"<span class="token key atrule">deploy-job</span><span class="token punctuation">:</span>      <span class="token comment"># 此作业在部署阶段运行</span>  <span class="token key atrule">stage</span><span class="token punctuation">:</span> deploy  <span class="token comment"># 只有当之前两个阶段都成功完成时，才会执行部署的。</span>  <span class="token key atrule">script</span><span class="token punctuation">:</span>    <span class="token punctuation">-</span> echo "开始部署代码<span class="token punctuation">...</span>"    <span class="token punctuation">-</span> echo "部署代码完成.."<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>在上面这个.gitlab-ci.yml文件中,有一个稍微特殊一点的地方在于,由于我们的代码中使用到了testcontainers,所以我们需要在.gitlab-ci.yml文件中添加一个service,这个service是用来启动testcontainers相关容器的,具体可以参考<a href="https://docs.gitlab.com/runner/install/docker.html#install-the-docker-image-and-start-the-container">安装 Docker 镜像并启动容器</a></p><p>然后我们定义了三个阶段:build,test,deploy,这三个阶段的执行顺序是:build-job,test-job,deploy-job,这样我们就可以在GitLab中按照顺序执行这三个阶段的作业了,在流水线中我们也可以看到</p><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/%E6%B5%81%E6%B0%B4%E7%BA%BF.jpg?raw=true" alt="流水线"></p><p>由于我们没有资源,不能进行deploy,在这个阶段实际上只是打印一下,之前的build-job和test-job阶段分别是执行:<br>- gradle clean compileJava<br>- gradle test --info</p><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C.jpg?raw=true" alt="执行结果"></p><p>通过在流水线中点击相关的阶段,可以看到详细的日志</p><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/%E6%89%A7%E8%A1%8C%E6%97%A5%E5%BF%97.jpg?raw=true" alt="执行日志"></p><h2 id="GitHub-Actions"><a class="header-anchor" href="#GitHub-Actions"></a>GitHub Actions</h2><p>GitHub Actions是github推出的一套发现、创建和共享操作以执行您喜欢的任何作业（包括 CI/CD），并将操作合并到完全自定义的工作流程。</p><h3 id="创建Actions"><a class="header-anchor" href="#创建Actions"></a>创建Actions</h3><p>在Actions中,选择对应的模板进行创建</p><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/GitHub_Actions_1.jpg?raw=true" alt="创建workflows"></p><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/GitHub_Actions_2.jpg?raw=true" alt="选择模板"></p><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/GitHub_Actions_3.jpg?raw=true" alt="模板"></p><h3 id="执行Actions"><a class="header-anchor" href="#执行Actions"></a>执行Actions</h3><p>创建完成Actions后,会自动运行.运行结果可以在workflow中查看</p><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/GitHub_Actions_4.jpg?raw=true" alt="执行Actions"></p><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/GitHub_Actions_5.jpg?raw=true" alt="执行结果"></p><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/GitHub_Actions_5.jpg?raw=true" alt="执行日志"></p><p>注意:</p><ul><li>编译gradle项目出现’Error: Gradle script ‘/home/runner/work/testcontainers-simple/testcontainers-simple/gradlew’ is not executable.'的问题是由于我们项目中的gradlew文件不是可执行的,所以需要将其设置为可执行的,在项目中执行<B>git update-index --chmod=+x gradlew</B>即可</li></ul><h3 id="Actions配置解释"><a class="header-anchor" href="#Actions配置解释"></a>Actions配置解释</h3><ul><li>main.yml</li></ul><pre class="line-numbers language-yml文件" data-language="yml文件"><code class="language-yml文件"># This workflow uses actions that are not certified by GitHub.# They are provided by a third-party and are governed by# separate terms of service, privacy policy, and support# documentation.# This workflow will build a Java project with Gradle and cache&#x2F;restore any dependencies to improve the workflow execution time# For more information see: https:&#x2F;&#x2F;help.github.com&#x2F;actions&#x2F;language-and-framework-guides&#x2F;building-and-testing-java-with-gradlename: Java CI with Gradleon: push        # 触发事件jobs:  build:    runs-on: ubuntu-latest    steps:    - uses: actions&#x2F;checkout@v2    - name: Set up JDK 11      uses: actions&#x2F;setup-java@v2      with:        java-version: &#39;11&#39;        distribution: &#39;temurin&#39;    - name: Build with Gradle      uses: gradle&#x2F;gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee      with:        arguments: build<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>github的CI/CD配置就比gitlab的配置看起来要清爽很多,主要是分为三个部分:</p><ul><li><p>name<br>name主要是用来标识这个workflows的名称的</p></li><li><p>on<br>on主要是用来标识触发Actions的动作的</p></li><li><p>jobs<br>jobs又很为两个部分:</p><ul><li>runs-on<br>标识运行的基础环境</li><li>steps<br>标识运行的步骤,其中with.arguments是用来指定gradle的参数的</li></ul></li></ul><h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2><p>GitLab和GitHub的CI/CD在使用上都是比较简单的,只需要使用到专用的配置文件就可以触发,需要主要一点的是GitLab的配置文件中需要指定Docker in Docker配置,<br>而GitHub Actions使用上要比GitLab的.gitlab-ci.yml要方便,可以直接从marketplace下载已经预设好的模板,直接进行使用.配置文件中也不需要指定运行环境</p><h2 id="参考文档"><a class="header-anchor" href="#参考文档"></a>参考文档</h2><p><a href="https://about.gitlab.com/install/">gitlab install</a><br><a href="https://help.aliyun.com/document_detail/52857.html">安装和使用GitLab</a><br><a href="http://blinkfox.com/2018/11/22/ruan-jian-gong-ju/devops/gitlab-ci-jie-shao-he-shi-yong/#toc-heading-20">GitLab CI/CD 介绍和使用</a><br><a href="https://zq99299.github.io/note-combat/gitlab/cicd/">CI/CD</a><br><a href="https://docs.github.com/cn/actions/quickstart">GitHub Actions 快速开始</a></p>]]></content>
       
+      
+      <categories>
+          
+          <category> 杂记 </category>
+          
+      </categories>
       
       
         <tags>
@@ -52,7 +58,7 @@
       <link href="2022/03/19/7.%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9F%A5%E8%AF%86/50.pulsar%E7%9A%84%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/"/>
       <url>2022/03/19/7.%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9F%A5%E8%AF%86/50.pulsar%E7%9A%84%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/</url>
       
-        <content type="html"><![CDATA[<h1>pulsar的简单使用</h1><p>Apache Pulsar 是一个云原生的分布式消息传递和流媒体平台，最初由 Yahoo! 创建。现在是作为Apache软件基金会的顶级项目.<br>在pulsar这个项目中还大量使用了另外一个Apache的顶级项目<B>Bookkeeper</B>作为存储层的解决方案,在研究完成Pulsar之后也会对Bookkeeper进行研究.<br>本文用于记录本地安装Pulsar的过程,希望对你有所帮助,祝好!</p><h2 id="安装Pulsar"><a class="header-anchor" href="#安装Pulsar"></a>安装Pulsar</h2><p>根据官网介绍安装Pulsar一共有三种安装方式,分别是</p><ul><li>本地运行</li><li>docker中运行</li><li>k8s中运行</li></ul><h3 id="本地运行"><a class="header-anchor" href="#本地运行"></a>本地运行</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#下载</span>$ <span class="token function">wget</span> https://archive.apache.org/dist/pulsar/pulsar-2.9.1/apache-pulsar-2.9.1-bin.tar.gz<span class="token comment">#解压</span>$ <span class="token function">tar</span> xvfz apache-pulsar-2.9.1-bin.tar.gz<span class="token comment"># 启动pulsar</span>$ <span class="token builtin class-name">cd</span> apache-pulsar-2.9.1$ bin/pulsar standalone<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><h3 id="docker中运行"><a class="header-anchor" href="#docker中运行"></a>docker中运行</h3><ul><li>pulsar</li></ul><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker run -it -p <span class="token number">6650</span>:6650  -p <span class="token number">8080</span>:8080 --mount <span class="token assign-left variable">source</span><span class="token operator">=</span>pulsardata,target<span class="token operator">=</span>/pulsar/data --mount <span class="token assign-left variable">source</span><span class="token operator">=</span>pulsarconf,target<span class="token operator">=</span>/pulsar/conf apachepulsar/pulsar:2.9.1 bin/pulsar standalone -nfw<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><ul><li>pulsar admin</li></ul><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 启动pulsar admin</span>docker run -it  -p <span class="token number">9527</span>:9527 -p <span class="token number">7750</span>:7750 -e <span class="token assign-left variable">SPRING_CONFIGURATION_FILE</span><span class="token operator">=</span>/pulsar-manager/pulsar-manager/application.properties apachepulsar/pulsar-manager:v0.2.0<span class="token comment"># 修改密码</span><span class="token function">curl</span>  -H <span class="token string">'X-XSRF-TOKEN: $CSRF_TOKEN'</span> -H <span class="token string">'Cookie: XSRF-TOKEN=$CSRF_TOKEN;'</span>  -H <span class="token string">"Content-Type: application/json"</span> -X PUT http://localhost:7750/pulsar-manager/users/superuser -d <span class="token string">'&#123;"name": "admin", "password": "apachepulsar", "description": "test", "email": "username@test.org"&#125;'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><ul><li>pulsar admin</li></ul><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/pulsar/puslarAdmin.jpg?raw=true" alt="pulsar admin"></p><h3 id="k8s中运行"><a class="header-anchor" href="#k8s中运行"></a>k8s中运行</h3><p>k8s中需要使用helm来运行</p><pre class="line-numbers language-java" data-language="java"><code class="language-java">helm install \    <span class="token operator">--</span>values examples<span class="token operator">/</span>values<span class="token operator">-</span>minikube<span class="token punctuation">.</span>yaml \    <span class="token operator">--</span>set initialize<span class="token operator">=</span><span class="token boolean">true</span> \    <span class="token operator">--</span>namespace pulsar \    pulsar<span class="token operator">-</span>mini apache<span class="token operator">/</span>pulsar<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><h2 id="pulsar示例"><a class="header-anchor" href="#pulsar示例"></a>pulsar示例</h2><p>使用kotlin来演示</p><h3 id="普通消息功能"><a class="header-anchor" href="#普通消息功能"></a>普通消息功能</h3><ul><li>PulsarUtil</li></ul><pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token comment">/** * 用于创建Pulasr使用中用到的一些工具 */</span><span class="token keyword">class</span> PulsarUtil<span class="token comment">/** * 创建pulsar客户端对象 */</span><span class="token keyword">fun</span> <span class="token function">createClient</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> PulsarClient <span class="token punctuation">&#123;</span>    <span class="token keyword">return</span> PulsarClient<span class="token punctuation">.</span><span class="token function">builder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>        <span class="token punctuation">.</span><span class="token function">serviceUrl</span><span class="token punctuation">(</span><span class="token string">"pulsar://localhost:6650"</span><span class="token punctuation">)</span>        <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span><span class="token comment">/** * 创建Topic */</span><span class="token keyword">fun</span> <span class="token function">createProduct</span><span class="token punctuation">(</span>topic<span class="token operator">:</span> String<span class="token punctuation">,</span> client<span class="token operator">:</span> PulsarClient<span class="token punctuation">)</span><span class="token operator">:</span> Producer<span class="token operator">&lt;</span>String<span class="token operator">></span> <span class="token punctuation">&#123;</span>    <span class="token keyword">return</span> client<span class="token punctuation">.</span><span class="token function">newProducer</span><span class="token punctuation">(</span>Schema<span class="token punctuation">.</span>STRING<span class="token punctuation">)</span>        <span class="token punctuation">.</span><span class="token function">topic</span><span class="token punctuation">(</span>topic<span class="token punctuation">)</span>        <span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><ul><li>PulsarProducer</li></ul><pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token keyword">class</span> PulsarProducer<span class="token keyword">fun</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>    <span class="token keyword">val</span> client <span class="token operator">=</span> <span class="token function">createClient</span><span class="token punctuation">(</span><span class="token punctuation">)</span>    <span class="token keyword">val</span> product <span class="token operator">=</span> <span class="token function">createProduct</span><span class="token punctuation">(</span><span class="token string">"pulsar-topic-1"</span><span class="token punctuation">,</span> client<span class="token punctuation">)</span>    <span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token keyword">in</span> <span class="token number">0</span><span class="token operator">..</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>        product<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token string">"message:<span class="token interpolation variable">$i</span>"</span><span class="token punctuation">)</span>    <span class="token punctuation">&#125;</span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><ul><li>PulsarConsumer</li></ul><pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token keyword">fun</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>    <span class="token keyword">val</span> client <span class="token operator">=</span> <span class="token function">createClient</span><span class="token punctuation">(</span><span class="token punctuation">)</span>    <span class="token keyword">val</span> subscribe <span class="token operator">=</span> client<span class="token punctuation">.</span><span class="token function">newConsumer</span><span class="token punctuation">(</span><span class="token punctuation">)</span>        <span class="token punctuation">.</span><span class="token function">topic</span><span class="token punctuation">(</span><span class="token string">"pulsar-topic-1"</span><span class="token punctuation">)</span>        <span class="token punctuation">.</span><span class="token function">subscriptionName</span><span class="token punctuation">(</span><span class="token string">"pulsar-topic-1-sub"</span><span class="token punctuation">)</span>        <span class="token punctuation">.</span><span class="token function">ackTimeout</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> TimeUnit<span class="token punctuation">.</span>SECONDS<span class="token punctuation">)</span>        <span class="token punctuation">.</span><span class="token function">subscriptionType</span><span class="token punctuation">(</span>SubscriptionType<span class="token punctuation">.</span>Exclusive<span class="token punctuation">)</span>        <span class="token punctuation">.</span><span class="token function">subscribe</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>        <span class="token keyword">val</span> receive <span class="token operator">=</span> subscribe<span class="token punctuation">.</span><span class="token function">receive</span><span class="token punctuation">(</span><span class="token punctuation">)</span>        <span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"message:"</span> <span class="token operator">+</span> <span class="token function">String</span><span class="token punctuation">(</span>receive<span class="token punctuation">.</span>data<span class="token punctuation">)</span><span class="token punctuation">)</span>        subscribe<span class="token punctuation">.</span><span class="token function">acknowledge</span><span class="token punctuation">(</span>receive<span class="token punctuation">.</span>messageId<span class="token punctuation">)</span>    <span class="token punctuation">&#125;</span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>第一个例子只是使用一个普通消息来演示pulsar的消息功能,推送完成后可以看到消息被消费了.</p><h3 id="异步消息功能"><a class="header-anchor" href="#异步消息功能"></a>异步消息功能</h3><blockquote><p>异步消息分为’异步发送’和’异步接收’,异步接收应该是puslar特有的功能,虽然业务代码在使用MQ时也可以通过自定义线程池的方式来完成异步接收的效果<br>下面展示一个发送消息和异步接收消息的示例</p></blockquote><ul><li>PulsarAsyncProducer</li></ul><pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token comment">/** * 异步消息 */</span><span class="token keyword">private</span> <span class="token keyword">fun</span> <span class="token function">asyncMsg</span><span class="token punctuation">(</span>product<span class="token operator">:</span> Producer<span class="token operator">&lt;</span>String<span class="token operator">></span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>    <span class="token function">println</span><span class="token punctuation">(</span>Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>name <span class="token operator">+</span> <span class="token string">":提交任务"</span><span class="token punctuation">)</span>    <span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token keyword">in</span> <span class="token number">0</span><span class="token operator">..</span><span class="token number">10</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>        product<span class="token punctuation">.</span><span class="token function">sendAsync</span><span class="token punctuation">(</span><span class="token string">"message:<span class="token interpolation variable">$i</span>|"</span> <span class="token operator">+</span> LocalDateTime<span class="token punctuation">.</span><span class="token function">now</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">thenAccept</span> <span class="token punctuation">&#123;</span>            <span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Message with ID <span class="token interpolation variable">$it</span> successfully sent|"</span> <span class="token operator">+</span> Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>name<span class="token punctuation">)</span>        <span class="token punctuation">&#125;</span>    <span class="token punctuation">&#125;</span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><ul><li>执行结果</li></ul><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/pulsar/%E5%BC%82%E6%AD%A5%E6%B6%88%E6%81%AF%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C.jpg?raw=true" alt="异步消息执行结果"></p><p>可以看到回调线程不是main,而是单独的一个线程池中的线程</p>]]></content>
+        <content type="html"><![CDATA[<h1>pulsar的简单使用</h1><p>Apache Pulsar 是一个云原生的分布式消息传递和流媒体平台，最初由 Yahoo! 创建。现在是作为Apache软件基金会的顶级项目.<br>在pulsar这个项目中还大量使用了另外一个Apache的顶级项目<B>Bookkeeper</B>作为存储层的解决方案,在研究完成Pulsar之后也会对Bookkeeper进行研究.<br>本文用于记录本地安装Pulsar的过程,希望对你有所帮助,祝好!</p><h2 id="安装Pulsar"><a class="header-anchor" href="#安装Pulsar"></a>安装Pulsar</h2><p>根据官网介绍安装Pulsar一共有三种安装方式,分别是</p><ul><li>本地运行</li><li>docker中运行</li><li>k8s中运行</li></ul><h3 id="本地运行"><a class="header-anchor" href="#本地运行"></a>本地运行</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#下载</span>$ <span class="token function">wget</span> https://archive.apache.org/dist/pulsar/pulsar-2.9.1/apache-pulsar-2.9.1-bin.tar.gz<span class="token comment">#解压</span>$ <span class="token function">tar</span> xvfz apache-pulsar-2.9.1-bin.tar.gz<span class="token comment"># 启动pulsar</span>$ <span class="token builtin class-name">cd</span> apache-pulsar-2.9.1$ bin/pulsar standalone<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><h3 id="docker中运行"><a class="header-anchor" href="#docker中运行"></a>docker中运行</h3><ul><li>pulsar</li></ul><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker run -it -p <span class="token number">6650</span>:6650  -p <span class="token number">8080</span>:8080 --mount <span class="token assign-left variable">source</span><span class="token operator">=</span>pulsardata,target<span class="token operator">=</span>/pulsar/data --mount <span class="token assign-left variable">source</span><span class="token operator">=</span>pulsarconf,target<span class="token operator">=</span>/pulsar/conf apachepulsar/pulsar:2.9.1 bin/pulsar standalone -nfw<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><ul><li>pulsar admin</li></ul><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 启动pulsar admin</span>docker run -it  -p <span class="token number">9527</span>:9527 -p <span class="token number">7750</span>:7750 -e <span class="token assign-left variable">SPRING_CONFIGURATION_FILE</span><span class="token operator">=</span>/pulsar-manager/pulsar-manager/application.properties apachepulsar/pulsar-manager:v0.2.0<span class="token comment"># 修改密码</span><span class="token function">curl</span>  -H <span class="token string">'X-XSRF-TOKEN: $CSRF_TOKEN'</span> -H <span class="token string">'Cookie: XSRF-TOKEN=$CSRF_TOKEN;'</span>  -H <span class="token string">"Content-Type: application/json"</span> -X PUT http://localhost:7750/pulsar-manager/users/superuser -d <span class="token string">'&#123;"name": "admin", "password": "apachepulsar", "description": "test", "email": "username@test.org"&#125;'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><ul><li>pulsar admin</li></ul><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/pulsar/puslarAdmin.jpg?raw=true" alt="pulsar admin"></p><h3 id="k8s中运行"><a class="header-anchor" href="#k8s中运行"></a>k8s中运行</h3><p>k8s中需要使用helm来运行</p><pre class="line-numbers language-java" data-language="java"><code class="language-java">helm install     <span class="token operator">--</span>values examples<span class="token operator">/</span>values<span class="token operator">-</span>minikube<span class="token punctuation">.</span>yaml     <span class="token operator">--</span>set initialize<span class="token operator">=</span><span class="token boolean">true</span>     <span class="token operator">--</span>namespace pulsar     pulsar<span class="token operator">-</span>mini apache<span class="token operator">/</span>pulsar<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><h2 id="pulsar示例"><a class="header-anchor" href="#pulsar示例"></a>pulsar示例</h2><p>使用kotlin来演示</p><h3 id="普通消息功能"><a class="header-anchor" href="#普通消息功能"></a>普通消息功能</h3><ul><li>PulsarUtil</li></ul><pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token comment">/** * 用于创建Pulasr使用中用到的一些工具 */</span><span class="token keyword">class</span> PulsarUtil<span class="token comment">/** * 创建pulsar客户端对象 */</span><span class="token keyword">fun</span> <span class="token function">createClient</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">:</span> PulsarClient <span class="token punctuation">&#123;</span>    <span class="token keyword">return</span> PulsarClient<span class="token punctuation">.</span><span class="token function">builder</span><span class="token punctuation">(</span><span class="token punctuation">)</span>        <span class="token punctuation">.</span><span class="token function">serviceUrl</span><span class="token punctuation">(</span><span class="token string">"pulsar://localhost:6650"</span><span class="token punctuation">)</span>        <span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span><span class="token comment">/** * 创建Topic */</span><span class="token keyword">fun</span> <span class="token function">createProduct</span><span class="token punctuation">(</span>topic<span class="token operator">:</span> String<span class="token punctuation">,</span> client<span class="token operator">:</span> PulsarClient<span class="token punctuation">)</span><span class="token operator">:</span> Producer<span class="token operator">&lt;</span>String<span class="token operator">></span> <span class="token punctuation">&#123;</span>    <span class="token keyword">return</span> client<span class="token punctuation">.</span><span class="token function">newProducer</span><span class="token punctuation">(</span>Schema<span class="token punctuation">.</span>STRING<span class="token punctuation">)</span>        <span class="token punctuation">.</span><span class="token function">topic</span><span class="token punctuation">(</span>topic<span class="token punctuation">)</span>        <span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><ul><li>PulsarProducer</li></ul><pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token keyword">class</span> PulsarProducer<span class="token keyword">fun</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>    <span class="token keyword">val</span> client <span class="token operator">=</span> <span class="token function">createClient</span><span class="token punctuation">(</span><span class="token punctuation">)</span>    <span class="token keyword">val</span> product <span class="token operator">=</span> <span class="token function">createProduct</span><span class="token punctuation">(</span><span class="token string">"pulsar-topic-1"</span><span class="token punctuation">,</span> client<span class="token punctuation">)</span>    <span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token keyword">in</span> <span class="token number">0</span><span class="token operator">..</span><span class="token number">100</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>        product<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token string">"message:<span class="token interpolation variable">$i</span>"</span><span class="token punctuation">)</span>    <span class="token punctuation">&#125;</span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><ul><li>PulsarConsumer</li></ul><pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token keyword">fun</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>    <span class="token keyword">val</span> client <span class="token operator">=</span> <span class="token function">createClient</span><span class="token punctuation">(</span><span class="token punctuation">)</span>    <span class="token keyword">val</span> subscribe <span class="token operator">=</span> client<span class="token punctuation">.</span><span class="token function">newConsumer</span><span class="token punctuation">(</span><span class="token punctuation">)</span>        <span class="token punctuation">.</span><span class="token function">topic</span><span class="token punctuation">(</span><span class="token string">"pulsar-topic-1"</span><span class="token punctuation">)</span>        <span class="token punctuation">.</span><span class="token function">subscriptionName</span><span class="token punctuation">(</span><span class="token string">"pulsar-topic-1-sub"</span><span class="token punctuation">)</span>        <span class="token punctuation">.</span><span class="token function">ackTimeout</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">,</span> TimeUnit<span class="token punctuation">.</span>SECONDS<span class="token punctuation">)</span>        <span class="token punctuation">.</span><span class="token function">subscriptionType</span><span class="token punctuation">(</span>SubscriptionType<span class="token punctuation">.</span>Exclusive<span class="token punctuation">)</span>        <span class="token punctuation">.</span><span class="token function">subscribe</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>        <span class="token keyword">val</span> receive <span class="token operator">=</span> subscribe<span class="token punctuation">.</span><span class="token function">receive</span><span class="token punctuation">(</span><span class="token punctuation">)</span>        <span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"message:"</span> <span class="token operator">+</span> <span class="token function">String</span><span class="token punctuation">(</span>receive<span class="token punctuation">.</span>data<span class="token punctuation">)</span><span class="token punctuation">)</span>        subscribe<span class="token punctuation">.</span><span class="token function">acknowledge</span><span class="token punctuation">(</span>receive<span class="token punctuation">.</span>messageId<span class="token punctuation">)</span>    <span class="token punctuation">&#125;</span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>第一个例子只是使用一个普通消息来演示pulsar的消息功能,推送完成后可以看到消息被消费了.</p><h3 id="异步消息功能"><a class="header-anchor" href="#异步消息功能"></a>异步消息功能</h3><blockquote><p>异步消息分为’异步发送’和’异步接收’,异步接收应该是puslar特有的功能,虽然业务代码在使用MQ时也可以通过自定义线程池的方式来完成异步接收的效果<br>下面展示一个发送消息和异步接收消息的示例</p></blockquote><ul><li>PulsarAsyncProducer</li></ul><pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token comment">/** * 异步消息 */</span><span class="token keyword">private</span> <span class="token keyword">fun</span> <span class="token function">asyncMsg</span><span class="token punctuation">(</span>product<span class="token operator">:</span> Producer<span class="token operator">&lt;</span>String<span class="token operator">></span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>    <span class="token function">println</span><span class="token punctuation">(</span>Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>name <span class="token operator">+</span> <span class="token string">":提交任务"</span><span class="token punctuation">)</span>    <span class="token keyword">for</span> <span class="token punctuation">(</span>i <span class="token keyword">in</span> <span class="token number">0</span><span class="token operator">..</span><span class="token number">10</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>        product<span class="token punctuation">.</span><span class="token function">sendAsync</span><span class="token punctuation">(</span><span class="token string">"message:<span class="token interpolation variable">$i</span>|"</span> <span class="token operator">+</span> LocalDateTime<span class="token punctuation">.</span><span class="token function">now</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">thenAccept</span> <span class="token punctuation">&#123;</span>            <span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Message with ID <span class="token interpolation variable">$it</span> successfully sent|"</span> <span class="token operator">+</span> Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>name<span class="token punctuation">)</span>        <span class="token punctuation">&#125;</span>    <span class="token punctuation">&#125;</span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><ul><li>执行结果</li></ul><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/pulsar/%E5%BC%82%E6%AD%A5%E6%B6%88%E6%81%AF%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C.jpg?raw=true" alt="异步消息执行结果"></p><p>可以看到回调线程不是main,而是单独的一个线程池中的线程</p>]]></content>
       
       
       <categories>
@@ -82,14 +88,14 @@
       
       <categories>
           
-          <category> 笔记 </category>
+          <category> 编译原理 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> 基础 </tag>
+            <tag> 笔记 </tag>
             
         </tags>
       
@@ -107,14 +113,14 @@
       
       <categories>
           
-          <category> 笔记 </category>
+          <category> 编译原理 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> 基础 </tag>
+            <tag> 笔记 </tag>
             
         </tags>
       
@@ -132,14 +138,14 @@
       
       <categories>
           
-          <category> 笔记 </category>
+          <category> 编译愿意 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> 基础 </tag>
+            <tag> 笔记 </tag>
             
         </tags>
       
@@ -357,7 +363,7 @@
       
       <categories>
           
-          <category> java并发 </category>
+          <category> 并发 </category>
           
       </categories>
       
@@ -416,8 +422,6 @@
             
             <tag> RocketMQ </tag>
             
-            <tag> IndexService </tag>
-            
         </tags>
       
     </entry>
@@ -434,7 +438,7 @@
       
       <categories>
           
-          <category> jvm </category>
+          <category> JVM </category>
           
       </categories>
       
@@ -443,7 +447,7 @@
             
             <tag> jvm </tag>
             
-            <tag> G1 </tag>
+            <tag> GC </tag>
             
         </tags>
       
@@ -536,7 +540,7 @@
       
       <categories>
           
-          <category> jvm </category>
+          <category> JVM </category>
           
       </categories>
       
@@ -936,12 +940,12 @@
         <content type="html"><![CDATA[<h1>基础知识</h1><h2 id="计算机网络的类别"><a class="header-anchor" href="#计算机网络的类别"></a>计算机网络的类别</h2><ol><li>广域网 WAN(Wide Area Network),作用范围在几十至几千公里</li><li>城域网 MAN(Metropolitan Area Network),作用范围在五至五十公里</li><li>局域网 LAN(Local Area Network),作用范围在一功能左右</li><li>个人局域网 PAN(Personal Area Network),通常作用范围为10米左右,通过无线连接起来的个人局域网又称为WPAN</li></ol><h2 id="计算机网络的性能指标"><a class="header-anchor" href="#计算机网络的性能指标"></a>计算机网络的性能指标</h2><ol><li>速率:指的是连接在计算机网络上的主机在数字信道上传送数据的速率.通俗来讲就是单位时间内能发送的数据量</li><li>带宽:指的是网络的通信线路所能传送数据的能力.通俗来讲就是网络线路承载数据的宽度</li><li>吞吐量:指的是单位时间内通过某个网络的数据量</li><li>时延:指的是数据通过网络从一端传送到另外一端的时间(总时延=发送时延+传播时延+处理时延+排队时延)</li><li>时延带宽积:指的是传播时延*贷款表示以比特为单位的链路长度</li><li>往返时间RTT:指的是从发送端发送数据开始到发送端接受到接受端的响应为止</li><li>利用率:指的是信道利用率和网络利用率</li></ol><h2 id="计算机网络协议划分"><a class="header-anchor" href="#计算机网络协议划分"></a>计算机网络协议划分</h2><ol><li><p>OSI七层协议<br>7. 应用层<br>6. 表示层<br>5. 会话层<br>4. 运输层<br>3. 网络层<br>2. 数据链路层</p><ol><li>物理层</li></ol></li><li><p>TCP/IP四层协议<br>4. 应用层(TELNET,FTP,SMTP)<br>3. 运输层(TCP/UDP)<br>2. 网际层(IP)</p><ol><li>网络接口层<br>由于TCP/IP协议中的网络接口层是对通信链路的一个抽象因此并无具体实现,因此又折中出了一个五层协议的架构</li></ol></li><li><p>五层协议<br>5. 应用层<br>4. 运输层<br>3. 网络层<br>2. 数据链路层</p><ol><li>物理层</li></ol></li></ol><h2 id="TCP和UDP的异同"><a class="header-anchor" href="#TCP和UDP的异同"></a>TCP和UDP的异同</h2><p>TCP和UDP都是运输层协议,TCP在设计是可靠的(因此有三次握手)</p><h2 id="TCP-IP协议族的沙漏模型"><a class="header-anchor" href="#TCP-IP协议族的沙漏模型"></a>TCP/IP协议族的沙漏模型</h2><p>应用层 :  HTTP   SMTP    DNS  RTP   H.323  SIP<br>\     /       \    /     \      /<br>运输层 :     TCP            UDP        SCTP<br>\             |          /<br>网际层 :                    IP<br>/            |            <br>网络接口层:  接口1          接口2         接口3</p><h2 id="通信方式"><a class="header-anchor" href="#通信方式"></a>通信方式</h2><ol><li>单向通信<br>信号只能沿着一个方向移动</li><li>双向交替通信(半双工通信)<br>单位时间内信号只能沿着一个方向移动</li><li>双向同时通信<br>单位时间内信号可向不同的方向移动</li></ol><h2 id="网际层协议-IP"><a class="header-anchor" href="#网际层协议-IP"></a>网际层协议-IP</h2><p>HTTP是什么?<br>HTTP是一种超文本传输协议(Hypertext Transfer Protocol),主要是由于</p>]]></content>
       
       
+      <categories>
+          
+          <category> 网络协议 </category>
+          
+      </categories>
       
-        <tags>
-            
-            <tag> 网络协议 </tag>
-            
-        </tags>
       
     </entry>
     
@@ -987,12 +991,6 @@
       </categories>
       
       
-        <tags>
-            
-            <tag> guava </tag>
-            
-        </tags>
-      
     </entry>
     
     
@@ -1007,7 +1005,7 @@
       
       <categories>
           
-          <category> java并发 </category>
+          <category> 杂记 </category>
           
       </categories>
       
@@ -1030,6 +1028,18 @@
         <content type="html"><![CDATA[<h2 id="Dockerfile文件"><a class="header-anchor" href="#Dockerfile文件"></a>Dockerfile文件</h2><blockquote><p>Dockerfile文件是用来构建镜像的文本文件，文本文件中包含了一系列构建镜像所需的指令和说明</p></blockquote><h2 id="java基础环境"><a class="header-anchor" href="#java基础环境"></a>java基础环境</h2><ul><li>Dockerfile</li></ul><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 基础镜像版本</span>FROM java:latest<span class="token comment"># 设置工作目录</span>WORKDIR /app<span class="token comment"># 复制初始文件到工作目录中</span>COPY <span class="token builtin class-name">.</span> /app<span class="token comment"># 设置Java环境变量</span>ENV <span class="token assign-left variable"><span class="token environment constant">PATH</span></span><span class="token operator">=</span><span class="token environment constant">$PATH</span><span class="token builtin class-name">:</span><span class="token variable">$JAVA_HOME</span>/binENV <span class="token assign-left variable">JRE_HOME</span><span class="token operator">=</span><span class="token variable">$&#123;JAVA_HOME&#125;</span>/jreENV <span class="token assign-left variable">CLASSPATH</span><span class="token operator">=</span>.:<span class="token variable">$&#123;JAVA_HOME&#125;</span>/lib:<span class="token variable">$&#123;JRE_HOME&#125;</span>/lib<span class="token comment"># 编译</span>RUN <span class="token punctuation">[</span><span class="token string">"/usr/lib/jvm/java-8-openjdk-amd64/bin/javac"</span>,<span class="token string">"Docker_java.java"</span><span class="token punctuation">]</span><span class="token comment"># 运行</span>ENTRYPOINT <span class="token punctuation">[</span><span class="token string">"/usr/lib/jvm/java-8-openjdk-amd64/bin/java"</span>, <span class="token string">"Docker_java"</span><span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><p>Dockerfile文件需要在当前工作目录下编写，Docker_java.java文件也需要在当前工作目录下</p><ul><li>Docker_java.java</li></ul><pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span></span><span class="token operator">*</span><span class="token punctuation">;</span><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Docker_java</span><span class="token punctuation">&#123;</span>    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Hello Docker!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>        <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Date</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>    <span class="token punctuation">&#125;</span><span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><ul><li>build命令和启动命令</li></ul><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># -rm 表示构建完成后删除中间镜像</span><span class="token comment"># -f  表示指定Dockerfile文件,默认为当前目录下的Dockerfile文件 </span><span class="token comment"># -t  表示对镜像打tag</span>docker build --rm -f <span class="token string">"Dockerfile"</span> -t docker_java:0.0.1<span class="token comment">#运行命令</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><pre><code>docker run docker_java:0.0.1</code></pre><pre class="line-numbers language-none"><code class="language-none">## mysql环境&gt; 构建一个账号名称为test,密码为test并且自定义初始化sqlmysql容器- Dockerfile&#96;&#96;&#96;bash#基础版本FROM mysql:5.7.22#环境变量ENV TZ&#x3D;Asia&#x2F;Shanghai \    MYSQL_DATABASE&#x3D;test \    MYSQL_USER&#x3D;test \    MYSQL_PASSWORD&#x3D;test \    MYSQL_ROOT_PASSWORD&#x3D;test#将sql目录下的文件全部拷贝到目标文件夹下COPY sql&#x2F;. &#x2F;docker-entrypoint-initdb.d<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><ul><li>init.sql</li></ul><pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">DATABASE</span> <span class="token keyword">IF</span> <span class="token operator">NOT</span> <span class="token keyword">EXISTS</span> <span class="token punctuation">`</span>test<span class="token punctuation">`</span><span class="token punctuation">;</span><span class="token keyword">USE</span> <span class="token punctuation">`</span>test<span class="token punctuation">`</span><span class="token punctuation">;</span><span class="token keyword">DROP</span> <span class="token keyword">TABLE</span> <span class="token keyword">IF</span> <span class="token keyword">EXISTS</span> <span class="token punctuation">`</span>table_a<span class="token punctuation">`</span><span class="token punctuation">;</span><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> <span class="token punctuation">`</span>table_a<span class="token punctuation">`</span> <span class="token punctuation">(</span><span class="token punctuation">`</span>sync_pk<span class="token punctuation">`</span> <span class="token keyword">varchar</span><span class="token punctuation">(</span><span class="token number">32</span><span class="token punctuation">)</span> <span class="token keyword">COLLATE</span> utf8mb4_unicode_ci <span class="token operator">NOT</span> <span class="token boolean">NULL</span> <span class="token punctuation">,</span><span class="token punctuation">`</span>hos_code<span class="token punctuation">`</span> <span class="token keyword">varchar</span><span class="token punctuation">(</span><span class="token number">64</span><span class="token punctuation">)</span> <span class="token keyword">COLLATE</span> utf8mb4_unicode_ci <span class="token keyword">DEFAULT</span> <span class="token boolean">NULL</span> <span class="token punctuation">,</span><span class="token punctuation">`</span>create_time<span class="token punctuation">`</span> <span class="token keyword">varchar</span><span class="token punctuation">(</span><span class="token number">19</span><span class="token punctuation">)</span> <span class="token keyword">COLLATE</span> utf8mb4_unicode_ci <span class="token keyword">DEFAULT</span> <span class="token boolean">NULL</span> <span class="token punctuation">,</span><span class="token punctuation">`</span>study_iuid<span class="token punctuation">`</span> <span class="token keyword">varchar</span><span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">)</span> <span class="token keyword">COLLATE</span> utf8mb4_unicode_ci <span class="token keyword">DEFAULT</span> <span class="token boolean">NULL</span> <span class="token punctuation">,</span><span class="token punctuation">`</span>study_content<span class="token punctuation">`</span> <span class="token keyword">mediumtext</span> <span class="token keyword">COLLATE</span> utf8mb4_unicode_ci <span class="token punctuation">,</span><span class="token punctuation">`</span>study_state<span class="token punctuation">`</span> <span class="token keyword">int</span><span class="token punctuation">(</span><span class="token number">255</span><span class="token punctuation">)</span> <span class="token keyword">DEFAULT</span> <span class="token boolean">NULL</span><span class="token punctuation">,</span><span class="token punctuation">`</span>remark<span class="token punctuation">`</span> <span class="token keyword">varchar</span><span class="token punctuation">(</span><span class="token number">1024</span><span class="token punctuation">)</span> <span class="token keyword">COLLATE</span> utf8mb4_unicode_ci <span class="token keyword">DEFAULT</span> <span class="token boolean">NULL</span> <span class="token punctuation">,</span><span class="token keyword">PRIMARY</span> <span class="token keyword">KEY</span> <span class="token punctuation">(</span><span class="token punctuation">`</span>sync_pk<span class="token punctuation">`</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">ENGINE</span><span class="token operator">=</span><span class="token keyword">InnoDB</span> <span class="token keyword">DEFAULT</span> <span class="token keyword">CHARSET</span><span class="token operator">=</span>utf8mb4 <span class="token keyword">COLLATE</span><span class="token operator">=</span>utf8mb4_unicode_ci <span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><ul><li>构建命令</li></ul><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker build --rm -f <span class="token string">"Dockerfile"</span> -t mysqlc:0.0.1 <span class="token builtin class-name">.</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><ul><li>运行命令</li></ul><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#与mysql启动一致</span>docker run -itd --name mysql_local mysqlc:0.0.1 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>]]></content>
       
       
+      <categories>
+          
+          <category> 杂记 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> docker </tag>
+            
+        </tags>
       
     </entry>
     
@@ -1070,7 +1080,7 @@
       
       <categories>
           
-          <category> dubbo </category>
+          <category> RPC </category>
           
       </categories>
       
@@ -1095,14 +1105,14 @@
       
       <categories>
           
-          <category> 读书笔记 </category>
+          <category> 杂记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> 如何高效学习 </tag>
+            <tag> 学习 </tag>
             
         </tags>
       
@@ -1120,7 +1130,7 @@
       
       <categories>
           
-          <category> java并发 </category>
+          <category> 并发 </category>
           
       </categories>
       
@@ -1145,7 +1155,7 @@
       
       <categories>
           
-          <category> mockito </category>
+          <category> 杂记 </category>
           
       </categories>
       
@@ -1197,14 +1207,14 @@
       
       <categories>
           
-          <category> Docker </category>
+          <category> 杂记 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> Docker </tag>
+            <tag> docker </tag>
             
         </tags>
       
@@ -1222,7 +1232,7 @@
       
       <categories>
           
-          <category> ShardingSphere </category>
+          <category> ORM </category>
           
       </categories>
       
@@ -1272,7 +1282,7 @@
       
       <categories>
           
-          <category> ShardingSphere </category>
+          <category> ORM </category>
           
       </categories>
       
@@ -1402,12 +1412,6 @@
       </categories>
       
       
-        <tags>
-            
-            <tag> guava </tag>
-            
-        </tags>
-      
     </entry>
     
     
@@ -1481,7 +1485,7 @@
       
         <tags>
             
-            <tag> java8 </tag>
+            <tag> java </tag>
             
         </tags>
       
@@ -1576,7 +1580,7 @@
       
       <categories>
           
-          <category> jvm </category>
+          <category> JVM </category>
           
       </categories>
       
@@ -2003,7 +2007,7 @@
       
       <categories>
           
-          <category> java并发 </category>
+          <category> 并发 </category>
           
       </categories>
       
@@ -2011,6 +2015,8 @@
         <tags>
             
             <tag> final </tag>
+            
+            <tag> thread </tag>
             
         </tags>
       
@@ -2028,14 +2034,14 @@
       
       <categories>
           
-          <category> AbstractQueuedSynchronizer的源码分析 </category>
+          <category> 并发 </category>
           
       </categories>
       
       
         <tags>
             
-            <tag> AbstractQueuedSynchronizer </tag>
+            <tag> AQS </tag>
             
         </tags>
       
@@ -2078,7 +2084,7 @@
       
       <categories>
           
-          <category> ShardingSphere </category>
+          <category> ORM </category>
           
       </categories>
       
@@ -2126,6 +2132,12 @@
         <content type="html"><![CDATA[]]></content>
       
       
+      <categories>
+          
+          <category> 杂记 </category>
+          
+      </categories>
+      
       
     </entry>
     
@@ -2141,7 +2153,7 @@
       
       <categories>
           
-          <category> ShardingSphere </category>
+          <category> ORM </category>
           
       </categories>
       
@@ -2191,7 +2203,7 @@
       
       <categories>
           
-          <category> jvm </category>
+          <category> JVM </category>
           
       </categories>
       
@@ -2216,7 +2228,7 @@
       
       <categories>
           
-          <category> java并发 </category>
+          <category> 并发 </category>
           
       </categories>
       
@@ -2241,7 +2253,7 @@
       
       <categories>
           
-          <category> jvm </category>
+          <category> JVM </category>
           
       </categories>
       
@@ -2266,7 +2278,7 @@
       
       <categories>
           
-          <category> dubbo </category>
+          <category> RPC </category>
           
       </categories>
       
@@ -2308,15 +2320,15 @@
     
     <entry>
       <title>git多环境配置</title>
-      <link href="2020/02/21/git%E5%A4%9A%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/"/>
-      <url>2020/02/21/git%E5%A4%9A%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</url>
+      <link href="2020/02/21/1.%E6%9D%82%E8%AE%B0/git%E5%A4%9A%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/"/>
+      <url>2020/02/21/1.%E6%9D%82%E8%AE%B0/git%E5%A4%9A%E7%8E%AF%E5%A2%83%E9%85%8D%E7%BD%AE/</url>
       
         <content type="html"><![CDATA[<p>疫情期间，需要在家远程办公，因此需要在电脑上配置两套git环境分别是github、gitlab的。在配置过程中遇到了一些阻碍，特此记录下来。</p><h3 id="步骤一：生成SSH-Key"><a class="header-anchor" href="#步骤一：生成SSH-Key"></a>步骤一：生成SSH-Key</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ssh-keygen -t rsa -C <span class="token string">"email@xx.com"</span> -f ~/.ssh/id_rsa <span class="token comment">#(或gitlab_rsa)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>其中email@xx.com为github或gitlab注册的邮箱<br>id_rsa或gitlab_rsa为生成key文件的名称，默认为id_rsa，使用别名时需要进行步骤三</p><ul><li>分别生成github和gitla的SSH-key</li></ul><h3 id="步骤二：设置Server端公钥"><a class="header-anchor" href="#步骤二：设置Server端公钥"></a>步骤二：设置Server端公钥</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">cat</span> ~/.ssh/id_rsa.pub <span class="token comment">#(或gitlab_rsa)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>将获取到的公钥设置到git服务端，也可以用编辑器打开~/.ssh/id_rsa.pub(或gitlab_rsa)将值复制设置到git服务端</p><h3 id="步骤三：添加私钥"><a class="header-anchor" href="#步骤三：添加私钥"></a>步骤三：添加私钥</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ssh-add ~/.ssh/id_rsa <span class="token comment">#(或gitlab_rsa)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>分别添加不同环境的私钥</p><h3 id="步骤三：配置多环境的config"><a class="header-anchor" href="#步骤三：配置多环境的config"></a>步骤三：配置多环境的config</h3><p>在.ssh/下创建config文件</p><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># github</span>Host github.com    HostName github.com    PreferredAuthentications publickey    IdentityFile ~/.ssh/id_rsa<span class="token comment"># gitlab</span>Host gitlab.com    HostName gitlab.com    PreferredAuthentications publickey    IdentityFile ~/.ssh/gitlab_rsa<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><h3 id="步骤四：测试"><a class="header-anchor" href="#步骤四：测试"></a>步骤四：测试</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ssh</span> -T git@github.com<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>使用命令进行测试</p><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Hi userName<span class="token operator">!</span> You've successfully authenticated, but GitHub does not provide shell access.<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>这样的提示表示成功</p><h3 id="异常处理"><a class="header-anchor" href="#异常处理"></a>异常处理</h3><ul><li><a href="mailto:git@github.com">git@github.com</a>: Permission denied (publickey).<br>1.是否修改过github.com的host<br>2.是否添加私钥</li></ul><h3 id="参考"><a class="header-anchor" href="#参考"></a>参考</h3><p><a href="https://my.oschina.net/stefanzhlg/blog/529403">git 配置多个SSH-Key</a><br><a href="https://www.cnblogs.com/lxwphp/p/7884700.html">解决Permission denied (publickey).</a></p>]]></content>
       
       
       <categories>
           
-          <category> git </category>
+          <category> 杂记 </category>
           
       </categories>
       
@@ -2718,33 +2730,12 @@
         <content type="html"><![CDATA[<h1>读书列表</h1><h2 id="正在读"><a class="header-anchor" href="#正在读"></a>正在读</h2><table><thead><tr><th>名称</th><th>状态</th></tr></thead><tbody><tr><td>《Effective Java中文版》</td><td>ing</td></tr><tr><td>《Java实战》</td><td>ing</td></tr><tr><td>《Java异步编程实战》</td><td>ing</td></tr></tbody></table><h2 id="读过"><a class="header-anchor" href="#读过"></a>读过</h2><table><thead><tr><th>名称</th><th>状态</th></tr></thead><tbody><tr><td>《重构–改善既有代码的设计》</td><td>end</td></tr><tr><td>《大话设计模式》</td><td>end</td></tr><tr><td>《RocketMQ实战与原理解析》</td><td>end</td></tr><tr><td>《Spring Cloud与Docker微服务架构实战》</td><td>end</td></tr><tr><td>《MySQL技术内幕.InnoDB存储引擎》</td><td>end</td></tr></tbody></table>]]></content>
       
       
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>Hello World</title>
-      <link href="2019/02/25/hello-world/"/>
-      <url>2019/02/25/hello-world/</url>
-      
-        <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a class="header-anchor" href="#Quick-Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a class="header-anchor" href="#Create-a-new-post"></a>Create a new post</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo new <span class="token string">"My New Post"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a class="header-anchor" href="#Run-server"></a>Run server</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo server<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a class="header-anchor" href="#Generate-static-files"></a>Generate static files</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo generate<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a class="header-anchor" href="#Deploy-to-remote-sites"></a>Deploy to remote sites</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ hexo deploy<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
-      
-      
       <categories>
           
-          <category> hexo </category>
+          <category> 杂记 </category>
           
       </categories>
       
-      
-        <tags>
-            
-            <tag> hexo </tag>
-            
-            <tag> 其他 </tag>
-            
-        </tags>
       
     </entry>
     
@@ -2787,7 +2778,7 @@
       
       <categories>
           
-          <category> mybatis </category>
+          <category> ORM </category>
           
       </categories>
       
@@ -2812,7 +2803,7 @@
       
       <categories>
           
-          <category> mybatis </category>
+          <category> ORM </category>
           
       </categories>
       
@@ -2837,7 +2828,7 @@
       
       <categories>
           
-          <category> mybatis </category>
+          <category> ORM </category>
           
       </categories>
       
@@ -2862,7 +2853,7 @@
       
       <categories>
           
-          <category> mybatis </category>
+          <category> ORM </category>
           
       </categories>
       
@@ -2887,7 +2878,7 @@
       
       <categories>
           
-          <category> mybatis </category>
+          <category> ORM </category>
           
       </categories>
       
@@ -3219,7 +3210,7 @@
       
         <tags>
             
-            <tag> 持久化 </tag>
+            <tag> spring源代码 </tag>
             
         </tags>
       
@@ -3244,7 +3235,7 @@
       
         <tags>
             
-            <tag> mvc </tag>
+            <tag> spring源代码 </tag>
             
         </tags>
       
@@ -3269,7 +3260,7 @@
       
         <tags>
             
-            <tag> aop </tag>
+            <tag> spring源代码 </tag>
             
         </tags>
       
@@ -3294,7 +3285,7 @@
       
         <tags>
             
-            <tag> aop </tag>
+            <tag> spring源代码 </tag>
             
         </tags>
       
@@ -3319,7 +3310,7 @@
       
         <tags>
             
-            <tag> spring </tag>
+            <tag> spring源代码 </tag>
             
         </tags>
       
@@ -3344,7 +3335,7 @@
       
         <tags>
             
-            <tag> spring </tag>
+            <tag> spring源代码 </tag>
             
         </tags>
       
@@ -3369,7 +3360,7 @@
       
         <tags>
             
-            <tag> spring </tag>
+            <tag> spring源代码 </tag>
             
         </tags>
       
@@ -3379,15 +3370,15 @@
     
     <entry>
       <title>Markdown模板</title>
-      <link href="2017/12/22/Markdown%E6%A8%A1%E6%9D%BF/"/>
-      <url>2017/12/22/Markdown%E6%A8%A1%E6%9D%BF/</url>
+      <link href="2017/12/22/1.%E6%9D%82%E8%AE%B0/Markdown%E6%A8%A1%E6%9D%BF/"/>
+      <url>2017/12/22/1.%E6%9D%82%E8%AE%B0/Markdown%E6%A8%A1%E6%9D%BF/</url>
       
         <content type="html"><![CDATA[<h1>Markdown 基本要素</h1><p>这篇文件意在简要介绍 <a href="https://guides.github.com/features/mastering-markdown/">GitHub Flavored Markdown 写作</a>。</p><h2 id="语法说明"><a class="header-anchor" href="#语法说明"></a>语法说明</h2><h3 id="标题"><a class="header-anchor" href="#标题"></a>标题</h3><pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown"><span class="token title important"><span class="token punctuation">#</span> 这是 &lt;h1> 一级标题</span><span class="token title important"><span class="token punctuation">##</span> 这是 &lt;h2> 二级标题</span><span class="token title important"><span class="token punctuation">###</span> 这是 &lt;h3> 三级标题</span><span class="token title important"><span class="token punctuation">####</span> 这是 &lt;h4> 四级标题</span><span class="token title important"><span class="token punctuation">#####</span> 这是 &lt;h5> 五级标题</span><span class="token title important"><span class="token punctuation">######</span> 这是 &lt;h6> 六级标题</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><h3 id="强调"><a class="header-anchor" href="#强调"></a>强调</h3><!-- prettier-ignore --><pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown"><span class="token italic"><span class="token punctuation">*</span><span class="token content">这会是 斜体 的文字</span><span class="token punctuation">*</span></span><span class="token italic"><span class="token punctuation">_</span><span class="token content">这会是 斜体 的文字</span><span class="token punctuation">_</span></span><span class="token bold"><span class="token punctuation">**</span><span class="token content">这会是 粗体 的文字</span><span class="token punctuation">**</span></span><span class="token bold"><span class="token punctuation">__</span><span class="token content">这会是 粗体 的文字</span><span class="token punctuation">__</span></span><span class="token italic"><span class="token punctuation">_</span><span class="token content">你也 <span class="token bold"><span class="token punctuation">**</span><span class="token content">组合</span><span class="token punctuation">**</span></span> 这些符号</span><span class="token punctuation">_</span></span><span class="token strike"><span class="token punctuation">~~</span><span class="token content">这个文字将会被横线删除</span><span class="token punctuation">~~</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><h3 id="列表"><a class="header-anchor" href="#列表"></a>列表</h3><h4 id="无序列表"><a class="header-anchor" href="#无序列表"></a>无序列表</h4><pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown"><span class="token list punctuation">-</span> Item 1<span class="token list punctuation">-</span> Item 2  <span class="token list punctuation">-</span> Item 2a  <span class="token list punctuation">-</span> Item 2b<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre><h4 id="有序列表"><a class="header-anchor" href="#有序列表"></a>有序列表</h4><pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown"><span class="token list punctuation">1.</span> Item 1<span class="token list punctuation">1.</span> Item 2<span class="token list punctuation">1.</span> Item 3   <span class="token list punctuation">1.</span> Item 3a   <span class="token list punctuation">1.</span> Item 3b<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre><h3 id="添加图片"><a class="header-anchor" href="#添加图片"></a>添加图片</h3><pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown"><span class="token url"><span class="token operator">!</span>[<span class="token content">GitHub Logo</span>](<span class="token url">/images/logo.png</span>)</span>Format: <span class="token url"><span class="token operator">!</span>[<span class="token content">Alt Text</span>](<span class="token url">url</span>)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><h3 id="链接"><a class="header-anchor" href="#链接"></a>链接</h3><pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown">http://github.com - 自动生成！<span class="token url">[<span class="token content">GitHub</span>](<span class="token url">http://github.com</span>)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><h3 id="引用"><a class="header-anchor" href="#引用"></a>引用</h3><pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown">正如 Kanye West 所说：<span class="token blockquote punctuation">></span> We're living the future so<span class="token blockquote punctuation">></span> the present is our past.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre><h3 id="分割线"><a class="header-anchor" href="#分割线"></a>分割线</h3><pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown">如下，三个或者更多的<span class="token hr punctuation">---</span>连字符<span class="token hr punctuation">---</span>星号<span class="token hr punctuation">---</span>下划线<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre><h3 id="行内代码"><a class="header-anchor" href="#行内代码"></a>行内代码</h3><pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown">我觉得你应该在这里使用<span class="token code-snippet code keyword">`&lt;addr>`</span> 才对。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><h3 id="代码块"><a class="header-anchor" href="#代码块"></a>代码块</h3><p>你可以在你的代码上面和下面添加 <code>```</code> 来表示代码块。</p><h4 id="语法高亮"><a class="header-anchor" href="#语法高亮"></a>语法高亮</h4><p>你可以给你的代码块添加任何一种语言的语法高亮</p><p>例如，给 ruby 代码添加语法高亮：</p><pre><code><pre class="line-numbers language-ruby" data-language="ruby"><code class="language-ruby"><span class="token keyword">require</span> <span class="token string">'redcarpet'</span>markdown <span class="token operator">=</span> <span class="token constant">Redcarpet</span><span class="token punctuation">.</span><span class="token keyword">new</span><span class="token punctuation">(</span><span class="token string">"Hello World!"</span><span class="token punctuation">)</span>puts markdown<span class="token punctuation">.</span>to_html<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre></code></pre><p>会得到下面的效果：</p><pre class="line-numbers language-ruby" data-language="ruby"><code class="language-ruby"><span class="token keyword">require</span> <span class="token string">'redcarpet'</span>markdown <span class="token operator">=</span> <span class="token constant">Redcarpet</span><span class="token punctuation">.</span><span class="token keyword">new</span><span class="token punctuation">(</span><span class="token string">"Hello World!"</span><span class="token punctuation">)</span>puts markdown<span class="token punctuation">.</span>to_html<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><h3 id="任务列表"><a class="header-anchor" href="#任务列表"></a>任务列表</h3><pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown"><span class="token list punctuation">-</span> [x] @mentions, #refs, [links](), <span class="token bold"><span class="token punctuation">**</span><span class="token content">formatting</span><span class="token punctuation">**</span></span>, and <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>del</span><span class="token punctuation">></span></span>tags<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>del</span><span class="token punctuation">></span></span> supported<span class="token list punctuation">-</span> [x] list syntax required (any unordered or ordered list supported)<span class="token list punctuation">-</span> [x] this is a complete item<span class="token list punctuation">-</span> [ ] this is an incomplete item<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre><h3 id="表格"><a class="header-anchor" href="#表格"></a>表格</h3><!-- prettier-ignore --><pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown"><span class="token table"><span class="token table-header-row"><span class="token table-header important">First Header </span><span class="token punctuation">|</span><span class="token table-header important"> Second Header</span></span><span class="token table-line"><span class="token punctuation">------------</span> <span class="token punctuation">|</span> <span class="token punctuation">-------------</span></span><span class="token table-data-rows"><span class="token table-data">Content from cell 1 </span><span class="token punctuation">|</span><span class="token table-data"> Content from cell 2</span><span class="token table-data">Content in the first column </span><span class="token punctuation">|</span><span class="token table-data"> Content in the second column</span></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre><h2 id="扩展的语法"><a class="header-anchor" href="#扩展的语法"></a>扩展的语法</h2><h3 id="上标"><a class="header-anchor" href="#上标"></a>上标</h3><pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown">30^th^<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h3 id="下标"><a class="header-anchor" href="#下标"></a>下标</h3><pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown">H<span class="token strike"><span class="token punctuation">~</span><span class="token content">2</span><span class="token punctuation">~</span></span>O<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h3 id="脚注"><a class="header-anchor" href="#脚注"></a>脚注</h3><pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown">Content [^1]<span class="token url-reference url"><span class="token punctuation">[</span><span class="token variable">^1</span><span class="token punctuation">]</span><span class="token punctuation">:</span> Hi!</span> This is a footnote<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre><h3 id="缩略"><a class="header-anchor" href="#缩略"></a>缩略</h3><pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown"><span class="token italic"><span class="token punctuation">_</span><span class="token content">[HTML]: Hyper Text Markup Language</span><span class="token punctuation">_</span></span><span class="token url-reference url"><span class="token punctuation">[</span><span class="token variable">W3C</span><span class="token punctuation">]</span><span class="token punctuation">:</span> World</span> Wide Web ConsortiumThe HTML specificationis maintained by the W3C.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre><h3 id="标记"><a class="header-anchor" href="#标记"></a>标记</h3><pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown">==marked==<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre><h3 id="CriticMarkup"><a class="header-anchor" href="#CriticMarkup"></a>CriticMarkup</h3><p>CriticMarkup 缺省是禁用的，你可以通过插件设置来启动它。<br>有关 CriticMarkup 的更多信息，请查看 <a href="http://criticmarkup.com/users-guide.php">CriticMarkup 用户指南</a>.</p><p>这里有 5 种基本语法：</p><ul><li>添加 <code>&#123;++ ++&#125;</code></li><li>删除 <code>&#123;-- --&#125;</code></li><li>替换 <code>&#123;~~ ~&gt; ~~&#125;</code></li><li>注释 <code>&#123;&gt;&gt; &lt;&lt;&#125;</code></li><li>高亮 <code>&#123;== ==&#125;&#123;&gt;&gt; &lt;&lt;&#125;</code></li></ul><blockquote><p>CriticMarkup 仅可用于 markdown-it parser，不与 pandoc parser 兼容。</p></blockquote><h2 id="参考"><a class="header-anchor" href="#参考"></a>参考</h2><ul><li><a href="https://guides.github.com/features/mastering-markdown/">Mastering Markdown</a></li><li><a href="https://daringfireball.net/projects/markdown/basics">Daring Fireball: Markdown Basics</a></li></ul><pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown"><span class="token list punctuation">-</span> <span class="token url">[<span class="token content">Mastering Markdown</span>](<span class="token url">https://guides.github.com/features/mastering-markdown/</span>)</span><span class="token list punctuation">-</span> <span class="token url">[<span class="token content">Daring Fireball: Markdown Basics</span>](<span class="token url">https://daringfireball.net/projects/markdown/basics</span>)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><blockquote><p>参考文档</p></blockquote>]]></content>
       
       
       <categories>
           
-          <category> markdown </category>
+          <category> 杂记 </category>
           
       </categories>
       
@@ -3412,7 +3403,7 @@
       
       <categories>
           
-          <category> java并发 </category>
+          <category> 并发 </category>
           
       </categories>
       
@@ -3437,7 +3428,7 @@
       
       <categories>
           
-          <category> java并发 </category>
+          <category> 并发 </category>
           
       </categories>
       
@@ -3462,7 +3453,7 @@
       
       <categories>
           
-          <category> java并发 </category>
+          <category> 并发 </category>
           
       </categories>
       
@@ -3487,7 +3478,7 @@
       
       <categories>
           
-          <category> java并发 </category>
+          <category> 并发 </category>
           
       </categories>
       
@@ -3512,7 +3503,7 @@
       
       <categories>
           
-          <category> java并发 </category>
+          <category> 并发 </category>
           
       </categories>
       
@@ -3537,7 +3528,7 @@
       
       <categories>
           
-          <category> java并发 </category>
+          <category> 并发 </category>
           
       </categories>
       
@@ -3562,7 +3553,7 @@
       
       <categories>
           
-          <category> java并发 </category>
+          <category> 并发 </category>
           
       </categories>
       
@@ -3587,7 +3578,7 @@
       
       <categories>
           
-          <category> java并发 </category>
+          <category> 并发 </category>
           
       </categories>
       
@@ -3637,7 +3628,7 @@
       
       <categories>
           
-          <category> java并发 </category>
+          <category> 并发 </category>
           
       </categories>
       
@@ -3662,7 +3653,7 @@
       
       <categories>
           
-          <category> java并发 </category>
+          <category> 并发 </category>
           
       </categories>
       
@@ -3687,7 +3678,7 @@
       
       <categories>
           
-          <category> java并发 </category>
+          <category> 并发 </category>
           
       </categories>
       
