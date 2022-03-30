@@ -1,7 +1,7 @@
 ---
 title: Markdown模板
 date: 2017-12-22 12:48:48
-categories: markdown
+categories: 杂记
 tags: markdown模板
 ---
 

@@ -2,8 +2,7 @@
 title: Leaf美团点评分布式ID生成系统
 date: 2020-07-12 21:49:54
 categories: 杂记
-tags:
-  - guava
+
 ---
 
 # Leaf-美团点评分布式ID生成系统

@@ -2,7 +2,9 @@
 layout: gitlab
 title: GitLab CI/CD与GitHub Actions的介绍和使用
 date: 2022-03-25 23:27:37
-tags: gitlab
+categories: 杂记
+tags:
+  - gitlab
 ---
 
 # GitLab CI/CD与GitHub Actions的介绍和使用

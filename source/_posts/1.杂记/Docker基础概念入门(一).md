@@ -1,9 +1,9 @@
 ---
 title: Docker基础概念入门(一)
 date: 2020-09-15 22:44:43
-categories: Docker
+categories: 杂记
 tags:
-  - Docker
+  - docker
 ---
 
 ## Docker实战

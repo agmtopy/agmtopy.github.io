@@ -1,7 +1,9 @@
 ---
 title: Docker基础概念入门(二)
 date: 2020-11-29 21:32:37
+categories: 杂记
 tags:
+  - docker
 ---
 
 ## Dockerfile文件

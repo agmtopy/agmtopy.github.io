@@ -3,7 +3,7 @@ title: 《java8实战》读书笔记
 date: 2020-06-20 13:53:14
 categories: 杂记
 tags:
-  - java8
+  - java
 ---
 
 # 《java8实战》读书笔记

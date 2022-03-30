@@ -1,7 +1,7 @@
 ---
 title: mockito使用小结
 date: 2020-10-13 22:02:22
-categories: mockito
+categories: 杂记
 tags: mockito
 ---
 # mockito使用小结

@@ -1,7 +1,7 @@
 ---
 title: git多环境配置
 date: 2020-02-21 22:00:49
-categories: git
+categories: 杂记
 tags:
   - 环境配置
 ---

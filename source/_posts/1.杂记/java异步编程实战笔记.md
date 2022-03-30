@@ -1,7 +1,7 @@
 ---
 title: 《Java异步编程实战》笔记
 date: 2020-12-12 16:45:36
-categories: java并发
+categories: 杂记
 tags:
   - 笔记
 ---
