@@ -267,7 +267,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/30.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/66.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -422,7 +422,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    1.7k
+                    1.8k
                 </div>
                 
 
@@ -444,16 +444,50 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <p>前言：<br>
-spring始终是java程序员必须要掌握的一个技能，随着springBoot的普及化，springBoot将大量初始化工作替我们实现，隐藏了实现细节。方便了我们快速开展业务，但是掌握好spring，熟悉基础，才能更好的知道应用运行的本质是什么。出现问题怎么去解决。反反复复，我也尝试看了很多遍spring的源代码，但是都只是知识在脑海中过了一下，并没有留下、理解。这一次一定要把spring弄懂！</p>
+spring始终是java程序员必须要掌握的一个技能，随着springBoot的普及化，springBoot替开发者实现了大量初始化工作，隐藏了实现细节,方便了我们快速开展业务，但是掌握好spring，熟悉基础，才能更好的知道应用是为什么这样运行的,出现问题怎么去解决。反反复复，我也尝试看了很多遍spring的源代码，但是都只是知识在脑海中过了一下，并没有留下、理解。这一次将之前的知识点记录下来,以供之后查阅.</p>
 <h1>认识spring容器和组件</h1>
 <h2 id="spring容器"><a class="header-anchor" href="#spring容器"></a>spring容器</h2>
-<h3 id="spring容器指的是什么？"><a class="header-anchor" href="#spring容器指的是什么？"></a>spring容器指的是什么？</h3>
+<h3 id="spring容器是什么？"><a class="header-anchor" href="#spring容器是什么？"></a>spring容器是什么？</h3>
 <p>spring容器指的是</p>
 <ul>
-<li>功能描述：是一个通过配置文件或类似方式加载配置的容器，这个容器可以根据配置去<strong>创建</strong>、<strong>管理</strong>、<strong>销毁</strong>Bean对象。</li>
-<li>代码描述：是实现了<strong>ApplicationContext</strong>接口的子类</li>
+<li>
+<p>功能描述：是一个通过配置文件或类似方式加载配置的容器，这个容器必须要有<strong>创建</strong>、<strong>管理</strong>、<strong>销毁</strong>等<B>管理</B>Bean对象的功能。</p>
+</li>
+<li>
+<p>抽象接口：<strong>ApplicationContext</strong></p>
+</li>
+<li>
+<p>ApplicationContext</p>
+</li>
 </ul>
-<h3 id="spring容器的功能和特点有哪些？"><a class="header-anchor" href="#spring容器的功能和特点有哪些？"></a>spring容器的功能和特点有哪些？</h3>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">ApplicationContext</span> <span class="token keyword">extends</span> <span class="token class-name">EnvironmentCapable</span><span class="token punctuation">,</span> <span class="token class-name">ListableBeanFactory</span><span class="token punctuation">,</span> <span class="token class-name">HierarchicalBeanFactory</span><span class="token punctuation">,</span>
+		<span class="token class-name">MessageSource</span><span class="token punctuation">,</span> <span class="token class-name">ApplicationEventPublisher</span><span class="token punctuation">,</span> <span class="token class-name">ResourcePatternResolver</span> <span class="token punctuation">&#123;</span>
+
+   <span class="token comment">//返回context的唯一标识</span>
+	<span class="token annotation punctuation">@Nullable</span>
+	<span class="token class-name">String</span> <span class="token function">getId</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">//返回context的名称</span>
+	<span class="token class-name">String</span> <span class="token function">getApplicationName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">//</span>
+	<span class="token class-name">String</span> <span class="token function">getDisplayName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+   <span class="token comment">//返回context的启动时间</span>
+	<span class="token keyword">long</span> <span class="token function">getStartupDate</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+  <span class="token comment">//返回context的parent context</span>
+	<span class="token annotation punctuation">@Nullable</span>
+	<span class="token class-name">ApplicationContext</span> <span class="token function">getParent</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+   <span class="token comment">//返回AutowireCapableBeanFactory</span>
+	<span class="token class-name">AutowireCapableBeanFactory</span> <span class="token function">getAutowireCapableBeanFactory</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IllegalStateException</span><span class="token punctuation">;</span>
+
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>可以看到Spring抽象出来的最顶层的接口<B>ApplicationContext</B>只有寥寥几个方法,分别是返回名称/启动时间/父容器/自动装配工厂。在看接口的实现有哪些</p>
+<h3 id="spring容器的功能"><a class="header-anchor" href="#spring容器的功能"></a>spring容器的功能</h3>
 <ul>
 <li>
 <p>spring容器功能<br>
@@ -871,7 +905,7 @@ spring始终是java程序员必须要掌握的一个技能，随着springBoot的
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/43.jpg" class="responsive-img" alt="Bean容器refresh的过程">
+                        <img src="/medias/featureimages/50.jpg" class="responsive-img" alt="Bean容器refresh的过程">
                         
                         <span class="card-title">Bean容器refresh的过程</span>
                     </div>
@@ -920,7 +954,7 @@ spring始终是java程序员必须要掌握的一个技能，随着springBoot的
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/34.jpg" class="responsive-img" alt="Markdown模板">
+                        <img src="/medias/featureimages/69.jpg" class="responsive-img" alt="Markdown模板">
                         
                         <span class="card-title">Markdown模板</span>
                     </div>
@@ -1103,7 +1137,7 @@ spring始终是java程序员必须要掌握的一个技能，随着springBoot的
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            149.7k
+                                            151.3k
                                         </span>&nbsp;字
                                         
                                             

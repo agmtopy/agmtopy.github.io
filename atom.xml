@@ -6,7 +6,7 @@
   <link href="https://agmtopy.gitee.io/atom.xml" rel="self"/>
   
   <link href="https://agmtopy.gitee.io/"/>
-  <updated>2022-03-29T13:30:31.313Z</updated>
+  <updated>2022-04-02T10:16:07.537Z</updated>
   <id>https://agmtopy.gitee.io/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Linux的定时测量分析</title>
+    <link href="https://agmtopy.gitee.io/2022/04/02/21.linux/linux%E7%9A%84%E5%AE%9A%E6%97%B6%E6%B5%8B%E9%87%8F%E5%88%86%E6%9E%90/"/>
+    <id>https://agmtopy.gitee.io/2022/04/02/21.linux/linux%E7%9A%84%E5%AE%9A%E6%97%B6%E6%B5%8B%E9%87%8F%E5%88%86%E6%9E%90/</id>
+    <published>2022-04-02T05:28:22.000Z</published>
+    <updated>2022-04-02T10:16:07.537Z</updated>
+    
+    <content type="html"><![CDATA[<h1>linux的定时测量分析</h1><p>定时测量之前的文章学习中的初步印象,是由特殊的电路系统上报给操作系统的一种信号量。下面是《深入理解Linux内核》一书中的阐述和思考。</p><h2 id="定时测量"><a class="header-anchor" href="#定时测量"></a>定时测量</h2><p>操作系统中需要处理的<B>定时测量</B>主要是两种：</p><ul><li>测量当前的日期和时间</li><li>维持定时器，以便测量出某一时间间隔</li></ul><p>定时测量是通过一种基于固定的频率振荡设备和计数器设备来实现的，下面介绍一下这几个硬件设备。</p><h3 id="时钟和定时器电路"><a class="header-anchor" href="#时钟和定时器电路"></a>时钟和定时器电路</h3><ul><li>实时时钟-RTC<br>实时时钟(Renl Time Clock RTC)是一个独立于CPU和其他芯片的设备，即使当计算设备被切断电源时，它还是还能正常工作。</li></ul><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/RTC.jpg?raw=true" alt="RTC产品图"></p><p>在现代的计算机结构中，RTC设备通常被集成到南桥中</p><ul><li>时间戳计数器-TSC</li></ul><p>时间戳计数器是用来接收外部传递的振荡器的时钟信号。在x86架构下是通过一条名叫<B>CLK</B>的输入总线和一个名叫<B>时间戳计时器寄存器</B>来实现的。</p><ul><li><p>可编程间隔定时器-PIT<br>PIT与RTC类似，也是一个独立于CPU和其他芯片的设备，但是它的工作方式与RTC不同。PIT是通过按照固定的频率发送一个特殊的中断信号来实现的。</p></li><li><p>CPU本地定时器</p></li></ul><p>CPU本地定时器的工作原理与PIT类似都是发送一个特殊的中断信号，但是不同点在于，CPU本地定时器是据语系统总线的时钟信号量的值来实现的。</p><ul><li>高精度事件定时器-HPET</li></ul><p>高精度事件定时器是由MS与Intel共同研发的一种新型定时器,目前应该是支持最广泛的定时器,内部主要包括8个32位或64位的独立计数器，在windows下通过设备管理器插看到</p><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/HPET.jpg?raw=true" alt="HPET"></p><p>在参考资料2中可以看到时钟频率对游戏帧率的影响，游戏帧率越高，时钟频率越低，这样的话，游戏的性能就会越好。这里的原理类似于显示屏幕的物理帧率对游戏性能的影响一样,可以看一下B站Up主的一个视频<a href="https://www.bilibili.com/video/BV19L411N7xw?spm_id_from=333.999.0.0">游戏帧数竟然可以影响永劫的攻击速度？！</a></p><ul><li>ACPI定时器</li></ul><p>ACPI电源管理定时器几乎存在所有的ACPI主板上，它是一个简单的计数器，每次时钟节拍到来时，寄存器就加1.</p><p>以上是一些定时器的简单介绍，主要有<B>RTC</B>、<B>HPET</B></p><h2 id="Linux计时体系结构"><a class="header-anchor" href="#Linux计时体系结构"></a>Linux计时体系结构</h2><p>linux启动后必须执行的与时间相关的操作是以下几个：</p><ul><li>更新系统启动以后经过的时间</li><li>更新当前日期和时间</li><li>确定当前进程在每一个CPU上运行的时间</li><li>更新资源使用统计数量<br>-检查每一个软件定时器的时间间隔是否达到</li></ul><p>在多处理器系统中，每一个CPU都有一个时钟，它的频率可以被设置，默认的频率是1GHz，也就是说，每秒钟的时钟节拍数是1000000。普通活动(例如:软定时器)都是由全局定时器产生的中断触发的；CPU的活动则是由本地的APIC产生的中断触发的。</p><p>(PS:APIC与ACPI的区别，ACIP是本地CPU定时器，而APIC是全局电源方面的定时器，优先级较高)</p><p>内核会提供两个最基本的计时函数:一个保持对当前时间的记录，一个计算当前秒内流逝的纳秒数</p><ul><li>计时体系的数据结构</li></ul><p>这里主要介绍一个<B>jiffies变量</B>,这个变量是用于记录系统启动后产生的节拍数，但是在X86架构下这个变量使用的是一个32位置的有符号值,因此大约只需要50天左右就会置为0，这被称为时钟回绕问题，linux提供了time_after和time_before函数来解决这个问题。解决问题的思路是通过先将32位的数据转化为64位的long类型来比较，这样做的原理是，当32位的数据转化为64位的long类型后，其符号位会被置为0，从一个有符号数变成了无符号数，在对差值与0进行比较，就可以解决时钟回绕问题。</p><p>关于这个<B>jiffies变量</B>还有一个指的注意的地方是，它在初始化时，并不是赋的0，而是负3W多的一个数字,这样做的目的是尽早的发现时钟回绕问题是否被正确的处理，这里面实际体现了一种不可靠思想，想尽量的让问题尽早的暴露出来，指的学习!</p><p>jiffies变量为什么选择的是32位而不是64位,这里主要是因为在32位系统中对64位数值的访问需要使用两个32位数值来处理，这样操作两次比直接操作32位的数值要慢一些</p><h2 id="定时测量的应用"><a class="header-anchor" href="#定时测量的应用"></a>定时测量的应用</h2><ul><li>更新日期和时间</li><li>更新系统统计数据，例如CPU统计数、系统负载等</li><li>监管内核代码，例如每次时钟中断时判断当前系统正在做什么</li><li>检查非屏蔽中断监视器,监控系统内核的运行情况</li><li>软定时器与延迟函数</li></ul><h2 id="小结"><a class="header-anchor" href="#小结"></a>小结</h2><p>Linux的定时测量是通过不同的硬件来实现的，有记录当前时间的RTC、有记录系统启动时间的TSC、有记录CPU的时钟周期的APIC、有记录全局时间的电源定时器ACPI、记录高精度时间的HPET等。操作系统通过这些定时器来实现记录系统运行状态、记录当前时间、记录流逝时间等功能。</p><h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2><p><a href="http://manpages.ubuntu.com/manpages/xenial/man4/rtc.4.html">ubuntu RTC驱动说明书</a><br><a href="https://silicophilic.com/disabling-hpet-settings/">如何通过禁用 HPET 设置来提高游戏性能</a><br><a href="https://blogs.gnome.org/raywang/2007/11/19/acpi%E5%92%8Capic%E6%9C%89%E4%BB%80%E4%B9%88%E5%85%B3%E7%B3%BB/">ACPI和APIC有什么关系</a><br><a href="https://www.modb.pro/db/217433">jiffies如何避免时钟回绕问题</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;linux的定时测量分析&lt;/h1&gt;
+&lt;p&gt;定时测量之前的文章学习中的初步印象,是由特殊的电路系统上报给操作系统的一种信号量。下面是《深入理解Linux内核》一书中的阐述和思考。&lt;/p&gt;
+&lt;h2 id=&quot;定时测量&quot;&gt;&lt;a class=&quot;header-anchor&quot; href</summary>
+      
+    
+    
+    
+    <category term="笔记" scheme="https://agmtopy.gitee.io/categories/%E7%AC%94%E8%AE%B0/"/>
+    
+    
+    <category term="linux" scheme="https://agmtopy.gitee.io/tags/linux/"/>
+    
+  </entry>
   
   <entry>
     <title>银行会计-笔记</title>
@@ -260,8 +286,8 @@ redis对于持久化支持4种部署方式&lt;/p&gt;
   
   <entry>
     <title>深入理解linux内核笔记</title>
-    <link href="https://agmtopy.gitee.io/2021/12/08/1.%E6%9D%82%E8%AE%B0/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3linux%E5%86%85%E6%A0%B8%E7%AC%94%E8%AE%B0/"/>
-    <id>https://agmtopy.gitee.io/2021/12/08/1.%E6%9D%82%E8%AE%B0/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3linux%E5%86%85%E6%A0%B8%E7%AC%94%E8%AE%B0/</id>
+    <link href="https://agmtopy.gitee.io/2021/12/08/21.linux/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3linux%E5%86%85%E6%A0%B8%E7%AC%94%E8%AE%B0/"/>
+    <id>https://agmtopy.gitee.io/2021/12/08/21.linux/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3linux%E5%86%85%E6%A0%B8%E7%AC%94%E8%AE%B0/</id>
     <published>2021-12-08T13:25:57.000Z</published>
     <updated>2021-12-15T12:47:43.279Z</updated>
     
@@ -524,31 +550,6 @@ RocketMQ的索引相关</summary>
     <summary type="html">&lt;h1&gt;rocketmq的存储实现原理之commitlog&lt;/h1&gt;
 &lt;p&gt;在之前的《rocketmq的存储原理》文章中分析了rocketmq的存储过程主要是通过两个类来实现的分别是commitlog和MappedFile，这篇文章重点分析commitlog这个类的实现&lt;/p&gt;
 </summary>
-      
-    
-    
-    
-    <category term="消息队列" scheme="https://agmtopy.gitee.io/categories/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/"/>
-    
-    
-    <category term="RocketMQ" scheme="https://agmtopy.gitee.io/tags/RocketMQ/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>rocketmq的存储实现原理之MappedFile</title>
-    <link href="https://agmtopy.gitee.io/2021/09/09/7.%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9F%A5%E8%AF%86/14.rocketmq%E7%9A%84%E5%AD%98%E5%82%A8%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86%E4%B9%8BMappedFile/"/>
-    <id>https://agmtopy.gitee.io/2021/09/09/7.%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9F%A5%E8%AF%86/14.rocketmq%E7%9A%84%E5%AD%98%E5%82%A8%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86%E4%B9%8BMappedFile/</id>
-    <published>2021-09-09T15:17:09.000Z</published>
-    <updated>2021-10-12T16:23:09.335Z</updated>
-    
-    <content type="html"><![CDATA[<h1>rocketmq的存储实现原理之MappedFile</h1><p><B>MappedFile</B>是RoketMq处理底层文件的类,在上面一篇文章中已经了解了如何通过<B>CommitLog</B>类来处理请求以及如何通过<B>MappedFile</B>来实现底层存储的<br><B>MappedFile</B>的整体逻辑是</p><h2 id="MappedFile"><a class="header-anchor" href="#MappedFile"></a>MappedFile</h2>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1&gt;rocketmq的存储实现原理之MappedFile&lt;/h1&gt;
-&lt;p&gt;&lt;B&gt;MappedFile&lt;/B&gt;是RoketMq处理底层文件的类,在上面一篇文章中已经了解了如何通过&lt;B&gt;CommitLog&lt;/B&gt;类来处理请求以及如何通过&lt;B&gt;MappedFile&lt;/B&gt;来实现底层</summary>
       
     
     
