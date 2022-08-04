@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>现代操作系统原理与实现-操作系统结构篇</title>
+      <link href="2022/08/04/20.%E7%AC%94%E8%AE%B0/10.%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84%E7%AF%87/"/>
+      <url>2022/08/04/20.%E7%AC%94%E8%AE%B0/10.%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84%E7%AF%87/</url>
+      
+        <content type="html"><![CDATA[<h1>引言</h1><p>《现代操作系统原理与实现》是一本介绍操作系统相关的书籍,是以ARM平台进行演示的.目前在看过一遍之后,我觉得还是比较有意思的<B>操作系统结构</B>、<B>硬件结构</B>、<B>内存管理</B>、<B>进程与线程</B>、<B>进程间通信</B>、<B>同步原语</B>、<B>文件系统</B>这七个章节.<br>下面会依次对这些章节做相关介绍.</p><h2 id="操作系统结构"><a class="header-anchor" href="#操作系统结构"></a>操作系统结构</h2><p>为什么要优先介绍<B>操作系统结构</B>,是这个章节给我带来了极大的感悟：对于像操作系统这样庞大的系统,在良好的架构下可以很好的有序演进,这一点是很多业务系统所欠缺的.<br>下面将从两个方面进行介绍:<B>设计方法</B>、<B>实践</B></p><h2 id="设计方法"><a class="header-anchor" href="#设计方法"></a>设计方法</h2><p>对于操作系统的设计方法或者方法论(不太喜欢’方法论’这一表述词,因为有一种’定式’的味道,现实或代码中并没有什么是固定的)来说,主要是对复杂度进行管理的一种手段;<br>这里介绍了一种设计方法:<B>M.A.L.H</B>,即模块化(modularity)、抽象(abstraction)、分层(layering)、层级(hierarchy),我对于设计简直是认同的不能在认同了.</p><h3 id="模块化"><a class="header-anchor" href="#模块化"></a>模块化</h3><p>模块化是通过<B>‘分治法’</B>的思想,将一个复杂系统分解为一系列有明确含义/领域能相互进行交互的小模块.模块的划分一定要具有’高内聚’和’低耦合’的特性,不能过大也不能过于小.<br>现代操作系统都是模块化的,以linux内核为例,可以看到分为若干模块</p><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/linux%E5%86%85%E6%A0%B8%E6%A8%A1%E5%9D%97.jpg?raw=true" alt="linux模块"></p><h3 id="一些碎碎念"><a class="header-anchor" href="#一些碎碎念"></a>一些碎碎念</h3><p>大多数程序员长期以来写的代码都是以实现当前需求为己任,对于代码之后的生命周期是不会去考虑的.这样的代码在过了几个月以后或者另外一位同事接手后不得不在一声声’问候’下继续做相同的事情.<br>我始终认为简单明了的代码是最好的代码,因为这样的可读性是最好的; 不用去追求’新’、‘奇’来体现技术能力,而是要去追求’正确性’、'可读性’来体现技术能力;<br>然而在实际开发中,我们往往缺少一种能够指导的方法,我认为<B>M.A.L.H</B>就是一种非常好的实现</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 操作系统 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 笔记 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>maven-shade-plugin使用中的小问题</title>
       <link href="2022/04/22/1.%E6%9D%82%E8%AE%B0/maven-shade-plugin%E4%BD%BF%E7%94%A8%E4%B8%AD%E7%9A%84%E5%B0%8F%E9%97%AE%E9%A2%98/"/>
       <url>2022/04/22/1.%E6%9D%82%E8%AE%B0/maven-shade-plugin%E4%BD%BF%E7%94%A8%E4%B8%AD%E7%9A%84%E5%B0%8F%E9%97%AE%E9%A2%98/</url>
@@ -213,7 +238,7 @@
       
       <categories>
           
-          <category> 编译愿意 </category>
+          <category> 编译原理 </category>
           
       </categories>
       
