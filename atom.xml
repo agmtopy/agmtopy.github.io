@@ -6,7 +6,7 @@
   <link href="https://agmtopy.gitee.io/atom.xml" rel="self"/>
   
   <link href="https://agmtopy.gitee.io/"/>
-  <updated>2022-08-06T14:30:34.947Z</updated>
+  <updated>2022-08-08T16:32:18.065Z</updated>
   <id>https://agmtopy.gitee.io/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>深入分布式缓存-从原理到实践</title>
+    <link href="https://agmtopy.gitee.io/2022/08/08/20.%E7%AC%94%E8%AE%B0/20.%E6%B7%B1%E5%85%A5%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98-%E4%BB%8E%E5%8E%9F%E7%90%86%E5%88%B0%E5%AE%9E%E8%B7%B5/"/>
+    <id>https://agmtopy.gitee.io/2022/08/08/20.%E7%AC%94%E8%AE%B0/20.%E6%B7%B1%E5%85%A5%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98-%E4%BB%8E%E5%8E%9F%E7%90%86%E5%88%B0%E5%AE%9E%E8%B7%B5/</id>
+    <published>2022-08-08T15:45:00.000Z</published>
+    <updated>2022-08-08T16:32:18.065Z</updated>
+    
+    <content type="html"><![CDATA[<h1>深入分布式缓存-从原理到实践</h1><h2 id="引言"><a class="header-anchor" href="#引言"></a>引言</h2><p>是《深入分布式缓存-从原理到实践》一书的一些记录</p><h2 id="理论基础"><a class="header-anchor" href="#理论基础"></a>理论基础</h2><blockquote><p>cache这个词,据说来自于法语,本意是当CPU处理数据时先到cache中去寻找,如果数据在之前的操作与i就读取而被暂存其中,就不需要从主内存中去读取了.后来cache的范围有所扩展,泛指凡是位于速度相差比较大的两种硬件之间,用于协调两者数据传输差异的结构,都称为cache.</p></blockquote><p>凡是通过两种查询速度较大的方式来查询同一对象都称为cache</p><blockquote><p>缓存:存储在计算机上的一个原始数据复制集,以便用于访问   -wiki</p></blockquote><p>常见的一些缓存:</p><ul><li>CPU多级缓存</li><li>TLB(Translation lookaside buffer) -最新的虚拟内存-&gt;物理内存的转换</li></ul><p>缓存分类:</p><ul><li>按缓存位置划分<ul><li>客户端缓存</li><li>服务器端缓存</li><li>网络中的缓存</li></ul></li><li>按部署方式划分<ul><li>单体缓存</li><li>集群缓存</li><li>分布式缓存</li></ul></li></ul><h3 id="网络中的缓存"><a class="header-anchor" href="#网络中的缓存"></a>网络中的缓存</h3><ul><li>web代理缓存</li></ul><p>使用正向代理的方式将web服务器上的数据进行缓存,客户端请求后之间返回不需要重新先web服务器请求</p><ul><li>边缘缓存</li></ul><p>边缘缓存是通过反向代理的方式与用户处于同一网络,向用户提供静态内容的缓存,典型应用就是CDN缓存</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;深入分布式缓存-从原理到实践&lt;/h1&gt;
+&lt;h2 id=&quot;引言&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;#引言&quot;&gt;&lt;/a&gt;引言&lt;/h2&gt;
+&lt;p&gt;是《深入分布式缓存-从原理到实践》一书的一些记录&lt;/p&gt;
+&lt;h2 id=&quot;理论基础&quot;&gt;&lt;a class=&quot;</summary>
+      
+    
+    
+    
+    <category term="分布式" scheme="https://agmtopy.gitee.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+    
+    <category term="笔记" scheme="https://agmtopy.gitee.io/tags/%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
   
   <entry>
     <title>现代操作系统原理与实现-操作系统结构篇</title>
@@ -526,32 +553,6 @@ ReadWriteLock默认有两</summary>
     
     
     <category term="ReadWriteLock" scheme="https://agmtopy.gitee.io/tags/ReadWriteLock/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>深入剖析Kubernetes之容器化的基础</title>
-    <link href="https://agmtopy.gitee.io/2021/10/28/18.%E5%AE%B9%E5%99%A8%E5%8C%96/0.%E6%B7%B1%E5%85%A5%E5%89%96%E6%9E%90Kubernetes%E4%B9%8B%E5%AE%B9%E5%99%A8%E5%8C%96%E7%9A%84%E5%9F%BA%E7%A1%80/"/>
-    <id>https://agmtopy.gitee.io/2021/10/28/18.%E5%AE%B9%E5%99%A8%E5%8C%96/0.%E6%B7%B1%E5%85%A5%E5%89%96%E6%9E%90Kubernetes%E4%B9%8B%E5%AE%B9%E5%99%A8%E5%8C%96%E7%9A%84%E5%9F%BA%E7%A1%80/</id>
-    <published>2021-10-28T06:08:23.000Z</published>
-    <updated>2021-11-08T08:31:04.505Z</updated>
-    
-    <content type="html"><![CDATA[<h1>深入剖析Kubernetes之容器化的基础</h1><h2 id="容器化的基础之进程管理"><a class="header-anchor" href="#容器化的基础之进程管理"></a>容器化的基础之进程管理</h2><p><B>容器化的基础</B>是依赖于Linux底层提供的两种能力分别是<B>cgroups</B>,<B>Namespace</B></p><h3 id="cgroups"><a class="header-anchor" href="#cgroups"></a>cgroups</h3><blockquote><p>cgroups 的全称是control groups,是Linux内核提供的一种可以限制单个进程或者多个进程所使用资源的机制<br>cgroups可以管理的资源有:</p></blockquote><ul><li><B>cpu子系统</B><br>主要限制进程的cpu使用率</li><li><B>cpuacct子系统</B><br>可以统计cgroups中的进程的cpu使用报告</li><li><B>cpuset 子系统</B><br>可以为cgroups中的进程分配单独的cpu节点或者内存节点</li><li><B>memory子系统</B><br>可以限制进程的 </B><br>可以限制进程的块设备 io</li><li><B>devices子系统</B><br>可以控制进程能够访问某些设备</li><li><B>net_cls子系统</B><br>可以标记cgroups中进程的网络数据包，然后可以使用tc模块(traffic control)对数据包进行控制</li><li><B>freezer子系统</B><br>可以挂起或者恢复cgroups中的进程</li><li><B>ns子系统</B><br>可以使不同cgroups下面的进程使用不同的namespace</li></ul><p><B>cgroups</B>是通过与内核的其他模块来完成<B>进程维度</B>对<B>资源</B>的管理</p><h3 id="Namespace"><a class="header-anchor" href="#Namespace"></a>Namespace</h3><p><B>namespace</B>是对内核资源进行分组管理的一个特性,用来修改进程间的可见性</p><p>namespace创建进程时会使用<B>CLONE_NEWPID</B>这个参数来创建一个新的进程空间</p><h3 id="虚拟机与Docker的区别"><a class="header-anchor" href="#虚拟机与Docker的区别"></a>虚拟机与Docker的区别</h3><p>虚拟机与Docker的区别在于虚拟机会采用硬件虚拟化功能,模拟出操作系统底层的设备;docker只是在宿主机上做了进程隔离和资源隔离</p><h2 id="容器化的基础之隔离和限制"><a class="header-anchor" href="#容器化的基础之隔离和限制"></a>容器化的基础之隔离和限制</h2><p><img src="https://i.loli.net/2021/10/28/HNTkSg5vwd7jymf.jpg" alt="容器化与虚拟机之间的对比"></p><p>通过<B>namespace</B>来完成进程之间的隔离,通过<B>cgroups</B>来完成对资源的限制</p><p><B>cgroups</B>是通过配置在<B>/sys/fs/cgroup</B>文件夹下会有</p><ul><li><p>资源分组<br><img src="https://i.loli.net/2021/10/28/gUHWXSlaGd7Lpn8.jpg" alt="cgroup资源分组"><br>这些限制项来进行处理</p></li><li><p>控制组<br><img src="https://i.loli.net/2021/10/28/PFv8caUqsLiYBpo.jpg" alt="cgroup详细控制"></p></li></ul><p>通过详细信息可以看到这个目录下有不同的配置文件<B>cgroup.procs</B>,内容如下展示</p><p><img src="https://z3.ax1x.com/2021/10/29/5jdCIx.jpg" alt="cgroup.procs内容"><br>可以看到这里记录的就是pid列表,<cgroup>就是通过管理为每个线程分配资源的执行时间来控制不同进程的资源使用情况</p><p>docker就是在创建容器的时候为每一个容器创建一个控制组,在将用户指定的docker容器初始化资源配置写入控制组中就可以了<br><B>cgroups</B>采用的资源限制方式主要是通过控制时间的形式来实现的,因此就会存在容器的进程实际上可以看到整个宿主机的一些状态.这是相较与虚拟机方式的不足</p><blockquote><p><B>容器的本质就是一个特殊的进程</B></p></blockquote><h2 id="容器中镜像的概念"><a class="header-anchor" href="#容器中镜像的概念"></a>容器中镜像的概念</h2><blockquote><p>镜像指的是一个由容器识别的只读模板.通常这个模板是基于另外的一个模板并进行一些自定义改动的</p></blockquote><p>以上是docker官网中对镜像概念的描述,镜像在物理上指的是容器进程实际可用的文件<br>通过<B>Namespace</B>和<B>cgroups</B>实现了对进程和操作时间的隔离,但是容器之间没有对文件的隔离,容器进程的可用文件与其他用户进程的可用文件相同.<br>因此需要对容器的可用文件进行限制,在docker上是优先使用<B>pivot_root</B>,其次使用<B>chroot</B></p><h3 id="pivot-root与chroot的区别"><a class="header-anchor" href="#pivot-root与chroot的区别"></a>pivot_root与chroot的区别</h3><ul><li><p>pivot_root改变当前mount namespace的rootfs(&quot;/&quot;目录)</p></li><li><p>chroot改变的是当前进程的rootfs(&quot;/&quot;目录)</p></li></ul><p>pivot_root的执行步骤分为三步:</p><ol><li>创建临时目录并将当前所有的root mount移动到临时目录</li><li>创建新目录(“/”)</li><li>清理新目录</li></ol><h3 id="rootfs"><a class="header-anchor" href="#rootfs"></a>rootfs</h3><p><B>rootfs</B>指的是就是镜像中的文件,也就是登录到具体的镜像中看到的文件.<B>rootfs</B>在结构上可以分为三层<B>可读写层</B>、<br><B>init层</B>、<B>只读层</B></p><p>从上到下分别是应用层到系统层的划分,在详细的对这三层进行分析之前需要了解一下为什么镜像文件中分层的文件在使用的时候可以想在同一个文件夹中一样？<br>这是采用了一种被称为联合文件系统(union file System)概念,docker中默认是使用Overlay2的实现，关于联合文件系统的文章看可以参考<br><a href="https://lwn.net/Articles/324291/">https://lwn.net/Articles/324291/</a></p><ul><li><p>可读写层<br>可读写层是rootfs中最上面的一层，是承载容器中文件读写的操作一层,在这一层中的挂载方式是read + write</p></li><li><p>init层<br>init层指的是Docker项目用来存放对底层操作系统的改动信息例如’etc/hosts’、‘etc/resolv.conf’等，因为容器在启动时可以手动指定。init层在挂载时是采用’ro’ + 'wh’的方式，'ro’指的是read onley,'wh’指的是whiteout,即只读 + ‘whiteout’,whiteout指的是对文件的操作会在通过一定的手段进行隐藏，类似与java中的临时变量的概念，只在当前容器中有效，不会真正的修改底层的文件</p></li><li><p>只读层<br>只读层指的是镜像中最底层的系统镜像层，它们的挂载方式也是’ro’ + ‘wh’</p></li></ul><h3 id="总结"><a class="header-anchor" href="#总结"></a>总结</h3><p>docker中的镜像通过这种分层构建的方式大大的减少了传统镜像中操作系统的大小，只包含了可读写层中应用的部分。底层支持这种构建方式主要是依赖<B>chroot</B>(切换根目录的能力)和<B>union file System</B>(联合文件系统)</p><h2 id="总结-v2"><a class="header-anchor" href="#总结-v2"></a>总结</h2><p>docker容器化的基础是三个部分</p><ul><li>Namespace提供的进程隔离能力</li><li>Cgroup提供的资源限制能力</li><li>rootfs的文件分层结构设计</li></ul><p><B>clone(true)/cgroup file/union file System</B></p><h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2><p><a href="https://tech.meituan.com/2015/03/31/cgroups.html">Linux资源管理之cgroups简介</a><br><a href="https://www.nginx.com/blog/what-are-namespaces-cgroups-how-do-they-work/">什么是命名空间和cgroup,以及它们是如何工作的？</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1&gt;深入剖析Kubernetes之容器化的基础&lt;/h1&gt;
-&lt;h2 id=&quot;容器化的基础之进程管理&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;#容器化的基础之进程管理&quot;&gt;&lt;/a&gt;容器化的基础之进程管理&lt;/h2&gt;
-&lt;p&gt;&lt;B&gt;容器化的基础&lt;/B&gt;是依赖于Li</summary>
-      
-    
-    
-    
-    <category term="容器化" scheme="https://agmtopy.gitee.io/categories/%E5%AE%B9%E5%99%A8%E5%8C%96/"/>
-    
-    
-    <category term="docker" scheme="https://agmtopy.gitee.io/tags/docker/"/>
     
   </entry>
   
