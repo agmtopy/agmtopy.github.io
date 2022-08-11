@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    384
+                    959
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    1 分钟
+                    3 分钟
                 </div>
                 
 
@@ -485,6 +485,55 @@
 <li>边缘缓存</li>
 </ul>
 <p>边缘缓存是通过反向代理的方式与用户处于同一网络,向用户提供静态内容的缓存,典型应用就是CDN缓存</p>
+<h3 id="缓存算法"><a class="header-anchor" href="#缓存算法"></a>缓存算法</h3>
+<p>LRU:最近最少使用算法<br>
+LFU:最少使用算法(会统计一段时间内每个缓存的访问次数)<br>
+SIZE:缓存大小算法(按照缓存的大小进行算法)</p>
+<h2 id="分布式系统理论"><a class="header-anchor" href="#分布式系统理论"></a>分布式系统理论</h2>
+<ul>
+<li>并向与并发</li>
+</ul>
+<blockquote>
+<p>并发指的是两个事情或多个事情在同一个时间段内间隔发生;并行指的是两个事情或多个事情在同一个时刻同时发生;</p>
+</blockquote>
+<ul>
+<li>CAP</li>
+</ul>
+<blockquote>
+<p>CAP理论提出一致性\可用性\分区容错性的取舍问题</p>
+</blockquote>
+<p>一致性©:指的是在同一时刻访问所有节点得到的数据相同<br>
+可用性(U):指的是在同一时刻访问所有节点得到的数据都可用<br>
+分区容错性§:指的是节点一定会发生故障,但是不会影响整个系统的正常运行</p>
+<h3 id="分布式系统设计策略"><a class="header-anchor" href="#分布式系统设计策略"></a>分布式系统设计策略</h3>
+<p>分布式系统设计策略指的是对于设计分布式系统常见的几个问题的处理策略:</p>
+<ul>
+<li>如何检测你还活着?</li>
+<li>如何保障高可用?</li>
+<li>容错机制的设计?</li>
+<li>重试机制?</li>
+<li>负载均衡?</li>
+</ul>
+<p>下面详细对每一个问题进行解答:</p>
+<ul>
+<li>如何检测你还活着?<br>
+在分布式系统中如何检测当前节点是否存活?<br>
+在大多数分布式中间件中都是通过<B>心跳检测</B>的机制来检测当前节点是否存活的,例如在zk的client与server之间的心跳检测保持连接\redis哨兵架构中的哨兵与master/slave之间的心跳检测</li>
+</ul>
+<p><B>φ-accrual 故障检测器</B>是通过滑动窗口的时间算法来统计结果</p>
+<p><B>Gossip分发</B>(流言算法)通过消息的传递确定节点是否应该停止服务的算法</p>
+<p>小结:<br>
+存活检测有两个方法:一个是从通信链路入手检测目标节点的网络是否异常\一种是通过检测当前状态是否符合预期状态来检测目标节点是否存活</p>
+<h3 id="分布式系统的几个通用问题"><a class="header-anchor" href="#分布式系统的几个通用问题"></a>分布式系统的几个通用问题</h3>
+<ul>
+<li>全局id的生成</li>
+<li>hash取模分配</li>
+<li>路由表</li>
+<li>一致性hash算法</li>
+<li>数据拆分</li>
+<li>分布式锁的解决方案</li>
+<li>分布式事务的解决方案</li>
+</ul>
 
                 
             </div>
@@ -787,7 +836,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            154.6k
+                                            155.2k
                                         </span>&nbsp;字
                                         
                                             
