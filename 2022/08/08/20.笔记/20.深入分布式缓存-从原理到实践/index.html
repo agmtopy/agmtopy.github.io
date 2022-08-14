@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    959
+                    2.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    3 分钟
+                    7 分钟
                 </div>
                 
 
@@ -515,15 +515,37 @@ SIZE:缓存大小算法(按照缓存的大小进行算法)</p>
 <li>负载均衡?</li>
 </ul>
 <p>下面详细对每一个问题进行解答:</p>
-<ul>
-<li>如何检测你还活着?<br>
-在分布式系统中如何检测当前节点是否存活?<br>
-在大多数分布式中间件中都是通过<B>心跳检测</B>的机制来检测当前节点是否存活的,例如在zk的client与server之间的心跳检测保持连接\redis哨兵架构中的哨兵与master/slave之间的心跳检测</li>
-</ul>
+<h4 id="如何检测你还活着"><a class="header-anchor" href="#如何检测你还活着"></a>如何检测你还活着?</h4>
+<p>在分布式系统中如何检测当前节点是否存活?<br>
+在大多数分布式中间件中都是通过<B>心跳检测</B>的机制来检测当前节点是否存活的,例如在zk的client与server之间的心跳检测保持连接\redis哨兵架构中的哨兵与master/slave之间的心跳检测</p>
 <p><B>φ-accrual 故障检测器</B>是通过滑动窗口的时间算法来统计结果</p>
 <p><B>Gossip分发</B>(流言算法)通过消息的传递确定节点是否应该停止服务的算法</p>
 <p>小结:<br>
 存活检测有两个方法:一个是从通信链路入手检测目标节点的网络是否异常\一种是通过检测当前状态是否符合预期状态来检测目标节点是否存活</p>
+<h4 id="如何保障高可用"><a class="header-anchor" href="#如何保障高可用"></a>如何保障高可用?</h4>
+<p>在分布式系统中保障高可用的核心就是数据备份,通过多个节点的备份来在任何节点故障的情况下提供服务<br>
+按照提供服务的节点时机可以分为<B>主备(Master/Slave)</B>&lt;B&gt;互备(Failover)</B>&lt;B&gt;集群(Cluster)</B>这三种方式</p>
+<ul>
+<li>
+<p>主备(Master/Slave)模式<br>
+主备模式多用于要求严格提供C(一致性)\A(可用性)的场景中,MySQL的主备模式\Redis的哨兵模式</p>
+</li>
+<li>
+<p>互备(Failover)模式<br>
+互备模式指的是各个节点提供的数据和服务是相同的,常见的RocketMQ的注册中心NameServer就是多个节点提供相同的服务</p>
+</li>
+<li>
+<p>集群(Cluster)模式<br>
+集群模式指的是服务在多个节点运行,不同的节点运行不同的任务,比如Redis的集群模式;集群模式与主备模式/互备模式的区别在于集群模式是仅对服务进行高可用的设计,另外两种设计既有对服务和数据的双重含义</p>
+</li>
+</ul>
+<h4 id="容错机制的设计"><a class="header-anchor" href="#容错机制的设计"></a>容错机制的设计</h4>
+<p>容错机制指的是在系统设计中需要对一些异常场景的兼容,例如在Raft的一些实现中就会对CommitId进行CRC32的容错机制校验</p>
+<h4 id="重试机制"><a class="header-anchor" href="#重试机制"></a>重试机制</h4>
+<p>重试机制指的是系统调用失败后,由于无法确定是否网络异常,或者是否是系统调用的问题,可以重试一定次数,如果重试次数超过限制,则抛出异常;这种设计是基于网络异常和系统异常的区别的基础上来进行设计的,在一般认为中网络异常是频繁且持续的,因此可以重试机制下,重试一定次数<br>
+重试机制又会引出接口幂等的场景,因此在分布式系统设计中,接口一定要提供幂等</p>
+<h4 id="负载均衡"><a class="header-anchor" href="#负载均衡"></a>负载均衡</h4>
+<p>负载均衡类似于集群模式通过一个总的调度器来对任务进行分配,常用的负载均衡方案Nginx,LB</p>
 <h3 id="分布式系统的几个通用问题"><a class="header-anchor" href="#分布式系统的几个通用问题"></a>分布式系统的几个通用问题</h3>
 <ul>
 <li>全局id的生成</li>
@@ -534,6 +556,40 @@ SIZE:缓存大小算法(按照缓存的大小进行算法)</p>
 <li>分布式锁的解决方案</li>
 <li>分布式事务的解决方案</li>
 </ul>
+<h4 id="全局Id的生成方案"><a class="header-anchor" href="#全局Id的生成方案"></a>全局Id的生成方案</h4>
+<p>分布式Id的产生是基于数据服务大都采用集群的模式提供服务,在这种模式下不同的节点如果产生的id不进行相互协调的话会造成id的冲突,因此需要一个全局的id生成方案来保证id的唯一性</p>
+<p>有两种实现思路:</p>
+<ul>
+<li>基于节点执行不同规则的id生成</li>
+<li>基于全局协调器的id生成</li>
+</ul>
+<p>下面分别来介绍一下这两种不同的方案</p>
+<ul>
+<li>基于节点执行不同规则的id生成</li>
+</ul>
+<p>是通过值得数据节点的id生成规则来实现的,例如对id设置初始值和步长,然后每个节点都会计算出自己的id,这样就可以保证id的唯一性</p>
+<ul>
+<li>
+<p>基于全局协调器的id生成<br>
+基于全局协调器的id生成方案实现比较多,例如通过一张id表的方式来进行实现\通过分布式id生成器的号段模式来实现\通过分布式id生成器的雪花算法来实现</p>
+</li>
+<li>
+<p>sonowfs的id生成方案</p>
+</li>
+</ul>
+<p>64bit = 41bit(时间戳) + 10bit(节点id) + 12bit(自增id)<br>
+时间戳精确到毫秒<br>
+12位自增id每个节点最多产生4096个id</p>
+<h4 id="hash取模-路由表-一致性hash算法"><a class="header-anchor" href="#hash取模-路由表-一致性hash算法"></a>hash取模\路由表\一致性hash算法</h4>
+<p>hash取模\路由表\一致性hash算法都是为了解决数据或服务的一个寻址过程,例如对于一个数据库来说,如果数据库有多个节点,那么对于某个数据来说,可以通过hash取模的方式来寻址到对应的节点,这样就可以保证数据的一致性</p>
+<p>hash取模是指的是对数据进行hash取模,然后根据模的值来寻址到对应的节点,这样就可以保证数据的分片性</p>
+<p>路由表是通过预设的路由表来寻址到对应的节点,这样就也可以保证数据的分片性;路由表还有一个优点是对于有序增加的场景下可以通过递增预设的路由表数据来寻址到对应的节点,还不影响之前的数据,但是这样有一个路由表单点问题,需要做好数据的备份和failover</p>
+<h4 id="数据拆分"><a class="header-anchor" href="#数据拆分"></a>数据拆分</h4>
+<p>数据的拆分主要指的是将数据分片到不同的节点上,这样就可以保证数据的一致性;前面已经介绍数据拆分的原理;<br>
+常用的数据拆分方案是mycat/shardingsphere等</p>
+<h3 id="小结"><a class="header-anchor" href="#小结"></a>小结</h3>
+<p>这一章节主要给我们介绍<B>分布式系统设计策略</B>&lt;B&gt;分布式系统的几个通用问题</B>的解决方案</p>
+<h2 id="缓存基础"><a class="header-anchor" href="#缓存基础"></a>缓存基础</h2>
 
                 
             </div>
@@ -594,18 +650,17 @@ SIZE:缓存大小算法(按照缓存的大小进行算法)</p>
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;Current
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2022/08/08/20.%E7%AC%94%E8%AE%B0/20.%E6%B7%B1%E5%85%A5%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98-%E4%BB%8E%E5%8E%9F%E7%90%86%E5%88%B0%E5%AE%9E%E8%B7%B5/">
+                <a href="/2022/08/14/20.%E7%AC%94%E8%AE%B0/11.%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E7%A1%AC%E4%BB%B6%E7%BB%93%E6%9E%84%E7%AF%87/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/60.jpg" class="responsive-img" alt="深入分布式缓存-从原理到实践">
+                        <img src="/medias/featureimages/66.jpg" class="responsive-img" alt="现代操作系统原理与实现-硬件结构篇">
                         
-                        <span class="card-title">深入分布式缓存-从原理到实践</span>
+                        <span class="card-title">现代操作系统原理与实现-硬件结构篇</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -615,22 +670,21 @@ SIZE:缓存大小算法(按照缓存的大小进行算法)</p>
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-08-08
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2022-08-14
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/" class="post-category">
-                                    分布式
+                            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="post-category">
+                                    操作系统
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
@@ -836,7 +890,7 @@ SIZE:缓存大小算法(按照缓存的大小进行算法)</p>
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            155.2k
+                                            157.7k
                                         </span>&nbsp;字
                                         
                                             
