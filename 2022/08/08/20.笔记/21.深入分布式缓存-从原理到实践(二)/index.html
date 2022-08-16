@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="深入分布式缓存-从原理到实践, agmtopy博客">
+    <meta name="keywords" content="深入分布式缓存-从原理到实践(二), agmtopy博客">
     <meta name="description" content="你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>深入分布式缓存-从原理到实践 | agmtopy博客</title>
+    <title>深入分布式缓存-从原理到实践(二) | agmtopy博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -267,12 +267,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/60.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/45.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">深入分布式缓存-从原理到实践</h1>
+                    <h1 class="description center-align post-title">深入分布式缓存-从原理到实践(二)</h1>
                 </div>
             </div>
         </div>
@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    2.2k
+                    352
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    7 分钟
+                    1 分钟
                 </div>
                 
 
@@ -443,153 +443,113 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1>深入分布式缓存-从原理到实践</h1>
-<h2 id="引言"><a class="header-anchor" href="#引言"></a>引言</h2>
-<p>是《深入分布式缓存-从原理到实践》一书的一些记录</p>
-<h2 id="理论基础"><a class="header-anchor" href="#理论基础"></a>理论基础</h2>
+                <h1>深入分布式缓存-从原理到实践(二)</h1>
+<h2 id="规划定义"><a class="header-anchor" href="#规划定义"></a>规划定义</h2>
+<h3 id="JSR"><a class="header-anchor" href="#JSR"></a>JSR</h3>
 <blockquote>
-<p>cache这个词,据说来自于法语,本意是当CPU处理数据时先到cache中去寻找,如果数据在之前的操作与i就读取而被暂存其中,就不需要从主内存中去读取了.后来cache的范围有所扩展,泛指凡是位于速度相差比较大的两种硬件之间,用于协调两者数据传输差异的结构,都称为cache.</p>
+<p>JSR是java Specification Requests的缩写,是java定义的一种对java对象临时在内存中进行缓存的方法,包括对象的创建\访问\失效\一致性等</p>
 </blockquote>
-<p>凡是通过两种查询速度较大的方式来查询同一对象都称为cache</p>
-<blockquote>
-<p>缓存:存储在计算机上的一个原始数据复制集,以便用于访问   -wiki</p>
-</blockquote>
-<p>常见的一些缓存:</p>
+<h3 id="缓存常用方法"><a class="header-anchor" href="#缓存常用方法"></a>缓存常用方法</h3>
+<table>
+<thead>
+<tr>
+<th>接口</th>
+<th>说明</th>
+<th>Ehcache</th>
+<th>Guava</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>put()</td>
+<td>添加缓存</td>
+<td>✔</td>
+<td>✔</td>
+</tr>
+<tr>
+<td>putIfAbsent()</td>
+<td>如果key不存在则添加缓存</td>
+<td>✔</td>
+<td>✔</td>
+</tr>
+<tr>
+<td>replace()</td>
+<td>如果key存在则替换缓存</td>
+<td>✔</td>
+<td>✔</td>
+</tr>
+<tr>
+<td>get()</td>
+<td>获取缓存</td>
+<td>✔</td>
+<td>✔</td>
+</tr>
+<tr>
+<td>getAll()</td>
+<td>获取所有缓存</td>
+<td>✔</td>
+<td>✔</td>
+</tr>
+<tr>
+<td>getAllPresent(key)</td>
+<td>存在key在进行加载</td>
+<td>❌</td>
+<td>✔</td>
+</tr>
+<tr>
+<td>putAll(entries)</td>
+<td>添加所有缓存</td>
+<td>✔</td>
+<td>✔</td>
+</tr>
+<tr>
+<td>keySet()</td>
+<td>获取所有key</td>
+<td>❌</td>
+<td>❌</td>
+</tr>
+<tr>
+<td>remove()</td>
+<td>移除缓存</td>
+<td>✔</td>
+<td>✔</td>
+</tr>
+<tr>
+<td>clear()</td>
+<td>清空缓存</td>
+<td>✔</td>
+<td>✔</td>
+</tr>
+</tbody>
+</table>
+<p>可以看到常见的缓存操作就三类:<B>添加</B>&lt;B&gt;获取</B>&lt;B&gt;移除</B></p>
+<p>下面介绍两类缓存的实现方式:<B>本地缓存</B>和<B>分布式缓存</B></p>
+<h2 id="本地缓存"><a class="header-anchor" href="#本地缓存"></a>本地缓存</h2>
+<h3 id="Ehcache"><a class="header-anchor" href="#Ehcache"></a>Ehcache</h3>
+<p>暂且将Ehcache划分到本地缓存中,因为在使用中大多数场景下还是将Ehcache作为本地缓存来进行使用</p>
+<p>Ehcache2的核心淘汰策略逻辑如下:</p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/ehcache_AbstractPolicy_selectedBasedOnPolicy.jpg?raw=true" alt="selectedBasedOnPolicy"></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/ehcache/ehcache2/blob/12f580426154277bd7079bb71e85ae3615eae36f/ehcache-core/src/main/java/net/sf/ehcache/store/AbstractPolicy.java#L77">AbstractPolicy.selectedBasedOnPolicy</a></p>
 <ul>
-<li>CPU多级缓存</li>
-<li>TLB(Translation lookaside buffer) -最新的虚拟内存-&gt;物理内存的转换</li>
+<li>compare</li>
 </ul>
-<p>缓存分类:</p>
-<ul>
-<li>按缓存位置划分
-<ul>
-<li>客户端缓存</li>
-<li>服务器端缓存</li>
-<li>网络中的缓存</li>
-</ul>
-</li>
-<li>按部署方式划分
-<ul>
-<li>单体缓存</li>
-<li>集群缓存</li>
-<li>分布式缓存</li>
-</ul>
-</li>
-</ul>
-<h3 id="网络中的缓存"><a class="header-anchor" href="#网络中的缓存"></a>网络中的缓存</h3>
-<ul>
-<li>web代理缓存</li>
-</ul>
-<p>使用正向代理的方式将web服务器上的数据进行缓存,客户端请求后之间返回不需要重新先web服务器请求</p>
-<ul>
-<li>边缘缓存</li>
-</ul>
-<p>边缘缓存是通过反向代理的方式与用户处于同一网络,向用户提供静态内容的缓存,典型应用就是CDN缓存</p>
-<h3 id="缓存算法"><a class="header-anchor" href="#缓存算法"></a>缓存算法</h3>
-<p>LRU:最近最少使用算法<br>
-LFU:最少使用算法(会统计一段时间内每个缓存的访问次数)<br>
-SIZE:缓存大小算法(按照缓存的大小进行算法)</p>
-<h2 id="分布式系统理论"><a class="header-anchor" href="#分布式系统理论"></a>分布式系统理论</h2>
-<ul>
-<li>并向与并发</li>
-</ul>
-<blockquote>
-<p>并发指的是两个事情或多个事情在同一个时间段内间隔发生;并行指的是两个事情或多个事情在同一个时刻同时发生;</p>
-</blockquote>
-<ul>
-<li>CAP</li>
-</ul>
-<blockquote>
-<p>CAP理论提出一致性\可用性\分区容错性的取舍问题</p>
-</blockquote>
-<p>一致性©:指的是在同一时刻访问所有节点得到的数据相同<br>
-可用性(U):指的是在同一时刻访问所有节点得到的数据都可用<br>
-分区容错性§:指的是节点一定会发生故障,但是不会影响整个系统的正常运行</p>
-<h3 id="分布式系统设计策略"><a class="header-anchor" href="#分布式系统设计策略"></a>分布式系统设计策略</h3>
-<p>分布式系统设计策略指的是对于设计分布式系统常见的几个问题的处理策略:</p>
-<ul>
-<li>如何检测你还活着?</li>
-<li>如何保障高可用?</li>
-<li>容错机制的设计?</li>
-<li>重试机制?</li>
-<li>负载均衡?</li>
-</ul>
-<p>下面详细对每一个问题进行解答:</p>
-<h4 id="如何检测你还活着"><a class="header-anchor" href="#如何检测你还活着"></a>如何检测你还活着?</h4>
-<p>在分布式系统中如何检测当前节点是否存活?<br>
-在大多数分布式中间件中都是通过<B>心跳检测</B>的机制来检测当前节点是否存活的,例如在zk的client与server之间的心跳检测保持连接\redis哨兵架构中的哨兵与master/slave之间的心跳检测</p>
-<p><B>φ-accrual 故障检测器</B>是通过滑动窗口的时间算法来统计结果</p>
-<p><B>Gossip分发</B>(流言算法)通过消息的传递确定节点是否应该停止服务的算法</p>
-<p>小结:<br>
-存活检测有两个方法:一个是从通信链路入手检测目标节点的网络是否异常\一种是通过检测当前状态是否符合预期状态来检测目标节点是否存活</p>
-<h4 id="如何保障高可用"><a class="header-anchor" href="#如何保障高可用"></a>如何保障高可用?</h4>
-<p>在分布式系统中保障高可用的核心就是数据备份,通过多个节点的备份来在任何节点故障的情况下提供服务<br>
-按照提供服务的节点时机可以分为<B>主备(Master/Slave)</B>&lt;B&gt;互备(Failover)</B>&lt;B&gt;集群(Cluster)</B>这三种方式</p>
-<ul>
-<li>
-<p>主备(Master/Slave)模式<br>
-主备模式多用于要求严格提供C(一致性)\A(可用性)的场景中,MySQL的主备模式\Redis的哨兵模式</p>
-</li>
-<li>
-<p>互备(Failover)模式<br>
-互备模式指的是各个节点提供的数据和服务是相同的,常见的RocketMQ的注册中心NameServer就是多个节点提供相同的服务</p>
-</li>
-<li>
-<p>集群(Cluster)模式<br>
-集群模式指的是服务在多个节点运行,不同的节点运行不同的任务,比如Redis的集群模式;集群模式与主备模式/互备模式的区别在于集群模式是仅对服务进行高可用的设计,另外两种设计既有对服务和数据的双重含义</p>
-</li>
-</ul>
-<h4 id="容错机制的设计"><a class="header-anchor" href="#容错机制的设计"></a>容错机制的设计</h4>
-<p>容错机制指的是在系统设计中需要对一些异常场景的兼容,例如在Raft的一些实现中就会对CommitId进行CRC32的容错机制校验</p>
-<h4 id="重试机制"><a class="header-anchor" href="#重试机制"></a>重试机制</h4>
-<p>重试机制指的是系统调用失败后,由于无法确定是否网络异常,或者是否是系统调用的问题,可以重试一定次数,如果重试次数超过限制,则抛出异常;这种设计是基于网络异常和系统异常的区别的基础上来进行设计的,在一般认为中网络异常是频繁且持续的,因此可以重试机制下,重试一定次数<br>
-重试机制又会引出接口幂等的场景,因此在分布式系统设计中,接口一定要提供幂等</p>
-<h4 id="负载均衡"><a class="header-anchor" href="#负载均衡"></a>负载均衡</h4>
-<p>负载均衡类似于集群模式通过一个总的调度器来对任务进行分配,常用的负载均衡方案Nginx,LB</p>
-<h3 id="分布式系统的几个通用问题"><a class="header-anchor" href="#分布式系统的几个通用问题"></a>分布式系统的几个通用问题</h3>
-<ul>
-<li>全局id的生成</li>
-<li>hash取模分配</li>
-<li>路由表</li>
-<li>一致性hash算法</li>
-<li>数据拆分</li>
-<li>分布式锁的解决方案</li>
-<li>分布式事务的解决方案</li>
-</ul>
-<h4 id="全局Id的生成方案"><a class="header-anchor" href="#全局Id的生成方案"></a>全局Id的生成方案</h4>
-<p>分布式Id的产生是基于数据服务大都采用集群的模式提供服务,在这种模式下不同的节点如果产生的id不进行相互协调的话会造成id的冲突,因此需要一个全局的id生成方案来保证id的唯一性</p>
-<p>有两种实现思路:</p>
-<ul>
-<li>基于节点执行不同规则的id生成</li>
-<li>基于全局协调器的id生成</li>
-</ul>
-<p>下面分别来介绍一下这两种不同的方案</p>
-<ul>
-<li>基于节点执行不同规则的id生成</li>
-</ul>
-<p>是通过值得数据节点的id生成规则来实现的,例如对id设置初始值和步长,然后每个节点都会计算出自己的id,这样就可以保证id的唯一性</p>
-<ul>
-<li>
-<p>基于全局协调器的id生成<br>
-基于全局协调器的id生成方案实现比较多,例如通过一张id表的方式来进行实现\通过分布式id生成器的号段模式来实现\通过分布式id生成器的雪花算法来实现</p>
-</li>
-<li>
-<p>sonowfs的id生成方案</p>
-</li>
-</ul>
-<p>64bit = 41bit(时间戳) + 10bit(节点id) + 12bit(自增id)<br>
-时间戳精确到毫秒<br>
-12位自增id每个节点最多产生4096个id</p>
-<h4 id="hash取模-路由表-一致性hash算法"><a class="header-anchor" href="#hash取模-路由表-一致性hash算法"></a>hash取模\路由表\一致性hash算法</h4>
-<p>hash取模\路由表\一致性hash算法都是为了解决数据或服务的一个寻址过程,例如对于一个数据库来说,如果数据库有多个节点,那么对于某个数据来说,可以通过hash取模的方式来寻址到对应的节点,这样就可以保证数据的一致性</p>
-<p>hash取模是指的是对数据进行hash取模,然后根据模的值来寻址到对应的节点,这样就可以保证数据的分片性</p>
-<p>路由表是通过预设的路由表来寻址到对应的节点,这样就也可以保证数据的分片性;路由表还有一个优点是对于有序增加的场景下可以通过递增预设的路由表数据来寻址到对应的节点,还不影响之前的数据,但是这样有一个路由表单点问题,需要做好数据的备份和failover</p>
-<h4 id="数据拆分"><a class="header-anchor" href="#数据拆分"></a>数据拆分</h4>
-<p>数据的拆分主要指的是将数据分片到不同的节点上,这样就可以保证数据的一致性;前面已经介绍数据拆分的原理;<br>
-常用的数据拆分方案是mycat/shardingsphere等</p>
-<h3 id="小结"><a class="header-anchor" href="#小结"></a>小结</h3>
-<p>这一章节主要给我们介绍<B>分布式系统设计策略</B>&lt;B&gt;分布式系统的几个通用问题</B>的解决方案</p>
-<h2 id="缓存基础"><a class="header-anchor" href="#缓存基础"></a>缓存基础</h2>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**
+ * Compares the desirableness for eviction of two elements
+ *
+ * @param element1 the element to compare against
+ * @param element2 the element to compare
+ * @return true if the second element is preferable for eviction to the first element
+ * under ths policy
+ */</span>
+<span class="token keyword">boolean</span> <span class="token function">compare</span><span class="token punctuation">(</span><span class="token class-name">Element</span> element1<span class="token punctuation">,</span> <span class="token class-name">Element</span> element2<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>可以看到<B>compare()</B>方法是核心的比较方法,下层有<B>LRUPolicy</B>&lt;B&gt;LFUPolicy</B>&lt;B&gt;FIFOPolicy</B>底层实现</p>
+<h3 id="Guava-Cache"><a class="header-anchor" href="#Guava-Cache"></a>Guava Cache</h3>
+<h3 id="Caffine"><a class="header-anchor" href="#Caffine"></a>Caffine</h3>
+<h2 id="分布式缓存"><a class="header-anchor" href="#分布式缓存"></a>分布式缓存</h2>
+<h3 id="Redis"><a class="header-anchor" href="#Redis"></a>Redis</h3>
+<h3 id="hazelcast"><a class="header-anchor" href="#hazelcast"></a>hazelcast</h3>
+<h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
+<p><a target="_blank" rel="noopener" href="https://github.com/hazelcast/hazelcast">https://github.com/hazelcast/hazelcast</a></p>
 
                 
             </div>
@@ -654,13 +614,13 @@ SIZE:缓存大小算法(按照缓存的大小进行算法)</p>
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2022/08/14/20.%E7%AC%94%E8%AE%B0/11.%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E7%A1%AC%E4%BB%B6%E7%BB%93%E6%9E%84%E7%AF%87/">
+                <a href="/2022/08/08/20.%E7%AC%94%E8%AE%B0/20.%E6%B7%B1%E5%85%A5%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98-%E4%BB%8E%E5%8E%9F%E7%90%86%E5%88%B0%E5%AE%9E%E8%B7%B5(%E4%B8%80)/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/66.jpg" class="responsive-img" alt="现代操作系统原理与实现-硬件结构篇">
+                        <img src="/medias/featureimages/71.jpg" class="responsive-img" alt="深入分布式缓存-从原理到实践(一)">
                         
-                        <span class="card-title">现代操作系统原理与实现-硬件结构篇</span>
+                        <span class="card-title">深入分布式缓存-从原理到实践(一)</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -671,14 +631,14 @@ SIZE:缓存大小算法(按照缓存的大小进行算法)</p>
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2022-08-14
+                            <i class="far fa-clock fa-fw icon-date"></i>2022-08-08
                         </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/" class="post-category">
-                                    操作系统
+                            <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/" class="post-category">
+                                    分布式
                                 </a>
                             
                             
@@ -890,7 +850,7 @@ SIZE:缓存大小算法(按照缓存的大小进行算法)</p>
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            157.9k
+                                            158.3k
                                         </span>&nbsp;字
                                         
                                             
