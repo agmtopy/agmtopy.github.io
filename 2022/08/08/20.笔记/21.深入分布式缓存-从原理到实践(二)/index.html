@@ -422,7 +422,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    817
+                    877
                 </div>
                 
 
@@ -597,8 +597,8 @@
   <span class="token keyword">return</span> oldValue<span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>scheduleRefresh()方法是在get()方法中调用的</p>
-<p><img src="https://github.com/google/guava/blob/c111c0150225739b3f5914d1739cd22fb692bce7/guava/src/com/google/common/cache/LocalCache.java#L2324" alt="LocalCache.scheduleRefresh"></p>
+<p>scheduleRefresh()方法是在get()方法中调用的<br>
+<a target="_blank" rel="noopener" href="https://github.com/google/guava/blob/c111c0150225739b3f5914d1739cd22fb692bce7/guava/src/com/google/common/cache/LocalCache.java#L2324">LocalCache.scheduleRefresh</a></p>
 <h3 id="Caffine"><a class="header-anchor" href="#Caffine"></a>Caffine</h3>
 <h2 id="二级缓存"><a class="header-anchor" href="#二级缓存"></a>二级缓存</h2>
 <p>在使用集中式或者数据库热点配置数据时,我们往往将这些数据放到应用进程空间中中,这样可以提高缓存的命中率;可以用Echache/Guava作为二级缓存来进行使用<br>
@@ -613,6 +613,8 @@
 <p><img src="https://github.com/agmtopy/noteBook/blob/master/drawio/s-%E6%B7%B1%E5%85%A5%E5%88%86%E5%B8%83%E5%BC%8F%E7%BC%93%E5%AD%98.%E4%BB%8E%E5%8E%9F%E7%90%86%E5%88%B0%E5%AE%9E%E7%8E%B0/reids%E6%95%B0%E6%8D%AE%E6%B6%88%E6%81%AF%E9%80%9A%E7%9F%A5%E5%90%8C%E6%AD%A5%E6%96%B9%E6%A1%88.drawio.png?raw=true" alt="消息通知"></p>
 <p>消息通知的方案可以保证准实时下的推送,但是会带来一定的开销,比如消息通知的推送频率是每秒一次,那么每秒钟的消息会被推送到缓存中,这样会带来一定的开销,通过这样的消耗来保证实时性;还需要注意一点的是应用的重启后一定要消费最新的消息或从redis中获取最新的数据</p>
 <h2 id="分布式缓存"><a class="header-anchor" href="#分布式缓存"></a>分布式缓存</h2>
+<p>传统的分布式缓存其实还包括Memcached,但是目前自己并没有接触过,因此就用<B>redis</B>和<B>hazelcast-嘿做看时特</B>来进行介绍</p>
+<h2 id="在分布式缓存中有几个问题需要解决"><a class="header-anchor" href="#在分布式缓存中有几个问题需要解决"></a>在分布式缓存中有几个问题需要解决:</h2>
 <h3 id="Redis"><a class="header-anchor" href="#Redis"></a>Redis</h3>
 <h3 id="hazelcast"><a class="header-anchor" href="#hazelcast"></a>hazelcast</h3>
 <h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
@@ -917,7 +919,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            158.8k
+                                            159.4k
                                         </span>&nbsp;字
                                         
                                             

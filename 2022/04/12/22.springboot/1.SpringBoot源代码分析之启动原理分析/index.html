@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    301
+                    818
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    1 分钟
+                    3 分钟
                 </div>
                 
 
@@ -464,29 +464,23 @@
 <ul>
 <li>执行链路</li>
 </ul>
-<p>可以看到执行链路为</p>
-<p>下面依次对<B>run()</B>和<B>@SpringBootApplication注解</B>进行分析</p>
+<p>可以看到执行链路为:</p>
+<p>这里有一个小细节,在没有提前初始化SpringApplication()时是不能使用arthas进行插入代码,显示错误为图一</p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/S-springboot%E6%BA%90%E4%BB%A3%E7%A0%81%E8%A7%A3%E6%9E%90/Arthas_SpringApplicationRun1.jpg?raw=true" alt="图1"></p>
+<p>查看相关类信息也没有看到类加载</p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/S-springboot%E6%BA%90%E4%BB%A3%E7%A0%81%E8%A7%A3%E6%9E%90/Arthas_SpringApplicationRun2.jpg?raw=true" alt="图2"></p>
+<p>经过分析可以知道这时候<B>SpringApplication</B>类还没有加载</p>
 <h2 id="SpringApplication-run"><a class="header-anchor" href="#SpringApplication-run"></a>SpringApplication.run()</h2>
 <ul>
 <li>run()</li>
 </ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java">   
-   <span class="token comment">// 1.  </span>
-<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">ConfigurableApplicationContext</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> primarySource<span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-	<span class="token keyword">return</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token punctuation">&#123;</span> primarySource <span class="token punctuation">&#125;</span><span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-
-   <span class="token comment">//2. </span>
+   <span class="token comment">//1. 构造方法  </span>
    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">ConfigurableApplicationContext</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span><span class="token punctuation">[</span><span class="token punctuation">]</span> primarySources<span class="token punctuation">,</span> <span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
 	<span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">SpringApplication</span><span class="token punctuation">(</span>primarySources<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">run</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span>
 
-   <span class="token comment">//3.</span>
-   <span class="token keyword">public</span> <span class="token class-name">SpringApplication</span><span class="token punctuation">(</span><span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> primarySources<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-	<span class="token keyword">this</span><span class="token punctuation">(</span><span class="token keyword">null</span><span class="token punctuation">,</span> primarySources<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-
-   <span class="token comment">//4.</span>
+   <span class="token comment">//2. 构造方法</span>
    <span class="token keyword">public</span> <span class="token class-name">SpringApplication</span><span class="token punctuation">(</span><span class="token class-name">ResourceLoader</span> resourceLoader<span class="token punctuation">,</span> <span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> primarySources<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
        <span class="token comment">//1. 初始化ResourceLoader</span>
 	<span class="token keyword">this</span><span class="token punctuation">.</span>resourceLoader <span class="token operator">=</span> resourceLoader<span class="token punctuation">;</span>
@@ -499,8 +493,110 @@
 	<span class="token function">setListeners</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token class-name">Collection</span><span class="token punctuation">)</span> <span class="token function">getSpringFactoriesInstances</span><span class="token punctuation">(</span><span class="token class-name">ApplicationListener</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 	<span class="token keyword">this</span><span class="token punctuation">.</span>mainApplicationClass <span class="token operator">=</span> <span class="token function">deduceMainApplicationClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>run()方法最后是执行<B>SpringApplication</B>的初始化方法:</p>
+<p><img src="" alt="图3"></p>
+<ul>
+<li>run()</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/**
+ * 运行Spring应用程序，创建并刷新新的容器
+ */</span>
+<span class="token keyword">public</span> <span class="token class-name">ConfigurableApplicationContext</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+	<span class="token comment">//1. 执行需要在初始化开始时执行的钩子方法</span>
+	<span class="token class-name">SpringApplicationHooks</span><span class="token punctuation">.</span><span class="token function">hooks</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">preRun</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token comment">//2. 获取初始化时间</span>
+	<span class="token keyword">long</span> startTime <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">nanoTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token comment">//3.初始化BootStrapContext(引导上下文)</span>
+	<span class="token class-name">DefaultBootstrapContext</span> bootstrapContext <span class="token operator">=</span> <span class="token function">createBootstrapContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token class-name">ConfigurableApplicationContext</span> context <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+	<span class="token comment">//4. 配置head头属性</span>
+	<span class="token function">configureHeadlessProperty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token comment">//5. 获取运行中的执行监听器</span>
+	<span class="token class-name">SpringApplicationRunListeners</span> listeners <span class="token operator">=</span> <span class="token function">getRunListeners</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token comment">//6. 启动监听器</span>
+	listeners<span class="token punctuation">.</span><span class="token function">starting</span><span class="token punctuation">(</span>bootstrapContext<span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>mainApplicationClass<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+		<span class="token comment">//7. 初始化应用程序参数</span>
+		<span class="token class-name">ApplicationArguments</span> applicationArguments <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DefaultApplicationArguments</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token comment">//8. 准备运行环境</span>
+		<span class="token class-name">ConfigurableEnvironment</span> environment <span class="token operator">=</span> <span class="token function">prepareEnvironment</span><span class="token punctuation">(</span>listeners<span class="token punctuation">,</span> bootstrapContext<span class="token punctuation">,</span> applicationArguments<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token comment">//9. 设置需要忽略的bean</span>
+		<span class="token function">configureIgnoreBeanInfo</span><span class="token punctuation">(</span>environment<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token comment">//10. 打印Banner信息</span>
+		<span class="token class-name">Banner</span> printedBanner <span class="token operator">=</span> <span class="token function">printBanner</span><span class="token punctuation">(</span>environment<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token comment">//11. 创建ApplicationContext</span>
+		context <span class="token operator">=</span> <span class="token function">createApplicationContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token comment">//12. 设置应用程序启动器(用于收集启动过程中的一些信息)</span>
+		context<span class="token punctuation">.</span><span class="token function">setApplicationStartup</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>applicationStartup<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token comment">//13. 准备启动ApplicationContext</span>
+		<span class="token function">prepareContext</span><span class="token punctuation">(</span>bootstrapContext<span class="token punctuation">,</span> context<span class="token punctuation">,</span> environment<span class="token punctuation">,</span> listeners<span class="token punctuation">,</span> applicationArguments<span class="token punctuation">,</span> printedBanner<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token comment">//14. 判断是否需要重新刷新容器</span>
+		<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">refreshContext</span><span class="token punctuation">(</span>context<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+			<span class="token comment">//15. 后置刷新容器方法</span>
+			<span class="token function">afterRefresh</span><span class="token punctuation">(</span>context<span class="token punctuation">,</span> applicationArguments<span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token comment">//16. 记录时间</span>
+			<span class="token class-name">Duration</span> timeTakenToStartup <span class="token operator">=</span> <span class="token class-name">Duration</span><span class="token punctuation">.</span><span class="token function">ofNanos</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">nanoTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> startTime<span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>logStartupInfo<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+				<span class="token keyword">new</span> <span class="token class-name">StartupInfoLogger</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>mainApplicationClass<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">logStarted</span><span class="token punctuation">(</span><span class="token function">getApplicationLog</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+						timeTakenToStartup<span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token punctuation">&#125;</span>
+			<span class="token comment">//17. 设置监听时间</span>
+			listeners<span class="token punctuation">.</span><span class="token function">started</span><span class="token punctuation">(</span>context<span class="token punctuation">,</span> timeTakenToStartup<span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token comment">//18. 执行Runner方法</span>
+			<span class="token function">callRunners</span><span class="token punctuation">(</span>context<span class="token punctuation">,</span> applicationArguments<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token punctuation">&#125;</span>
+	<span class="token punctuation">&#125;</span>
+	<span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Throwable</span> ex<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+		<span class="token function">handleRunFailure</span><span class="token punctuation">(</span>context<span class="token punctuation">,</span> ex<span class="token punctuation">,</span> listeners<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalStateException</span><span class="token punctuation">(</span>ex<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">&#125;</span>
+	<span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+		<span class="token keyword">if</span> <span class="token punctuation">(</span>context<span class="token punctuation">.</span><span class="token function">isRunning</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+			<span class="token class-name">Duration</span> timeTakenToReady <span class="token operator">=</span> <span class="token class-name">Duration</span><span class="token punctuation">.</span><span class="token function">ofNanos</span><span class="token punctuation">(</span><span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">nanoTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-</span> startTime<span class="token punctuation">)</span><span class="token punctuation">;</span>
+			listeners<span class="token punctuation">.</span><span class="token function">ready</span><span class="token punctuation">(</span>context<span class="token punctuation">,</span> timeTakenToReady<span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token punctuation">&#125;</span>
+	<span class="token punctuation">&#125;</span>
+	<span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Throwable</span> ex<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+		<span class="token function">handleRunFailure</span><span class="token punctuation">(</span>context<span class="token punctuation">,</span> ex<span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalStateException</span><span class="token punctuation">(</span>ex<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token punctuation">&#125;</span>
+	<span class="token comment">//19. 执行后置Hook后置方法</span>
+	<span class="token class-name">SpringApplicationHooks</span><span class="token punctuation">.</span><span class="token function">hooks</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">postRun</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> context<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">return</span> context<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>可以看到run方法的执行过程分为几个阶段:</p>
+<ul>
+<li>
+<p><B>前置准备阶段</B></p>
+<ul>
+<li>执行前置钩子方法(步骤一)</li>
+<li>初始化引导上下文(步骤二\步骤三\步骤四)</li>
+<li>设置启动监听器 (步骤五\步骤六)</li>
+</ul>
+</li>
+<li>
+<p><B>启动容器阶段</B></p>
+<ul>
+<li>初始化应用参数(步骤七\八\九\十)</li>
+<li>创建容器(步骤十一\十二\十三)</li>
+</ul>
+</li>
+<li>
+<p><B>刷新容器阶段</B></p>
+<ul>
+<li>刷新容器(步骤十四)</li>
+<li>创建容器(步骤十五)</li>
+</ul>
+</li>
+<li>
+<p><B>执行后置方法阶段</B></p>
+<ul>
+<li>执行Runner(步骤十八)</li>
+<li>执行hook(步骤十九)</li>
+</ul>
+</li>
+</ul>
 
                 
             </div>
@@ -801,7 +897,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            158.8k
+                                            159.4k
                                         </span>&nbsp;字
                                         
                                             

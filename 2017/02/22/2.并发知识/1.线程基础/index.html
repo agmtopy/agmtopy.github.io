@@ -422,7 +422,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    1.3k
+                    1.4k
                 </div>
                 
 
@@ -621,7 +621,7 @@
 <p>关于线程中断isInterrupted()和线程关闭stop()的区别在于<br>
 线程中断是不会中断线程的运行的,而线程关闭stop会关闭线程,stop()是不安全的说法来自于stop()执行后会立即释放该线程所持有的所有锁(包括synchronized持有的全局对象锁)</p>
 <h2 id="volatile不能作为线程标记位"><a class="header-anchor" href="#volatile不能作为线程标记位"></a>volatile不能作为线程标记位</h2>
-<p>volatile作为标记位的时候，当线程阻塞的时候，其他线程仍旧可以改变标记位的值，因此volatile不适合作为线程标记位。</p>
+<p>volatile作为并发标记位的时候，当一个使用线程阻塞的时候，其他线程仍旧可以改变标记位的值,打但是由于线程不是活动的是不能即使获取到volatile的值，因此volatile不适合作为线程标记位。</p>
 <h2 id="wait-notify-notifyAll-方法使用注意"><a class="header-anchor" href="#wait-notify-notifyAll-方法使用注意"></a>wait/notify/notifyAll()方法使用注意</h2>
 <ol>
 <li>wait()方法，必须在<strong>synchronized</strong>中持有锁后才能使用，因为必须持有对象的<strong>monitor</strong>锁，这样才能防止在执行前后线程被切换。</li>
@@ -943,7 +943,7 @@ wait必须在synchronized中使用的原因是因为防止指令的乱序执行�
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            158.8k
+                                            159.4k
                                         </span>&nbsp;字
                                         
                                             
