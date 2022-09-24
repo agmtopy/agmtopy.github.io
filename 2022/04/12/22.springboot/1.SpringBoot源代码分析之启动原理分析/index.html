@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    818
+                    1.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    3 分钟
+                    4 分钟
                 </div>
                 
 
@@ -597,6 +597,45 @@
 </ul>
 </li>
 </ul>
+<h2 id="前置准备阶段"><a class="header-anchor" href="#前置准备阶段"></a>前置准备阶段</h2>
+<p><B>前置准备阶段</B>主要是设置一些容器上下文和钩子函数,下面详细分析一下这几个功能的实现</p>
+<h3 id="执行前置钩子方法"><a class="header-anchor" href="#执行前置钩子方法"></a>执行前置钩子方法</h3>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//设置钩子方法</span>
+<span class="token class-name">SpringApplicationHooks</span><span class="token punctuation">.</span><span class="token function">hooks</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">preRun</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>这个方法是在针对于AOT的启动过程中提供的钩子方法,最早应用于<B>v3.0.0-M4</B>版本中,<a target="_blank" rel="noopener" href="https://github.com/spring-projects/spring-boot/commit/9cd17f8a14eab8007c372c045a6b9295a3a56126?diff=unified">commit</a></p>
+<p>下面来继续分析<B>SpringApplicationHooks</B>的执行流程</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">final</span> <span class="token keyword">class</span> <span class="token class-name">SpringApplicationHooks</span> <span class="token punctuation">&#123;</span>
+
+	<span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">ThreadLocal</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Hooks</span><span class="token punctuation">></span></span> hooks <span class="token operator">=</span> <span class="token class-name">ThreadLocal</span><span class="token punctuation">.</span><span class="token function">withInitial</span><span class="token punctuation">(</span><span class="token class-name">Hooks</span><span class="token operator">::</span><span class="token keyword">new</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+	<span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">withHook</span><span class="token punctuation">(</span><span class="token class-name">Hook</span> hook<span class="token punctuation">,</span> <span class="token class-name">Runnable</span> action<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+		<span class="token comment">//....</span>
+	<span class="token punctuation">&#125;</span>
+	
+	<span class="token comment">//钩子接口</span>
+	<span class="token keyword">interface</span> <span class="token class-name">Hook</span> <span class="token punctuation">&#123;</span>
+		<span class="token keyword">default</span> <span class="token keyword">void</span> <span class="token function">preRun</span><span class="token punctuation">(</span><span class="token class-name">SpringApplication</span> application<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+		<span class="token punctuation">&#125;</span>
+
+		<span class="token keyword">default</span> <span class="token keyword">void</span> <span class="token function">postRun</span><span class="token punctuation">(</span><span class="token class-name">SpringApplication</span> application<span class="token punctuation">,</span> <span class="token class-name">ConfigurableApplicationContext</span> context<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+		<span class="token punctuation">&#125;</span>
+
+		<span class="token keyword">default</span> <span class="token keyword">boolean</span> <span class="token function">preRefresh</span><span class="token punctuation">(</span><span class="token class-name">SpringApplication</span> application<span class="token punctuation">,</span> <span class="token class-name">ConfigurableApplicationContext</span> context<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+			<span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+		<span class="token punctuation">&#125;</span>
+	<span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><B>SpringApplicationHooks</B>主要是由两个部分组成:</p>
+<ul>
+<li>本身的线程变量属性<B>hooks</B>和设置方法<B>withHook</B></li>
+<li><B>hook</B>接口定义的方法:<B>preRun():开始执行</B>、<B>postRun():run()方法执行完成后执行</B>、<B>preRefresh():指定刷新前执行</B></li>
+</ul>
+<p>目前hook有两个实现类,在SpringApplicationHooks中默认实现的<B>hooks</B>以及在AOT模块中的实现类<B>AotProcessorHook</B></p>
+<p>下面对<B>Hook</B>的方法的调用过程进行分析</p>
+<ul>
+<li>preRun</li>
+</ul>
+<p><img src="" alt="preRun调用过程"></p>
 
                 
             </div>
@@ -897,7 +936,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            159.4k
+                                            159.6k
                                         </span>&nbsp;字
                                         
                                             
