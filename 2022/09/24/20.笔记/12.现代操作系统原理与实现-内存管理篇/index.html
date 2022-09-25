@@ -459,7 +459,7 @@
 <li>虚拟内存的结构<br>
 下面是一张有关CPU如何将虚拟地址转换为物理地址的图:</li>
 </ul>
-<p><img src="https://github.com/agmtopy/noteBook/blob/master/drawio/CPU%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80%E7%BF%BB%E8%AF%91%E7%A4%BA%E6%84%8F%E5%9B%BE.drawio.png?raw=true" alt="CPU虚拟地址翻译示意图"></p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/drawio/x-%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E7%8E%B0/CPU%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80%E7%BF%BB%E8%AF%91%E7%A4%BA%E6%84%8F%E5%9B%BE.drawio.png?raw=true" alt="CPU虚拟地址翻译示意图"></p>
 <p>可以看到操作系统向CPU发生虚拟地址访问请求后,传给MMU在通过TLB转换后,将物理地址发送给操作总线,从而访问到物理内存地址;</p>
 <p>现代操作系统都是通过分页的形式采用页表来实现的,<B>TLB</B>缓存了虚拟页号到物理页号之间的映射关系,TLB的设计非常简单就是做映射,但是却十分的高效,因为在内存数据的访问遵守<B>时空局部性原理</B></p>
 <ul>
