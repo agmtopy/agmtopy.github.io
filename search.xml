@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>现代操作系统原理与实现-内存管理篇</title>
+      <link href="2022/09/24/20.%E7%AC%94%E8%AE%B0/12.%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E7%AF%87/"/>
+      <url>2022/09/24/20.%E7%AC%94%E8%AE%B0/12.%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E7%AF%87/</url>
+      
+        <content type="html"><![CDATA[<h1>现代操作系统原理与实现-内存管理篇</h1><p>一晃而过距离上一篇<B>硬件结构</B>已经过去了一个月有余了.最近一直在整理<B>Notion</B>上的笔记,把《深入理解Java虚拟机》的相关笔记也在notion上写和整理去了,对《现代操作系统原理与实现》的笔记也耽搁了许久;这本书应该是本年度最佳书籍了,会争取在今年把第一遍阅读的相关笔记完成,时间过的真的很快,跑题感慨了一下,下面继续有关内存部分的整理和理解吧!</p><h2 id="引言"><a class="header-anchor" href="#引言"></a>引言</h2><p>在上一章中了解到物理内存是组成操作系统的重要部分,这一章节就是介绍操作系统是如何管理和使用内存的;</p><h3 id="内存管理"><a class="header-anchor" href="#内存管理"></a>内存管理</h3><p>内存管理主要是对物理内存的管理,在早期程序是直接分配在物理内存上运行的,那个时候操作系统都不存在,这样分配会产生几个问题例如程序直接操作物理内存无法做到隔离/分配内存空间的碎片化/无法处理超过物理容量限制的分配</p><p>针对这个些问题,提出了<B>虚拟内存</B>的概念,大概是在1956年的一位德国物理学家提出的,感觉这个时间过了好久了啊,但是在翻阅资料查这些的时候发现计算机的发明居然还没有80年,太不可思议了</p><p><img src="http://www.isolves.com/d/file/p/2020/03-17/bbd1470ef6879e2f6e4847b7444fde35.jpg" alt="虚拟内存技术发展时间线"></p><h4 id="虚拟内存"><a class="header-anchor" href="#虚拟内存"></a>虚拟内存</h4><blockquote><p>虚拟内存作为物理内存和应用程序之间的一个抽象层;应用程序不在直接运行在物理内存之上,而是运行在虚拟内存之上;应用程序在运行时只知道虚拟内存地址,cpu或者硬件负责将虚拟地址转换为物理地址,操作系统负责设置虚拟地址与物理地址之间的映射;每个应用程序只能看到属于自己的虚拟内存地址,并且看到的虚拟内存地址是同一的、连续的;</p></blockquote><ul><li>虚拟内存的结构<br>下面是一张有关CPU如何将虚拟地址转换为物理地址的图:</li></ul><p><img src="https://github.com/agmtopy/noteBook/blob/master/drawio/CPU%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80%E7%BF%BB%E8%AF%91%E7%A4%BA%E6%84%8F%E5%9B%BE.drawio.png?raw=true" alt="CPU虚拟地址翻译示意图"></p><p>可以看到操作系统向CPU发生虚拟地址访问请求后,传给MMU在通过TLB转换后,将物理地址发送给操作总线,从而访问到物理内存地址;</p><p>现代操作系统都是通过分页的形式采用页表来实现的,<B>TLB</B>缓存了虚拟页号到物理页号之间的映射关系,TLB的设计非常简单就是做映射,但是却十分的高效,因为在内存数据的访问遵守<B>时空局部性原理</B></p><ul><li>虚拟内存中的换页</li></ul><p>在前面说到物理内存无法自动处理分配超过实际容量限制的场景.而虚拟内存可以做到,就是通过换页机制来实现的,具体流程如下:</p><h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2><p><a href="https://zhuanlan.zhihu.com/p/143273007">操作系统之内存管理</a><br><a href="https://ewikizh.top/wiki/Virtual_memory#cite_note-10">虚拟内存</a><br><a href="https://www.isolves.com/it/rj/jy/2020-03-17/14226.html">虚拟内存技术的前世今生</a></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 操作系统 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 笔记 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>现代操作系统原理与实现-硬件结构篇</title>
       <link href="2022/08/14/20.%E7%AC%94%E8%AE%B0/11.%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E7%A1%AC%E4%BB%B6%E7%BB%93%E6%9E%84%E7%AF%87/"/>
       <url>2022/08/14/20.%E7%AC%94%E8%AE%B0/11.%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E7%A1%AC%E4%BB%B6%E7%BB%93%E6%9E%84%E7%AF%87/</url>
