@@ -6,7 +6,7 @@
   <link href="https://agmtopy.gitee.io/atom.xml" rel="self"/>
   
   <link href="https://agmtopy.gitee.io/"/>
-  <updated>2022-09-25T14:21:54.753Z</updated>
+  <updated>2022-09-27T16:21:20.773Z</updated>
   <id>https://agmtopy.gitee.io/</id>
   
   <author>
@@ -15,6 +15,36 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>分布式数据库系统原理.第一篇</title>
+    <link href="https://agmtopy.gitee.io/2022/09/27/11.%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AC%94%E8%AE%B0/31.%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86-%E7%AC%AC%E4%B8%80%E7%AF%87/"/>
+    <id>https://agmtopy.gitee.io/2022/09/27/11.%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AC%94%E8%AE%B0/31.%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86-%E7%AC%AC%E4%B8%80%E7%AF%87/</id>
+    <published>2022-09-27T15:11:06.000Z</published>
+    <updated>2022-09-27T16:21:20.773Z</updated>
+    
+    <content type="html"><![CDATA[<h1>分布式数据库系统原理(一)</h1><h2 id="引言"><a class="header-anchor" href="#引言"></a>引言</h2><blockquote><p>为什么需要分布式?</p></blockquote><ul><li><B>处理逻辑</B></li><li><B>功能</B></li><li><B>数据</B></li><li><B>控制</B></li></ul><p>对于这个的理解应该是:</p><ul><li>处理逻辑:对应应用实例或者算法之类的,单点无法满足某些需求(AP)</li><li>功能:对于功能的分布式划分主要是体现在微服务的拆分上,不同的功能拆分成为不同的服务</li><li>数据:对于数据的拆分主要是单点数据服务无法满足要求的情况下,进行拆库拆表</li><li>控制:<font color="#dddd00">这个暂时不能理解?控制是否为程序或者算法的同义楠?</font></li></ul><blockquote><p>什么是分布式数据库?<br>物理上分布不同地方,通过计算机网络逻辑上相互关联的数据库</p></blockquote><h2 id="实现的问题"><a class="header-anchor" href="#实现的问题"></a>实现的问题</h2><ul><li>数据如何选择分片?</li><li>分布式事务的实现?</li><li>性能问题?</li></ul><p>如下图:</p><p><img src="https://raw.githubusercontent.com/agmtopy/noteBook/master/png/f-%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%8E%9F%E7%90%86/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E9%97%AE%E9%A2%98%E4%B9%8B%E9%97%B4%E7%9A%84%E8%81%94%E7%B3%BB.jpg" alt="分布式数据问题之间的联系"></p><h2 id="集中式数据库模型与分布式数据库模型"><a class="header-anchor" href="#集中式数据库模型与分布式数据库模型"></a>集中式数据库模型与分布式数据库模型</h2><p><img src="TODO" alt="集中式DBMS分层架构"></p><p>可以看到集中式数据库就是一个标准的应用分层,以MySql为例</p><p>界面: 提供不同语音的MySql Drive<br>控制: 连接校验<br>编译: sql解析<br>执行: innodb存储引擎处理<br>数据访问:MySql内核处理<br>一致性: 各种Lock和log</p><p><img src="TODO" alt="分布式数据库结构"></p><p>可以看到分布式数据库系统需要从三个不同的方面进行考虑:<B>物理分布</B>&lt;B&gt;异构性</B>&lt;B&gt;自治性</B></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;分布式数据库系统原理(一)&lt;/h1&gt;
+&lt;h2 id=&quot;引言&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;#引言&quot;&gt;&lt;/a&gt;引言&lt;/h2&gt;
+&lt;blockquote&gt;
+&lt;p&gt;为什么需要分布式?&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;B&gt;处</summary>
+      
+    
+    
+    
+    <category term="数据库" scheme="https://agmtopy.gitee.io/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
+    
+    
+    <category term="分布式" scheme="https://agmtopy.gitee.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
+    
+  </entry>
   
   <entry>
     <title>现代操作系统原理与实现-内存管理篇</title>
@@ -514,32 +544,6 @@ redis对于持久化支持4种部署方式&lt;/p&gt;
 &lt;p&gt;编排: 引申为描述复杂计算机系统、中间件 (middleware) 和业务的自动化的安排、协调和管理。&lt;/p&gt;
 &lt;/blockquote&gt;
 </summary>
-      
-    
-    
-    
-    <category term="容器化" scheme="https://agmtopy.gitee.io/categories/%E5%AE%B9%E5%99%A8%E5%8C%96/"/>
-    
-    
-    <category term="Kubernetes" scheme="https://agmtopy.gitee.io/tags/Kubernetes/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>深入剖析Kubernetes之Pods的概念</title>
-    <link href="https://agmtopy.gitee.io/2021/11/28/18.%E5%AE%B9%E5%99%A8%E5%8C%96/2.%E6%B7%B1%E5%85%A5%E5%89%96%E6%9E%90Kubernetes%E4%B9%8BPod%E7%9A%84%E6%A6%82%E5%BF%B5/"/>
-    <id>https://agmtopy.gitee.io/2021/11/28/18.%E5%AE%B9%E5%99%A8%E5%8C%96/2.%E6%B7%B1%E5%85%A5%E5%89%96%E6%9E%90Kubernetes%E4%B9%8BPod%E7%9A%84%E6%A6%82%E5%BF%B5/</id>
-    <published>2021-11-28T05:40:30.000Z</published>
-    <updated>2021-11-28T15:40:46.956Z</updated>
-    
-    <content type="html"><![CDATA[<h1>深入剖析Kubernetes之Pods的概念</h1><p>在上一篇文章中了解到kubernetes的部署在逻辑上是按照<B>Pod</B>的概念进行的,下面来详细的了解一下pod的知识</p><h2 id="基础概念"><a class="header-anchor" href="#基础概念"></a>基础概念</h2><blockquote><p>Pods是您可以在 Kubernetes 中创建和管理的最小的可部署计算单元。Pods是一组由一个或一个以上的容器组成的共享存储和网络资源，以及如何运行容器的规范。Pod 的内容始终位于同一地点并共同调度，并在共享上下文中运行。Pod 为特定于应用程序的“逻辑主机”建模：它包含一个或多个相对紧密耦合的应用程序容器。在非云环境中，在同一物理或虚拟机上执行的应用程序类似于在同一逻辑主机上执行的云应用程序。</p></blockquote><p>Pods的官网定义,这个定义传达出三个规范:</p><ol><li>Pods是Kubernetes管理执行的最小单元</li><li>Pods是容器组成,并且容器内部可以共享网络和存储</li><li>Pods是一个逻辑概念,替kubernetes完成底层操作的还是容器三剑客’Namespace’、‘Cgroup’、‘rootFs’</li></ol><h2 id="Pods组成"><a class="header-anchor" href="#Pods组成"></a>Pods组成</h2><p>Pods的组成可以参考这张图:<br><img src="https://d33wubrfki0l68.cloudfront.net/aecab1f649bc640ebef1f05581bfcc91a48038c4/728d6/images/docs/pod.svg" alt="Pods组成"></p><p>Pods除了本身的容器’ContainerA/ContainerB’以外还有一个<B>Infra container</B>容器，这个容器的镜像很小解压后也只有100kb~200kb大小。</p><ul><li><p>Init容器<br>init容器是在用户容器启动之前-网络和数据卷初始化完成后启动<br>用于代理用户容器的网络和IO,其实就是Sidecar模式</p></li><li><p>用户容器<br>用户容器是’Web Server’也就是在YML中定义的容器</p></li></ul><h2 id="Pods功能"><a class="header-anchor" href="#Pods功能"></a>Pods功能</h2><ul><li><p>volume</p><p>volume数据卷其中有一种特殊的volume-&gt;‘Projected Volume’(投射数据卷)主要是用来向容器内部提供预先定义好的数据，可以划分为</p><ol><li>Secret</li><li>ConfigMao</li><li>DownwardApi</li><li>ServiceAccountToken</li></ol><p>这几种类型，其中Secret指的是将配置添加到kubernetes中镜像管理的数据，在通过Pods的YMAL文件的定义可以将这部分配置信息直接写入容器中，并且可以随着Kubernetes中内容的变化而变化，类似与配置中心的使用</p></li><li><p>异常恢复策略</p><p>Pods的异常恢复策略可以分为:</p><ol><li>只要容器没有运行就进行自动重启</li><li>只有在容器异常时才进行chongq</li><li>永不自动重启容器</li></ol><p>检查容器是否运行的方法有:</p><ol><li>响应外部请求，例如http请求</li><li>外部检查预设的启动后的钩子方法，例如检查文件卷宗预设的文件是否存在等</li></ol><p>实现对容器进行定期诊断的功能叫’容器探针’，由容器内部进行实现。分为三种类型</p><ol><li>ExecAction</li><li>TCPSocketAction</li><li>HTTPGetAction</li></ol><p>容器探针又分为：</p><ol><li>存活探针<br>存活探针指的是要确认一个容器是否真正的死亡的场景，例如重启时检测之前的失败容器是否已经死亡</li><li>就绪探针<br>就绪探针指的是区分应用是否准备就绪的场景</li><li>启动探针<br>启动探针指的是对于大型容器的启动比较慢的场景需要区分容器是否还在启动</li></ol></li></ul><h2 id="Pods生命周期"><a class="header-anchor" href="#Pods生命周期"></a>Pods生命周期</h2><p>Pod的阶段分为</p><table><thead><tr><th>取值</th><th>描述</th></tr></thead><tbody><tr><td>Pending（悬决）</td><td>Pod 已被 Kubernetes 系统接受，但有一个或者多个容器尚未创建亦未运行。此阶段包括等待 Pod 被调度的时间和通过网络下载镜像的时间，</td></tr><tr><td>Running（运行中）</td><td>Pod 已经绑定到了某个节点，Pod 中所有的容器都已被创建。至少有一个容器仍在运行，或者正处于启动或重启状态。</td></tr><tr><td>Succeeded（成功）</td><td>Pod 中的所有容器都已成功终止，并且不会再重启。</td></tr><tr><td>Failed（失败）</td><td>Pod 中的所有容器都已终止，并且至少有一个容器是因为失败终止。也就是说，容器以非 0 状态退出或者被系统终止。</td></tr><tr><td>Unknown（未知）</td><td>因为某些原因无法取得 Pod 的状态。这种情况通常是因为与 Pod 所在主机通信失败。</td></tr></tbody></table><h2 id="Pod的上层抽象-Service"><a class="header-anchor" href="#Pod的上层抽象-Service"></a>Pod的上层抽象:Service</h2><p>这里先简单的介绍以下Service，kubernetes中Service是将一组Pod暴露给外界的一种方式。对外提供两种访问方式</p><ol><li><p>VIP<br>通过对外提供Service的虚拟IP,然后在将请求转发到具体的Pod上。</p></li><li><p>DNS<br>- Normal Service<br>与VIP方式类似<br>- Headles Service<br>对于请求直接返回具体Pod的IP。类似于DNS直接解析出真实Pod的IP</p></li></ol><h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2><p><a href="https://kubernetes.io/zh/docs/concepts/workloads/pods/">pod是什么?</a><br><a href="https://kubernetes.io/zh/docs/concepts/workloads/pods/pod-lifecycle/#pod-phase">pod的生命周期</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1&gt;深入剖析Kubernetes之Pods的概念&lt;/h1&gt;
-&lt;p&gt;在上一篇文章中了解到kubernetes的部署在逻辑上是按照&lt;B&gt;Pod&lt;/B&gt;的概念进行的,下面来详细的了解一下pod的知识&lt;/p&gt;
-&lt;h2 id=&quot;基础概念&quot;&gt;&lt;a class=&quot;header-anchor</summary>
       
     
     

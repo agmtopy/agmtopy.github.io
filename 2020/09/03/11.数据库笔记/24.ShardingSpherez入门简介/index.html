@@ -1,0 +1,1364 @@
+<!DOCTYPE HTML>
+<html lang="zh-Hans">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="ShardingSphere入门简介, agmtopy博客">
+    <meta name="description" content="你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>ShardingSphere入门简介 | agmtopy博客</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="agmtopy博客" type="application/atom+xml">
+</head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">agmtopy博客</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>主页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">agmtopy博客</div>
+        <div class="logo-desc">
+            
+            你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			主页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/agmtopy" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/agmtopy" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/27.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">ShardingSphere入门简介</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/ShardingSphere/">
+                                <span class="chip bg-color">ShardingSphere</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" class="post-category">
+                                数据库
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2020-09-03
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
+                    2k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
+                    8 分钟
+                </div>
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="ShardingSphere入门简介"><a class="header-anchor" href="#ShardingSphere入门简介"></a>ShardingSphere入门简介</h2>
+<h3 id="概览"><a class="header-anchor" href="#概览"></a>概览</h3>
+<blockquote>
+<p>ShardingSphere是一套开源的分布式数据库中间件解决方案组成的生态圈，它由Sharding-JDBC、Sharding-Proxy和Sharding-Sidecar（计划中）这3款相互独立的产品组成。 他们均提供标准化的数据分片、分布式事务和数据库治理功能，可适用于如Java同构、异构语言、云原生等各种多样化的应用场景。<sup class="footnote-ref"><a href="#fn1" id="fnref1">[1]</a></sup></p>
+</blockquote>
+<h4 id="基本概念"><a class="header-anchor" href="#基本概念"></a>基本概念</h4>
+<p>数据分片拆分方式</p>
+<ul>
+<li>
+<p>垂直拆分<br>
+<b>垂直拆分</b>指的是专库专用，将不同业务的表拆分到对应的库中。微服务架构下已基本实现了垂直拆分。</p>
+</li>
+<li>
+<p>水平拆分<br>
+<b>水平拆分</b>指的是逻辑上相同的数据通过根据某种规则将数据分散存储到指定的数据节点中。</p>
+</li>
+</ul>
+<p>产品组成</p>
+<ul>
+<li>
+<p><b>Sharding-JDBC</b><br>
+Sharding-JDBC定位为轻量级Java框架，在Java的JDBC层提供的额外服务。 它使用客户端直连数据库，以jar包形式提供服务，无需额外部署和依赖，可理解为增强版的JDBC驱动，完全兼容JDBC和各种ORM框架。</p>
+</li>
+<li>
+<p><b>Sharding-Proxy</b><br>
+Sharding-Proxy定位为透明化的数据库代理端，提供封装了数据库二进制协议的服务端版本，用于完成对异构语言的支持。</p>
+</li>
+<li>
+<p><b>Sharding-Sidecar</b><br>
+Sharding-Sidecar定位为Kubernetes的云原生数据库代理，以Sidecar的形式代理所有对数据库的访问，是想作为DB层面的数据网格。(规划中)</p>
+</li>
+</ul>
+<h4 id="专有名词"><a class="header-anchor" href="#专有名词"></a>专有名词</h4>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>逻辑表</td>
+<td>水平拆分的数据库（表）的相同逻辑和数据结构表的总称</td>
+</tr>
+<tr>
+<td>真实表</td>
+<td>在分片的数据库中真实存在的物理表</td>
+</tr>
+<tr>
+<td>数据节点</td>
+<td>数据分片的最小单位,由数据源名称和数据表组成(shema.tableName)</td>
+</tr>
+<tr>
+<td>绑定表</td>
+<td>绑定表是shardingSphere中特有的概念，指的是分片规则一致的主表和子表。如果指定互为绑定表，在进行联表查询时将不会出现笛卡尔积</td>
+</tr>
+<tr>
+<td>广播表</td>
+<td>广播表类似于mycat中的全局表,适用于作为字典</td>
+</tr>
+<tr>
+<td>精确分片算法</td>
+<td>用于处理使用单一键作为分片键的=与IN进行分片的场景</td>
+</tr>
+<tr>
+<td>范围分片算法</td>
+<td>用于处理使用单一键作为分片键的BETWEEN AND、&gt;、&lt;、&gt;=、&lt;=进行分片的场景</td>
+</tr>
+<tr>
+<td>复合分片算法</td>
+<td>用于处理使用多键作为分片键进行分片的场景</td>
+</tr>
+<tr>
+<td>Hint分片算法</td>
+<td>用于处理使用Hint行分片的场景(使用外部规则进行分片)</td>
+</tr>
+</tbody>
+</table>
+<h4 id="功能列表"><a class="header-anchor" href="#功能列表"></a>功能列表</h4>
+<ul>
+<li>
+<p><b>数据分片</b></p>
+<ol>
+<li>分库 &amp; 分表</li>
+<li>读写分离</li>
+<li>分片策略定制化</li>
+<li>无中心化分布式主键</li>
+</ol>
+</li>
+<li>
+<p><b>分布式事务</b></p>
+<ol>
+<li>标准化事务接口</li>
+<li>XA强一致事务</li>
+<li>柔性事务</li>
+</ol>
+</li>
+<li>
+<p><b>数据库治理</b></p>
+<ol>
+<li>配置动态化</li>
+<li>编排 &amp; 治理</li>
+<li>数据脱敏</li>
+<li>可视化链路追踪</li>
+</ol>
+</li>
+</ul>
+<h3 id="sharding-jdbc"><a class="header-anchor" href="#sharding-jdbc"></a>sharding-jdbc</h3>
+<h4 id="功能列表-v2"><a class="header-anchor" href="#功能列表-v2"></a>功能列表</h4>
+<pre><code>1. 数据分片
+2. 读写分离
+3. 强制路由
+4. 数据脱敏
+</code></pre>
+<h4 id="数据分片配置"><a class="header-anchor" href="#数据分片配置"></a>数据分片配置</h4>
+<pre class="line-numbers language-yml" data-language="yml"><code class="language-yml">server:
+  port: 8080
+  tomcat:
+    uri-encoding: utf-8
+
+spring:
+  application:
+    name: shardingsphere-example
+  jpa:
+    properties:
+      hibernate:
+        enable_lazy_load_no_trans: true
+  shardingsphere:
+    datasource:
+      names: ds0,ds1
+      ds0:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbcUrl: jdbc:mysql:&#x2F;&#x2F;127.0.0.1:3306&#x2F;ds0?useUnicode&#x3D;true&amp;characterEncoding&#x3D;utf-8&amp;serverTimezone&#x3D;GMT
+        username: root
+        password: 111111
+      ds1:
+        type: com.zaxxer.hikari.HikariDataSource
+        driver-class-name: com.mysql.cj.jdbc.Driver
+        jdbcUrl: jdbc:mysql:&#x2F;&#x2F;127.0.0.1:3306&#x2F;ds1?useUnicode&#x3D;true&amp;characterEncoding&#x3D;utf-8&amp;serverTimezone&#x3D;GMT
+        username: root
+        password: 111111
+      sharding:
+        default-database-strategy: # 分库规则
+          inline:
+            sharding-column: vender_id
+            algorithm-expression: ds$&#123;vender_id % 2&#125;
+        tables:
+          t_user:  #t_user表
+            key-generator-column-name: id  #主键
+            actual-data-nodes: ds$&#123;0..1&#125;.t_user$&#123;0..1&#125;    #真实数据节点
+            databaseStrategy: # 分库策略
+              inline:
+                sharding-column: vender_id # 分库键
+                algorithm-expression: ds$&#123;vender_id % 2&#125;
+            tableStrategy: #分表策略
+              inline: #行表达式
+                shardingColumn: vender_id
+                algorithmExpression: t_user$&#123;vender_id % 2&#125;
+
+    sharding: #读写分离配置
+      master-slave-rules:
+        ms_ds0:
+          masterDataSourceName: ds0 # 主库
+          slaveDataSourceNames:
+            - ds0_slave0 #从库
+            - ds0_slave1
+          loadBalanceAlgorithmType: ROUND_ROBIN<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="jdbc不支持的操作"><a class="header-anchor" href="#jdbc不支持的操作"></a>jdbc不支持的操作</h4>
+<ol>
+<li>不支持存储过程，函数，游标的操作</li>
+<li>不支持联表删除</li>
+</ol>
+<pre class="line-numbers language-sql" data-language="sql"><code class="language-sql"><span class="token keyword">DELETE</span> TABLE_XXX1<span class="token punctuation">,</span> TABLE_xxx2 <span class="token keyword">FROM</span> TABLE_XXX1 <span class="token keyword">JOIN</span> TABLE_XXX2<span class="token punctuation">;</span>
+<span class="token keyword">DELETE</span> <span class="token keyword">FROM</span> TABLE_XXX1<span class="token punctuation">,</span> TABLE_xxx2 <span class="token keyword">USING</span> TABLE_XXX1 <span class="token keyword">JOIN</span> TABLE_XXX2<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<ol start="3">
+<li>不建议使用子查询(4.x版本对子查询的优化不太好)</li>
+</ol>
+<h3 id="sharding-proxy"><a class="header-anchor" href="#sharding-proxy"></a>sharding-proxy</h3>
+<h4 id="功能列表-v3"><a class="header-anchor" href="#功能列表-v3"></a>功能列表</h4>
+<pre><code>1. sharding-jdbc提供的功能
+2. 权限控制
+3. DB高可用管理
+</code></pre>
+<h4 id="数据分片配置-v2"><a class="header-anchor" href="#数据分片配置-v2"></a>数据分片配置</h4>
+<ul>
+<li>server.yaml</li>
+</ul>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">authentication</span><span class="token punctuation">:</span>
+<span class="token key atrule">users</span><span class="token punctuation">:</span>
+<span class="token key atrule">root</span><span class="token punctuation">:</span> 
+    <span class="token key atrule">password</span><span class="token punctuation">:</span> <span class="token number">111111</span>
+<span class="token key atrule">sharding</span><span class="token punctuation">:</span>
+    <span class="token key atrule">password</span><span class="token punctuation">:</span> sharding 
+    <span class="token key atrule">authorizedSchemas</span><span class="token punctuation">:</span> sharding_db<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>config-sharding.yaml</li>
+</ul>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">schemaName</span><span class="token punctuation">:</span> sharding_db
+
+<span class="token key atrule">dataSources</span><span class="token punctuation">:</span>
+<span class="token key atrule">ds0</span><span class="token punctuation">:</span>
+<span class="token key atrule">url</span><span class="token punctuation">:</span> jdbc<span class="token punctuation">:</span>mysql<span class="token punctuation">:</span>//127.0.0.1<span class="token punctuation">:</span>3306/ds0<span class="token punctuation">?</span>serverTimezone=UTC<span class="token important">&amp;useSSL=false</span>
+<span class="token key atrule">username</span><span class="token punctuation">:</span> root
+<span class="token key atrule">password</span><span class="token punctuation">:</span> <span class="token number">111111</span>
+<span class="token key atrule">connectionTimeoutMilliseconds</span><span class="token punctuation">:</span> <span class="token number">30000</span>
+<span class="token key atrule">idleTimeoutMilliseconds</span><span class="token punctuation">:</span> <span class="token number">60000</span>
+<span class="token key atrule">maxLifetimeMilliseconds</span><span class="token punctuation">:</span> <span class="token number">1800000</span>
+<span class="token key atrule">maxPoolSize</span><span class="token punctuation">:</span> <span class="token number">50</span>
+<span class="token key atrule">ds1</span><span class="token punctuation">:</span>
+<span class="token key atrule">url</span><span class="token punctuation">:</span> jdbc<span class="token punctuation">:</span>mysql<span class="token punctuation">:</span>//127.0.0.1<span class="token punctuation">:</span>3306/ds1<span class="token punctuation">?</span>serverTimezone=UTC<span class="token important">&amp;useSSL=false</span>
+<span class="token key atrule">username</span><span class="token punctuation">:</span> root
+<span class="token key atrule">password</span><span class="token punctuation">:</span> <span class="token number">111111</span>
+<span class="token key atrule">connectionTimeoutMilliseconds</span><span class="token punctuation">:</span> <span class="token number">30000</span>
+<span class="token key atrule">idleTimeoutMilliseconds</span><span class="token punctuation">:</span> <span class="token number">60000</span>
+<span class="token key atrule">maxLifetimeMilliseconds</span><span class="token punctuation">:</span> <span class="token number">1800000</span>
+<span class="token key atrule">maxPoolSize</span><span class="token punctuation">:</span> <span class="token number">50</span>
+
+<span class="token key atrule">shardingRule</span><span class="token punctuation">:</span>
+<span class="token key atrule">tables</span><span class="token punctuation">:</span>
+<span class="token key atrule">t_order</span><span class="token punctuation">:</span>
+    <span class="token key atrule">actualDataNodes</span><span class="token punctuation">:</span> ds$<span class="token punctuation">&#123;</span>0..1<span class="token punctuation">&#125;</span>.t_user
+    <span class="token key atrule">databaseStrategy</span><span class="token punctuation">:</span>
+    <span class="token key atrule">inline</span><span class="token punctuation">:</span>
+        <span class="token key atrule">shardingColumn</span><span class="token punctuation">:</span> vender_id
+        <span class="token key atrule">algorithmExpression</span><span class="token punctuation">:</span> ds$<span class="token punctuation">&#123;</span>vender_id % 2<span class="token punctuation">&#125;</span>
+    <span class="token key atrule">keyGenerator</span><span class="token punctuation">:</span>
+    <span class="token key atrule">type</span><span class="token punctuation">:</span> SNOWFLAKE
+    <span class="token key atrule">column</span><span class="token punctuation">:</span> order_id
+<span class="token key atrule">defaultDatabaseStrategy</span><span class="token punctuation">:</span>
+<span class="token key atrule">inline</span><span class="token punctuation">:</span>
+    <span class="token key atrule">shardingColumn</span><span class="token punctuation">:</span> id
+    <span class="token key atrule">algorithmExpression</span><span class="token punctuation">:</span> ds$<span class="token punctuation">&#123;</span>id % 2<span class="token punctuation">&#125;</span>
+<span class="token key atrule">defaultTableStrategy</span><span class="token punctuation">:</span>
+none<span class="token punctuation">:</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="注意事项"><a class="header-anchor" href="#注意事项"></a>注意事项</h4>
+<ol>
+<li>在部署sharding-proxy时需要将mysql driver在lib下</li>
+<li>不建议使用子查询(4.x版本对子查询的优化不太好)</li>
+<li>配置文件请以官网为准(5.x版本与4.x版本改动较大)</li>
+</ol>
+<h3 id="client与proxy对比"><a class="header-anchor" href="#client与proxy对比"></a>client与proxy对比</h3>
+<h4 id="功能对比"><a class="header-anchor" href="#功能对比"></a>功能对比</h4>
+<table>
+<thead>
+<tr>
+<th>/</th>
+<th>Sharding-JDBC</th>
+<th>Sharding-Proxy</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>数据库连接</td>
+<td>任意</td>
+<td>MySql</td>
+</tr>
+<tr>
+<td>连接消耗数</td>
+<td>高</td>
+<td>低</td>
+</tr>
+<tr>
+<td>异构语言</td>
+<td>仅java</td>
+<td>任意</td>
+</tr>
+<tr>
+<td>性能</td>
+<td>损耗低</td>
+<td>损耗略高</td>
+</tr>
+<tr>
+<td>无中心化</td>
+<td>是</td>
+<td>否</td>
+</tr>
+<tr>
+<td>静态入口</td>
+<td>无</td>
+<td>有</td>
+</tr>
+</tbody>
+</table>
+<h4 id="性能对比"><a class="header-anchor" href="#性能对比"></a>性能对比</h4>
+<p>Sharding-JDBC与Sharding-Proxy保持相同的数据库、数据库连接配置、后端应用下进行测试</p>
+<ul>
+<li>
+<p>单表插入<br>
+<img src="https://s1.ax1x.com/2020/09/10/wY071U.png" alt="wY071U.png"></p>
+</li>
+<li>
+<p>单表查询<br>
+<img src="https://s1.ax1x.com/2020/09/10/wY0f7n.png" alt="wY0f7n.png"></p>
+</li>
+<li>
+<p>结论<br>
+从耗时上比较单表插入的性能从高到低依次是Sharding-JDBC、JDBC、Sharding-Proxy<br>
+从耗时上比较单表查询的性能从高到低依次是Sharding-JDBC、JDBC、Sharding-Proxy</p>
+</li>
+</ul>
+<h3 id="扩展部分"><a class="header-anchor" href="#扩展部分"></a>扩展部分</h3>
+<h4 id="源码分析"><a class="header-anchor" href="#源码分析"></a>源码分析</h4>
+<ul>
+<li>Sharding-JDBC的数据分片的执行过程</li>
+</ul>
+<p><img src="https://s1.ax1x.com/2020/09/06/wmlLC9.png" alt="wmlLC9.png"></p>
+<p>ShardingRouter.<strong>route()<strong>方法作为路由的核心，主要是返回路由对象</strong>SQLRouteResult</strong>,SQLRouteResult保存路由信息<br>
+<img src="https://s1.ax1x.com/2020/05/19/Y4Fupq.png" alt="Y4Fupq.png"></p>
+<p><strong>RouteResult</strong>对象会被返回到<strong>ShardingPreparedStatement</strong>中，这个类继承于<strong>java.sql.Statement</strong>,Statement是定义数据库进行交互并返回结果的接口</p>
+<ul>
+<li>ShardingPreparedStatement扩展的方法</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">ShardingPreparedStatement</span> <span class="token keyword">extends</span> <span class="token class-name">AbstractShardingPreparedStatementAdapter</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token comment">//分片连接</span>
+    <span class="token annotation punctuation">@Getter</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">ShardingConnection</span> connection<span class="token punctuation">;</span>
+    
+    <span class="token comment">//执行sql</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">String</span> sql<span class="token punctuation">;</span>
+    
+    <span class="token comment">//分片引擎</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">PreparedQueryShardingEngine</span> shardingEngine<span class="token punctuation">;</span>
+    
+    <span class="token comment">//执行器</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">PreparedStatementExecutor</span> preparedStatementExecutor<span class="token punctuation">;</span>
+    
+    <span class="token comment">//批处理执行器</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">BatchPreparedStatementExecutor</span> batchPreparedStatementExecutor<span class="token punctuation">;</span>
+    
+    <span class="token comment">//sql路由器</span>
+    <span class="token keyword">private</span> <span class="token class-name">SQLRouteResult</span> sqlRouteResult<span class="token punctuation">;</span>
+    
+    <span class="token comment">//结果集</span>
+    <span class="token keyword">private</span> <span class="token class-name">ResultSet</span> currentResultSet<span class="token punctuation">;</span>
+
+    <span class="token comment">//实现executeQuery、executeUpdate、execute、getGeneratedKeys等方法</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="execute-方法进行具体的执行过程"><a class="header-anchor" href="#execute-方法进行具体的执行过程"></a>execute()方法进行具体的执行过程</h3>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">boolean</span> <span class="token function">execute</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">SQLException</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">//清除环境</span>
+        <span class="token function">clearPrevious</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//进行分片环境设置</span>
+        <span class="token function">shard</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//初始化预处理执行器</span>
+        <span class="token function">initPreparedStatementExecutor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//执行</span>
+        <span class="token keyword">return</span> preparedStatementExecutor<span class="token punctuation">.</span><span class="token function">execute</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">finally</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">clearBatch</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>initPreparedStatementExecutor()方法初始化预处理执行</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">initPreparedStatementExecutor</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">SQLException</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">//初始化执行器</span>
+    preparedStatementExecutor<span class="token punctuation">.</span><span class="token function">init</span><span class="token punctuation">(</span>sqlRouteResult<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">//设置语句参数</span>
+    <span class="token function">setParametersForStatements</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">replayMethodForStatements</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>**preparedStatementExecutor.execute()**方法是具体执行的方法</p>
+<p><img src="https://s1.ax1x.com/2020/05/20/Y7XsIA.png" alt="Y7XsIA.png"></p>
+<p>1处将待执行sql封装成为回调对象，2处**executeCallback(executeCallback)**执行回调对象</p>
+<ul>
+<li>executeCallback在回调中执行sql</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
+<span class="token keyword">protected</span> <span class="token class-name">Boolean</span> <span class="token function">executeSQL</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token class-name">String</span> sql<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token class-name">Statement</span> statement<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token class-name">ConnectionMode</span> connectionMode<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">SQLException</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token class-name">PreparedStatement</span><span class="token punctuation">)</span> statement<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">execute</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>executeCallback()</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> result <span class="token operator">=</span> sqlExecuteTemplate<span class="token punctuation">.</span><span class="token function">executeGroup</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token class-name">Collection</span><span class="token punctuation">)</span> executeGroups<span class="token punctuation">,</span> executeCallback<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">refreshMetaDataIfNeeded</span><span class="token punctuation">(</span>connection<span class="token punctuation">.</span><span class="token function">getRuntimeContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span> sqlStatementContext<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">return</span> result<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>通过<strong>sqlExecuteTemplate.executeGroup</strong>执行方法，会将执行动作传递到执行引擎<strong>ShardingExecuteEngine</strong>的<strong>groupExecute</strong>方法</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">I</span><span class="token punctuation">,</span> <span class="token class-name">O</span><span class="token punctuation">></span></span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">O</span><span class="token punctuation">></span></span> <span class="token function">groupExecute</span><span class="token punctuation">(</span>
+    <span class="token keyword">final</span> <span class="token class-name">Collection</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">ShardingExecuteGroup</span><span class="token punctuation">&lt;</span><span class="token class-name">I</span><span class="token punctuation">></span><span class="token punctuation">></span></span> inputGroups<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token class-name">ShardingGroupExecuteCallback</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">I</span><span class="token punctuation">,</span> <span class="token class-name">O</span><span class="token punctuation">></span></span> firstCallback<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token class-name">ShardingGroupExecuteCallback</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">I</span><span class="token punctuation">,</span> <span class="token class-name">O</span><span class="token punctuation">></span></span> callback<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token keyword">boolean</span> serial<span class="token punctuation">)</span>
+    <span class="token keyword">throws</span> <span class="token class-name">SQLException</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>inputGroups<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> <span class="token class-name">Collections</span><span class="token punctuation">.</span><span class="token function">emptyList</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span> serial <span class="token operator">?</span> <span class="token function">serialExecute</span><span class="token punctuation">(</span>inputGroups<span class="token punctuation">,</span> firstCallback<span class="token punctuation">,</span> callback<span class="token punctuation">)</span> <span class="token operator">:</span> <span class="token function">parallelExecute</span><span class="token punctuation">(</span>inputGroups<span class="token punctuation">,</span> firstCallback<span class="token punctuation">,</span> callback<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在这里<strong>同步执行方法</strong>和<strong>异步执行方法</strong>，并且将第一个任务交给当前线程进行处理</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">private</span> <span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">I</span><span class="token punctuation">,</span> <span class="token class-name">O</span><span class="token punctuation">></span></span> <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">O</span><span class="token punctuation">></span></span> <span class="token function">parallelExecute</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token class-name">Collection</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">ShardingExecuteGroup</span><span class="token punctuation">&lt;</span><span class="token class-name">I</span><span class="token punctuation">></span><span class="token punctuation">></span></span> inputGroups<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token class-name">ShardingGroupExecuteCallback</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">I</span><span class="token punctuation">,</span> <span class="token class-name">O</span><span class="token punctuation">></span></span> firstCallback<span class="token punctuation">,</span>
+                                       <span class="token keyword">final</span> <span class="token class-name">ShardingGroupExecuteCallback</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">I</span><span class="token punctuation">,</span> <span class="token class-name">O</span><span class="token punctuation">></span></span> callback<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">SQLException</span> <span class="token punctuation">&#123;</span>
+    <span class="token class-name">Iterator</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">ShardingExecuteGroup</span><span class="token punctuation">&lt;</span><span class="token class-name">I</span><span class="token punctuation">></span><span class="token punctuation">></span></span> inputGroupsIterator <span class="token operator">=</span> inputGroups<span class="token punctuation">.</span><span class="token function">iterator</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">ShardingExecuteGroup</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">I</span><span class="token punctuation">></span></span> firstInputs <span class="token operator">=</span> inputGroupsIterator<span class="token punctuation">.</span><span class="token function">next</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">Collection</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">ListenableFuture</span><span class="token punctuation">&lt;</span><span class="token class-name">Collection</span><span class="token punctuation">&lt;</span><span class="token class-name">O</span><span class="token punctuation">></span><span class="token punctuation">></span><span class="token punctuation">></span></span> restResultFutures <span class="token operator">=</span> <span class="token function">asyncGroupExecute</span><span class="token punctuation">(</span><span class="token class-name">Lists</span><span class="token punctuation">.</span><span class="token function">newArrayList</span><span class="token punctuation">(</span>inputGroupsIterator<span class="token punctuation">)</span><span class="token punctuation">,</span> callback<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">//如果firstCallback有值就让当前线程进行执行，如果没值就返回线程池执行结果</span>
+    <span class="token keyword">return</span> <span class="token function">getGroupResults</span><span class="token punctuation">(</span><span class="token function">syncGroupExecute</span><span class="token punctuation">(</span>firstInputs<span class="token punctuation">,</span> <span class="token keyword">null</span> <span class="token operator">==</span> firstCallback <span class="token operator">?</span> callback <span class="token operator">:</span> firstCallback<span class="token punctuation">)</span><span class="token punctuation">,</span> restResultFutures<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这段代码很细心，不但使用到了当前线程来执行第一个任务，并且线程池也使用的是Guava提供的可回调的线程池<strong>ListeningExecutorService</strong>,可参考<a href="/2020/05/20/1.%E6%9D%82%E8%AE%B0/Guava%E7%9A%84%E4%BD%BF%E7%94%A8/#more">Guava的使用</a></p>
+<p>在执行sql时候又会回到当初创建回调函数的地方进行执行回调方法。</p>
+<h3 id="参考文献"><a class="header-anchor" href="#参考文献"></a>参考文献</h3>
+<hr class="footnotes-sep">
+<section class="footnotes">
+<ol class="footnotes-list">
+<li id="fn1" class="footnote-item"><p><a target="_blank" rel="noopener" href="https://shardingsphere.apache.org/">ShardingSphere官网</a> <a href="#fnref1" class="footnote-backref">↩︎</a></p>
+</li>
+</ol>
+</section>
+
+                
+            </div>
+            <hr/>
+
+            
+    
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/ShardingSphere/">
+                                    <span class="chip bg-color">ShardingSphere</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="wechat" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2020/09/15/1.%E6%9D%82%E8%AE%B0/Docker%E5%9F%BA%E7%A1%80%E6%A6%82%E5%BF%B5%E5%85%A5%E9%97%A8(%E4%B8%80)/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/69.jpg" class="responsive-img" alt="Docker基础概念入门(一)">
+                        
+                        <span class="card-title">Docker基础概念入门(一)</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2020-09-15
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%9D%82%E8%AE%B0/" class="post-category">
+                                    杂记
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/docker/">
+                        <span class="chip bg-color">docker</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2020/08/23/1.%E6%9D%82%E8%AE%B0/%E6%97%A5%E5%B8%B8%E7%A2%8E%E7%A2%8E%E5%BF%B5/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/60.jpg" class="responsive-img" alt="日常碎碎念">
+                        
+                        <span class="card-title">日常碎碎念</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2020-08-23
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%9D%82%E8%AE%B0/" class="post-category">
+                                    杂记
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E7%A2%8E%E7%A2%8E%E5%BF%B5/">
+                        <span class="chip bg-color">碎碎念</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+                <div class="container row center-align"
+                    style="margin-bottom: 0px !important;">
+                    <div class="col s12 m8 l8 copy-right">
+                        
+                            <span id="year">
+                            </span>
+                            
+                                    <span id="year">
+                                    </span>
+                                    <a href="/about" target="_blank">
+                                    </a>
+                                    &nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+                                    |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery"
+                                        target="_blank">Matery</a>
+                                    <!-- <br> -->
+                                    
+                                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                                            class="white-color">
+                                            160.8k
+                                        </span>&nbsp;字
+                                        
+                                            
+                                                
+                                                    
+                                                        
+                                                            
+
+                                                                
+                                                                    
+
+                                                                        
+                                                                            <br>
+                                                                            
+                                                                                    <br>
+                                                                                    
+                    </div>
+                    <div class="col s12 m4 l4 social-link social-statis">
+                        
+
+        
+            <a href="mailto:zjytian@gmail.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我"
+                data-position="top" data-delay="50">
+                <i class="fas fa-envelope-open"></i>
+            </a>
+            
+
+                
+
+                        
+
+                                
+
+                                        
+
+                                                
+
+                                                        
+                    </div>
+                </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入关键词"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
