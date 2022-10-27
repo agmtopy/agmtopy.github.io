@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    325
+                    634
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    1 分钟
+                    2 分钟
                 </div>
                 
 
@@ -483,6 +483,41 @@
 <li>当前读<br>
 当前读指的是通过Next-Key Locking 机制将对数据的读取操作序列化,解决幻读问题</li>
 </ul>
+<hr>
+<ul>
+<li>checkpoint机制</li>
+</ul>
+<blockquote>
+<p>checkpoint机制指的是将内存中的数据刷新到磁盘上的机制,内存中的数据包括<B>数据页</B>、<B>索引页</B>、<B>undo页</B>、<B>插入缓冲 insert buffer</B>、<B>redo log buffer</B></p>
+</blockquote>
+<p>MySQL中内存页淘汰算法比较特殊，采用的是基于LRU-最近最少的算法改进后(3/4插入新值)进行淘汰的，防止一个表的大量更新影响到其他热点数据</p>
+<p><B>show engine innodb status</B>查看innodb engine的状态</p>
+<hr>
+<ul>
+<li>InnoDB存储引擎特点</li>
+</ul>
+<ol>
+<li>插入缓冲(insert buffer)</li>
+</ol>
+<blockquote>
+<p>insert buffer是对非聚集索引页的插入,修改缓冲页就直接认为成功后续线程在专门将page刷新到磁盘中；change buffer是对insert buffer的升级</p>
+</blockquote>
+<ol start="2">
+<li>
+<p>两次写(Double Write)<br>
+double write产生的根本原因是由于由于MySql的最小写入单位为16K,而文件系统能保证原子写入的最小单位是4k，这样就造成MySql一次性向文件系统写入16k的数据时可能会发生中断，会污染数据页，通过先写中间层的方式来解决这个问题</p>
+</li>
+<li>
+<p>自适应哈希索引(Adaptive Hash Index)</p>
+</li>
+<li>
+<p>异步IO(Async IO)<br>
+MySQL中大量使用到异步IO</p>
+</li>
+<li>
+<p>刷新邻接页(Flush Neighbor Page)</p>
+</li>
+</ol>
 <h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://www.zhihu.com/question/334408495">知乎MVCC的解答</a></li>
@@ -787,7 +822,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            161.4k
+                                            161.7k
                                         </span>&nbsp;字
                                         
                                             
