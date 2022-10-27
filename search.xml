@@ -1083,31 +1083,6 @@
     
     
     <entry>
-      <title>MySQL技术疑问</title>
-      <link href="2021/03/20/6.mysql/MySQL%E6%8A%80%E6%9C%AF%E7%96%91%E9%97%AE/"/>
-      <url>2021/03/20/6.mysql/MySQL%E6%8A%80%E6%9C%AF%E7%96%91%E9%97%AE/</url>
-      
-        <content type="html"><![CDATA[<blockquote><p>记录&lt;&lt;MySQL技术内幕-InnoDB存储引擎&gt;&gt;阅读中存在的疑问点</p></blockquote><ul><li>P77 日志文件</li></ul><blockquote><p>如果使用RC隔离级别会出现类似数据丢失更新的现象,从而出现主从数据库上的数据不一致</p></blockquote><p>bin_log的记录格式为’STATENEBT’是,会出现这样的情况为什么喃?</p><p>原因:</p><blockquote><ol><li>bin_log的记录顺序是commit的顺序,而不是执行顺序</li></ol></blockquote><ol start="2"><li>RC中SQL的执行是立即执行的<br>这样如果bin_log记录格式如果是sql,就会出现丢失数据的场景</li></ol><hr><ul><li>P268 锁</li></ul><blockquote><p>InnoDB对于Insert的操作会检查插入记录的下一条记录是否被锁定,如果锁定则不允许操作</p></blockquote><ul><li>P269 解决幻读</li></ul><blockquote><p>在RR模式下通过Next-Key Locking机制来解决幻读,既然MVVC是读取快照,为什么还需要Next-Key Locking机制来解决幻读问题</p></blockquote><p>InnoDB实际上是把读取拆分成两种类型</p><ul><li>快照读<br>通过读取undo log,并且对比版本号得到事务开始时的数据,这种主要是select 操作,对数据加s锁</li><li>当前读<br>当前读指的是通过Next-Key Locking 机制将对数据的读取操作序列化,解决幻读问题</li></ul><hr><ul><li>checkpoint机制</li></ul><blockquote><p>checkpoint机制指的是将内存中的数据刷新到磁盘上的机制,内存中的数据包括<B>数据页</B>、<B>索引页</B>、<B>undo页</B>、<B>插入缓冲 insert buffer</B>、<B>redo log buffer</B></p></blockquote><p>MySQL中内存页淘汰算法比较特殊，采用的是基于LRU-最近最少的算法改进后(3/4插入新值)进行淘汰的，防止一个表的大量更新影响到其他热点数据</p><p><B>show engine innodb status</B>查看innodb engine的状态</p><hr><ul><li>InnoDB存储引擎特点</li></ul><ol><li>插入缓冲(insert buffer)</li></ol><blockquote><p>insert buffer是对非聚集索引页的插入,修改缓冲页就直接认为成功后续线程在专门将page刷新到磁盘中；change buffer是对insert buffer的升级</p></blockquote><ol start="2"><li><p>两次写(Double Write)<br>double write产生的根本原因是由于由于MySql的最小写入单位为16K,而文件系统能保证原子写入的最小单位是4k，这样就造成MySql一次性向文件系统写入16k的数据时可能会发生中断，会污染数据页，通过先写中间层的方式来解决这个问题</p></li><li><p>自适应哈希索引(Adaptive Hash Index)</p></li><li><p>异步IO(Async IO)<br>MySQL中大量使用到异步IO</p></li><li><p>刷新邻接页(Flush Neighbor Page)</p></li></ol><h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2><ul><li><a href="https://www.zhihu.com/question/334408495">知乎MVCC的解答</a></li></ul>]]></content>
-      
-      
-      <categories>
-          
-          <category> 数据库 </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
-            <tag> MySQL </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
       <title>MySQL文件和表结构</title>
       <link href="2021/03/20/6.mysql/MySQL%E6%96%87%E4%BB%B6%E5%92%8C%E8%A1%A8%E7%BB%93%E6%9E%84/"/>
       <url>2021/03/20/6.mysql/MySQL%E6%96%87%E4%BB%B6%E5%92%8C%E8%A1%A8%E7%BB%93%E6%9E%84/</url>
@@ -1138,6 +1113,31 @@
       <url>2021/03/15/6.mysql/MySQL%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B8%8E%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/</url>
       
         <content type="html"><![CDATA[<blockquote><p>主要介绍MySql的整体体系结构和存储引擎</p></blockquote><h2 id="体系结构"><a class="header-anchor" href="#体系结构"></a>体系结构</h2><p>概念上<B>数据库</B>是文件的集合,是按照一定的文件模型组织起来存放数据的结构;<B>数据库实列</B>是程序是一个用户进程,是用户对<B>数据库</B>进行操作的软件.</p><p>MySql主要由以下几部分组成</p><ol><li>连接池组件</li><li>管理服务和工具组件</li><li>SQL接口组件</li><li>查询分析器组件</li><li>优化器组件</li><li>缓冲组件</li><li>插件式存储引擎(存储引擎是基于表的 ,而不是基于数据库的)</li><li>物理文件</li></ol><h2 id="存储引擎"><a class="header-anchor" href="#存储引擎"></a>存储引擎</h2><ul><li><p>概述<br>存储引擎是与MySql物理文件进行交互的一种插件,存储引擎的底部是物理存储层,包括二进制日志文件,数据文件,错误文件,慢查询日志,undo/redo日志等</p></li><li><p>select的过程</p></li></ul><p>下图是一次select的过程<br><img src="https://s3.ax1x.com/2021/03/15/6r8Q7q.png" alt="select执行过程"></p><p>从图中得知存储引擎位于是物理文件和程序数据之间</p><ul><li>InnoDB的体系架构</li></ul><p><a href="https://dev.mysql.com/doc/refman/8.0/en/innodb-architecture.html"><img src="https://dev.mysql.com/doc/refman/8.0/en/images/innodb-architecture.png" alt="InnoDB架构"></a></p><ol><li>实列层<br>实列层主要包括’线程’和’内存’两个部分<br>a. 后台线程主要有</li></ol><ul><li>Master Thread<br>主线程主要负责将缓冲池中的数据异步刷新到磁盘中,保证数据的一致性</li><li>I/O Thread<br>I/O Thread 主要是负责AIO(Async IO)请求的回调</li><li>Purge Thread<br>Purge Thread的作用是事物在被提交后undolog就可能不在被使用了,因此需要Purge Thread线程来回收并分配的undo页</li><li>Page Cleaner Thread<br>Page Cleaner Thread的作用是回收分配脏页</li></ul><p>小结:Master Thread和I/O Thread一个负责异步刷新数据一个负责AIO的回调,Purge Thread和Page Cleaner Thread一个负责回收分配undolog一个负责回收分配脏页</p><p>b. 内存</p><ul><li>缓冲池<br>InnoDB存储引擎是基于磁盘存储,其中的数据是按照页的方式进行管理.由于CPU和磁盘速度中的差异因此用缓冲池技术来提高数据库的整体性能<br>缓冲池是一块内存区域,在数据库进行读取页操作时,会首先将从内存中的数据放到缓冲池中,在下一次读取相同页时,会直接读取缓冲池中的页数据.<br>对于数据库中的页的修改,首先会修改缓冲池中的页,然后以一定的频率刷新到磁盘,这种机制被称为CheckPoint<br>缓冲池中的数据页类型分为:</li></ul><ol><li>索引页</li><li>数据页</li><li>undo页</li><li>插入缓冲</li><li>自适应哈希索引</li><li>InnoDB存储的锁信息</li><li>数据字典</li></ol><ul><li><p>LRU list,Freen lst,Flush list<br>数据库中的缓冲池是通过LRU算法来进行管理,但是InnoDB中的LRU算法是经过优化的,将新数据放到列表3/8处</p></li><li><p>重做日志缓冲<br>重做日志首先会放到缓冲区,然后按照一定的频率刷新到日志文件上,有三种情况会刷新重做日志:1.Master Thread每一秒都会将日志缓冲刷新到日志文件,2.每个事务提交时都会将重做日志刷新到文件,3.当重做日志缓冲池剩余空间小于1/2时,会将日志刷新到文件上</p></li><li><p>额外的内存池<br>额外的内存池作为缓冲池的备用,但缓冲池不够的时候,就会从额外的内存池中申请</p></li><li><p>Checkpoint技术<br>Mysql中数据的持久性是通过Write Ahead Log策略来保证,也就是先写日志文件,在修改数据文件.当宕机导致数据丢失时,会通过重做日志来进行数据恢复.<br>如果重做日志太大会导致数据恢复的很慢,因此mysql使用CheckPoint的技术来保证,CheckPoint是将缓冲池中的内存页刷新到磁盘的动作</p></li></ul><h2 id="Master-Thread"><a class="header-anchor" href="#Master-Thread"></a>Master Thread</h2><p>Master Thread具有最高级别的线程优先级,内部有多个循环组成:主循环,后台循环,刷新循环,暂停循环.<br>Master Thread主要分为1s执行一次的操作:</p><ol><li>日志缓冲刷新到磁盘,即使这个事务还没提交</li><li>合并插入缓冲</li><li>最多刷新100个InnoDB的缓冲池中的脏页到磁盘</li><li>如果当前没有用户活动,就切换到backgroud loop<br>10s执行一次的操作:</li><li>刷新100个脏页到磁盘</li><li>合并至多5个插入缓冲</li><li>将日志缓冲刷新到磁盘</li><li>删除无用的Undo页</li><li>刷新100个或者10个脏页</li></ol><h2 id="InnoDB特点"><a class="header-anchor" href="#InnoDB特点"></a>InnoDB特点</h2><ol><li>插入缓冲(Insert Buffer)</li><li>两次写(Double Write)</li><li>自适应哈希索引(Adaptive Hash Index)</li><li>异步IO(Async IO)</li><li>刷新邻接页(Flush Neighbor Page)</li></ol><h2 id="插入缓冲"><a class="header-anchor" href="#插入缓冲"></a>插入缓冲</h2><ol><li>Insert Buffer<br>Insert Buffer是在插入数据时将辅助索引先放到Insert Buffer中,然后在按照一定的频率将Insert Buffer中的数据和辅助索引页的子节点进行合并,这样能够提高非聚集索引的插入性能</li><li>Change Buffer<br>Change Buffer作为Insert Buffer的升级,会将所有对非聚集索引的操作进行缓冲</li><li>Insert Buffer的内部结构<br>Insert Buffer的数据结构是B+树,在Mysql4.1之前每张表都有一颗B+树;在现在的版本中全局只有一颗B+树,负责对所有表的辅助索引进行Insert Buffer,默认为ibdata1<br>Insert Buffer的非叶子节点是由space(待插入记录表的表空间id),offer(偏移量)构成;叶子节点是由space,offer,metadata(操作辅助索引的元数据-顺序,标识,类型)</li><li>merge Insert Buffer的过程<br>在三种情况下,MySql会将Insert Buffer刷新到辅助索引文件中,并且虽然Insert Buffer是有序的,但是在刷新时,是随机选取Insert Buffer中的一个页进行刷新,做这个的目的是为了保证公平性而舍弃顺序性.以下的三种情况会进行Inser Buffer的刷新</li><li>辅助索引页被读取到缓冲池中</li><li>Insert Buffer BitMap记录Insert Buffer可用空间不足时</li><li>Master Thread线程对Insert Buffer的刷新</li></ol><h2 id="两次写"><a class="header-anchor" href="#两次写"></a>两次写</h2><p>两次写指的是当在直接写入某页时发生宕机,会有丢失数据的风险.通过向将脏页的数据转移到内存中的doublewrite buffer中,在将doublewrite中的数据同步写到共享表空间的物理磁盘文件上,第二次才将doublewrite buffer中的文件刷新到数据文件(.ibd)中,这样可以尽量保证数据文件的完整性</p><h2 id="自适应哈希索引"><a class="header-anchor" href="#自适应哈希索引"></a>自适应哈希索引</h2><p>自适应哈希索引指的是连续对热点数据的多次查询后会根据B+树索引生成对应的哈希索引,加快查询性能</p><h2 id="异步IO"><a class="header-anchor" href="#异步IO"></a>异步IO</h2><p>异步IO可以提高操作磁盘的效率,</p><h2 id="刷新邻接页"><a class="header-anchor" href="#刷新邻接页"></a>刷新邻接页</h2><p>刷新邻接页指的是对脏页所在区的页进行检测,发现是脏页一并进行刷新.</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 数据库 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> MySQL </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>MySQL技术疑问</title>
+      <link href="2021/03/10/6.mysql/MySQL%E6%8A%80%E6%9C%AF%E7%96%91%E9%97%AE/"/>
+      <url>2021/03/10/6.mysql/MySQL%E6%8A%80%E6%9C%AF%E7%96%91%E9%97%AE/</url>
+      
+        <content type="html"><![CDATA[<blockquote><p>记录&lt;&lt;MySQL技术内幕-InnoDB存储引擎&gt;&gt;阅读中存在的疑问点</p></blockquote><ul><li>P77 日志文件</li></ul><blockquote><p>如果使用RC隔离级别会出现类似数据丢失更新的现象,从而出现主从数据库上的数据不一致</p></blockquote><p>bin_log的记录格式为’STATENEBT’是,会出现这样的情况为什么喃?</p><p>原因:</p><blockquote><ol><li>bin_log的记录顺序是commit的顺序,而不是执行顺序</li></ol></blockquote><ol start="2"><li>RC中SQL的执行是立即执行的<br>这样如果bin_log记录格式如果是sql,就会出现丢失数据的场景</li></ol><hr><ul><li>P268 锁</li></ul><blockquote><p>InnoDB对于Insert的操作会检查插入记录的下一条记录是否被锁定,如果锁定则不允许操作</p></blockquote><ul><li>P269 解决幻读</li></ul><blockquote><p>在RR模式下通过Next-Key Locking机制来解决幻读,既然MVVC是读取快照,为什么还需要Next-Key Locking机制来解决幻读问题</p></blockquote><p>InnoDB实际上是把读取拆分成两种类型</p><ul><li>快照读<br>通过读取undo log,并且对比版本号得到事务开始时的数据,这种主要是select 操作,对数据加s锁</li><li>当前读<br>当前读指的是通过Next-Key Locking 机制将对数据的读取操作序列化,解决幻读问题</li></ul><hr><ul><li>checkpoint机制</li></ul><blockquote><p>checkpoint机制指的是将内存中的数据刷新到磁盘上的机制,内存中的数据包括<B>数据页</B>、<B>索引页</B>、<B>undo页</B>、<B>插入缓冲 insert buffer</B>、<B>redo log buffer</B></p></blockquote><p>MySQL中内存页淘汰算法比较特殊，采用的是基于LRU-最近最少的算法改进后(3/4插入新值)进行淘汰的，防止一个表的大量更新影响到其他热点数据</p><p><B>show engine innodb status</B>查看innodb engine的状态</p><hr><ul><li>InnoDB存储引擎特点</li></ul><ol><li>插入缓冲(insert buffer)</li></ol><blockquote><p>insert buffer是对非聚集索引页的插入,修改缓冲页就直接认为成功后续线程在专门将page刷新到磁盘中；change buffer是对insert buffer的升级</p></blockquote><ol start="2"><li><p>两次写(Double Write)<br>double write产生的根本原因是由于由于MySql的最小写入单位为16K,而文件系统能保证原子写入的最小单位是4k，这样就造成MySql一次性向文件系统写入16k的数据时可能会发生中断，会污染数据页，通过先写中间层的方式来解决这个问题</p></li><li><p>自适应哈希索引(Adaptive Hash Index)</p></li><li><p>异步IO(Async IO)<br>MySQL中大量使用到异步IO</p></li><li><p>刷新邻接页(Flush Neighbor Page)</p></li></ol><hr><ul><li>bin log的日志格式</li></ul><p><B>STATENEBT</B>模式，记录的是标准的逻辑SQL语句<br><B>ROW</B>模式，记录的是每一行的数据<br><B>MIXED</B>模式混合模式7</p><hr><h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2><ul><li><a href="https://www.zhihu.com/question/334408495">知乎MVCC的解答</a></li></ul>]]></content>
       
       
       <categories>
