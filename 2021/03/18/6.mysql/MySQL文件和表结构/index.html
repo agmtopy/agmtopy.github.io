@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="MySQL体系结构与存储引擎, agmtopy博客">
+    <meta name="keywords" content="MySQL文件和表结构, agmtopy博客">
     <meta name="description" content="你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>MySQL体系结构与存储引擎 | agmtopy博客</title>
+    <title>MySQL文件和表结构 | agmtopy博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -267,12 +267,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/2.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/60.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">MySQL体系结构与存储引擎</h1>
+                    <h1 class="description center-align post-title">MySQL文件和表结构</h1>
                 </div>
             </div>
         </div>
@@ -413,7 +413,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-03-15
+                    2021-03-18
                 </div>
                 
 
@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    1.7k
+                    1.6k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    6 分钟
+                    5 分钟
                 </div>
                 
 
@@ -443,137 +443,112 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <blockquote>
-<p>主要介绍MySql的整体体系结构和存储引擎</p>
-</blockquote>
-<h2 id="体系结构"><a class="header-anchor" href="#体系结构"></a>体系结构</h2>
-<p>概念上<B>数据库</B>是文件的集合,是按照一定的文件模型组织起来存放数据的结构;<B>数据库实列</B>是程序是一个用户进程,是用户对<B>数据库</B>进行操作的软件.</p>
-<p>MySql主要由以下几部分组成</p>
+                <h2 id="MySQL文件体系"><a class="header-anchor" href="#MySQL文件体系"></a>MySQL文件体系</h2>
+<p>MySql文件体系主要分为:</p>
 <ol>
-<li>连接池组件</li>
-<li>管理服务和工具组件</li>
-<li>SQL接口组件</li>
-<li>查询分析器组件</li>
-<li>优化器组件</li>
-<li>缓冲组件</li>
-<li>插件式存储引擎(存储引擎是基于表的 ,而不是基于数据库的)</li>
-<li>物理文件</li>
+<li>参数文件<br>
+参数文件的定义是作为存储MySql初始化参数的作用,负责记录各种参数</li>
+<li>日志文件:<br>
+这里的日志文件主要是系统操作日志,主要有错误日志文件,二进制日志文件,慢查询日志文件等</li>
+<li>socket文件:<br>
+UNIX域套接字所需文件</li>
+<li>pid文件<br>
+MySql实例进程的ID文件</li>
+<li>MySQL表结构文件<br>
+用来存放MySQL表结构定义文件</li>
+<li>存储引擎文件<br>
+存储引擎文件存放了真正的记录和索引数据</li>
 </ol>
-<h2 id="存储引擎"><a class="header-anchor" href="#存储引擎"></a>存储引擎</h2>
+<p>主要关心的是日志文件和存储引擎文件</p>
+<h3 id="日志文件"><a class="header-anchor" href="#日志文件"></a>日志文件</h3>
+<p>日志文件主要有错误日志,二进制日志,慢查询日志,查询日志文件<br>
+二进制日志就是bin_log文件,会记录所有对MySql数据库执行更新的操作,就算最后数据未发生改变;<br>
+当使用支持事务的存储引擎时,所有未提交的二进制日志会被记录到一个缓存中(当超过缓存大小时会记录到临时文件中),等待该事务提交时直接将缓存刷新到bin_log中<br>
+bin_log的记录格式有三种(记录执行SQL,记录更新数据,混合模式),在’记录执行SQL’的模式下主从复制不能使用RC模式</p>
+<h3 id="存储引擎文件"><a class="header-anchor" href="#存储引擎文件"></a>存储引擎文件</h3>
+<p>存储引擎文件主要有’表空间文件’,重做日志文件(redo log)</p>
+<h4 id="表空间文件"><a class="header-anchor" href="#表空间文件"></a>表空间文件</h4>
+<p>表空间文件指的是实际存储数据的文件,分为两种类型默认的表空间,这种表空间是共享数据存储的模式,另外一种是独自的表空间,为每一张表单独生产独立的表空间文件存放数据/索引/插入缓冲BITMAP,但是该表其余的数据还是放到默认的表空间中</p>
+<h4 id="重做日志文件"><a class="header-anchor" href="#重做日志文件"></a>重做日志文件</h4>
+<p>重做日志文件是innoDB用来保证数据完整性的关键,默认采用一个重做日志组下面有两个镜像重做日志文件的架构.<br>
+redo_log是在sql执行过程中不断的进行写入和复制,这里和bin_log有所差异,bin_log是在事务提交后进行的写入.<br>
+redo_log的记录对象是对每个页的更改的物理记录,redo_log记录的是向前的更新记录.</p>
+<h2 id="MySQL表结构"><a class="header-anchor" href="#MySQL表结构"></a>MySQL表结构</h2>
+<p>MySQL的文件结构是如何数据如何在物理上的结构,MySQL对于数据在逻辑上的结构可以划分为索引组织表,InnoDO的存储结构,行记录结构,页记录结构以及视图等</p>
+<h3 id="数据存储的方式"><a class="header-anchor" href="#数据存储的方式"></a>数据存储的方式</h3>
+<p>数据存储格式可以分为’堆表’/‘索引组织表’</p>
 <ul>
-<li>
-<p>概述<br>
-存储引擎是与MySql物理文件进行交互的一种插件,存储引擎的底部是物理存储层,包括二进制日志文件,数据文件,错误文件,慢查询日志,undo/redo日志等</p>
-</li>
-<li>
-<p>select的过程</p>
-</li>
+<li>堆表指的是数据的存放是无序的,是根据空闲磁盘空间来决定存放位置;</li>
+<li>索引组织表指的是在存放数据时是按照主键索引来进行存放的.InnoDB的B+树索引结构就是一种索引组织表的形式.</li>
 </ul>
-<p>下图是一次select的过程<br>
-<img src="https://s3.ax1x.com/2021/03/15/6r8Q7q.png" alt="select执行过程"></p>
-<p>从图中得知存储引擎位于是物理文件和程序数据之间</p>
-<ul>
-<li>InnoDB的体系架构</li>
-</ul>
-<p><a target="_blank" rel="noopener" href="https://dev.mysql.com/doc/refman/8.0/en/innodb-architecture.html"><img src="https://dev.mysql.com/doc/refman/8.0/en/images/innodb-architecture.png" alt="InnoDB架构"></a></p>
+<h3 id="InnoDB逻辑存储结构"><a class="header-anchor" href="#InnoDB逻辑存储结构"></a>InnoDB逻辑存储结构</h3>
+<p>InnoDB的逻辑存储结构划分为4级,分别是表空间-段空间-区空间-页空间,页空间上存储的就是一行一行的数据了</p>
+<h3 id="表空间"><a class="header-anchor" href="#表空间"></a>表空间</h3>
+<p>表空间是InnoDB逻辑存储上最上层的操作单位,一个表空间存储了所属该表的全部数据(data,index)</p>
+<h3 id="段空间"><a class="header-anchor" href="#段空间"></a>段空间</h3>
+<p>对表空间内的数据按照类型进行划分,又可以划分为数据段/索引段/回滚段等,这些不同的类型数据,被称为段空间</p>
+<p>------逻辑-物理分割层------</p>
+<h3 id="区空间"><a class="header-anchor" href="#区空间"></a>区空间</h3>
+<p>区空间是由连续的磁盘空间组成,默认区空间大小为1MB,为了保证区空间的连续性还会一次向磁盘申请多个区空间.区空间实际存储了段空间内的数据.</p>
+<h3 id="页空间"><a class="header-anchor" href="#页空间"></a>页空间</h3>
+<p>页空间是InnoDB最小的磁盘管理单位,在InnoDB中每个页的大小为16KB,因此一个区可以存储64个页.页按照类型可以划分为</p>
 <ol>
-<li>实列层<br>
-实列层主要包括’线程’和’内存’两个部分<br>
-a. 后台线程主要有</li>
-</ol>
-<ul>
-<li>Master Thread<br>
-主线程主要负责将缓冲池中的数据异步刷新到磁盘中,保证数据的一致性</li>
-<li>I/O Thread<br>
-I/O Thread 主要是负责AIO(Async IO)请求的回调</li>
-<li>Purge Thread<br>
-Purge Thread的作用是事物在被提交后undolog就可能不在被使用了,因此需要Purge Thread线程来回收并分配的undo页</li>
-<li>Page Cleaner Thread<br>
-Page Cleaner Thread的作用是回收分配脏页</li>
-</ul>
-<p>小结:Master Thread和I/O Thread一个负责异步刷新数据一个负责AIO的回调,Purge Thread和Page Cleaner Thread一个负责回收分配undolog一个负责回收分配脏页</p>
-<p>b. 内存</p>
-<ul>
-<li>缓冲池<br>
-InnoDB存储引擎是基于磁盘存储,其中的数据是按照页的方式进行管理.由于CPU和磁盘速度中的差异因此用缓冲池技术来提高数据库的整体性能<br>
-缓冲池是一块内存区域,在数据库进行读取页操作时,会首先将从内存中的数据放到缓冲池中,在下一次读取相同页时,会直接读取缓冲池中的页数据.<br>
-对于数据库中的页的修改,首先会修改缓冲池中的页,然后以一定的频率刷新到磁盘,这种机制被称为CheckPoint<br>
-缓冲池中的数据页类型分为:</li>
-</ul>
-<ol>
-<li>索引页</li>
 <li>数据页</li>
 <li>undo页</li>
-<li>插入缓冲</li>
-<li>自适应哈希索引</li>
-<li>InnoDB存储的锁信息</li>
-<li>数据字典</li>
+<li>系统页</li>
+<li>事务数据页</li>
+<li>插入缓冲页(BitMap/Free List)</li>
+<li>二进制大对象页</li>
 </ol>
+<h3 id="行"><a class="header-anchor" href="#行"></a>行</h3>
+<p>InnoDB中的数据是按照行来进行存储的,行数据的记录格式按照类型可以分为两类.Compact和Redundant两种类型.</p>
 <ul>
 <li>
-<p>LRU list,Freen lst,Flush list<br>
-数据库中的缓冲池是通过LRU算法来进行管理,但是InnoDB中的LRU算法是经过优化的,将新数据放到列表3/8处</p>
+<p>Redundant<br>
+Redundant类型是为了兼容之前版本而设计的</p>
 </li>
 <li>
-<p>重做日志缓冲<br>
-重做日志首先会放到缓冲区,然后按照一定的频率刷新到日志文件上,有三种情况会刷新重做日志:1.Master Thread每一秒都会将日志缓冲刷新到日志文件,2.每个事务提交时都会将重做日志刷新到文件,3.当重做日志缓冲池剩余空间小于1/2时,会将日志刷新到文件上</p>
+<p>Compact<br>
+Compact格式是MySQL5.0中引入的,目的是高效的存储数据.</p>
 </li>
 <li>
-<p>额外的内存池<br>
-额外的内存池作为缓冲池的备用,但缓冲池不够的时候,就会从额外的内存池中申请</p>
-</li>
-<li>
-<p>Checkpoint技术<br>
-Mysql中数据的持久性是通过Write Ahead Log策略来保证,也就是先写日志文件,在修改数据文件.当宕机导致数据丢失时,会通过重做日志来进行数据恢复.<br>
-如果重做日志太大会导致数据恢复的很慢,因此mysql使用CheckPoint的技术来保证,CheckPoint是将缓冲池中的内存页刷新到磁盘的动作</p>
+<p>数据结构</p>
 </li>
 </ul>
-<h2 id="Master-Thread"><a class="header-anchor" href="#Master-Thread"></a>Master Thread</h2>
-<p>Master Thread具有最高级别的线程优先级,内部有多个循环组成:主循环,后台循环,刷新循环,暂停循环.<br>
-Master Thread主要分为1s执行一次的操作:</p>
-<ol>
-<li>日志缓冲刷新到磁盘,即使这个事务还没提交</li>
-<li>合并插入缓冲</li>
-<li>最多刷新100个InnoDB的缓冲池中的脏页到磁盘</li>
-<li>如果当前没有用户活动,就切换到backgroud loop<br>
-10s执行一次的操作:</li>
-<li>刷新100个脏页到磁盘</li>
-<li>合并至多5个插入缓冲</li>
-<li>将日志缓冲刷新到磁盘</li>
-<li>删除无用的Undo页</li>
-<li>刷新100个或者10个脏页</li>
-</ol>
-<h2 id="InnoDB特点"><a class="header-anchor" href="#InnoDB特点"></a>InnoDB特点</h2>
-<ol>
-<li>插入缓冲(Insert Buffer)</li>
-<li>两次写(Double Write)</li>
-<li>自适应哈希索引(Adaptive Hash Index)</li>
-<li>异步IO(Async IO)</li>
-<li>刷新邻接页(Flush Neighbor Page)</li>
-</ol>
-<h2 id="插入缓冲"><a class="header-anchor" href="#插入缓冲"></a>插入缓冲</h2>
-<ol>
-<li>Insert Buffer<br>
-Insert Buffer是在插入数据时将辅助索引先放到Insert Buffer中,然后在按照一定的频率将Insert Buffer中的数据和辅助索引页的子节点进行合并,这样能够提高非聚集索引的插入性能</li>
-<li>Change Buffer<br>
-Change Buffer作为Insert Buffer的升级,会将所有对非聚集索引的操作进行缓冲</li>
-<li>Insert Buffer的内部结构<br>
-Insert Buffer的数据结构是B+树,在Mysql4.1之前每张表都有一颗B+树;在现在的版本中全局只有一颗B+树,负责对所有表的辅助索引进行Insert Buffer,默认为ibdata1<br>
-Insert Buffer的非叶子节点是由space(待插入记录表的表空间id),offer(偏移量)构成;叶子节点是由space,offer,metadata(操作辅助索引的元数据-顺序,标识,类型)</li>
-<li>merge Insert Buffer的过程<br>
-在三种情况下,MySql会将Insert Buffer刷新到辅助索引文件中,并且虽然Insert Buffer是有序的,但是在刷新时,是随机选取Insert Buffer中的一个页进行刷新,做这个的目的是为了保证公平性而舍弃顺序性.以下的三种情况会进行Inser Buffer的刷新</li>
-<li>辅助索引页被读取到缓冲池中</li>
-<li>Insert Buffer BitMap记录Insert Buffer可用空间不足时</li>
-<li>Master Thread线程对Insert Buffer的刷新</li>
-</ol>
-<h2 id="两次写"><a class="header-anchor" href="#两次写"></a>两次写</h2>
-<p>两次写指的是当在直接写入某页时发生宕机,会有丢失数据的风险.通过向将脏页的数据转移到内存中的doublewrite buffer中,在将doublewrite中的数据同步写到共享表空间的物理磁盘文件上,第二次才将doublewrite buffer中的文件刷新到数据文件(.ibd)中,这样可以尽量保证数据文件的完整性</p>
-<h2 id="自适应哈希索引"><a class="header-anchor" href="#自适应哈希索引"></a>自适应哈希索引</h2>
-<p>自适应哈希索引指的是连续对热点数据的多次查询后会根据B+树索引生成对应的哈希索引,加快查询性能</p>
-<h2 id="异步IO"><a class="header-anchor" href="#异步IO"></a>异步IO</h2>
-<p>异步IO可以提高操作磁盘的效率,</p>
-<h2 id="刷新邻接页"><a class="header-anchor" href="#刷新邻接页"></a>刷新邻接页</h2>
-<p>刷新邻接页指的是对脏页所在区的页进行检测,发现是脏页一并进行刷新.</p>
+<table>
+<thead>
+<tr>
+<th>变长字段长度列表</th>
+<th>NULL标志位</th>
+<th>记录头信息</th>
+<th>列数据…</th>
+<th>事务ID</th>
+<th>回滚指针</th>
+</tr>
+</thead>
+<tbody></tbody>
+</table>
+<p>特别要注意’事务ID’和’回滚指针’这两项与隔离级别和事务回滚有关;<br>
+NULL,在行的数据结构中都不占用任何存储空间,因为在行的数据结构中有NULL标志位来处理NULL</p>
+<ul>
+<li>Varchar类型长度<br>
+Varchar类型在MySQL中的定义是最大能存储65535个字节,并且是该行所有的Varchar类型长度之和.由于一个页的大小为16KB,因此在Varchar的类型长度实际上是超过一页的大小,这样就会导致一页上不能存储一行数据.这里InnoDB采用了溢出页的方式来进行处理,page上只保留数据头信息,而溢出页上存储溢出的信息(溢出指的是数据大小溢出InnoDB设定的额定大小,而不是page页的大小)</li>
+</ul>
+<h2 id="InnoDB数据页结构"><a class="header-anchor" href="#InnoDB数据页结构"></a>InnoDB数据页结构</h2>
+<p>InnoDB的数据页结构指的是页空间中数据页的结构,主要由数据系统信息和用户记录信息组成</p>
+<ul>
+<li>数据系统结构<br>
+数据系统结构主要是由文件头/页头/Infimun-Supremum Records/页目录等组成,标记了该块区域的系统信息</li>
+<li>Infimun-Supremum Records指的是一个小于数据主键的区间起始值和终止值.这两个值会在B+树中进行存储</li>
+<li>页目录指的是指的是标记用户数据的相对位置的结构</li>
+</ul>
+<blockquote>
+<p>在进行数据查找时,会先从B+树中查询到数据对应的页,将页加载到内存中后,根据页目录来对用户数据进行二分查找(重点)</p>
+</blockquote>
+<h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://my.oschina.net/xinxingegeya/blog/474895">MySQL聚簇索引&amp;聚集索引&amp;索引组织表</a></li>
+</ul>
 
                 
             </div>
@@ -638,13 +613,13 @@ Insert Buffer的非叶子节点是由space(待插入记录表的表空间id),off
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2021/03/20/6.mysql/MySQL%E6%96%87%E4%BB%B6%E5%92%8C%E8%A1%A8%E7%BB%93%E6%9E%84/">
+                <a href="/2021/03/21/6.mysql/MySQL%E7%B4%A2%E5%BC%95%E4%B8%8E%E9%94%81/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/60.jpg" class="responsive-img" alt="MySQL文件和表结构">
+                        <img src="/medias/featureimages/40.jpg" class="responsive-img" alt="MySQL索引与锁">
                         
-                        <span class="card-title">MySQL文件和表结构</span>
+                        <span class="card-title">MySQL索引与锁</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -655,7 +630,7 @@ Insert Buffer的非叶子节点是由space(待插入记录表的表空间id),off
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-03-20
+                            <i class="far fa-clock fa-fw icon-date"></i>2021-03-21
                         </span>
                         <span class="publish-author">
                             
@@ -687,13 +662,13 @@ Insert Buffer的非叶子节点是由space(待插入记录表的表空间id),off
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2021/03/10/6.mysql/MySQL%E6%8A%80%E6%9C%AF%E7%96%91%E9%97%AE/">
+                <a href="/2021/03/12/6.mysql/MySQL%E4%BD%93%E7%B3%BB%E7%BB%93%E6%9E%84%E4%B8%8E%E5%AD%98%E5%82%A8%E5%BC%95%E6%93%8E/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/60.jpg" class="responsive-img" alt="MySQL技术疑问">
+                        <img src="/medias/featureimages/2.jpg" class="responsive-img" alt="MySQL体系结构与存储引擎">
                         
-                        <span class="card-title">MySQL技术疑问</span>
+                        <span class="card-title">MySQL体系结构与存储引擎</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -704,7 +679,7 @@ Insert Buffer的非叶子节点是由space(待插入记录表的表空间id),off
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-03-10
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-03-12
                             </span>
                         <span class="publish-author">
                             
@@ -874,7 +849,7 @@ Insert Buffer的非叶子节点是由space(待插入记录表的表空间id),off
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            161.7k
+                                            161.8k
                                         </span>&nbsp;字
                                         
                                             
