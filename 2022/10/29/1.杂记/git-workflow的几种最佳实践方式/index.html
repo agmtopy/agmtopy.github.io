@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    2.8k
+                    2.9k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    9 分钟
+                    10 分钟
                 </div>
                 
 
@@ -570,17 +570,19 @@ master branch 在合并代码后就会进入持续交付阶段,这样会最大�
 <p><img src="https://github.com/agmtopy/noteBook/blob/master/png/%E6%9D%82%E8%AE%B0/git_flow/GitLab%20flow%201.png?raw=true" alt="上游优先流程"></p>
 <p><img src="https://github.com/agmtopy/noteBook/blob/master/png/%E6%9D%82%E8%AE%B0/git_flow/GitLab%20flow%202.png?raw=true" alt="生产分支的切出"></p>
 <p>从上述的流程中可以看到GitLab flow在分支上选择是多分支的管理方式,但是是一种基于<B>上游优先</B>策略下的多分支管理方式,并不是像Git flow那样同时维护多个长期分支,对于后续的发布分支流程,GitLab采用的也是从Master branch中切分支或者打tag的方式:</p>
-<p><a target="_blank" rel="noopener" href="https://github.com/agmtopy/noteBook/blob/master/png/%E6%9D%82%E8%AE%B0/git_flow/GitLab%20flow%203.jpg?raw=true">GitLab 发布分支</a></p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/%E6%9D%82%E8%AE%B0/git_flow/GitLab%20flow%203.jpg?raw=true" alt="GitLab 发布分支"></p>
 <p>在GitLab的实践中,通常<B>Master branch</B>都是受保护的,这样大部分开发者不能对其进行直接修改;<br>
-其中在他们的实践中也认可践行(PR/MR)的协助方式,分支的命名也是采用的功能命名的方式,合并后立即删除,以便其他人重新开始这个功能的议题;issues也是工作的开始,MR中结束工作;</p>
+其中在他们的实践中也认可践行(PR/MR)的协助方式,分支的命名也是采用的功能命名的方式,合并后立即删除,以便其他人重新开始这个功能的议题;issues是工作的开始,MR是工作的结束;</p>
 <h3 id="优点-v3"><a class="header-anchor" href="#优点-v3"></a>优点</h3>
 <ul>
-<li>支持多版本部署</li>
-</ul>
-<p>支持pre-* /pro-*的多分支部署方式</p>
-<ul>
-<li>可以支持延迟发布<br>
-开发分支和发布分支可以并行</li>
+<li>
+<p>支持多版本部署<br>
+支持pre-* /pro-*的多分支部署方式</p>
+</li>
+<li>
+<p>可以支持延迟发布<br>
+开发分支和发布分支可以并行</p>
+</li>
 </ul>
 <h2 id="小结-v3"><a class="header-anchor" href="#小结-v3"></a>小结</h2>
 <p>由于GitLab flow出现的时间比git flow/gitlab flow都要晚一些,因此吸收了这两种风格的特点(支持多分支/PR模式);<br>
@@ -613,19 +615,37 @@ master branch 在合并代码后就会进入持续交付阶段,这样会最大�
 <h2 id="使用Git的几个约定"><a class="header-anchor" href="#使用Git的几个约定"></a>使用Git的几个约定</h2>
 <p>在使用Git过程中,其实每个团队的风格不同,都有一些比较好的值得借鉴的地方,以下可能是我自己的一个使用习惯</p>
 <ol>
-<li>使用rebase -i整理需要提交的commit</li>
-</ol>
-<p>每次大功能向master/develop等公开分支提交时,会首先将同一需求的多个commit压缩合并成为一个有具体含义的commit后在发起PR;这样做的原因是基于我认为提交的MR应该是一个完整的功能/补丁/操作的log,可以让之后进行阅读的人知道这一行代码是为那个需求/修复而写的,而不应该是一个需求中的一个小点添加的;第二点是便于回滚/Cherry-pick,一个commit的操作要比多个commit的操作更简单;</p>
-<ol start="2">
 <li>
-<p>基于最新的共享分支进行MR<br>
-这一点是基于Code review来说的,基于过时的分支合并到共享分支中是会夹杂大量代码差异,不利于code review的进行;</p>
+<p><B>使用rebase -i整理需要提交的commit</B><br>
+每次大功能向master/develop等公开分支提交时,会首先将同一需求的多个commit压缩合并成为一个有具体含义的commit后在发起PR;这样做的原因是基于我认为提交的MR应该是一个完整的功能/补丁/操作的log,可以让之后进行阅读的人知道这一行代码是为那个需求/修复而写的,而不应该是一个需求中的一个小点添加的;第二点是便于回滚/Cherry-pick,一个commit的操作要比多个commit的操作更简单;</p>
 </li>
 <li>
-<p>使用stash<br>
+<p><B>基于最新的共享分支进行MR</B><br>
+这一点是基于Code review来说的,基于过时的分支合并到共享分支中是会夹杂大量代码差异,不利于code review的进行;对于rebase的使用,坚持一个原则<B>私有分支操作使用rebase,共享分支操作使用merge</B></p>
+</li>
+<li>
+<p><B>使用stash</B><br>
 暂存区配合分支切换可以较好的完成,工作区的分支切换/代码存储合并的动作</p>
 </li>
 </ol>
+<h2 id="问题"><a class="header-anchor" href="#问题"></a>问题</h2>
+<ul>
+<li>
+<p>Code Review如何让每一个人参与其中?</p>
+</li>
+<li>
+<p>CI耗时过程问题以及是否需要进行CI?</p>
+</li>
+</ul>
+<blockquote>
+<p>需要,非常需要;gradle cache;</p>
+</blockquote>
+<ul>
+<li>代码文件冲突/合并的问题?</li>
+</ul>
+<blockquote>
+<p>产生的原因是与长期分支脱节、需求划分的不合理、没有及时的协作解决冲突等等</p>
+</blockquote>
 <h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
 <p><a target="_blank" rel="noopener" href="https://docs.gitlab.cn/jh/topics/gitlab_flow.html">GitLab Flow 介绍</a><br>
 <a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2015/12/git-workflow.html">Git 工作流程</a><br>
@@ -937,7 +957,7 @@ master branch 在合并代码后就会进入持续交付阶段,这样会最大�
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            164.6k
+                                            164.7k
                                         </span>&nbsp;字
                                         
                                             
