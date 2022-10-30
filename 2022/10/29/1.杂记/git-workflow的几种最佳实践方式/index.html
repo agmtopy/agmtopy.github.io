@@ -1,0 +1,1147 @@
+<!DOCTYPE HTML>
+<html lang="zh-Hans">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="git workflow的几种最佳实践方式, agmtopy博客">
+    <meta name="description" content="你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>git workflow的几种最佳实践方式 | agmtopy博客</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="agmtopy博客" type="application/atom+xml">
+</head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">agmtopy博客</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>主页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">agmtopy博客</div>
+        <div class="logo-desc">
+            
+            你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			主页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/agmtopy" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/agmtopy" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/48.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">git workflow的几种最佳实践方式</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/git/">
+                                <span class="chip bg-color">git</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E6%9D%82%E8%AE%B0/" class="post-category">
+                                杂记
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2022-10-29
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
+                    2.8k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
+                    9 分钟
+                </div>
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h1>git workflow的几种最佳实践方式</h1>
+<h2 id="引言"><a class="header-anchor" href="#引言"></a>引言</h2>
+<p>现有的版本控制系统大多选择使用Git来进行管理/协作;不同的团队有会根据各自的情况选择不同的协助方式,常见的<B>git workflow</B>主要分为三种:</p>
+<ul>
+<li>Git flow</li>
+<li>Github flow</li>
+<li>Gitlab flow<br>
+常见的分支模式也可以大致划分为两种:</li>
+<li>主干分支模式</li>
+<li>特性分支模式</li>
+</ul>
+<p>下面就先介绍特性分支模式下的三种 Git WorkFlow特点与优劣;</p>
+<h2 id="Git-flow"><a class="header-anchor" href="#Git-flow"></a>Git flow</h2>
+<blockquote>
+<p><B>Git flow</B>最早是由Vincent Driessen在2010年左右提出来的<B><a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2015/12/git-workflow.html">《一个成功的 Git 分支模型》</a></B>一文中介绍他自己的分支管理模式;主要核心思想就是会存在两类分支:</p>
+</blockquote>
+<ul>
+<li>
+<p>长期分支:</p>
+<ul>
+<li><B>master</B></li>
+<li><B>develop</B></li>
+</ul>
+</li>
+<li>
+<p>临时分支:</p>
+<ul>
+<li><B>hotfixs branch</B></li>
+<li><B>release branch</B></li>
+<li><B>feature branch</B></li>
+</ul>
+</li>
+</ul>
+<p>长期分支是一直存在的,临时分支只是会存在与一个迭代或一次hotfix的过程中,他们之间的关系如下所示:</p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/%E6%9D%82%E8%AE%B0/git_flow/git_flow.png?raw=true" alt="git flow "></p>
+<p>也可以看下面这个简化的git flow流程<br>
+<img src="https://github.com/agmtopy/noteBook/blob/master/png/%E6%9D%82%E8%AE%B0/git_flow/git-flow%E7%AE%80%E5%8C%96%E6%B5%81%E7%A8%8B.png?raw=true" alt="git flow "></p>
+<p>可以从上面两个图中看到开发者其实是站着<B>develop branch</B>一侧的,feature branch分支通常存在于本地,开发完成后执行<B>merge request(MR)</B>合并到<B>develop branch</B>(通常使用的是git merge --no–ff feature-branch的方式);同时发布分支(release branch)是从develop branch上切出来的,测试通过后mr到master中;</p>
+<p>git flow中进行code review的判定点:</p>
+<ul>
+<li>尝试从私有分支合并代码到公有分支(develop, release/<em>, hotfix/</em>, master)中时</li>
+</ul>
+<p>例如从feature branch -&gt; develop branch,hotfixs branch -&gt; master/develop时是需要进行code review;<br>
+从develop -&gt; master时是不需要进行code review的;</p>
+<h3 id="优点"><a class="header-anchor" href="#优点"></a>优点</h3>
+<ul>
+<li>
+<p>严谨的合并流程<br>
+所有进入公共分支的代码都需要进行审核,确保代码问题;这样的合并流程适用于已有的成熟项目开发流程,可以尽量在前置协作过程中发现避免问题;</p>
+</li>
+<li>
+<p>适用于开源项目(曾经)<br>
+各个贡献者都是在各自的repository(存储库)中工作,需要提出PR经过审核后才能提交代码到主库中</p>
+</li>
+</ul>
+<h3 id="缺点"><a class="header-anchor" href="#缺点"></a>缺点</h3>
+<ul>
+<li>
+<p>繁琐<br>
+在开发过程中,会持续维护两个长期分支<B>develop</B>和<B>master</B>,并且这两个分支的实际含义还有所重合(develop-拥有不稳定的全部代码的分支/master-拥有全部稳定代码的分支);</p>
+</li>
+<li>
+<p>持续交付困难<br>
+所有的功能开发必须是在一个周期或多个周期内完成,造成master中的代码不是最新的,因此很难进行CD;也有基于git flow开进行CD的方案,但是有点舍本求末的感觉在里面了,CI/CD应该是在’每个人每天都致力于master上工作’的前提</p>
+</li>
+</ul>
+<h3 id="小结"><a class="header-anchor" href="#小结"></a>小结</h3>
+<p>git flow的开发模式过于繁琐来保证较高的代码质量,需要去维护多个长期分支;繁琐也是相对于下面两种模式而言的;git flow的作者目前也是建议大家基于团队/项目来选择和更简单的GitHub flow;</p>
+<h2 id="GitHub-flow"><a class="header-anchor" href="#GitHub-flow"></a>GitHub flow</h2>
+<p>GitHub flow最早是由GitHub的技术经理scott chacon提出来的<a target="_blank" rel="noopener" href="http://scottchacon.com/2011/08/31/github-flow.html">GitHub Flow</a>,是基于Github内部使用Git工作的一种流程;</p>
+<blockquote>
+<p>GitHub flow主要有以下几个特征:<br>
+- master branch中的代码是在任何时候都是可以进行部署的<br>
+- 功能分支名称需要用描述功能特性来进行命名的<br>
+- 即时将本地代码push/pull到服务器上<br>
+- 使用PR来进行协作(反馈/帮助/合并)<br>
+- 完成master合并后立即部署</p>
+</blockquote>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/%E6%9D%82%E8%AE%B0/git_flow/github%20flow.jpg?raw=true" alt="github flow"></p>
+<p>这是一个简易的GitHub flow的流程,可以看到所有去请求在进行审核之后都会被合并到Master分支中;<br>
+在实践中GitHub flow是一个一直向前的流程,对于master分支几乎不会进行回滚操作(通过新的提交抵消错误需要进行回滚的合并)</p>
+<h3 id="优点-v2"><a class="header-anchor" href="#优点-v2"></a>优点</h3>
+<ul>
+<li>
+<p>分支模型简单<br>
+这个分支模型简单是相对于Git flow来说的,只用维护一个长期分支<B>master</B>,利于后续的CI/CD</p>
+</li>
+<li>
+<p>PR<br>
+这个是GitHub flow的一个创新,PR不止是合并代码而是一种协作方式,可以进行评论/审查/帮助,这个是跨地域进行大规模协作的基础,改变了以前通过邮件的方式;</p>
+</li>
+<li>
+<p>可以最大限度减少未发布代码的数量<br>
+master branch 在合并代码后就会进入持续交付阶段,这样会最大限度的降低未发布代码的数量</p>
+</li>
+</ul>
+<h3 id="缺点-v2"><a class="header-anchor" href="#缺点-v2"></a>缺点</h3>
+<ul>
+<li>
+<p>无法应对版本的延迟发布<br>
+在实际开发工作中,持续交付不一定能实现,毕竟大多数技术开发还是以业务为导向的;</p>
+</li>
+<li>
+<p>无法处理多版本交付<br>
+开发环境/测试环境/预发环境甚至生产多版本部署的场景</p>
+</li>
+</ul>
+<h3 id="小结-v2"><a class="header-anchor" href="#小结-v2"></a>小结</h3>
+<p>GitHub flow在简化Git flow的基础上支持开源软件的开发模式,但是自身也有一些问题.</p>
+<h2 id="GitLab-flow"><a class="header-anchor" href="#GitLab-flow"></a>GitLab flow</h2>
+<p>GitLab flow是由极狐公司提出在<B><a target="_blank" rel="noopener" href="https://docs.gitlab.cn/jh/topics/gitlab_flow.html">GitLab Flow介绍</a></B>一文实践的分支管理方式;</p>
+<p>GitLab flow的设计遵寻两个原则:</p>
+<ul>
+<li>单一主分支</li>
+</ul>
+<blockquote>
+<p>单一主分支原则与GitHub Flow所保留的Master分支一致</p>
+</blockquote>
+<ul>
+<li>上游优先</li>
+</ul>
+<blockquote>
+<p>上游优先原则指的是只存在一个主分支master,它是所有其他分支的<B>上游</B>.只有上游分支采纳的代码变化,才能应用到其他分支。对于<B>持续发布</B>的项目，它建议在master分支以外，再建立不同的环境分支。比如,<B>开发环境</B>的分支是master,<B>预发环境</B>的分支是pre-* ,<B>生产环境</B>的分支是pro-*;</p>
+</blockquote>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/%E6%9D%82%E8%AE%B0/git_flow/GitLab%20flow%201.png?raw=true" alt="上游优先流程"></p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/%E6%9D%82%E8%AE%B0/git_flow/GitLab%20flow%202.png?raw=true" alt="生产分支的切出"></p>
+<p>从上述的流程中可以看到GitLab flow在分支上选择是多分支的管理方式,但是是一种基于<B>上游优先</B>策略下的多分支管理方式,并不是像Git flow那样同时维护多个长期分支,对于后续的发布分支流程,GitLab采用的也是从Master branch中切分支或者打tag的方式:</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/agmtopy/noteBook/blob/master/png/%E6%9D%82%E8%AE%B0/git_flow/GitLab%20flow%203.jpg?raw=true">GitLab 发布分支</a></p>
+<p>在GitLab的实践中,通常<B>Master branch</B>都是受保护的,这样大部分开发者不能对其进行直接修改;<br>
+其中在他们的实践中也认可践行(PR/MR)的协助方式,分支的命名也是采用的功能命名的方式,合并后立即删除,以便其他人重新开始这个功能的议题;issues也是工作的开始,MR中结束工作;</p>
+<h3 id="优点-v3"><a class="header-anchor" href="#优点-v3"></a>优点</h3>
+<ul>
+<li>支持多版本部署</li>
+</ul>
+<p>支持pre-* /pro-*的多分支部署方式</p>
+<ul>
+<li>可以支持延迟发布<br>
+开发分支和发布分支可以并行</li>
+</ul>
+<h2 id="小结-v3"><a class="header-anchor" href="#小结-v3"></a>小结</h2>
+<p>由于GitLab flow出现的时间比git flow/gitlab flow都要晚一些,因此吸收了这两种风格的特点(支持多分支/PR模式);<br>
+大多数开发模式都是让代码审查通过后直接进入Master branch,因为这样可以尽早的解决冲突;</p>
+<p>以上三种代码分支的管理方式都是基于<B>功能开发</B>(先有需求驱动的开发模式),并不是GitLab flow就一定比Git flow要更好,只有更适合的,下面介绍三种简单的区分方式仅供参考:</p>
+<ul>
+<li>工作中会使用到多个版本 -&gt; Git flow</li>
+</ul>
+<blockquote>
+<p>如果代码库在工作中有多个版本(即典型的软件产品,如操作系统、Office 软件包、自定义应用程序等);可以使用git-flow,主要原因是在开发下一个版本的同时,需要在生产中持续支持以前的版本,并且有一个较长的迭代周期;</p>
+</blockquote>
+<ul>
+<li>工作中只会使用到一个版本 -&gt; GitHub flow</li>
+</ul>
+<blockquote>
+<p>如果代码库始终只有一个生产版本（即网站、Web 服务等），可以使用 github flow。主要原因是您不需要为开发人员复杂的事情。一旦开发人员完成一项功能或完成错误修复，它就会立即升级为生产版本。</p>
+</blockquote>
+<ul>
+<li>生产中的单一版本但非常复杂的软件 -&gt; Gitlab-flow</li>
+</ul>
+<blockquote>
+<p>在商业大型软件或者是以提供服务的项目上，在生产中可能需要在您的分支和主分支之间来回部署,并且在不同版本都需要进行CI/CD。推荐就使用Gitlab-flow</p>
+</blockquote>
+<h2 id="基于主干的开发模式"><a class="header-anchor" href="#基于主干的开发模式"></a>基于主干的开发模式</h2>
+<p>在基于主干的开发模式中,所有开发人员都在一个开放的分支上进行工作。一般是使用master分支.他们直接向Master提交代码并运行;开发人员会创建短暂的功能分支。一旦他们分支上的代码编译并通过所有测试，他们就会直接将其合并到master. 确保开发是真正连续的，并防止开发人员创建难以解决的合并冲突;</p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/%E6%9D%82%E8%AE%B0/git_flow/%E5%9F%BA%E4%BA%8E%E4%B8%BB%E5%B9%B2%E7%9A%84%E5%BC%80%E5%8F%91%E6%B5%81%E7%A8%8B.png?raw=true" alt="基于主干开发流程"></p>
+<p>可以看到<B>基于主干的开发流程</B>非常的简单,任何人都可以直接向Master branch 合并代码,能够做到快速交付/迭代;缺点是没有人来进行功能性code review,只能进行完整的源代码检查(这是一种灾难😰);</p>
+<p>基于主干的开发模式适用于:<B>项目开始的早期</B>、<B>拥有的都是老手</B>(😖)或者是<B>基础架构强/持续集成工具集成度高/TDD和自动化测试覆盖完善场景</B>下;</p>
+<p>其实还有其他的开发模式例如<B>集中式</B>、<B>Forking</B>等工作流程,有兴趣的可以了解一下;</p>
+<h2 id="使用Git的几个约定"><a class="header-anchor" href="#使用Git的几个约定"></a>使用Git的几个约定</h2>
+<p>在使用Git过程中,其实每个团队的风格不同,都有一些比较好的值得借鉴的地方,以下可能是我自己的一个使用习惯</p>
+<ol>
+<li>使用rebase -i整理需要提交的commit</li>
+</ol>
+<p>每次大功能向master/develop等公开分支提交时,会首先将同一需求的多个commit压缩合并成为一个有具体含义的commit后在发起PR;这样做的原因是基于我认为提交的MR应该是一个完整的功能/补丁/操作的log,可以让之后进行阅读的人知道这一行代码是为那个需求/修复而写的,而不应该是一个需求中的一个小点添加的;第二点是便于回滚/Cherry-pick,一个commit的操作要比多个commit的操作更简单;</p>
+<ol start="2">
+<li>
+<p>基于最新的共享分支进行MR<br>
+这一点是基于Code review来说的,基于过时的分支合并到共享分支中是会夹杂大量代码差异,不利于code review的进行;</p>
+</li>
+<li>
+<p>使用stash<br>
+暂存区配合分支切换可以较好的完成,工作区的分支切换/代码存储合并的动作</p>
+</li>
+</ol>
+<h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
+<p><a target="_blank" rel="noopener" href="https://docs.gitlab.cn/jh/topics/gitlab_flow.html">GitLab Flow 介绍</a><br>
+<a target="_blank" rel="noopener" href="https://www.ruanyifeng.com/blog/2015/12/git-workflow.html">Git 工作流程</a><br>
+<a target="_blank" rel="noopener" href="https://nvie.com/posts/a-successful-git-branching-model/">一个成功的Git分支模式</a><br>
+<a target="_blank" rel="noopener" href="http://dockone.io/article/2350">gitLab Flow的11条建议</a><br>
+<a target="_blank" rel="noopener" href="https://www.atlassian.com/git/tutorials/comparing-workflows">atlassian Bitbucket</a><br>
+<a target="_blank" rel="noopener" href="https://about.gitlab.com/topics/version-control/what-is-git-workflow/">what-is-git-workflow</a><br>
+<a target="_blank" rel="noopener" href="https://www.toptal.com/software/trunk-based-development-git-flow">trunk based developmentgit flow</a><br>
+<a target="_blank" rel="noopener" href="https://medium.com/burdaforward/state-of-ci-cd-and-the-dreaded-git-flow-fce92d04fb07">State of CI/CD and the omnipresent git flow</a></p>
+
+                
+            </div>
+            <hr/>
+
+            
+    
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/git/">
+                                    <span class="chip bg-color">git</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="wechat" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
+            <div class="card">
+                <a href="/2022/10/29/1.%E6%9D%82%E8%AE%B0/git-workflow%E7%9A%84%E5%87%A0%E7%A7%8D%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5%E6%96%B9%E5%BC%8F/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/48.jpg" class="responsive-img" alt="git workflow的几种最佳实践方式">
+                        
+                        <span class="card-title">git workflow的几种最佳实践方式</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-10-29
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%9D%82%E8%AE%B0/" class="post-category">
+                                    杂记
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/git/">
+                        <span class="chip bg-color">git</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2022/09/27/11.%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AC%94%E8%AE%B0/31.%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/42.jpg" class="responsive-img" alt="分布式数据库系统原理">
+                        
+                        <span class="card-title">分布式数据库系统原理</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2022-09-27
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/" class="post-category">
+                                    数据库
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F/">
+                        <span class="chip bg-color">分布式</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+                <div class="container row center-align"
+                    style="margin-bottom: 0px !important;">
+                    <div class="col s12 m8 l8 copy-right">
+                        
+                            <span id="year">
+                            </span>
+                            
+                                    <span id="year">
+                                    </span>
+                                    <a href="/about" target="_blank">
+                                    </a>
+                                    &nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+                                    |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery"
+                                        target="_blank">Matery</a>
+                                    <!-- <br> -->
+                                    
+                                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                                            class="white-color">
+                                            164.6k
+                                        </span>&nbsp;字
+                                        
+                                            
+                                                
+                                                    
+                                                        
+                                                            
+
+                                                                
+                                                                    
+
+                                                                        
+                                                                            <br>
+                                                                            
+                                                                                    <br>
+                                                                                    
+                    </div>
+                    <div class="col s12 m4 l4 social-link social-statis">
+                        
+
+        
+            <a href="mailto:zjytian@gmail.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我"
+                data-position="top" data-delay="50">
+                <i class="fas fa-envelope-open"></i>
+            </a>
+            
+
+                
+
+                        
+
+                                
+
+                                        
+
+                                                
+
+                                                        
+                    </div>
+                </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入关键词"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
