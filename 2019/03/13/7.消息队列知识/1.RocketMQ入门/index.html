@@ -422,7 +422,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    734
+                    747
                 </div>
                 
 
@@ -444,7 +444,7 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h1>RocketMQ入门</h1>
-<p>在工作中只是简单的使用了一下kafka进行系统间的交互，并未好好的系统化的学习一下消息队列这个工具。因此选择从阿里出来的RocketMQ来进行一个学习，再来就是RocketMQ本身也是用java语言进行开发的一个项目。</p>
+<p>在工作中只是简单的使用了一下kafka进行系统间的交互，并未系统化的学习g过消息队列这个中间件。基于开源MQ项目的一个活跃度,选择阿里开源出来的RocketMQ来进行学习，再来就是RocketMQ本身也是用java语言进行开发的一个项目。</p>
 <h2 id="安装"><a class="header-anchor" href="#安装"></a>安装</h2>
 <h3 id="安装前提"><a class="header-anchor" href="#安装前提"></a>安装前提</h3>
 <p>需要拥有以下软件：</p>
@@ -481,7 +481,7 @@
 </ol>
 <h4 id="安装Maven"><a class="header-anchor" href="#安装Maven"></a>安装Maven</h4>
 <ul>
-<li>下载<a target="_blank" rel="noopener" href="https://maven.apache.org/download.cgi">mav</a></li>
+<li>下载<a target="_blank" rel="noopener" href="https://maven.apache.org/download.cgi">mave</a></li>
 </ul>
 <ol>
 <li>解压、设置环境path、生效</li>
@@ -574,7 +574,7 @@
     consumer<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>上述运行环境是在windows子系统中进行运行的,但是由于网络的问题producer一直连接不上broker，导致实验失败。最后切换到windows环境下，运行倒是成功了，但是由于c盘太小了，每次都要删除commitLog进行运行，实在是太耗费精力和时间了，所以不在环境问题上纠结了。</p>
-<p>##RocketMQ中的基础概念</p>
+<h2 id="RocketMQ中的基础概念"><a class="header-anchor" href="#RocketMQ中的基础概念"></a>RocketMQ中的基础概念</h2>
 <ul>
 <li>
 <p>NameServer<br>
@@ -584,23 +584,23 @@
 <p>broker<br>
 <strong>broker</strong>类似于物理逻辑上的机器，支持主从部署，是实际于消息体交互的</p>
 </li>
-<li></li>
-</ul>
+<li>
 <p>producer<br>
 <strong>producer</strong>消息的提供方</p>
+</li>
+<li>
 <p>comsumer<br>
 <strong>comsumer</strong>消息的消费方</p>
-<p>具体的交互逻辑，如下图展示：<br>
-<img src="https://s1.ax1x.com/2020/03/14/8luQ76.png" alt="8luQ76.png"></p>
-<ul>
-<li>官方图<br>
-<img src="https://s1.ax1x.com/2020/03/14/8lKAbt.png" alt="8lKAbt.png"></li>
+</li>
 </ul>
+<p>具体的交互逻辑，如下图展示：<br>
+<img src="https://s1.ax1x.com/2020/03/14/8luQ76.png" alt="RocketMQ架构图"></p>
+<p><img src="https://s1.ax1x.com/2020/03/14/8lKAbt.png" alt="RocketMQ架构图"></p>
 <blockquote>
-<p>参考文章</p>
+<p>参考文章<br>
+<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000017841402#item-3-8">RocketMQ入门篇</a><br>
+<a target="_blank" rel="noopener" href="https://blog.csdn.net/micholas_net/article/details/89178761">windows下安装rocketMQ</a></p>
 </blockquote>
-<p><img src="https://segmentfault.com/a/1190000017841402#item-3-8" alt="RocketMQ入门篇"><br>
-<img src="https://blog.csdn.net/micholas_net/article/details/89178761" alt="windows下安装rocketMQ"></p>
 
                 
             </div>
