@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="RocketMQ使用, agmtopy博客">
+    <meta name="keywords" content="RocketMQ中的通信模式, agmtopy博客">
     <meta name="description" content="你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>RocketMQ使用 | agmtopy博客</title>
+    <title>RocketMQ中的通信模式 | agmtopy博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -267,12 +267,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/25.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/46.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">RocketMQ使用</h1>
+                    <h1 class="description center-align post-title">RocketMQ中的通信模式</h1>
                 </div>
             </div>
         </div>
@@ -444,8 +444,12 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h1>RocketMQ中的通信模式</h1>
-<p>在RocketMQ中为<strong>producer</strong>提供了三种通讯模式分别是<strong>同步</strong>、<strong>异步</strong>、<strong>单向</strong></p>
-<h2 id="同步模式"><a class="header-anchor" href="#同步模式"></a>同步模式</h2>
+<p>在RocketMQ中为<strong>producer</strong>提供了三种通讯模式分别是<strong>同步</strong>、<strong>异步</strong>、<strong>单向</strong>;<br>
+同时对于消息类型也提供了多种选择:<B>广播消息</B>、<B>延迟消息</B>、<br>
+<B>顺序消息</B>、<B>事务消息</B>等选择;<br>
+下文就主要介绍一些概念性的东西和<B>最佳实践</B></p>
+<h2 id="producer"><a class="header-anchor" href="#producer"></a>producer</h2>
+<h3 id="同步模式"><a class="header-anchor" href="#同步模式"></a>同步模式</h3>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"> <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">MQClientException</span> <span class="token punctuation">&#123;</span>
         <span class="token class-name">DefaultMQProducer</span> producer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DefaultMQProducer</span><span class="token punctuation">(</span><span class="token class-name">MqConfig</span><span class="token punctuation">.</span>GROUP_ID<span class="token punctuation">,</span> <span class="token function">getAclRPCHook</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         producer<span class="token punctuation">.</span><span class="token function">setNamesrvAddr</span><span class="token punctuation">(</span><span class="token class-name">MqConfig</span><span class="token punctuation">.</span>NAMESRV_ADDR<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -868,7 +872,7 @@ producer<span class="token punctuation">.</span><span class="token function">sen
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            164.7k
+                                            164.8k
                                         </span>&nbsp;字
                                         
                                             
