@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="RocketMQ特点和组件, agmtopy博客">
+    <meta name="keywords" content="RocketMQ组件, agmtopy博客">
     <meta name="description" content="你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>RocketMQ特点和组件 | agmtopy博客</title>
+    <title>RocketMQ组件 | agmtopy博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -267,12 +267,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/70.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/10.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">RocketMQ特点和组件</h1>
+                    <h1 class="description center-align post-title">RocketMQ组件</h1>
                 </div>
             </div>
         </div>
@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    1.3k
+                    1.7k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    4 分钟
+                    6 分钟
                 </div>
                 
 
@@ -443,59 +443,51 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1>RocketMQ特点和组件</h1>
-<h2 id="consumer如何找到信息？"><a class="header-anchor" href="#consumer如何找到信息？"></a>consumer如何找到信息？</h2>
+                <h1>RocketMQ组件</h1>
+<p>RocketMQ简单的看是由四个组件构成的，分别是<B>NameServe</B>、<B>Broker</B>、<B>Producer</B>、<B>consumer</B>这四个组件构成的;</p>
+<p>一个简单的执行过程是:</p>
 <ol>
-<li>consumer通过向NameServer询问具体的Topic所在的Broker信息</li>
+<li>consumer通过向NameServer询问具体的Topic所在的Broker地址</li>
 <li>consumer通过向Broker保持长连接的形式，获取到信息</li>
 <li>同一组下的consumer会向broker中的不同MessageQueue根据offset的位置进行获取msg,offeset会根据不同的模式有不同的实现，如果是广播模式offset会保存在不同的consumer中，如果是集群模式offset是保存在broker中的</li>
 </ol>
+<p>下面依次来介绍一下这几个组件</p>
 <h2 id="NameServer"><a class="header-anchor" href="#NameServer"></a>NameServer</h2>
-<ul>
-<li><strong>NameServer</strong>是整个消息队列中的状态服务器，集群的各个组件通过它来了解全局的信息。同时，各个角色的机器都要定期向NameServer上报自己的状态，超时不上报的话，NameServer会认为某个机器出故障不可用了，其他的组件会把这个机器从可用列表里移除。</li>
-<li><strong>NameServe</strong>r本身是无状态的，也就是说NameServer中的Broker、Topic等状态信息不会持久存储，都是由各个角色定时上报并存储到内存中的</li>
-</ul>
+<p><strong>NameServer</strong>是整个消息队列中的状态服务器，集群的各个组件通过它来了解全局的信息。同时，各个角色的机器都要定期向NameServer上报自己的状态，超时不上报的话，NameServer会认为某个机器出故障不可用了，其他的组件会把这个机器从可用列表里移除。<br>
+<strong>NameServe</strong>r本身是无状态的，也就是说NameServer中的Broker、Topic等状态信息不会持久存储，都是由各个角色定时上报并存储到内存中的</p>
 <p>NameServer和zk的对比：</p>
 <ul>
 <li>NameServer只是作为一个轻量级的元数据服务器</li>
 <li>zk是一个分布式应用程序提供协调服务<br>
 RocketMQ的NameServer只有很少的代码，容易维护，所以不需要再依赖另一个中间件，从而减少整体维护成本</li>
 </ul>
-<h2 id="数据的发送"><a class="header-anchor" href="#数据的发送"></a>数据的发送</h2>
-<p>底层是使用Netty进行通信的，这里还要补充一下</p>
-<h2 id="数据的存储"><a class="header-anchor" href="#数据的存储"></a>数据的存储</h2>
-<p>数据的存储是用“零拷贝”技术实现的</p>
-<h3 id="存储结构"><a class="header-anchor" href="#存储结构"></a>存储结构</h3>
-<p>RocketMQ的数据存储结构分为两种：</p>
+<h2 id="Broker"><a class="header-anchor" href="#Broker"></a>Broker</h2>
+<p>Broker主要负责消息的存储、传递和查询，以及服务的高可用保证。在Broker的Master-Slave架构中，Broker分为Master和Slave。一个Master可以对应多个Slave，但是一个Slave只能对应一个Master。Master和Slave的对应关系是通过指定相同的BrokerName和不同的BrokerId来定义的。BrokerId 为 0 表示 Master，非 0 表示 Slave;</p>
+<ul>
+<li>ROCKETMQ 架构总结</li>
+</ul>
+<blockquote>
+<p>每个Broker都与NameServer集群中的所有节点建立长期连接，并定期向所有 NameServer 注册 Topic 信息。Producer与NameServer集群中的一个节点建立长连接，定时从NameServer获取topic路由信息，与提供Topic服务的Master建立长连接，定时向Master发送心跳。Producer是完全无状态的。Consumer与NameServer集群中的一个节点建立长连接，定期从 NameServer 获取 Topic 路由信息，与提供 Topic 服务的 Master 和 Slave 建立长连接，定期向 Master 和 Slave 发送心跳。Consumer 从 Master 订阅 Topic或奴隶。</p>
+</blockquote>
+<h2 id="Producer"><a class="header-anchor" href="#Producer"></a>Producer</h2>
+<p><B>Producer</B>是作为数据源，将消息优化、写入和发布到一个或多个主题。生产者通过 MessageQueue 在代理之间负载平衡数据。它支持快速失败和发送消息期间的重试。</p>
+<h2 id="consumer"><a class="header-anchor" href="#consumer"></a>consumer</h2>
+<p><B>Consumer</B>是通过订阅Topic来读取消息,有两种消费的方式<B>服务端推送</B>或者<B>客户端拉取</B>;消费者需要在消费的时候作业务幂等和可靠性保证;</p>
+<ul>
+<li>执行过程</li>
+</ul>
 <ol>
-<li><strong>CommitLog</strong>是实际存储信息的单元，顺序进行写入</li>
-<li><strong>ConsumeQueue</strong>是消息的逻辑队列，类似数据库的索引文件，存储的是指向物理存储的地址</li>
+<li>Consumer 启动时需要指定 Namesrv 地址，与其中一个 Namesrv 建立长连接。消费者每隔 30 秒从 Namesrv 获取所有Topic 的最新队列情况</li>
+<li>消费者端的负载均衡。根据消费者的消费模式不同，负载均衡方式也不同。</li>
 </ol>
-<p>刷盘策略分为<strong>同步刷盘</strong>、<strong>异步刷盘</strong></p>
-<p>同步策略分为<strong>同步复制</strong>、<strong>异步复制</strong></p>
-<ul>
-<li>最佳实际：<strong>异步刷盘</strong>+<strong>同步复制</strong></li>
-</ul>
-<h2 id="筛选消息"><a class="header-anchor" href="#筛选消息"></a>筛选消息</h2>
-<p>”对一个应用来说，尽可能只用一个Topic，不同的消息子类型用Tag来标识（每条消息只能有一个Tag），服务器端基于Tag进行过滤，并不需要读取消息体的内容，所以效率很高。发送消息设置了Tag以后，消费方在订阅消息时，才可以利用Tag在Broker端做消息过滤。</p>
-<p>其次是消息的Key。对发送的消息设置好Key，以后可以根据这个Key来查找消息。所以这个Key一般用消息在业务层面的唯一标识码来表示，这样后续查询消息异常，消息丢失等都很方便。Broker会创建专门的索引文件，来存储Key到消息的映射，由于是哈希索引，应尽量使Key唯一，避免潜在的哈希冲突</p>
-<p>Tag和Key的主要差别是使用场景不同，Tag用在Consumer的代码中，用来进行服务端消息过滤，Key主要用于通过命令行查询消息。“</p>
-<ul>
-<li><strong>Tag</strong>过滤是在broker从<strong>Consume Queue</strong>中取数据的时候就进行比较，在这一过程中通过比较tag的<strong>hashCode值</strong>和<strong>内容</strong>进行双重过滤</li>
-<li><strong>SQL过滤</strong>，通过在producer向消息中插入自定义属性和值的方式,在comsumer中使用**MessageSelect.bySql()**的方法进行过滤</li>
-</ul>
-<h2 id="提高消费速度"><a class="header-anchor" href="#提高消费速度"></a>提高消费速度</h2>
-<ul>
-<li>提高消费并行度
+<h3 id="消费者消费模式"><a class="header-anchor" href="#消费者消费模式"></a>消费者消费模式</h3>
 <ol>
-<li>增加Consumer实例数量</li>
-<li>增加单个Consumer中的并行度（增加线程）</li>
+<li>集群消费<br>
+消费者的一种消费模式。一个 Consumer Group 中的各个 Consumer 实例分摊去消费消息，即一条消息只会投递到一个 Consumer Group 下面的一个实例。</li>
+<li>广播消费<br>
+消费者的一种消费模式。消息将对一 个Consumer Group 下的各个 Consumer 实例都投递一遍。即即使这些 Consumer 属于同一个Consumer Group ，消息也会被 Consumer Group 中的每个 Consumer 都消费一次</li>
 </ol>
-</li>
-<li>批量消费</li>
-<li>自定义消费offset逻辑,丢弃一部分消息</li>
-</ul>
-<h1>RocketMQ使用问题</h1>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/RocketMQ/RocketMQ%E6%89%A7%E8%A1%8C%E8%BF%87%E7%A8%8B.png?raw=true" alt="RocketMQ执行过程"></p>
 <h2 id="RocketMQ执行流程"><a class="header-anchor" href="#RocketMQ执行流程"></a>RocketMQ执行流程</h2>
 <ol>
 <li>启动 Namesrv，Namesrv起 来后监听端口，等待 Broker、Producer、Consumer 连上来，相当于一个路由控制中心</li>
@@ -509,23 +501,42 @@ RocketMQ的NameServer只有很少的代码，容易维护，所以不需要再�
 <li>Producer 启动时，也需要指定 Namesrv 的地址，从 Namesrv 集群中选一台建立长连接</li>
 <li>生产者端的负载均衡,生产者发送时，会自动轮询当前所有可发送的broker，一条消息发送成功，下次换另外一个broker发送，以达到消息平均落到所有的broker上</li>
 </ol>
-<h2 id="Consumer"><a class="header-anchor" href="#Consumer"></a>Consumer</h2>
+<hr>
+<p>上面就是对RocketMQ整体结构的一个简单介绍,下面对RocketMQ中最重要的一个概念进行简单介绍</p>
+<h2 id="Message"><a class="header-anchor" href="#Message"></a>Message</h2>
+<p><B>Message</B>是所有MQ中间件的核心领域,一切都是围绕着这个领域来作设计的;</p>
+<h3 id="存储消息"><a class="header-anchor" href="#存储消息"></a>存储消息</h3>
+<p>RocketMQ的数据存储结构分为两种：</p>
 <ol>
-<li>Consumer 启动时需要指定 Namesrv 地址，与其中一个 Namesrv 建立长连接。消费者每隔 30 秒从 Namesrv 获取所有Topic 的最新队列情况</li>
-<li>消费者端的负载均衡。根据消费者的消费模式不同，负载均衡方式也不同。</li>
+<li><strong>CommitLog</strong>是实际存储信息的单元，顺序进行写入</li>
+<li><strong>ConsumeQueue</strong>是消息的逻辑队列，类似数据库的索引文件，存储的是指向物理存储的地址</li>
 </ol>
-<h2 id="消费者消费模式"><a class="header-anchor" href="#消费者消费模式"></a>消费者消费模式</h2>
+<p>刷盘策略分为<strong>同步刷盘</strong>、<strong>异步刷盘</strong></p>
+<p>同步策略分为<strong>同步复制</strong>、<strong>异步复制</strong></p>
+<ul>
+<li>最佳实际：<strong>异步刷盘</strong>+<strong>同步复制</strong></li>
+</ul>
+<h3 id="使用消息"><a class="header-anchor" href="#使用消息"></a>使用消息</h3>
+<p>”对一个应用来说，尽可能只用一个Topic，不同的消息子类型用Tag来标识（每条消息只能有一个Tag），服务器端基于Tag进行过滤，并不需要读取消息体的内容，所以效率很高。发送消息设置了Tag以后，消费方在订阅消息时，才可以利用Tag在Broker端做消息过滤。</p>
+<p>其次是消息的Key。对发送的消息设置好Key，以后可以根据这个Key来查找消息。所以这个Key一般用消息在业务层面的唯一标识码来表示，这样后续查询消息异常，消息丢失等都很方便。Broker会创建专门的索引文件，来存储Key到消息的映射，由于是哈希索引，应尽量使Key唯一，避免潜在的哈希冲突</p>
+<p>Tag和Key的主要差别是使用场景不同，Tag用在Consumer的代码中，用来进行服务端消息过滤，Key主要用于通过命令行查询消息。“</p>
+<ul>
+<li><strong>Tag</strong>过滤是在broker从<strong>Consume Queue</strong>中取数据的时候就进行比较，在这一过程中通过比较tag的<strong>hashCode值</strong>和<strong>内容</strong>进行双重过滤</li>
+<li><strong>SQL过滤</strong>，通过在producer向消息中插入自定义属性和值的方式,在comsumer中使用**MessageSelect.bySql()**的方法进行过滤</li>
+</ul>
+<p>如何提高消费速度?</p>
+<ul>
+<li>提高消费并行度
 <ol>
-<li>集群消费<br>
-消费者的一种消费模式。一个 Consumer Group 中的各个 Consumer 实例分摊去消费消息，即一条消息只会投递到一个 Consumer Group 下面的一个实例。</li>
-<li>广播消费<br>
-消费者的一种消费模式。消息将对一 个Consumer Group 下的各个 Consumer 实例都投递一遍。即即使这些 Consumer 属于同一个Consumer Group ，消息也会被 Consumer Group 中的每个 Consumer 都消费一次</li>
+<li>增加Consumer实例数量</li>
+<li>增加单个Consumer中的并行度（增加线程）</li>
 </ol>
-<h2 id="消费者获取消息有几种模式"><a class="header-anchor" href="#消费者获取消息有几种模式"></a>消费者获取消息有几种模式</h2>
-<ol>
-<li>PushConsumer<br>
-推送模式（虽然 RocketMQ 使用的是长轮询）的消费者。消息的能及时被消费。长轮询是broker在没有消息时会hold当前pull的请求，等待消息或超时返回。</li>
-</ol>
+</li>
+<li>批量消费</li>
+<li>自定义消费offset逻辑,丢弃一部分消息</li>
+</ul>
+<h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
+<p>(RocketMQ简介)[<a target="_blank" rel="noopener" href="https://rocketmq.apache.org/docs/4.x/introduction/03whatis#consumer">https://rocketmq.apache.org/docs/4.x/introduction/03whatis#consumer</a>]</p>
 
                 
             </div>
@@ -826,7 +837,7 @@ RocketMQ的NameServer只有很少的代码，容易维护，所以不需要再�
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            164.8k
+                                            165.2k
                                         </span>&nbsp;字
                                         
                                             
