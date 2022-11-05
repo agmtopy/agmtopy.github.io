@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="RocketMq源代码之NameServer, agmtopy博客">
+    <meta name="keywords" content="NameServer源代码分析, agmtopy博客">
     <meta name="description" content="你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>RocketMq源代码之NameServer | agmtopy博客</title>
+    <title>NameServer源代码分析 | agmtopy博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -267,12 +267,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/43.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">RocketMq源代码之NameServer</h1>
+                    <h1 class="description center-align post-title">NameServer源代码分析</h1>
                 </div>
             </div>
         </div>
@@ -422,7 +422,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    760
+                    783
                 </div>
                 
 
@@ -443,7 +443,7 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1>RocketMq源代码之NameServer解析</h1>
+                <h1>NameServer源代码分析</h1>
 <p>周末继续阅读RocketMq的学习,在上周已经简单的把RocketMq的安装和使用学习了一下。本周主要来看一下NameServer的源代码和设计</p>
 <h2 id="NameServer启动"><a class="header-anchor" href="#NameServer启动"></a>NameServer启动</h2>
 <h3 id="NamesrvController启动"><a class="header-anchor" href="#NamesrvController启动"></a>NamesrvController启动</h3>
@@ -463,13 +463,13 @@
         <span class="token punctuation">&#125;</span>
         <span class="token keyword">return</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p><strong>NamesrvStartup</strong>中启动，调用main0() -&gt; createNamesrvController()</p>
-<p>主要代码逻辑在<strong>createNamesrvController</strong>中，主要执行<strong>NamesrvController初始化</strong>、<strong>NamesrvController.start</strong></p>
+<p>在RocketMQ的源代码<strong>NamesrvStartup.java</strong>中启动，调用时序主要是: main0() -&gt; createNamesrvController()</p>
+<p>在<strong>createNamesrvController</strong>方法中，主要执行<strong>NamesrvController初始化</strong>、<strong>NamesrvController.start()</strong></p>
 <h3 id="NamesrvController初始化"><a class="header-anchor" href="#NamesrvController初始化"></a>NamesrvController初始化</h3>
 <p><strong>NamesrvController</strong>初始化的步骤主要是：</p>
 <ol>
-<li>获取到<strong>namesrvConfig</strong>、<strong>nettyServerConfig</strong></li>
-<li>根据配置生成<strong>NamesrvController</strong></li>
+<li>获取到<strong>namesrvConfig</strong>、<strong>nettyServerConfig</strong>等配置信息</li>
+<li>在根据配置生成<strong>NamesrvController</strong>初始化对象</li>
 </ol>
 <h3 id="NamesrvController-start"><a class="header-anchor" href="#NamesrvController-start"></a>NamesrvController.start()</h3>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//省略代码....</span>
@@ -491,7 +491,7 @@
 controller<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
 <span class="token keyword">return</span> controller<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>**NamesrvController.start()**主要做了两个工作：</p>
+<p><B>NamesrvController.start()</B>主要做了两个工作：</p>
 <ol>
 <li>通过<strong>controller.initialize()<strong>设置好controller的配置环境<br>
 1.1 开启Netty服务<br>
@@ -553,7 +553,7 @@ controller<span class="token punctuation">.</span><span class="token function">s
         <span class="token keyword">break</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>根据不同的请求返回不同的处理函数</p>
-<h2 id="消息的存储"><a class="header-anchor" href="#消息的存储"></a>消息的存储</h2>
+<h2 id="RocketMQ元数据存储"><a class="header-anchor" href="#RocketMQ元数据存储"></a>RocketMQ元数据存储</h2>
 <p>NameSrv中信息都是存储在内存中的，而且每一个NameSrv保存的信息都是全量的。<strong>RouteInfoManager</strong>是保存这些信息的类</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java">
 <span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">RouteInfoManager</span> <span class="token punctuation">&#123;</span>
@@ -568,7 +568,7 @@ controller<span class="token punctuation">.</span><span class="token function">s
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>在这里由于Namesev中的业务场景是<strong>读多写少</strong>，因此用<strong>可重入的读写锁</strong>来保证并发的安全性</p>
-<h1>总结</h1>
+<h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2>
 <ol>
 <li>加载配置文件转换为NameServerConfig、NettyConfig</li>
 <li>根据配置文件生成<strong>NamesrvController</strong></li>
@@ -577,12 +577,10 @@ controller<span class="token punctuation">.</span><span class="token function">s
 <li>用<strong>NettyRequestProcessor</strong>处理请求</li>
 <li><strong>RouteInfoManager</strong>中存储信息</li>
 </ol>
-<blockquote>
-<p>参考资料</p>
-</blockquote>
+<h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
 <ul>
 <li>《RocketMQ实战与原理解析》</li>
-<li><img src="http://www.jiangxinlingdu.com/rocketmq/2018/05/10/mq-rpc.html" alt="RocketMQ 系列文章"></li>
+<li><a target="_blank" rel="noopener" href="http://www.jiangxinlingdu.com/rocketmq/2018/05/10/mq-rpc.html">RocketMQ 系列文章</a></li>
 </ul>
 
                 
