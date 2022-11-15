@@ -267,7 +267,7 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/14.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/82.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    1.2k
+                    1.3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    5 分钟
+                    6 分钟
                 </div>
                 
 
@@ -443,10 +443,11 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1>DefaultMQPushConsumer源代码分析</h1>
-<h2 id="基本使用"><a class="header-anchor" href="#基本使用"></a>基本使用</h2>
+                <h1>Consumer源代码分析</h1>
+<h2 id="消费流程"><a class="header-anchor" href="#消费流程"></a>消费流程</h2>
+<h3 id="DefaultMQPushConsumer"><a class="header-anchor" href="#DefaultMQPushConsumer"></a>DefaultMQPushConsumer</h3>
 <p><strong>DefaultMQPushConsumer</strong>是默认进行消费的工具类，类图如下：</p>
-<p><img src="https://s1.ax1x.com/2020/03/25/8x1zJP.png" alt="8x1zJP.png"></p>
+<p><img src="https://s1.ax1x.com/2020/03/25/8x1zJP.png" alt="DefaultMQPushConsumer继承结构"></p>
  <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">DefaultMQPushConsumer</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token class-name">String</span> namespace<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token class-name">String</span> consumerGroup<span class="token punctuation">,</span> <span class="token class-name">RPCHook</span> rpcHook<span class="token punctuation">,</span>
     <span class="token class-name">AllocateMessageQueueStrategy</span> allocateMessageQueueStrategy<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">this</span><span class="token punctuation">.</span>consumerGroup <span class="token operator">=</span> consumerGroup<span class="token punctuation">;</span>
@@ -454,9 +455,7 @@
     <span class="token keyword">this</span><span class="token punctuation">.</span>allocateMessageQueueStrategy <span class="token operator">=</span> allocateMessageQueueStrategy<span class="token punctuation">;</span>
     defaultMQPushConsumerImpl <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DefaultMQPushConsumerImpl</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> rpcHook<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<blockquote>
 <p>默认的构造函数参数如下</p>
-</blockquote>
 <table>
 <thead>
 <tr>
@@ -491,7 +490,7 @@
 </tr>
 </tbody>
 </table>
-<h2 id="底层原理"><a class="header-anchor" href="#底层原理"></a>底层原理</h2>
+<h2 id="实现原理"><a class="header-anchor" href="#实现原理"></a>实现原理</h2>
 <p>主要是一下几个步骤</p>
 <ol start="0">
 <li>准备环境，设置各种环境变量(例如topic,过滤策略)，根据环境变量初始化<strong>pullRequest</strong></li>
@@ -501,7 +500,8 @@
 <li>底层调用<strong>NettyRemotingClient</strong>进行网络连接，<strong>特殊的报文结构</strong></li>
 </ol>
 <p>消息的方式是通过“长轮询”的方式进行处理的，通过服务端hold住请求(默认是15s)来实现的</p>
-<h1>ConsumerMessageConcurrentlyService源代码分析</h1>
+<h2 id="源代码分析"><a class="header-anchor" href="#源代码分析"></a>源代码分析</h2>
+<h3 id="ConsumerMessageConcurrentlyService"><a class="header-anchor" href="#ConsumerMessageConcurrentlyService"></a>ConsumerMessageConcurrentlyService</h3>
 <p>上面讲到如何初始化一个<strong>DefaultMQPushConsumer</strong>,但是在实际执行获取动作的是<strong>ConsumerMessageConcurrentlyService</strong>来进行的。</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">ConsumeMessageConcurrentlyService</span><span class="token punctuation">(</span><span class="token class-name">DefaultMQPushConsumerImpl</span> defaultMQPushConsumerImpl<span class="token punctuation">,</span>
     <span class="token class-name">MessageListenerConcurrently</span> messageListener<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
@@ -579,7 +579,7 @@
 <li>判断当前消息数量是否大于最大处理数量</li>
 <li>尝试使用正常消费的线程池进行消费 如果失败 -&gt; 等待消费的线程池</li>
 </ol>
-<h1>消费消息的线程池逻辑</h1>
+<h3 id="消费消息线程池的逻辑"><a class="header-anchor" href="#消费消息线程池的逻辑"></a>消费消息线程池的逻辑</h3>
 <ul>
 <li><strong>ConsumeRequest</strong></li>
 </ul>
@@ -653,12 +653,26 @@
 2.1 广播模式 消费不成功不处理<br>
 2.2 集群模式消费不成功，推送broker，让broker通知其他consumer进行消费，还是失败进入延迟队列</li>
 </ol>
-<h1>ProcessQueue</h1>
+<h3 id="ProcessQueue"><a class="header-anchor" href="#ProcessQueue"></a>ProcessQueue</h3>
 <p><strong>ProcessQueue</strong>是consumer中每一个MessageQueue所对应的队列消耗快照。</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">ReadWriteLock</span> lockTreeMap <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ReentrantReadWriteLock</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">TreeMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Long</span><span class="token punctuation">,</span> <span class="token class-name">MessageExt</span><span class="token punctuation">></span></span> msgTreeMap <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">TreeMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Long</span><span class="token punctuation">,</span> <span class="token class-name">MessageExt</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>主要是由一个TreeMep和ReadWriteLock锁组成，TreeMap里以MessageQueue的Offset作为Key，以消息内容的引用为Value，保存了所有从MessageQueue获取到但是还未被处理的消息，读写锁控制着多个线程对TreeMap对象的并发访问。</p>
-<h1>MessageQueue的分析</h1>
+<h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2>
+<p>Consumer的消费过程是:</p>
+<ol>
+<li>根据配置信息初始化Consumer client对象</li>
+<li>获取Offerset偏移量</li>
+<li>获取BrokerTable中的地址</li>
+<li>调用NettyRemotingClint获取消息,然后业务处理完成回调</li>
+</ol>
+<p>Consumer的消费的组件是:</p>
+<ol>
+<li>处理正常消费的消息线程池</li>
+<li>处理延迟消息的线程池</li>
+<li>清理消息的线程池</li>
+</ol>
+<p>每一个MessageQueue在消费时都有一个ProcessQueue来缓冲所有已消费未处理的消息,ProcessQueue底层是采用<B>TreeMap</B>、<B>ReadWriteLock</B>来进行实现的</p>
 
                 
             </div>
@@ -727,7 +741,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/22.jpg" class="responsive-img" alt="MessageQueue的分析">
+                        <img src="/medias/featureimages/36.jpg" class="responsive-img" alt="MessageQueue的分析">
                         
                         <span class="card-title">MessageQueue的分析</span>
                     </div>
@@ -776,7 +790,7 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="NameServer源代码分析">
+                        <img src="/medias/featureimages/62.jpg" class="responsive-img" alt="NameServer源代码分析">
                         
                         <span class="card-title">NameServer源代码分析</span>
                     </div>
@@ -959,7 +973,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            166.4k
+                                            167.2k
                                         </span>&nbsp;字
                                         
                                             
