@@ -429,7 +429,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    5 分钟
+                    4 分钟
                 </div>
                 
 
@@ -496,14 +496,14 @@ TiDB在实现上比ETL + Hadddoop简单和高效低本,并且可以直接用SQL�
 <ol>
 <li>下载安装脚本</li>
 </ol>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">curl --proto &#39;&#x3D;https&#39; --tlsv1.2 -sSf https:&#x2F;&#x2F;tiup-mirrors.pingcap.com&#x2F;install.sh | sh
-# 下载完成后会展示安装脚本路径  &#39;Shell profile:&#39;后面的就是 $&#123;your_shell_profile&#125; 替换量
-source $&#123;your_shell_profile&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token function">curl</span> --proto <span class="token string">'=https'</span> --tlsv1.2 -sSf https://tiup-mirrors.pingcap.com/install.sh <span class="token operator">|</span> <span class="token function">sh</span>
+<span class="token comment"># 下载完成后会展示安装脚本路径  'Shell profile:'后面的就是 $&#123;your_shell_profile&#125; 替换量</span>
+<span class="token builtin class-name">source</span> <span class="token variable">$&#123;your_shell_profile&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://github.com/agmtopy/noteBook/blob/master/png/T-TiDB/%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B_1.jpg?raw=true" alt="下载安装脚本"></p>
 <ol start="2">
 <li>启动集群</li>
 </ol>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"># 默认TiDB、TiKV、PD 和 TiFlash 实例各一个
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token comment"># 默认TiDB、TiKV、PD 和 TiFlash 实例各一个</span>
 tiup playground<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p><img src="https://github.com/agmtopy/noteBook/blob/master/png/T-TiDB/%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B_%E5%90%AF%E5%8A%A8.jpg?raw=true" alt="启动"></p>
 <ol start="3">
@@ -513,11 +513,11 @@ tiup playground<span aria-hidden="true" class="line-numbers-rows"><span></span><
 <li>连接TiDB</li>
 </ul>
 <pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">
-# 使用TiDB clinet
+<span class="token comment"># 使用TiDB clinet</span>
 tiup client
 
-# 使用MySQL 协议
-mysql --host 127.0.0.1 --port 4000 -u root<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token comment"># 使用MySQL 协议</span>
+mysql --host <span class="token number">127.0</span>.0.1 --port <span class="token number">4000</span> -u root<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://github.com/agmtopy/noteBook/blob/master/png/T-TiDB/%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B_3_tidb%E5%8D%8F%E8%AE%AE%E7%99%BB%E9%99%86.jpg?raw=true" alt="TiDB clinet"></p>
 <p>在使用MySQL客户端连接的时候,因为TiDB默认没有为root用户分配密码的,可以通过TiDB clint 登陆后使用<B>set password for root=‘123456’;</B>来修改密码</p>
 <p><img src="https://github.com/agmtopy/noteBook/blob/master/png/T-TiDB/%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B_4_%E4%BF%AE%E6%94%B9%E5%AF%86%E7%A0%81.jpg?raw=true" alt="修改root 密码"></p>
@@ -548,17 +548,17 @@ mysql --host 127.0.0.1 --port 4000 -u root<span aria-hidden="true" class="line-n
 <p>HTAOP功能就是在线分析功能,在传统的数据库使用过程中通常会伴随着这样的使用场景,下面用<B>TiFlash</B>和MySQL之间来对比</p>
 <h3 id="准备数据"><a class="header-anchor" href="#准备数据"></a>准备数据</h3>
 <pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">
-# 使用以下命令安装数据生成工具
-tiup install bench
+<span class="token comment"># 使用以下命令安装数据生成工具</span>
+tiup <span class="token function">install</span> bench
 
-# 使用以下命令生成数据
-tiup bench tpch --sf&#x3D;1 prepare
+<span class="token comment"># 使用以下命令生成数据</span>
+tiup bench tpch --sf<span class="token operator">=</span><span class="token number">1</span> prepare
 
-![准备数据](https:&#x2F;&#x2F;github.com&#x2F;agmtopy&#x2F;noteBook&#x2F;blob&#x2F;master&#x2F;png&#x2F;T-TiDB&#x2F;HTAP_%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B_1.jpg?raw&#x3D;true)
+<span class="token operator">!</span><span class="token punctuation">[</span>准备数据<span class="token punctuation">]</span><span class="token punctuation">(</span>https://github.com/agmtopy/noteBook/blob/master/png/T-TiDB/HTAP_%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B_1.jpg?raw<span class="token operator">=</span>true<span class="token punctuation">)</span>
 
 
-# 运行以下 SQL 语句查看生成的数据量
-SELECT CONCAT(table_schema,&#39;.&#39;,table_name) AS &#39;Table Name&#39;, table_rows AS &#39;Number of Rows&#39;, CONCAT(ROUND(data_length&#x2F;(1024*1024*1024),4),&#39;G&#39;) AS &#39;Data Size&#39;, CONCAT(ROUND(index_length&#x2F;(1024*1024*1024),4),&#39;G&#39;) AS &#39;Index Size&#39;, CONCAT(ROUND((data_length+index_length)&#x2F;(1024*1024*1024),4),&#39;G&#39;) AS&#39;Total&#39;FROM information_schema.TABLES WHERE table_schema LIKE &#39;test&#39;;
+<span class="token comment"># 运行以下 SQL 语句查看生成的数据量</span>
+SELECT CONCAT<span class="token punctuation">(</span>table_schema,<span class="token string">'.'</span>,table_name<span class="token punctuation">)</span> AS <span class="token string">'Table Name'</span>, table_rows AS <span class="token string">'Number of Rows'</span>, CONCAT<span class="token punctuation">(</span>ROUND<span class="token punctuation">(</span>data_length/<span class="token punctuation">(</span><span class="token number">1024</span>*1024*1024<span class="token punctuation">)</span>,4<span class="token punctuation">)</span>,<span class="token string">'G'</span><span class="token punctuation">)</span> AS <span class="token string">'Data Size'</span>, CONCAT<span class="token punctuation">(</span>ROUND<span class="token punctuation">(</span>index_length/<span class="token punctuation">(</span><span class="token number">1024</span>*1024*1024<span class="token punctuation">)</span>,4<span class="token punctuation">)</span>,<span class="token string">'G'</span><span class="token punctuation">)</span> AS <span class="token string">'Index Size'</span>, CONCAT<span class="token punctuation">(</span>ROUND<span class="token punctuation">((</span>data_length+index_length<span class="token punctuation">)</span>/<span class="token punctuation">(</span><span class="token number">1024</span>*1024*1024<span class="token punctuation">)</span>,4<span class="token punctuation">)</span>,<span class="token string">'G'</span><span class="token punctuation">)</span> AS<span class="token string">'Total'</span>FROM information_schema.TABLES WHERE table_schema LIKE <span class="token string">'test'</span><span class="token punctuation">;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://github.com/agmtopy/noteBook/blob/master/png/T-TiDB/HTAP_%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B_2_%E6%95%B0%E6%8D%AE%E9%87%8F%E5%B1%95%E7%A4%BA.jpg?raw=true" alt="数据行数"></p>
 <h3 id="执行SQL"><a class="header-anchor" href="#执行SQL"></a>执行SQL</h3>
@@ -904,7 +904,7 @@ ALTER TABLE test.lineitem SET TIFLASH REPLICA 1;
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            167.2k
+                                            167.5k
                                         </span>&nbsp;字
                                         
                                             
