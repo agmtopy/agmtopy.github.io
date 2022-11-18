@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    904
+                    1.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    3 分钟
+                    4 分钟
                 </div>
                 
 
@@ -490,7 +490,7 @@ W/C ：指的是等待时间与计算时间的比例,对于计算密集型与IO�
 
     <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span> <span class="token punctuation">&#123;</span>
         <span class="token class-name">CountDownLatch</span> latch <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">CountDownLatch</span><span class="token punctuation">(</span>taskNum<span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">8</span><span class="token punctuation">;</span> i <span class="token operator">&lt;=</span> <span class="token number">32768</span><span class="token punctuation">;</span> i <span class="token operator">=</span> i <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">8</span><span class="token punctuation">;</span> i <span class="token operator">&lt;=</span> <span class="token number">8192</span><span class="token punctuation">;</span> i <span class="token operator">=</span> i <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
             <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"线程数量为[%s]正在执行... %n"</span><span class="token punctuation">,</span> i<span class="token punctuation">)</span><span class="token punctuation">;</span>
             threadPoolExecutor<span class="token punctuation">.</span><span class="token function">setMaximumPoolSize</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
             threadPoolExecutor<span class="token punctuation">.</span><span class="token function">setCorePoolSize</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -522,10 +522,7 @@ W/C ：指的是等待时间与计算时间的比例,对于计算密集型与IO�
 
         <span class="token annotation punctuation">@Override</span>
         <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-<span class="token comment">//            long st = System.currentTimeMillis();</span>
             <span class="token function">doExecute</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token comment">//            long et = System.currentTimeMillis();</span>
-<span class="token comment">//            System.out.printf("线程[%s]执行任务Id[%s],耗时[%s]ms %n", Thread.currentThread().getName(), taskId, et - st);</span>
             latch<span class="token punctuation">.</span><span class="token function">countDown</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">&#125;</span>
     <span class="token punctuation">&#125;</span>
@@ -552,13 +549,32 @@ W/C ：指的是等待时间与计算时间的比例,对于计算密集型与IO�
         <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><a target="_blank" rel="noopener" href="https://github.com/agmtopy/jvmsource/blob/218c8f2fc3995e962cb8382e0f4ee6bb2b29fc1c/src/main/java/com/agmtopy/source/executer/ExecutorServiceUtil.java#L17">ExecutorServiceUtil</a></p>
-<p>使用<B>vmstat -w 1</B></p>
+<p>这是一个循环求解0~10W之间的素数的程序,下面是分别在Windows/Linux上执行的结果</p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/linux.jpg?raw=true" alt="Linux下的执行结果"></p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/windows.jpg?raw=true" alt="Windows下的执行结果"></p>
+<p>操作系统的线程调度策略还是会影响性能的.Linux的线程调度要稍微比Windows的优秀一点点,下面使用<B>vmstat</B>和<B>pidstat</B>分析</p>
+<ul>
+<li>vmstat</li>
+</ul>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">vmstat</span> -w <span class="token number">1</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/vmstat.jpg?raw=true" alt="vmstat执行结果"></p>
+<ul>
+<li>pidstat</li>
+</ul>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pidstat -p /PID -wtu  <span class="token number">5</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/pidstat.jpg?raw=true" alt="pidstat执行结果"></p>
+<p>主要关心<B>cswch/s</B>和<B>nvcswch/s</B>、<B>in</B>和<B>cs</B>&gt;指标，表示的是<B>线程上下文切换</B>的一个频率<br>
+不管是从windows还是linux的一个执行结果来看，线程的增加都会导致程序的下降,但是这种下降并不是很明显，也许是得益于现代操作系统的线程切换的一个优化吧</p>
+<h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2>
+<p>一个线程池中核心线程数与最大线程数的数量是会受到多个方面因素共同影响的，例如<B>操作系统</B>、<B>物理核心逻辑线程</B> 以及任务类型(计算密集型/IO密集型)都有关系,因此在使用线程池时对于线程池的<B>6个</B>参数一定要有思考以后在进行创建相应的线程池;</p>
 <h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
 <p><a target="_blank" rel="noopener" href="https://stackoverflow.com/questions/13834692/threads-configuration-based-on-no-of-cpu-cores/13958877#13958877">Threads configuration based on no. of CPU-cores</a><br>
 <a target="_blank" rel="noopener" href="https://en.wikipedia.org/wiki/Amdahl%27s_law">Amdahl’s law</a><br>
-<a target="_blank" rel="noopener" href="https://research.cs.wisc.edu/multifacet/amdahl/">Amdahl’s Law in the Multicore Era</a></p>
+<a target="_blank" rel="noopener" href="https://research.cs.wisc.edu/multifacet/amdahl/">Amdahl’s Law in the Multicore Era</a><br>
+<a target="_blank" rel="noopener" href="https://www.cnblogs.com/ggjucheng/archive/2012/01/05/2312625.html">Linux vmstat命令实战详解</a><br>
+<a target="_blank" rel="noopener" href="https://timzhouyes.github.io/2020/04/29/Java%E6%80%A7%E8%83%BD%E9%97%AE%E9%A2%98/">Java常见的性能问题和排查</a></p>
 
                 
             </div>
@@ -861,7 +877,7 @@ W/C ：指的是等待时间与计算时间的比例,对于计算密集型与IO�
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            167.5k
+                                            167.7k
                                         </span>&nbsp;字
                                         
                                             
