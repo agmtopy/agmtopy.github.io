@@ -565,7 +565,7 @@ W/C ：指的是等待时间与计算时间的比例,对于计算密集型与IO�
 </ul>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pidstat -p /PID -wtu  <span class="token number">5</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="https://github.com/agmtopy/noteBook/blob/master/png/%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/pidstat.jpg?raw=true" alt="pidstat执行结果"></p>
-<p>主要关心<B>cswch/s</B>和<B>nvcswch/s</B>、<B>in</B>和<B>cs</B>&gt;指标，表示的是<B>线程上下文切换</B>的一个频率<br>
+<p>主要关心<B>cswch/s</B>和<B>nvcswch/s</B>、<B>in</B>和<B>cs</B>&gt;指标，表示的是<B>线程上下文切换</B>的一个频率,在线程不断的增加以后可以看到这几个指标在快速的向上增长<br>
 不管是从windows还是linux的一个执行结果来看，线程的增加都会导致程序的下降,但是这种下降并不是很明显，也许是得益于现代操作系统的线程切换的一个优化吧</p>
 <h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2>
 <p>一个线程池中核心线程数与最大线程数的数量是会受到多个方面因素共同影响的，例如<B>操作系统</B>、<B>物理核心逻辑线程</B> 以及任务类型(计算密集型/IO密集型)都有关系,因此在使用线程池时对于线程池的<B>6个</B>参数一定要有思考以后在进行创建相应的线程池;</p>
@@ -877,7 +877,7 @@ W/C ：指的是等待时间与计算时间的比例,对于计算密集型与IO�
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            167.7k
+                                            167.8k
                                         </span>&nbsp;字
                                         
                                             
