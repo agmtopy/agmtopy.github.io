@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="jvm-虚拟机性能监控与故障处理工具, agmtopy博客">
+    <meta name="keywords" content="性能监控与故障处理工具, agmtopy博客">
     <meta name="description" content="你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>jvm-虚拟机性能监控与故障处理工具 | agmtopy博客</title>
+    <title>性能监控与故障处理工具 | agmtopy博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -267,12 +267,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/20.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/5.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">jvm-虚拟机性能监控与故障处理工具</h1>
+                    <h1 class="description center-align post-title">性能监控与故障处理工具</h1>
                 </div>
             </div>
         </div>
@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    155
+                    606
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    1 分钟
+                    2 分钟
                 </div>
                 
 
@@ -443,7 +443,7 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1>虚拟机性能监控与故障处理工具</h1>
+                <h1>性能监控与故障处理工具</h1>
 <p>介绍处理jvm的相关问题办法以及相关工具的一个持续更新的集合</p>
 <h2 id="📚-经验"><a class="header-anchor" href="#📚-经验"></a>📚 经验</h2>
 <h3 id="CPU占用率高"><a class="header-anchor" href="#CPU占用率高"></a>CPU占用率高</h3>
@@ -469,14 +469,123 @@ thread
 thread --all
 
 # 查看指定线程执行状态
-
 thread --pid
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="OOM问题"><a class="header-anchor" href="#OOM问题"></a>OOM问题</h3>
 <ol>
-<li></li>
+<li>启动命令中设置</li>
 </ol>
-<h2 id="🛠-工具"><a class="header-anchor" href="#🛠-工具"></a>🛠 工具</h2>
+<blockquote>
+<p><B>-XX:+HeapDumpOnOutOfMemoryError</B> 配合<B> -XX:HeapDumpPath</B><br>
+在OOM时生成dump文件</p>
+</blockquote>
+<ol start="2">
+<li>线上命令</li>
+</ol>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">#生成堆转储快照dump文件命令
+  jmap -dump:format&#x3D;b,file&#x3D;heapdump.hprof pid
+# 生成堆栈信息文件命令
+  jstack -l pid &gt;&gt; stack.txt
+# Arthas命令
+  heapdump
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="线程问题"><a class="header-anchor" href="#线程问题"></a>线程问题</h3>
+<ul>
+<li>线程池提交任务不执行</li>
+</ul>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">
+# arthas排查
+
+# 获取ClassLoad Hash
+sc -d com.agmtopy.source.executer.ExecutorServiceUtil
+
+# 获取对象
+ognl -x 1 &#39;@com.agmtopy.source.executer.ExecutorServiceUtil@threadPoolExecutor&#39;
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>线程死锁</li>
+</ul>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">
+ # arthas排查
+Thread -b
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<h2 id="⚙-工具"><a class="header-anchor" href="#⚙-工具"></a>⚙ 工具</h2>
+<p><B>Arthas</B>强烈推荐</p>
+<h2 id="📒-常用命令"><a class="header-anchor" href="#📒-常用命令"></a>📒 常用命令</h2>
+<h3 id="网络"><a class="header-anchor" href="#网络"></a>网络</h3>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"># 采样tcp连接
+lsof -p 进程号 &gt; &#x2F;tmp&#x2F;进程号_lsof.txt
+# 查看指定端口
+netstat -tnlp | grep :8080
+ss -tunlp |grep :8080
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>排查网络问题步骤:</p>
+<ol>
+<li>ping 目标地址</li>
+<li>丢包<br>
+a. 链路中断<br>
+b. 抖动<br>
+c. 出口堵塞</li>
+<li>能通<br>
+a. 检查dns和域名解析</li>
+</ol>
+<blockquote>
+<p>/etc/resolv.conf 或者 dig 或者 nslookup :url</p>
+</blockquote>
+<p>b. 检查端口</p>
+<blockquote>
+<p>telnet -&gt; 如果全部端口不通检查<B>安全组策略</B>;部分端口不通检查<B>负载均衡白名单</B></p>
+</blockquote>
+<ol start="3">
+<li>不通<br>
+检查ip设置/网卡驱动/物理链路</li>
+</ol>
+<h3 id="内存"><a class="header-anchor" href="#内存"></a>内存</h3>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">
+# 系统内存分布
+pmap -pid
+
+# 内存占用
+jmap -heap 进程号 &gt; &#x2F;tmp&#x2F;进程号_jmap_heap.txt
+
+# 保存进程堆栈
+jmap -dump:format&#x3D;b,file&#x3D;&#x2F;tmp&#x2F;进程号_jmap_dump.hprof 进程号
+
+# 内存对象占比
+jmap -histo 1 |more
+
+# GC
+jstat -gcutil 进程号 &gt; &#x2F;tmp&#x2F;进程号_jstat_gc.txt
+
+jstat -gcutil 1 1s
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="CPU"><a class="header-anchor" href="#CPU"></a>CPU</h3>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">
+# 查看系统上下文切换
+vmstat -w 1
+
+# 查看进程上下文切换
+pidstat -p &#x2F;PID -wtu  5
+
+# 打印系统负载快照
+top -b -n 2 &gt; &#x2F;tmp&#x2F;top.txt
+top -H -n 1 -p pid &gt; &#x2F;tmp&#x2F;pid_top.txt
+
+# 进程列表
+ps -mp-o THREAD,tid,time | sort -k2r &gt; &#x2F;tmp&#x2F;进程号_threads.txt
+
+# 线程信息
+jstack -l 进程号 &gt; &#x2F;tmp&#x2F;进程号_jstack.txt
+
+# Arthas
+thread 
+thread -tid
+thread -all<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="I-O"><a class="header-anchor" href="#I-O"></a>I/O</h3>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">strace -p pid
+iotop
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
                 
             </div>
@@ -546,9 +655,9 @@ thread --pid
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/20.jpg" class="responsive-img" alt="jvm-虚拟机性能监控与故障处理工具">
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="性能监控与故障处理工具">
                         
-                        <span class="card-title">jvm-虚拟机性能监控与故障处理工具</span>
+                        <span class="card-title">性能监控与故障处理工具</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -779,7 +888,7 @@ thread --pid
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            170.4k
+                                            170.8k
                                         </span>&nbsp;字
                                         
                                             
