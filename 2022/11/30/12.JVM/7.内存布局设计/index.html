@@ -446,7 +446,7 @@
                 <h1>内存布局设计</h1>
 <p>JVM的内存设计上是划分为两个大的区域的<B>启动时向操作系统分配的程序内存区域</B>、<B>直接对系统内存进行操作的区域</B>,后者不属于JVM管理,我们主要是分析前者</p>
 <h2 id="大体结构"><a class="header-anchor" href="#大体结构"></a>大体结构</h2>
-<p><img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/60659940-822f-48cc-bfe3-24de2e756a24/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20221201%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20221201T135502Z&amp;X-Amz-Expires=86400&amp;X-Amz-Signature=77c0bc3f96ba996015400565a07ed8964908b41289bf09d3c4106d13c9af923f&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename%3D%22Untitled.png%22&amp;x-id=GetObject" alt="JVM架构图"></p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/jvm%E6%80%BB%E8%A7%88.png?raw=true" alt="JVM架构图"></p>
 <ol>
 <li>程序计数器
 <ol>
@@ -470,7 +470,7 @@
 </ol>
 </li>
 </ol>
-<p><img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/90fe3a1b-93b8-4f54-840a-855655ea629a/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20221201%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20221201T135849Z&amp;X-Amz-Expires=86400&amp;X-Amz-Signature=1f08ca0b1637dd0c0d9ff7cf746e82b314915bc732b0dbb40aaaea49978682e3&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename%3D%22Untitled.png%22&amp;x-id=GetObject" alt="栈帧"></p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/%E7%BA%BF%E7%A8%8B%E5%B8%A7%E6%A0%88.png?raw=true" alt="栈帧"></p>
 <ol>
 <li>
 <p>本地方法栈</p>
@@ -527,7 +527,7 @@
 <li>通过句柄的方式来返回</li>
 </ol>
 <p>HotSpot是通过第二种方式来进行访问的,优点是**快,**缺点是在GC时需要修改栈帧中的reference数据</p>
-<p><img src="https://s3.us-west-2.amazonaws.com/secure.notion-static.com/4bfc471c-8a12-4eaf-8575-49e720e2a746/Untitled.png?X-Amz-Algorithm=AWS4-HMAC-SHA256&amp;X-Amz-Content-Sha256=UNSIGNED-PAYLOAD&amp;X-Amz-Credential=AKIAT73L2G45EIPT3X45%2F20221201%2Fus-west-2%2Fs3%2Faws4_request&amp;X-Amz-Date=20221201T140025Z&amp;X-Amz-Expires=86400&amp;X-Amz-Signature=79a121d7523473a2dd00388251d3146157db80cb64405c5350bc4d653c5a44c9&amp;X-Amz-SignedHeaders=host&amp;response-content-disposition=filename%3D%22Untitled.png%22&amp;x-id=GetObject" alt="Untitled"></p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/%E5%AF%B9%E8%B1%A1%E7%9A%84%E8%AE%BF%E9%97%AE%E5%AE%9A%E4%BD%8D.png?raw=true" alt="对象地址"></p>
 </li>
 </ol>
 
@@ -830,7 +830,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            170.8k
+                                            172.2k
                                         </span>&nbsp;字
                                         
                                             
