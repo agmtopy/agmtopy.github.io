@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    1.7k
+                    2.7k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    6 分钟
+                    10 分钟
                 </div>
                 
 
@@ -481,11 +481,9 @@
 <li>如何简化Groovy的学习成本,从而推广出去?</li>
 <li>如何保证性能?</li>
 <li>如何保证动态脚本的安全性?</li>
-<li>如何保证动态脚本的稳定性(动态脚本的单元测试如何进行)?</li>
+<li>如何保证动态脚本的代码质量(动态脚本的单元测试如何进行)?</li>
 </ol>
-<ul>
-<li>对于如何简化Groovy的学习成本?</li>
-</ul>
+<h4 id="对于如何简化Groovy的学习成本"><a class="header-anchor" href="#对于如何简化Groovy的学习成本"></a>对于如何简化Groovy的学习成本?</h4>
 <p>项目初期可以采用<B>GroovyClassLoader</B>来执行<B>Java脚本</B></p>
 <ul>
 <li>DynamicUtil</li>
@@ -522,10 +520,9 @@
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>可以看到在上面这个例子中,我们执行的脚本就是java语法规则的脚本;这样如何简化Groovy脚本的问题就可以得到解决;</p>
-<ul>
-<li>如何保证脚本的执行性能?</li>
-</ul>
+<p>可以看到在上面这个例子中,我们执行的脚本就是java语法规则的脚本;这样如何简化Groovy脚本的问题就可以得到解决;<br>
+在整个执行框架稳定以后,还是需要推广Groovy脚本,java语法的脚本只是一个中间过渡方案!</p>
+<h4 id="如何保证脚本的执行性能"><a class="header-anchor" href="#如何保证脚本的执行性能"></a>如何保证脚本的执行性能?</h4>
 <p>这里的性能指的是两方面:<B>编译</B>和<B>执行</B>,我们先来看Groovy是如何编译脚本的</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java">
 <span class="token keyword">public</span> <span class="token class-name">Class</span> <span class="token function">parseClass</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token class-name">GroovyCodeSource</span> codeSource<span class="token punctuation">,</span> <span class="token keyword">boolean</span> shouldCacheSource<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">CompilationFailedException</span> <span class="token punctuation">&#123;</span>
@@ -593,9 +590,75 @@
 <p>return java.security.AccessController.doPrivileged((PrivilegedAction<InnerLoader>) () -&gt; new InnerLoader(GroovyClassLoader.this));</p>
 </blockquote>
 <p>这是因为Class对象是通过ClassLoader+class的方式来定位确定唯一一个类的,InnerLoader每次都会创建一个新的对象,这样可能会导致Metaspace内存溢出,虽然在Groovy3.0以后针对这个问题已经进行过优化了,但是还是强烈建议通过内存将脚本编译后的<B>GroovyObject</B>缓存下来,本身脚本的再次编译和加载都是一个较为消耗性能的动作;</p>
-<p>我们下面继续对<B>执行性能</B>来进行分析,</p>
+<p>我们下面继续对<B>执行性能</B>来进行分析,在网上大多数资料对于Groovy的脚本执行性能的分析,github中关于这方面的issue也比较少,并且大部分是针对与Groovy和Java进行对比的;<br>
+下面有几个关于Groovy脚本执行的建议:</p>
+<ol>
+<li>尽量使用静态类型,由于Groovy是动态语言,在将动态特性编译成为静态语言时是比较消耗性能的</li>
+<li>oracle官方对于Groovy的5条性能建议</li>
+</ol>
+<h4 id="如何保证动态脚本的安全性"><a class="header-anchor" href="#如何保证动态脚本的安全性"></a>如何保证动态脚本的安全性?</h4>
+<p>如何保证动态脚本的安全性?其实也是分为两个方面考虑的:</p>
+<ol>
+<li>执行安全性</li>
+</ol>
+<blockquote>
+<p>执行安全性指的是在执行脚本时是否会影响到我的宿主进程?如何规避这种风险?</p>
+</blockquote>
+<ol start="2">
+<li>脚本本身的安全性</li>
+</ol>
+<blockquote>
+<p>脚本本身的安全性指的是脚本语义是否正确/正常以及可信</p>
+</blockquote>
+<p>下面对着两方面进行分析和设计:</p>
+<p><B>脚本执行的安全性</B>方面最主要的考虑是错误的脚本是否会影响到主进程的执行?主要从下面几个方面考虑:</p>
+<ol>
+<li>内存
+<blockquote>
+<p>内存主要还是考虑堆栈内存即可,一个是成员变量的空间分配,一个是while造成死循环使栈溢出等;可以在定义<B>GroovyClassLoader</B>时进行排除</p>
+</blockquote>
+</li>
+</ol>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">
+<span class="token keyword">final</span> <span class="token class-name">SecureASTCustomizer</span> secure <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">SecureASTCustomizer</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">// 创建SecureASTCustomizer</span>
+secure<span class="token punctuation">.</span><span class="token function">setClosuresAllowed</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">// 禁止使用闭包</span>
+<span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Integer</span><span class="token punctuation">></span></span> tokensBlacklist <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+tokensBlacklist<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token class-name">Types</span><span class="token punctuation">.</span>*<span class="token operator">*</span>KEYWORD_WHILE<span class="token operator">*</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">// 添加关键字黑名单 while和goto</span>
+tokensBlacklist<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token class-name">Types</span><span class="token punctuation">.</span>*<span class="token operator">*</span>KEYWORD_GOTO<span class="token operator">*</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+secure<span class="token punctuation">.</span><span class="token function">setTokensBlacklist</span><span class="token punctuation">(</span>tokensBlacklist<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+secure<span class="token punctuation">.</span><span class="token function">setIndirectImportCheckEnabled</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token comment">// 设置直接导入检查</span>
+list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string">"com.alibaba.fastjson.JSONObject"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+secure<span class="token punctuation">.</span><span class="token function">setImportsBlacklist</span><span class="token punctuation">(</span>list<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="2">
+<li>线程</li>
+</ol>
+<blockquote>
+<p>对与线程方面的考虑主要是执行线程需要使用单独的线程池进行处理,这样做的目的是防止动态脚本的执行线程阻塞业务线程;第二个是动态脚本中应该禁止使用线程池来进行处理,这方面的考量主要是基于脚本业务代码尽量的要简单高效和可读性,引入线程池会增加脚本的复杂度和可维护性</p>
+</blockquote>
+<ol start="3">
+<li>数据库/资源的管理</li>
+</ol>
+<blockquote>
+<p>对与数据库和其他资源的访问,我是持有拒绝的态度,主要观点还是和脚本中实现线程池类似,还有一点是脚本中进行数据变更和资源处理缺少了代码版本控制这一个环节;</p>
+</blockquote>
+<p><B>脚本本身的安全性</B>主要指的是脚本开发/提测/上线整个流程的安全和监控性,在这方面Vivo提供了一套内部使用的流程如下:</p>
+<p><img src="https://static001.geekbang.org/infoq/ac/acf787602d9e4bf20abded0c80525565.png" alt="Groovy整体流程"></p>
+<p>在这个过程中,除了code review部分需要开发者进行参与,其他部分都可以依托CI/CD工具实现自动化执行;<br>
+有了这样一个流程,其实是可以解决脚本本身的安全性的问题的;</p>
+<h4 id="如何保证动态脚本的代码质量"><a class="header-anchor" href="#如何保证动态脚本的代码质量"></a>如何保证动态脚本的代码质量?</h4>
+<p>动态脚本的代码质量如何进行保证,一方面是可以通过良好的code review机制来提高质量,另外一方面是需要建设好单元测试框架;<br>
+如何建立好动态脚本的单元测试?<br>
+首先是方便,在开发人员的角度一个工具只有在足够的简单方便的情况下才会乐意去进行使用,其次是流程规范.<br>
+目前执行的过程是在特定的测试包下,开发脚本,然后进行单元测试,在单元测试通过后在写入数据库中;<br>
+后续实践出更好的方案在进行更新</p>
+<h2 id="小结"><a class="header-anchor" href="#小结"></a>小结</h2>
+<p>以上通过Groovy实现了动态特性的同时引入了一些尚未解决的问题:<br>
+执行性能/单元测试,后续在实践过程中也会对这些问题持续的进行更新.</p>
 <h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
-<p><a target="_blank" rel="noopener" href="https://docs.oracle.com/en/cloud/paas/app-builder-cloud/visual-builder-groovy/best-practices-for-groovy-performance.html">oracle官方对于Groovy 性能的最佳实践</a></p>
+<p><a target="_blank" rel="noopener" href="https://docs.oracle.com/en/cloud/paas/app-builder-cloud/visual-builder-groovy/best-practices-for-groovy-performance.html">oracle官方对于Groovy 性能的最佳实践</a><br>
+<a target="_blank" rel="noopener" href="https://www.huangchaoyu.com/2021/10/16/groovy%E9%9D%99%E6%80%81%E7%BC%96%E8%AF%91%E5%AE%B9%E6%98%93%E5%BC%95%E5%8F%91%E7%9A%84%E9%97%AE%E9%A2%98/">groovy静态编译容易引发的问题</a></p>
 
                 
             </div>
@@ -884,7 +947,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            174.9k
+                                            175.9k
                                         </span>&nbsp;字
                                         
                                             
