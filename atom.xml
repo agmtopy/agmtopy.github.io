@@ -6,7 +6,7 @@
   <link href="https://agmtopy.gitee.io/atom.xml" rel="self"/>
   
   <link href="https://agmtopy.gitee.io/"/>
-  <updated>2022-12-24T03:30:58.433Z</updated>
+  <updated>2023-01-05T17:05:10.797Z</updated>
   <id>https://agmtopy.gitee.io/</id>
   
   <author>
@@ -17,15 +17,28 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Cola4.0的最佳工程实践</title>
+    <title>Cola4.0的工程实践</title>
     <link href="https://agmtopy.gitee.io/2022/12/24/1.%E6%9D%82%E8%AE%B0/Cola4-0%E7%9A%84%E6%9C%80%E4%BD%B3%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/"/>
     <id>https://agmtopy.gitee.io/2022/12/24/1.%E6%9D%82%E8%AE%B0/Cola4-0%E7%9A%84%E6%9C%80%E4%BD%B3%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/</id>
     <published>2022-12-24T03:30:46.000Z</published>
-    <updated>2022-12-24T03:30:58.433Z</updated>
+    <updated>2023-01-05T17:05:10.797Z</updated>
+    
+    <content type="html"><![CDATA[<h1>Cola4.0的工程实践</h1><p>cola在今年迎来了4.0版本,在最新的版本中对<B>包结构</B>进行了调整以及将COLA项目整体划分为两个部分<B>COLA架构</B>和<B>COLA组件</B>;<br>下面先简单的介绍COLA的改变,再介绍CLOA4.0的工程实践</p><h2 id="COLA的改变"><a class="header-anchor" href="#COLA的改变"></a>COLA的改变</h2><p>COLA4.0的改变主要是聚焦与COLA架构和COLA组件两个部分:</p><ol><li>COLA架构：关注应用架构的定义和构建，提升应用质量。</li><li>COLA组件：提供应用开发所需要的可复用组件，提升研发效率。<br>作者Frank画了两张图很好的表现出来</li></ol><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/cola/COLA4.0%E5%88%86%E5%B1%82%E6%A8%A1%E5%9E%8B.png?raw=true" alt="COLA4.0分层模型"></p><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/cola/COLA%E6%9E%B6%E6%9E%84%E6%8A%BD%E8%B1%A1.png?raw=true" alt="COLA架构抽象"></p><h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2><p><a href="https://blog.csdn.net/significantfrank/article/details/110934799?spm=1001.2014.3001.5502">COLA 4.0：应用架构的最佳实践</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;Cola4.0的工程实践&lt;/h1&gt;
+&lt;p&gt;cola在今年迎来了4.0版本,在最新的版本中对&lt;B&gt;包结构&lt;/B&gt;进行了调整以及将COLA项目整体划分为两个部分&lt;B&gt;COLA架构&lt;/B&gt;和&lt;B&gt;COLA组件&lt;/B&gt;;&lt;br&gt;
+下面先简单的介绍COLA的改变,再介绍CLOA4.</summary>
+      
     
     
     
+    <category term="杂记" scheme="https://agmtopy.gitee.io/categories/%E6%9D%82%E8%AE%B0/"/>
     
+    
+    <category term="cola" scheme="https://agmtopy.gitee.io/tags/cola/"/>
     
   </entry>
   
