@@ -6,7 +6,7 @@
   <link href="https://agmtopy.gitee.io/atom.xml" rel="self"/>
   
   <link href="https://agmtopy.gitee.io/"/>
-  <updated>2023-01-05T17:05:10.797Z</updated>
+  <updated>2023-01-08T14:44:17.103Z</updated>
   <id>https://agmtopy.gitee.io/</id>
   
   <author>
@@ -18,12 +18,12 @@
   
   <entry>
     <title>Cola4.0的工程实践</title>
-    <link href="https://agmtopy.gitee.io/2022/12/24/1.%E6%9D%82%E8%AE%B0/Cola4-0%E7%9A%84%E6%9C%80%E4%BD%B3%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/"/>
-    <id>https://agmtopy.gitee.io/2022/12/24/1.%E6%9D%82%E8%AE%B0/Cola4-0%E7%9A%84%E6%9C%80%E4%BD%B3%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/</id>
+    <link href="https://agmtopy.gitee.io/2022/12/24/1.%E6%9D%82%E8%AE%B0/Cola4.0%E7%9A%84%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/"/>
+    <id>https://agmtopy.gitee.io/2022/12/24/1.%E6%9D%82%E8%AE%B0/Cola4.0%E7%9A%84%E5%B7%A5%E7%A8%8B%E5%AE%9E%E8%B7%B5/</id>
     <published>2022-12-24T03:30:46.000Z</published>
-    <updated>2023-01-05T17:05:10.797Z</updated>
+    <updated>2023-01-08T14:44:17.103Z</updated>
     
-    <content type="html"><![CDATA[<h1>Cola4.0的工程实践</h1><p>cola在今年迎来了4.0版本,在最新的版本中对<B>包结构</B>进行了调整以及将COLA项目整体划分为两个部分<B>COLA架构</B>和<B>COLA组件</B>;<br>下面先简单的介绍COLA的改变,再介绍CLOA4.0的工程实践</p><h2 id="COLA的改变"><a class="header-anchor" href="#COLA的改变"></a>COLA的改变</h2><p>COLA4.0的改变主要是聚焦与COLA架构和COLA组件两个部分:</p><ol><li>COLA架构：关注应用架构的定义和构建，提升应用质量。</li><li>COLA组件：提供应用开发所需要的可复用组件，提升研发效率。<br>作者Frank画了两张图很好的表现出来</li></ol><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/cola/COLA4.0%E5%88%86%E5%B1%82%E6%A8%A1%E5%9E%8B.png?raw=true" alt="COLA4.0分层模型"></p><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/cola/COLA%E6%9E%B6%E6%9E%84%E6%8A%BD%E8%B1%A1.png?raw=true" alt="COLA架构抽象"></p><h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2><p><a href="https://blog.csdn.net/significantfrank/article/details/110934799?spm=1001.2014.3001.5502">COLA 4.0：应用架构的最佳实践</a></p>]]></content>
+    <content type="html"><![CDATA[<h1>Cola4.0的工程实践</h1><p>cola在今年迎来了4.0版本,在最新的版本中对<B>包结构</B>进行了调整以及将COLA项目整体划分为两个部分<B>COLA架构</B>和<B>COLA组件</B>;<br>下面先简单的介绍COLA的改变,再介绍CLOA4.0的工程实践</p><h2 id="COLA的改变"><a class="header-anchor" href="#COLA的改变"></a>COLA的改变</h2><p>COLA4.0的改变主要是聚焦与COLA架构和COLA组件两个部分:</p><ol><li>COLA架构：关注应用架构的定义和构建，提升应用质量。</li><li>COLA组件：提供应用开发所需要的可复用组件，提升研发效率。<br>作者Frank画了两张图很好的表现出来</li></ol><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/cola/COLA4.0%E5%88%86%E5%B1%82%E6%A8%A1%E5%9E%8B.png?raw=true" alt="COLA4.0分层模型"></p><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/cola/COLA%E6%9E%B6%E6%9E%84%E6%8A%BD%E8%B1%A1.png?raw=true" alt="COLA架构抽象"></p><h2 id="COLA-4-0d的实践"><a class="header-anchor" href="#COLA-4-0d的实践"></a>COLA 4.0d的实践</h2><h3 id="创建项目"><a class="header-anchor" href="#创建项目"></a>创建项目</h3><p>创建项目命令与之前的相同还是执行以下命令即可:</p><blockquote><p>mvn archetype:generate  -DgroupId=com.agmtopy.demo  -DartifactId=cola-demo  -Dversion=1.0.0-SNAPSHOT  -Dpackage=com.agmtopy.demo  -DarchetypeArtifactId=cola-framework-archetype-web  -DarchetypeGroupId=com.alibaba.cola  -DarchetypeVersion=4.3.1</p></blockquote><p>稍微注意修改 #groupId#/#artifactId#/#package#;<br>这个命令在PowerShell不能执行,参数传递错误,需要在CMD或者shell下执行</p><p>创建完成项目后可以看到项目目录如下:</p><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/cola/cola%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84_pom.jpg?raw=true" alt="cola项目结构_maven"></p><p>使用<B>gradle init</B>将maven转换成gradle项目</p><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/cola/cola%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84_gradle.jpg?raw=true" alt="cola项目结构_gradle"></p><p>在maven项目转换成gradle项目时遇到几个问题:</p><ol><li>gradle ext定义常量在使用kotlin定义时,方式为<B>val</B></li><li>主build.gradle.kts引入BOM,子项目使用组件版本问题未解决,现在还是通过在子项目中直接引入的目标组件</li></ol><p>项目build成功后,通过<B>Application.main</B>启动即可访问</p><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/cola/cola_helloworld.jpg?raw=true" alt="cola_helloworld"></p><h3 id="项目结构"><a class="header-anchor" href="#项目结构"></a>项目结构</h3><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/cola/cola%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84_gradle.jpg?raw=true" alt="cola项目结构_gradle"></p><p>通过<B>cola-framework-archetype-web</B>创建出来的项目结构如上所示,这个结构比较符合标准项目的定义,在实际使用中我进行了部分调整,调整后的结构如下所示</p><h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2><p><a href="https://blog.csdn.net/significantfrank/article/details/110934799?spm=1001.2014.3001.5502">COLA 4.0：应用架构的最佳实践</a></p>]]></content>
     
     
       
