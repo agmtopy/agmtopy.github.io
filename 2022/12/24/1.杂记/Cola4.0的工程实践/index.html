@@ -422,7 +422,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    555
+                    657
                 </div>
                 
 
@@ -476,7 +476,8 @@
 <p><img src="https://github.com/agmtopy/noteBook/blob/master/png/cola/cola_helloworld.jpg?raw=true" alt="cola_helloworld"></p>
 <h3 id="项目结构"><a class="header-anchor" href="#项目结构"></a>项目结构</h3>
 <p><img src="https://github.com/agmtopy/noteBook/blob/master/png/cola/cola%E9%A1%B9%E7%9B%AE%E7%BB%93%E6%9E%84_gradle.jpg?raw=true" alt="cola项目结构_gradle"></p>
-<p>通过<B>cola-framework-archetype-web</B>创建出来的项目结构如上所示,这个结构比较符合标准项目的定义,在实际使用中我进行了部分调整,调整后的结构如下所示</p>
+<p>通过<B>cola-framework-archetype-web</B>创建出来的项目结构如上所示,这个结构比较符合标准项目的定义;<br>
+在实际使用中结合目前团队现有方案我进行了部分调整,调整后的结构如下所示</p>
 <p><img src="https://github.com/agmtopy/noteBook/blob/master/png/cola/cola%E9%A1%B9%E7%9B%AE%E5%AE%9E%E8%B7%B5.png?raw=true" alt="项目实践"></p>
 <pre class="line-numbers language-none"><code class="language-none">
 ├‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧integrationtest‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧‧┤
@@ -490,7 +491,11 @@
 新增:<B>integrationtest</B>作为通用测试的模块<br>
 新增:<B>configure</B>作为业务配置的模块,专门处理业务配置<br>
 改变:<B>adapter</B>模块扩充为<B>api/app/batch</B>三个模块,其中app和batch作为实例的启动入口<br>
-改变:<B>app</B>模块扩充为<B>joblay/business/configure</B>三个模块,作为业务处理</p>
+改变:<B>app</B>模块扩充为<B>joblay/business/configure</B>三个模块,作为业务处理<br>
+改变:<B>infrastructure</B>层新增加<B>common</B>模块,承载通用处理和工具类的职能<br>
+删除:删除<B>start</B>模块,将启动模块下沉到<B>app</B>和<B>batch</B>中</p>
+<p>在这个模块设计中<B>joblay</B>存在的意义是用来实现批量业务领域内的功能;由于<B>app</B>和<B>batch</B>都只是承担start的功能;</p>
+<p>项目地址为<B><a target="_blank" rel="noopener" href="https://github.com/agmtopy/cola-demo">https://github.com/agmtopy/cola-demo</a></B></p>
 <h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
 <p><a target="_blank" rel="noopener" href="https://blog.csdn.net/significantfrank/article/details/110934799?spm=1001.2014.3001.5502">COLA 4.0：应用架构的最佳实践</a></p>
 
@@ -795,7 +800,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            176.5k
+                                            176.6k
                                         </span>&nbsp;字
                                         
                                             
