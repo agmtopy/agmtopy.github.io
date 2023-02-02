@@ -422,7 +422,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    613
+                    516
                 </div>
                 
 
@@ -447,84 +447,10 @@
 <p>在近两年的工作中一直是在适用的是mybatis框架，进行数据库的相关操作。这次来进行对mybatis源代码的一个学习。回想一下第一份工作时还使用的是ibatis，着实有一些岁月了。下面来一步一步的进行分析</p>
 <h2 id="调试环境的搭建"><a class="header-anchor" href="#调试环境的搭建"></a>调试环境的搭建</h2>
 <p>参照芋大的代码，在设置maven的时候需要指定中央仓库这样稍微快一点</p>
-<p>使用<strong>AutoConstructorTest</strong>进行测试</p>
-<h2 id="mybatis的分层职责"><a class="header-anchor" href="#mybatis的分层职责"></a>mybatis的分层职责</h2>
-<table>
-<thead>
-<tr>
-<th>组件</th>
-<th>作用</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>sqlSession</td>
-<td>接口层</td>
-</tr>
-<tr>
-<td>配置解析</td>
-<td>核心处理层</td>
-</tr>
-<tr>
-<td>参数映射</td>
-<td>核心处理层</td>
-</tr>
-<tr>
-<td>SQL解析</td>
-<td>核心处理层</td>
-</tr>
-<tr>
-<td>SQl执行</td>
-<td>核心处理层</td>
-</tr>
-<tr>
-<td>结果集映射</td>
-<td>核心处理层</td>
-</tr>
-<tr>
-<td>插件</td>
-<td>核心处理层</td>
-</tr>
-<tr>
-<td>数据源模块</td>
-<td>基础支持层</td>
-</tr>
-<tr>
-<td>事务管理模块</td>
-<td>基础支持层</td>
-</tr>
-<tr>
-<td>缓存模块</td>
-<td>基础支持层</td>
-</tr>
-<tr>
-<td>Binding模块</td>
-<td>基础支持层</td>
-</tr>
-<tr>
-<td>反射模块</td>
-<td>基础支持层</td>
-</tr>
-<tr>
-<td>类型转化</td>
-<td>基础支持层</td>
-</tr>
-<tr>
-<td>日志模块</td>
-<td>基础支持层</td>
-</tr>
-<tr>
-<td>资源加载</td>
-<td>基础支持层</td>
-</tr>
-<tr>
-<td>解析器模块</td>
-<td>基础支持层</td>
-</tr>
-</tbody>
-</table>
+<p>使用<strong>org.apache.ibatis.autoconstructor.AutoConstructorTest</strong>进行测试,也可以查看github上的源代码<a target="_blank" rel="noopener" href="https://github.com/mybatis/mybatis-3/blob/aa22f9ec1c48639c5db252e34b8809ee93ce3ef4/src/test/java/org/apache/ibatis/autoconstructor/AutoConstructorTest.java#L36">地址</a></p>
 <h2 id="核心基础组件"><a class="header-anchor" href="#核心基础组件"></a>核心基础组件</h2>
-<p>核心的基础组件：</p>
+<p>核心的基础组件：<B>SqlSessionFactory和SqlSession</B>,<B>Configuration</B>,<B>Executor</B>,<B>MapperProxyFactory和MapperProxy</B>,<B>Plugin</B></p>
+<p>这四大组件是注册Mybatis框架重要的基础组件,下面就详细来进行分析;</p>
 <ol>
 <li><strong>SqlSession</strong>是抽象处理出来为JDBC生成的Connection对象的SqlSession对象，这样才能与数据库开启“沟通”，通过SqlSession可以实现增删改查的接口</li>
 </ol>
@@ -867,7 +793,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            176.6k
+                                            177k
                                         </span>&nbsp;字
                                         
                                             

@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="mybatis插件机制, agmtopy博客">
+    <meta name="keywords" content="MyBatis的插件机制源代码解析, agmtopy博客">
     <meta name="description" content="你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>mybatis插件机制 | agmtopy博客</title>
+    <title>MyBatis的插件机制源代码解析 | agmtopy博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -267,12 +267,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/61.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/66.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">mybatis插件机制</h1>
+                    <h1 class="description center-align post-title">MyBatis的插件机制源代码解析</h1>
                 </div>
             </div>
         </div>
@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    287
+                    751
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    1 分钟
+                    3 分钟
                 </div>
                 
 
@@ -443,35 +443,109 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1>mybatis插件机制</h1>
-<p>mybatis框架支持通过插件机制来扩展功能，分别提供了4种扩展点：</p>
+                <h1>MyBatis的插件机制源代码解析</h1>
+<p>MyBatis插件机制主要从插件的执行流程来进行分析,分别是<B>查找/注册阶段</B>,<B>包装阶段</B>,<B>执行阶段</B>和<B>扩展点</B>来分析</p>
+<h2 id="查找-注册MyBatis插件阶段"><a class="header-anchor" href="#查找-注册MyBatis插件阶段"></a>查找/注册MyBatis插件阶段</h2>
+<ul>
+<li>org.apache.ibatis.session.Configuration#addInterceptor</li>
+</ul>
+<p>是使用<B>Configuration#addInterceptor</B>将插件注册到<B>InterceptorChain</B>拦截器链上;</p>
+<p>有两个种使用的方法:</p>
 <ol>
-<li>Executor ： mybatis的执行器，用于执行curd操作</li>
-<li>StatementHandler：数据库处理对象，用于执行sql操作</li>
-<li>ParameterHandler：处理参数对象</li>
-<li>ResultSetHandler：处理返回结果集</li>
+<li>
+<p>org.apache.ibatis.builder.xml.XMLConfigBuilder#pluginElement<br>
+通过解析XML配置文件中的<plugins>标签,获取到插件类名,在通过类名加载的方式</p>
+</li>
+<li>
+<p>直接外部调用的方式,常见的MyBatis-plus就是通过这种方式来注册插件的<br>
+<a target="_blank" rel="noopener" href="https://github.com/baomidou/mybatis-plus/blob/786f25ec272a828c69d73e83c0485b8fe0f4a942/mybatis-plus-extension/src/main/java/com/baomidou/mybatisplus/extension/spring/MybatisSqlSessionFactoryBean.java#L508">MybatisSqlSessionFactoryBean.buildSqlSessionFactory()</a></p>
+</li>
 </ol>
-<p>其中<strong>executor</strong>和<strong>statementHandler</strong>的区别在于executor是使用connection的一方，statementHandler通过对connection进行封装。</p>
-<h2 id="插件的基本原理"><a class="header-anchor" href="#插件的基本原理"></a>插件的基本原理</h2>
-<p>通过责任链的模式对请求进行处理，使用代理模式对目标类进行增强从而达到处理的目的。</p>
-<h2 id="插件的注册时机？"><a class="header-anchor" href="#插件的注册时机？"></a>插件的注册时机？</h2>
-<p>插件是在configation.newParameterHandler/newResultSetHandler/newStatementHandler/newExecutor方法中会注册拦截器插件<br>
-<img src="https://s1.ax1x.com/2020/04/23/J09Llt.png" alt="J09Llt.png"></p>
-<h2 id="插件的执行时机？"><a class="header-anchor" href="#插件的执行时机？"></a>插件的执行时机？</h2>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
-<span class="token keyword">public</span> <span class="token class-name">Object</span> <span class="token function">invoke</span><span class="token punctuation">(</span><span class="token class-name">Object</span> proxy<span class="token punctuation">,</span> <span class="token class-name">Method</span> method<span class="token punctuation">,</span> <span class="token class-name">Object</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Throwable</span> <span class="token punctuation">&#123;</span>
-  <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
-    <span class="token class-name">Set</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Method</span><span class="token punctuation">></span></span> methods <span class="token operator">=</span> signatureMap<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>method<span class="token punctuation">.</span><span class="token function">getDeclaringClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>methods <span class="token operator">!=</span> <span class="token keyword">null</span> <span class="token operator">&amp;&amp;</span> methods<span class="token punctuation">.</span><span class="token function">contains</span><span class="token punctuation">(</span>method<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-      <span class="token keyword">return</span> interceptor<span class="token punctuation">.</span><span class="token function">intercept</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Invocation</span><span class="token punctuation">(</span>target<span class="token punctuation">,</span> method<span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<p>在通过xml配置文件进行加载时,会根据自定义的类加载器 -&gt; 默认类加载器 -&gt; 当前线程的类加载器 -&gt; ClassLoaderWrapper.getClassLoader() -&gt; 系统类加载器的顺序来尝试进行加载,这里比较特别;</p>
+<h2 id="包装阶段"><a class="header-anchor" href="#包装阶段"></a>包装阶段</h2>
+<p>将Interceptor注册到<B>InterceptorChain</B>拦截器链上之后,下一步就是将InterceptorChain与Executor进行关联;</p>
+<ul>
+<li>DefaultSqlSessionFactory_openSessionFromDataSource</li>
+</ul>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/M-MyBatis/DefaultSqlSessionFactory_openSessionFromDataSource.png?raw=true" alt="DefaultSqlSessionFactory_openSessionFromDataSource.png"></p>
+<p>我们以openSessionFromDataSource方法为例,在创建<B>Executor</B>的过程中会向Plugin.wrap(Executor);</p>
+<p>下面我们详细分析Plugin.wrap()方法</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Plugin</span> <span class="token keyword">implements</span> <span class="token class-name">InvocationHandler</span> <span class="token punctuation">&#123;</span>
+  
+  <span class="token comment">//wrap方法</span>
+  <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">Object</span> <span class="token function">wrap</span><span class="token punctuation">(</span><span class="token class-name">Object</span> target<span class="token punctuation">,</span> <span class="token class-name">Interceptor</span> interceptor<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Class</span><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span><span class="token punctuation">,</span> <span class="token class-name">Set</span><span class="token punctuation">&lt;</span><span class="token class-name">Method</span><span class="token punctuation">></span><span class="token punctuation">></span></span> signatureMap <span class="token operator">=</span> <span class="token function">getSignatureMap</span><span class="token punctuation">(</span>interceptor<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> type <span class="token operator">=</span> target<span class="token punctuation">.</span><span class="token function">getClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">Class</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span><span class="token punctuation">[</span><span class="token punctuation">]</span> interfaces <span class="token operator">=</span> <span class="token function">getAllInterfaces</span><span class="token punctuation">(</span>type<span class="token punctuation">,</span> signatureMap<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>interfaces<span class="token punctuation">.</span>length <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">return</span> <span class="token class-name">Proxy</span><span class="token punctuation">.</span><span class="token function">newProxyInstance</span><span class="token punctuation">(</span>
+          type<span class="token punctuation">.</span><span class="token function">getClassLoader</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+          interfaces<span class="token punctuation">,</span>
+          <span class="token keyword">new</span> <span class="token class-name">Plugin</span><span class="token punctuation">(</span>target<span class="token punctuation">,</span> interceptor<span class="token punctuation">,</span> signatureMap<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
-    <span class="token keyword">return</span> method<span class="token punctuation">.</span><span class="token function">invoke</span><span class="token punctuation">(</span>target<span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">throw</span> <span class="token class-name">ExceptionUtil</span><span class="token punctuation">.</span><span class="token function">unwrapThrowable</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> target<span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+
+  <span class="token comment">//invoke</span>
+  <span class="token annotation punctuation">@Override</span>
+  <span class="token keyword">public</span> <span class="token class-name">Object</span> <span class="token function">invoke</span><span class="token punctuation">(</span><span class="token class-name">Object</span> proxy<span class="token punctuation">,</span> <span class="token class-name">Method</span> method<span class="token punctuation">,</span> <span class="token class-name">Object</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Throwable</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+      <span class="token comment">//signatureMap是目标执行器需要执行的插件方法</span>
+      <span class="token class-name">Set</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Method</span><span class="token punctuation">></span></span> methods <span class="token operator">=</span> signatureMap<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>method<span class="token punctuation">.</span><span class="token function">getDeclaringClass</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span>methods <span class="token operator">!=</span> <span class="token keyword">null</span> <span class="token operator">&amp;&amp;</span> methods<span class="token punctuation">.</span><span class="token function">contains</span><span class="token punctuation">(</span>method<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">return</span> interceptor<span class="token punctuation">.</span><span class="token function">intercept</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Invocation</span><span class="token punctuation">(</span>target<span class="token punctuation">,</span> method<span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token punctuation">&#125;</span>
+      <span class="token keyword">return</span> method<span class="token punctuation">.</span><span class="token function">invoke</span><span class="token punctuation">(</span>target<span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Exception</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">throw</span> <span class="token class-name">ExceptionUtil</span><span class="token punctuation">.</span><span class="token function">unwrapThrowable</span><span class="token punctuation">(</span>e<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
   <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>从<strong>Plugin</strong>中的invoker方法可以看出具体执行插件的方法是在代理类执行的时候会判断时候有插件如果有插件就执行插件中的方法并返回。</p>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>Plugin实现<B>InvocationHandler</B>接口,重写<B>invoke</B>方法,invoke方法在<B>targer</B>对象执行方法时都会先进入invoke方法体,这样就为插件的执行提供了底层基础;</p>
+<h2 id="执行阶段"><a class="header-anchor" href="#执行阶段"></a>执行阶段</h2>
+<ul>
+<li>
+<p>声明插件<br>
+插件在声明时主要是使用<B>@Intercepts</B>和<B>@Signature</B>注解来对插件类进行描述,描述插件的作用域(类/方法)</p>
+</li>
+<li>
+<p>执行过程</p>
+</li>
+</ul>
+<ol>
+<li>
+<p>pluginAll<br>
+在<B>Configuration</B>中创建Handler后,立即执行pluginAll方法,可以看到分别为<B>ResultSetHandler</B>,<B>ParameterHandler</B>,<B>StatementHandler</B>,<B>Executor</B>四种</p>
+</li>
+<li>
+<p>当Target class在执行时会先执行<B>Plugin.invoke</B>方法,就会执行<B>Interceptor.intercept</B>中的实现方法</p>
+</li>
+</ol>
+<h2 id="扩展点"><a class="header-anchor" href="#扩展点"></a>扩展点</h2>
+<p>在上面的执行步骤中可以看到<B><a target="_blank" rel="noopener" href="https://github.com/mybatis/mybatis-3/blob/0d0223b2df3a53e4a0b2e2be1b990091bd149fd4/src/main/java/org/apache/ibatis/session/Configuration.java#L683">ResultSetHandler</a></B>,<B><a target="_blank" rel="noopener" href="https://github.com/mybatis/mybatis-3/blob/0d0223b2df3a53e4a0b2e2be1b990091bd149fd4/src/main/java/org/apache/ibatis/session/Configuration.java#L677">ParameterHandler</a></B>,<B><a target="_blank" rel="noopener" href="https://github.com/mybatis/mybatis-3/blob/0d0223b2df3a53e4a0b2e2be1b990091bd149fd4/src/main/java/org/apache/ibatis/session/Configuration.java#L690">StatementHandler</a></B>,<B><a target="_blank" rel="noopener" href="https://github.com/mybatis/mybatis-3/blob/0d0223b2df3a53e4a0b2e2be1b990091bd149fd4/src/main/java/org/apache/ibatis/session/Configuration.java#L700">Executor</a></B>执行pluginAll方法;</p>
+<ul>
+<li>
+<p>Executor<br>
+一个 SqlSession 对应一个 Executor 对象，Executor对象负责增删改查的具体操作;</p>
+</li>
+<li>
+<p>ParameterHandler<br>
+mybatis 提供的参数处理器, 没有过多的类关联关系, 只有一个默认的实现类;</p>
+</li>
+<li>
+<p>StatementHandler<br>
+StatementHandler是mybatis创建Statement的处理器, 会负责Statement的创建工作,主要是<B>SimpleStatementHandler</B>,<B>PrepareStatementHandler</B>,<B>CallableStatementHandler</B>组成;主要是进行适配JDBC的Statement创建和执行的工作</p>
+</li>
+<li>
+<p>ResultSetHandler<br>
+ResultSetHandler 作用域只有一个, 那就是负责处理 Statement 返回的结果, 根据定义返回类型进行封装返回</p>
+</li>
+</ul>
+<h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
+<p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/cf8e5178ca31">mybatis 四大核心组件</a><br>
+<a target="_blank" rel="noopener" href="https://www.cnblogs.com/tanghaorong/p/14094521.html#_label1">Mybatis3详解（十九）----SqlSession下的四大对象</a></p>
 
                 
             </div>
@@ -776,7 +850,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            176.6k
+                                            177k
                                         </span>&nbsp;字
                                         
                                             
