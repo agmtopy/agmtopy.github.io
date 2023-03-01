@@ -422,7 +422,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    684
+                    680
                 </div>
                 
 
@@ -491,7 +491,10 @@
 <li>任务缓存队列已满，未达到最大线程数，<strong>将会创建新的线程执行任务</strong></li>
 <li>达到最大线程数，执行拒绝策略</li>
 </ol>
-<h2 id="拒绝策略"><a class="header-anchor" href="#拒绝策略"></a>拒绝策略</h2>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/%E7%BA%BF%E7%A8%8B%E6%B1%A0%E6%89%A7%E8%A1%8C%E6%B5%81%E7%A8%8B.png?raw=true" alt="线程池执行流程"></p>
+<ul>
+<li>拒绝策略类型</li>
+</ul>
 <table>
 <thead>
 <tr>
@@ -519,7 +522,7 @@
 </tbody>
 </table>
 <p><strong>ThreadPoolExecutor.CallerRunsPolicy()</strong> 这种拒绝策略比较合理，通过将任务由提交任务的线程去执行这样可以减少任务的累积</p>
-<h2 id="通过Executers创建的线程池"><a class="header-anchor" href="#通过Executers创建的线程池"></a>通过Executers创建的线程池</h2>
+<h3 id="Executers-new"><a class="header-anchor" href="#Executers-new"></a>Executers.new</h3>
 <table>
 <thead>
 <tr>
@@ -546,6 +549,7 @@
 </tr>
 </tbody>
 </table>
+<h3 id="ForkJoinPool"><a class="header-anchor" href="#ForkJoinPool"></a>ForkJoinPool</h3>
 <p><strong>ForkJoinPool线程池</strong></p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">ForkJoinPool</span> forkJoinPool <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ForkJoinPool</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token class-name">ForkJoinTask</span> task <span class="token operator">=</span> forkJoinPool<span class="token punctuation">.</span><span class="token function">submit</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Fibonacci</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -882,7 +886,7 @@ task<span class="token punctuation">.</span><span class="token function">get</sp
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            177k
+                                            175.2k
                                         </span>&nbsp;字
                                         
                                             

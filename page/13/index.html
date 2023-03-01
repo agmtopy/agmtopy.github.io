@@ -706,23 +706,21 @@ AOP术语
             
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2018/03/07/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/3.finishBeanFactoryInitialization%E5%8A%A0%E8%BD%BD%E6%B5%81%E7%A8%8B/">
+                    <a href="/2018/03/07/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/3.%E6%99%AE%E9%80%9Abean%E5%AF%B9%E8%B1%A1%E7%9A%84%E5%88%9D%E5%A7%8B%E5%8C%96%E6%B5%81%E7%A8%8B/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/86.jpg" class="responsive-img" alt="finishBeanFactoryInitialization加载bean流程">
+                            <img src="/medias/featureimages/42.jpg" class="responsive-img" alt="普通bean对象的初始化流程">
                             
-                            <span class="card-title">finishBeanFactoryInitialization加载bean流程</span>
+                            <span class="card-title">普通bean对象的初始化流程</span>
                         </div>
                     </a>
 
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                finishBeanFactoryInitialization加载流程
-finishBeanFactoryInitialization入口方法
-代码展示
-finishBeanFactoryInitialization是加载普通的spring
+                                普通bean对象的初始化流程
+在上文中分析ApplicationContext的refresh过程,在这过程中对于业务bean对象添加到Spirng容器的过程,在这个流程的最后一步骤就是初始化业务bean对象,下面这个业务bean对象的初始
                             
                         </div>
                         <div class="publish-info">
@@ -756,25 +754,23 @@ finishBeanFactoryInitialization是加载普通的spring
             
             <div class="article col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2018/03/05/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/2.bean%E7%9A%84%E7%94%9F%E5%91%BD%E5%91%A8%E6%9C%9F/">
+                    <a href="/2018/03/05/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/2.ApplicationContext%E5%AE%B9%E5%99%A8%E7%9A%84refresh%E7%9A%84%E8%BF%87%E7%A8%8B/">
                         <div class="card-image">
                             
                             
-                            <img src="/medias/featureimages/4.jpg" class="responsive-img" alt="Bean容器refresh的过程">
+                            <img src="/medias/featureimages/47.jpg" class="responsive-img" alt="ApplicationContext容器的refresh过程">
                             
-                            <span class="card-title">Bean容器refresh的过程</span>
+                            <span class="card-title">ApplicationContext容器的refresh过程</span>
                         </div>
                     </a>
 
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                bean的生命周期
-bean的生命周期可以通过**AbstrctApplicationContext.refresh()**方法进行加载普通bean可以得出。
-refresh()
-
-@Override
-	public void refres
+                                前言
+在Spring框架中要说最重要的方法就是AbstrctApplicationContext.refresh()方法,在这个方法中完成对容器的刷新和bean对象的加载过程,下面就详细对这个方法进行分析;
+refresh()方法概述
+@O
                             
                         </div>
                         <div class="publish-info">
@@ -1024,7 +1020,7 @@ java内存模型是java的规范，定义了语义到实现的规范。主要有
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            177k
+                                            175.2k
                                         </span>&nbsp;字
                                         
                                             

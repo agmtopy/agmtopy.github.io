@@ -422,7 +422,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    922
+                    953
                 </div>
                 
 
@@ -527,11 +527,12 @@
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p>用的是<strong>unsafe.getAndAddInt</strong>方法，这是一个调用硬件进行CAS的方法，通过自旋和CAS保证了并发的安全性</p>
 <h2 id="AtomicIntger在高并发下的性能问题"><a class="header-anchor" href="#AtomicIntger在高并发下的性能问题"></a>AtomicIntger在高并发下的性能问题</h2>
-<p><strong>AtomicIntger</strong>底层是用一个<strong>volatile</strong>进行修饰了，因此在高并发的场景下，线程会不断的进行<strong>flush</strong>、<strong>reflush</strong>。<br>
-因此<strong>LongAdder</strong>是更新方案，采用的是<strong>base</strong>加<strong>call[/]<strong>用分段的思想，在并发激烈的场景下会加线程需要的资源分配到不同的call中去，在需要sum等操作时遍历</strong>call[]<strong>数组和</strong>base</strong>从而得出值</p>
+<p><strong>AtomicIntger</strong>底层是用一个<strong>volatile</strong>进行修饰<B>value</B>字段，因此在高并发的场景下，线程会不断的进行<strong>flush</strong>、<strong>reflush</strong>。<br>
+因此<strong>LongAdder</strong>是更新方案，采用的是<strong>base</strong>即value和<B>call[]</B>数组用分段的思想，在并发激烈的场景下会加线程需要的资源分配到不同的call中去，在需要sum等操作时遍历<strong>call[]<strong>数组和</strong>base</strong>从而得出值</p>
 <h2 id="原子类和volatile的区别"><a class="header-anchor" href="#原子类和volatile的区别"></a>原子类和volatile的区别</h2>
-<p>原子类是对类的一系列操作进行了封装，让这一系列的操作成为一个原子性的动作。volatile修饰的变量是在内存模型上对其他线程透明。<br>
-两者的适用场景也不一样，volatile适用于可见性方面，原子类适用于对一系列操作具有的原子性的要求。</p>
+<p>原子类是对类的一系列操作进行了封装，让这一系列的操作成为一个原子性的动作。volatile修饰的变量是在内存模型上对其他线程透明;<br>
+一个表示的语义是并发安全,一个表示的语义是线程间的可见性;<br>
+两者的适用场景也不一样，volatile适用于可见性方面，原子类适用于对一系列操作具有的原子性的要求;</p>
 <h2 id="LongAccumulator"><a class="header-anchor" href="#LongAccumulator"></a>LongAccumulator</h2>
 <p><strong>LongAccumulator</strong>是对<strong>longAdder</strong>的一个升级，提供了自定义函数的功能，构造器如下</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">LongAccumulator</span><span class="token punctuation">(</span><span class="token class-name">LongBinaryOperator</span> accumulatorFunction<span class="token punctuation">,</span>
@@ -870,7 +871,7 @@ flag<span class="token punctuation">.</span><span class="token function">await</
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            177k
+                                            175.2k
                                         </span>&nbsp;字
                                         
                                             

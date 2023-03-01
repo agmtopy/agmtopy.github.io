@@ -458,7 +458,7 @@
 <h3 id="偏向锁-轻量级锁-重量级锁"><a class="header-anchor" href="#偏向锁-轻量级锁-重量级锁"></a>偏向锁/轻量级锁/重量级锁</h3>
 <p>这三种都是描述synchronized持有的锁，synchronized锁底层是通过持有共享对象的moniter来实现的，在持有对象的对象头用mark word的标记，当前对象是属于那种锁。</p>
 <h4 id="偏向锁"><a class="header-anchor" href="#偏向锁"></a>偏向锁</h4>
-<p>偏向锁：当共享对象没有发生线程竞争时，执行线程持有锁就是偏向锁。此时共享对象的对象将持有线程记录下来，再次访问该对象时，如果是执行线程就直接获取，如果不是执行线程该锁会升级为轻量级锁</p>
+<p>偏向锁：当共享对象没有发生线程竞争时，执行线程持有锁就是偏向锁。此时共享对象的对象头将持有线程的ID记录下来，再次访问该对象时，如果是执行线程就直接获取，如果不是执行线程该锁会升级为轻量级锁;</p>
 <h4 id="轻量级锁"><a class="header-anchor" href="#轻量级锁"></a>轻量级锁</h4>
 <p>轻量级锁：当共享对象存在资源竞争时，如果之前的锁是偏向锁的状态就会发生锁的升级，升级为轻量级锁。轻量级锁采用CAS和自旋的机制，避免了线程切换所带来的开销</p>
 <h4 id="重量级锁"><a class="header-anchor" href="#重量级锁"></a>重量级锁</h4>
@@ -466,7 +466,7 @@
 <h3 id="可重入锁和不可重入锁"><a class="header-anchor" href="#可重入锁和不可重入锁"></a>可重入锁和不可重入锁</h3>
 <p>可重入锁指的是当前持有锁的线程，再次请求持有锁的时候可以直接获得；<br>
 不可重入锁指定是当前持有锁的线程，再次请求持有锁的时候也不能直接获得需要排队；<br>
-<strong>ReentrantLock</strong>就是重入锁</p>
+<strong>ReentrantLock</strong>就是可重入锁</p>
 <h3 id="共享锁-非共享锁"><a class="header-anchor" href="#共享锁-非共享锁"></a>共享锁/非共享锁</h3>
 <p>共享锁指的是一个锁可以被多个线程获得；非共享锁又叫独占锁，只能被一个线程使用。<br>
 <strong>ReadWriteLock</strong>中的读锁就是共享锁，write就是独占锁。</p>
@@ -493,7 +493,7 @@
 <ul>
 <li>将锁对象的monitor计数减1操作</li>
 </ul>
-<p>synchronized修饰方法时，是通过==ACC_SYNCHRONIZED==标记位来实现的，<B>ACC_SYNCHRONIZED</B>标记位标记的方法会在尝试获取到monitor锁后才执行，执行完毕后就释放。</p>
+<p>synchronized修饰方法时，是通过<B>ACC_SYNCHRONIZED</B>标记位来实现的，<B>ACC_SYNCHRONIZED</B>标记位标记的方法会在尝试获取到monitor锁后才执行，执行完毕后就释放。</p>
 <h2 id="RLock接口的常用方法"><a class="header-anchor" href="#RLock接口的常用方法"></a>RLock接口的常用方法</h2>
 <table>
 <thead>
@@ -512,7 +512,7 @@
 <td>尝试获取锁，返回值表示获取成功还是失败</td>
 </tr>
 <tr>
-<td>tryLock()</td>
+<td>tryLock(time)</td>
 <td>带等待时间的tryLock()</td>
 </tr>
 <tr>
@@ -861,7 +861,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            177k
+                                            175.2k
                                         </span>&nbsp;字
                                         
                                             
