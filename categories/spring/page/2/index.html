@@ -598,7 +598,7 @@ spring中大量运用到模板模式，简单回顾一下模板模式就是
                                 spring MVC分析
 本章主要分析一下spring MVC的过程，主要从一下几个方面：
 spring MVC概述
-如果要在web环境中使用IOC容器，需要spring IOC设计一个启动过程把IOC容器导入。在这个过程中一方面处理Web
+如果要在web环境中使用IOC容器，需要spring IOC设计一个启动过程把web容器导入。在这个过程中一方面处理Web
                             
                         </div>
                         <div class="publish-info">
@@ -646,8 +646,8 @@ spring MVC概述
                             
                                 AOP源代码分析
 阅读spring的源代码，来查看spring是如何实现AOP增强的
-探寻bean初始化的方法
-在普通bean的加载流程中，如果一个bean是被AOP拦截增强后doCreateBean方法返回的是CGLib动态代理类生成的对
+被AOP代理的Bean对象创建过程
+在普通bean的加载流程中，如果一个bean是被AOP拦截增强后doCreateBean方法返回的是CGLib动态代理
                             
                         </div>
                         <div class="publish-info">
