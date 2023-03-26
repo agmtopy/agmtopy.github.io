@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="spring 持久化的设计, agmtopy博客">
+    <meta name="keywords" content="spring JDBC持久化设计, agmtopy博客">
     <meta name="description" content="你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>spring 持久化的设计 | agmtopy博客</title>
+    <title>spring JDBC持久化设计 | agmtopy博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -267,12 +267,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/81.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">spring 持久化的设计</h1>
+                    <h1 class="description center-align post-title">spring JDBC持久化设计</h1>
                 </div>
             </div>
         </div>
@@ -443,25 +443,25 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1>spring持久化的设计</h1>
+                <h1>spring JDBC持久化设计</h1>
 <p>spring中大量运用到<strong>模板模式</strong>，简单回顾一下模板模式就是</p>
 <blockquote>
-<p>抽象类中定义好产品的步骤，不同的之类去实现相同的步骤方法，客户端调用抽象类的方法，执行统一的产品步骤，从而返回结果有点类似于桥接模式的一半，将建造过程抽象出来，形成统一的模板方法。可以使用钩子方法改造模板方法流程，从而增加健壮性。</p>
+<p>抽象类中定义好产品的步骤，不同的子类去实现相同的步骤方法，客户端调用抽象类的方法，执行统一的产品步骤，从而返回结果有点类似于桥接模式的一半，将建造过程抽象出来，形成统一的模板方法。可以使用钩子方法改造模板方法流程，从而增加健壮性。</p>
 </blockquote>
 <h2 id="JdbcTemplate分析"><a class="header-anchor" href="#JdbcTemplate分析"></a>JdbcTemplate分析</h2>
 <h3 id="使用代码"><a class="header-anchor" href="#使用代码"></a>使用代码</h3>
-<pre class="line-numbers language-yml" data-language="yml"><code class="language-yml"><span class="token key atrule">server</span><span class="token punctuation">:</span>
-  <span class="token key atrule">port</span><span class="token punctuation">:</span> <span class="token number">8080</span>
+<pre class="line-numbers language-yml" data-language="yml"><code class="language-yml">server:
+  port: 8080
 
-<span class="token key atrule">spring</span><span class="token punctuation">:</span>
-  <span class="token key atrule">profiles</span><span class="token punctuation">:</span>
-  <span class="token key atrule">active</span><span class="token punctuation">:</span> dev
+spring:
+  profiles:
+  active: dev
 
-  <span class="token key atrule">datasource</span><span class="token punctuation">:</span>
-    <span class="token key atrule">username</span><span class="token punctuation">:</span> root
-    <span class="token key atrule">password</span><span class="token punctuation">:</span> <span class="token number">111111</span>
-    <span class="token key atrule">url</span><span class="token punctuation">:</span> jdbc<span class="token punctuation">:</span>mysql<span class="token punctuation">:</span>//127.0.0.1<span class="token punctuation">:</span>3306/tables<span class="token punctuation">?</span>useUnicode=true<span class="token important">&amp;characterEncoding=utf-8&amp;serverTimezone=GMT</span>
-    <span class="token key atrule">driver-class-name</span><span class="token punctuation">:</span> com.mysql.jdbc.Driver
+  datasource:
+    username: root
+    password: 111111
+    url: jdbc:mysql:&#x2F;&#x2F;127.0.0.1:3306&#x2F;tables?useUnicode&#x3D;true&amp;characterEncoding&#x3D;utf-8&amp;serverTimezone&#x3D;GMT
+    driver-class-name: com.mysql.jdbc.Driver
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <ul>
 <li>UserDO.java</li>
@@ -1037,7 +1037,7 @@ createTransactionIfNecessary() -&gt; AbstractPlatformTransactionManager.getTrans
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            177k
+                                            177.6k
                                         </span>&nbsp;字
                                         
                                             
