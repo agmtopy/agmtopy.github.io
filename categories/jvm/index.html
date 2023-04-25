@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="分类: JVM, agmtopy博客">
+    <meta name="keywords" content="分类: jvm, agmtopy博客">
     <meta name="description" content="你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>分类: JVM | agmtopy博客</title>
+    <title>分类: jvm | agmtopy博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -343,7 +343,7 @@
                 
                 <a href="/categories/JVM/" title="JVM: 8">
                     <span class="chip center-align waves-effect waves-light
-                             chip-active "
+                             chip-default "
                             style="background-color: #D5F5E3;">JVM
                         <span class="tag-length">8</span>
                     </span>
@@ -530,6 +530,15 @@
                 </a>
                 
                 
+                <a href="/categories/jvm/" title="jvm: 1">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-active "
+                            style="background-color: #A3E4D7;">jvm
+                        <span class="tag-length">1</span>
+                    </span>
+                </a>
+                
+                
             </div>
         </div>
     </div>
@@ -543,37 +552,33 @@
             
             <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
                 <div class="card">
-                    <a href="/2022/12/03/12.JVM/9.Class%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E4%B8%8E%E5%8A%A0%E8%BD%BD/">
+                    <a href="/2023/04/05/20.%E7%AC%94%E8%AE%B0/40.G1GC%E7%9A%84%E7%AE%97%E6%B3%95%E4%B8%8E%E5%AE%9E%E7%8E%B0%E4%B9%8B%E7%AE%97%E6%B3%95%E7%AF%87%E7%AC%94%E8%AE%B0/">
                         <div class="card-image tag-image">
                             
                             
-                            <img src="/medias/featureimages/73.jpg" class="responsive-img" alt="Class文件格式与加载">
+                            <img src="/medias/featureimages/85.jpg" class="responsive-img" alt="《深入Java虚拟机：JVM G1GC的算法与实现》-算法篇笔记">
                             
-                            <span class="card-title">Class文件格式与加载</span>
+                            <span class="card-title">《深入Java虚拟机：JVM G1GC的算法与实现》-算法篇笔记</span>
                         </div>
                     </a>
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                Class文件格式与加载
-类文件结构
-
-类文件结构也就是Class文件的结构
-
-魔数:用于标识Class文件的版本
-常量池:主要用于保存字面量(类似于字符串等) 和 符号引用(类和接口的全限定名\字段名称以及描述符\方法名称和描述符); 由
+                                《深入Java虚拟机：JVM G1GC的算法与实现》-算法篇笔记
+这一篇文章主要是用于记录《深入Java虚拟机：JVM G1GC的算法与实现》一书中算法篇部分的笔记,主要分为引子、并发标记、转移、软实时性、分代G1GC模式;
+G1 GC是什
                             
                         </div>
                         <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-12-03
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-04-05
                             </span>
                             <span class="publish-author">
                                 
                                 <i class="fas fa-bookmark fa-fw icon-category"></i>
                                 
-                                <a href="/categories/JVM/" class="post-category">
-                                    JVM
+                                <a href="/categories/jvm/" class="post-category">
+                                    jvm
                                 </a>
                                 
                                 
@@ -584,8 +589,8 @@
                     
                     <div class="card-action article-tags">
                         
-                        <a href="/tags/jvm/">
-                            <span class="chip bg-color">jvm</span>
+                        <a href="/tags/%E7%AC%94%E8%AE%B0/">
+                            <span class="chip bg-color">笔记</span>
                         </a>
                         
                     </div>
@@ -593,216 +598,242 @@
                 </div>
             </div>
             
-            <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2022/12/01/12.JVM/8.%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E5%8F%8A%E7%AE%97%E6%B3%95%E5%9F%BA%E7%A1%80/">
-                        <div class="card-image tag-image">
-                            
-                            
-                            <img src="/medias/featureimages/53.jpg" class="responsive-img" alt="jvm-垃圾回收器及算法基础">
-                            
-                            <span class="card-title">jvm-垃圾回收器及算法基础</span>
-                        </div>
-                    </a>
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                垃圾回收器及算法基础
-前提介绍
-垃圾回收器(GC)的理论研究在很早直接就开始了,大概是在60年代lisp语言就开始使用内存分配和垃圾回收机制来管理程序的内存了,近现代这一方向也是保持着极高的研究热度,从G1-&gt;ZGC
+        </div>
+    </article>
+</main>
 
-算法基础
-对内
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-12-01
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/JVM/" class="post-category">
-                                    JVM
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
 
-                    
-                    <div class="card-action article-tags">
+
+
+    <footer class="page-footer bg-color">
+    
+                <div class="container row center-align"
+                    style="margin-bottom: 0px !important;">
+                    <div class="col s12 m8 l8 copy-right">
                         
-                        <a href="/tags/jvm/">
-                            <span class="chip bg-color">jvm</span>
-                        </a>
-                        
+                            <span id="year">
+                            </span>
+                            
+                                    <span id="year">
+                                    </span>
+                                    <a href="/about" target="_blank">
+                                    </a>
+                                    &nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+                                    |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery"
+                                        target="_blank">Matery</a>
+                                    <!-- <br> -->
+                                    
+                                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                                            class="white-color">
+                                            183.3k
+                                        </span>&nbsp;字
+                                        
+                                            
+                                                
+                                                    
+                                                        
+                                                            
+
+                                                                
+                                                                    
+
+                                                                        
+                                                                            <br>
+                                                                            
+                                                                                    <br>
+                                                                                    
                     </div>
-                    
-                </div>
-            </div>
+                    <div class="col s12 m4 l4 social-link social-statis">
+                        
+
+        
+            <a href="mailto:zjytian@gmail.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我"
+                data-position="top" data-delay="50">
+                <i class="fas fa-envelope-open"></i>
+            </a>
             
-            <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2022/11/30/12.JVM/7.%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80%E8%AE%BE%E8%AE%A1/">
-                        <div class="card-image tag-image">
-                            
-                            
-                            <img src="/medias/featureimages/23.jpg" class="responsive-img" alt="jvm-内存布局设计">
-                            
-                            <span class="card-title">jvm-内存布局设计</span>
-                        </div>
-                    </a>
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                内存布局设计
-JVM的内存设计上是划分为两个大的区域的启动时向操作系统分配的程序内存区域、直接对系统内存进行操作的区域,后者不属于JVM管理,我们主要是分析前者
-大体结构
 
+                
 
-程序计数器
-
-
-程序计数器是用来记录当前线程所执行的字节码的行号
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2022-11-30
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/JVM/" class="post-category">
-                                    JVM
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
                         
-                        <a href="/tags/jvm/">
-                            <span class="chip bg-color">jvm</span>
-                        </a>
-                        
+
+                                
+
+                                        
+
+                                                
+
+                                                        
                     </div>
-                    
                 </div>
-            </div>
-            
-            <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2021/09/26/12.JVM/6.G1GC%E7%9A%84%E7%AE%97%E6%B3%95%E4%B8%8E%E5%AE%9E%E7%8E%B0/">
-                        <div class="card-image tag-image">
-                            
-                            
-                            <img src="/medias/featureimages/12.jpg" class="responsive-img" alt="G1GC的算法与实现">
-                            
-                            <span class="card-title">G1GC的算法与实现</span>
-                        </div>
-                    </a>
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                G1GC的算法与实现-算法篇
-根据《深入Java虚拟机-JVM G1GC的算法与实现》-算法篇整理而来,该篇主要由以下章节组成
+</footer>
 
-第一章 G1GC是什么?
-第二章 并发标记
-第三章 转移
-第四章 软实时性
-第五章 分代G1GC模式
-第六章 
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-09-26
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/JVM/" class="post-category">
-                                    JVM
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
+<div class="progress-bar"></div>
 
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/jvm/">
-                            <span class="chip bg-color">jvm</span>
-                        </a>
-                        
-                        <a href="/tags/GC/">
-                            <span class="chip bg-color">GC</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2021/07/03/12.JVM/5.%E5%A6%82%E4%BD%95%E7%BC%96%E5%86%99JavaAgent/">
-                        <div class="card-image tag-image">
-                            
-                            
-                            <img src="/medias/featureimages/59.jpg" class="responsive-img" alt="如何编写JavaAgent">
-                            
-                            <span class="card-title">如何编写JavaAgent</span>
-                        </div>
-                    </a>
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                如何编写JavaAgent
-这篇文章是根据MegaEase的袁伟老师的分享而来,地址是How To Write a JavaAgent
-简介
-java agent是什么？
-java agent是jdk1.5时候推出的一个在运行时动态修改cl
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-07-03
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/JVM/" class="post-category">
-                                    JVM
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入关键词"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
 
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/tags/jvm/">
-                            <span class="chip bg-color">jvm</span>
-                        </a>
-                        
-                        <a href="/tags/agent/">
-                            <span class="chip bg-color">agent</span>
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
+   <span class="chip bg-color">agent</span>
                         </a>
                         
                     </div>
@@ -998,7 +1029,7 @@ jvm与操作系统的关系？
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            177.6k
+                                            183.3k
                                         </span>&nbsp;字
                                         
                                             

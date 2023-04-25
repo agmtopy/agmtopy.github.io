@@ -1,0 +1,1236 @@
+<!DOCTYPE HTML>
+<html lang="zh-Hans">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="《深入Java虚拟机：JVM G1GC的算法与实现》-算法篇笔记, agmtopy博客">
+    <meta name="description" content="你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>《深入Java虚拟机：JVM G1GC的算法与实现》-算法篇笔记 | agmtopy博客</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="agmtopy博客" type="application/atom+xml">
+</head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">agmtopy博客</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>主页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">agmtopy博客</div>
+        <div class="logo-desc">
+            
+            你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			主页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/agmtopy" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/agmtopy" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/85.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">《深入Java虚拟机：JVM G1GC的算法与实现》-算法篇笔记</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/%E7%AC%94%E8%AE%B0/">
+                                <span class="chip bg-color">笔记</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/jvm/" class="post-category">
+                                jvm
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2023-04-05
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
+                    5.7k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
+                    20 分钟
+                </div>
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h1>《深入Java虚拟机：JVM G1GC的算法与实现》-算法篇笔记</h1>
+<p>这一篇文章主要是用于记录《深入Java虚拟机：JVM G1GC的算法与实现》一书中<B>算法篇</B>部分的笔记,主要分为引子、并发标记、转移、软实时性、分代G1GC模式;</p>
+<h2 id="G1-GC是什么"><a class="header-anchor" href="#G1-GC是什么"></a>G1 GC是什么?</h2>
+<p>在G1GC之前JVM中存在的垃圾收集器主要是<B>Parallel Scavenge</B>和<B>Parallel Old</B>,在jdk9将G1设置为默认处理器后,截至现在的jdk 20都是默认的垃圾收集器,目前G1GC就是JDK平台跨最多版本的默认垃圾收集器;</p>
+<p>G1GC设计的出发点与之前的GC收集器有明显的不同,之前的不管是串行的Serial还是并发Paraller都是基于<B>吞吐量</B>和<B>缩短最大暂停时间</B>来进行设计的;<br>
+目前JVM的生态或者说面向的应用还是偏向于Web处理方面的,这一类应用的特点短、快,因此需要具有<B>软实时性</B>和<B>高吞吐量</B>的垃圾收集器;</p>
+<blockquote>
+<p>软实时性指的是处理时间可以超出最后期限,但是超出最后期限的频率很重要.只有超出的频率在用户能够容忍的范围之内,才能称之为&quot;软实时性&quot;<br>
+举一个栗子: 公司都允许每个考勤周期内迟到2或者3次,公司可以容忍这种情况发生,但是超过规定的次数之后就不能忍受了,这种行为就叫&quot;软实时性&quot;;与之相反的&quot;硬实时性&quot;,例如&quot;职务侵占&quot;公司就一次都不能忍受;</p>
+</blockquote>
+<p>咱们已经了解了为什么需要重头开始设计一个GC算法了,下面就看一下具体的内存结构和算法实现.</p>
+<h3 id="G1GC的内存结构"><a class="header-anchor" href="#G1GC的内存结构"></a>G1GC的内存结构</h3>
+<ul>
+<li>内存布局</li>
+</ul>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/G1GC%E5%86%85%E5%AD%98%E5%B8%83%E5%B1%80.png?raw=true" alt="G1GC内存布局"></p>
+<p>首先G1GC的内存布局最大的特点是抛弃了内存中对于老年代和年轻代的内存范围划分,而是采用区域(region),默认大小为1MB的形式进行划分.<br>
+对于region内存的大小用户可以随意设置,但是在内部会将用户设置的值向上调整为2的指数幂(2^n),1000kb-&gt;1024kb;</p>
+<ul>
+<li>对象引用</li>
+</ul>
+<p>这里的对象引用指的不是对象与对象之间的引用,而是在GC查找对象时持有的引用关系,一个典型的栗子就是老年代中引用年轻代存储关系的<B>记忆集</B>;</p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/G1GC-%E8%B7%A8%E4%BB%A3%E5%BC%95%E7%94%A8.png?raw=true" alt="G1GC 跨代引用布局"></p>
+<ul>
+<li>Card Table</li>
+</ul>
+<blockquote>
+<p>Card Tables and Concurrent Phases  If a garbage collector does not collect the entire heap (an incremental collection), the garbage collector needs to know where there are pointers from the uncollected part of the heap into the part of the heap that is being collected. This is typically for a generational garbage collector in which the uncollected part of the heap is usually the old generation, and the collected part of the heap is the young generation. The data structure for keeping this information (old generation pointers to young generation objects), is a remembered set. A card table is a particular type of remembered set. Java HotSpot VM uses an array of bytes as a card table. Each byte is referred to as a card. A card corresponds to a range of addresses in the heap. Dirtying a card means changing the value of the byte to a dirty value; a dirty value might contain a new pointer from the old generation to the young generation in the address range covered by the card. 如果垃圾收集器不收集整个堆而是进行增量收集，则垃圾收集器需要知道从堆的未收集部分到正在收集的堆部分的指针在哪里。 这通常适用于分代垃圾收集器，其中堆的未收集部分通常是老年代，堆中已收集的部分是新生代。 保存此信息的数据结构（指向年轻代对象的老年代指针）是一个记忆集(RS)。 Card Table是一种特殊类型的记忆集。 Java HotSpot VM 使用字节数组作为卡片表。 每个字节称为一张卡片。 一张卡片对应堆中的一个地址范围。 弄脏一张卡片意味着将字节的值更改为脏值； 一个脏值可能包含一个新的指针，在卡覆盖的地址范围内从老一代到年轻一代。</p>
+</blockquote>
+<p>Card Table是用于简化年轻代收集,类似与一个被老年代持有年轻代对象的索引,在年轻代进行垃圾收集时按图索骥就可以把这些被跨代引用的对象找出来,之后会详细的讲述一下执行过程;</p>
+<h3 id="执行过程"><a class="header-anchor" href="#执行过程"></a>执行过程</h3>
+<p>G1GC底层算法是<B>标记-压缩</B>算法,这样的话它的执行步骤可以划分为两个部分:</p>
+<ol>
+<li>并发标记阶段<br>
+并发标记阶段主要是在尽量不暂停mutator线程(即访问和修改Manage Object的线程,如所有Java Thread及其Attach到JVM的thread)的情况下标记出存活的对象,而且在标记过程中会记录下每个区域(region)内存活的对象数量;</li>
+<li>转移压缩阶段<br>
+转移压缩阶段主要是将待回收区域内的存活对象复杂到其他空闲区域中,然后将空闲出来的区域标记为空闲状态,类似于GC算法,但是是以单位进行的;</li>
+</ol>
+<p>需要注意的是<B>并发标记</B>和<B>转移压缩</B>在处理顺序上是没有先后顺序的,并发标记的结果对于转移压缩阶段也不是必须的.</p>
+<hr>
+<p>上面简单的描述了一下G1GC的执行过程,下面我们来详细的看一下<B>并发标记阶段</B>做的事情</p>
+<h2 id="并发标记阶段"><a class="header-anchor" href="#并发标记阶段"></a>并发标记阶段</h2>
+<h3 id="标记位图"><a class="header-anchor" href="#标记位图"></a>标记位图</h3>
+<p>首先解释&quot;并发标记&quot;是在标记什么?</p>
+<blockquote>
+<p>并发标记是在标记所有的存活对象和可以回收的对象,并发标记并不是直接在对象内存上添加标记,而是在<B>标记位图</B>上</p>
+</blockquote>
+<p>标记位图如图所示</p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/74172d16f52935f2a49645d6f14132e0b6d966f5/png/j-jvm/%E6%A0%87%E8%AE%B0%E4%BD%8D%E5%9B%BE.png?raw=true" alt="标记位图"></p>
+<p>标记位图是对<B>region</B>中分配的对象进行一个类似于索引标记的数据结构,每个bit位对应一个对象,默认最小的对象为8字节,0代表活动对象;</p>
+<p>每个region都有两个<B>标记位图</B>分别是nextBitMap和prevBitMap用于保存本次的位图和上一次的位图;</p>
+<p>由于在并发标记阶段Mutator线程可以继续分配对象或者yuang GC,会破坏已经进行过标记的内存区域,因此需要用4个标记位来确定,分别是<B>bottom</B>、<B>TOP</B>、<B>prevTAMS</B>、<B>nextTAMS</B></p>
+<p>bottom-TOP范围表示的开始标记前的某个区域的底部和顶部<br>
+TAMS(Top-at-Mark-Start,标记开始时的top)，prevTAMS和nextTAMS即上/下一次的标记的top</p>
+<p>nextTAMS-TOP范围表示就就是标记过程中新产生的对象所占用的区域</p>
+<h3 id="执行步骤"><a class="header-anchor" href="#执行步骤"></a>执行步骤</h3>
+<p>并发标记过程包括以下5个步骤:</p>
+<ol>
+<li>初始标记阶段</li>
+<li>并发标记阶段</li>
+<li>最终标记阶段</li>
+<li>存活对象计数阶段</li>
+<li>收尾阶段</li>
+</ol>
+<h4 id="初始标记阶段"><a class="header-anchor" href="#初始标记阶段"></a>初始标记阶段</h4>
+<ol>
+<li>创建标记位图
+<blockquote>
+<p>在初始化阶段,GC线程会首先创建Next MarkBitmap</p>
+</blockquote>
+</li>
+<li>对GC Root可达对象进行扫描和标记,为了防止GC Root对象变化,<B>Mutator是暂停执行的</B>,这里需要注意的是初始标记阶段有且只会对GC Root的可达对象进行标记</li>
+</ol>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/G1GC_%E5%88%9D%E5%A7%8B%E6%A0%87%E8%AE%B0%E9%98%B6%E6%AE%B5.png?raw=true" alt="初始标记阶段结果"></p>
+<h4 id="并发标记阶段-v2"><a class="header-anchor" href="#并发标记阶段-v2"></a>并发标记阶段</h4>
+<blockquote>
+<p>并发标记阶段,GC线程会继续扫描在初始化阶段被标记过的对象,分析它们的引用关系,完成大部分存活对象的标记</p>
+</blockquote>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/G1GC_%E5%B9%B6%E5%8F%91%E6%A0%87%E8%AE%B0%E9%98%B6%E6%AE%B5.png?raw=true" alt="并发标记阶段结果"></p>
+<p>在并发标记阶段GC线程和Mutator线程是并发执行的,那么是如何解决<B>标记遗漏</B>问题的楠?</p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/G1GC_%E5%B9%B6%E5%8F%91%E6%A0%87%E8%AE%B0%E9%98%B6%E6%AE%B5_%E6%A0%87%E8%AE%B0%E9%81%97%E6%BC%8F.png?raw=true" alt="标记遗漏"></p>
+<p>首先说一下<B>标记遗漏</B>产生的原因,从上图中可以看到我们的GC线程已经标记到第二层对象,这个时候Mutator线程将Obj1-Obj3直接的引用关系去除,并且GCRoot-Obj3产生新的引用关系,由于Obj1标记完成后已经没有下属的任何引用那么就不会在标记Obj3,就发生了标记遗漏,可以看到发生标记遗漏的两个条件:</p>
+<ul>
+<li>新产生一条或多条从黑色对象(已标记对象)到白色对象(未标记对象)的新引用;</li>
+<li>删除灰色对象(正在标记对象)到白色对象的引用关系;</li>
+</ul>
+<p>那么解决标记遗漏的问题就在于对这两个关系的破坏或者记录:</p>
+<blockquote>
+<p>在CMS中采用的是增量更新(Incremental Update)方案,破坏的是第一个条件，当黑色对象插入新的指向白色对象的引用关系时，就将这个新插入的引用记录下来，等并发扫描结束之后，再将这些记录过的引用关系中的黑色对象为根，重新扫描一次;</p>
+</blockquote>
+<blockquote>
+<p>在G1GC中采用的是原始快照(Snapshot At The Beginning,SATB)方案,破坏的是第二个条件，当灰色对象要删除指向白色对象的引用关系时，就将这个要删除的引用记录下来，在并发扫描结束之后，再将这些记录过的引用关系中的灰色对象为根，重新扫描一次;</p>
+</blockquote>
+<p>这里重新扫描的是灰色对象,然后是在快照中扫描,快照指的是GC在开始时对象之间的引用关系,这里会产生一个问题,将本来已经可以进行回收的对象标记为活动的,系统设计上应该是要保证没有漏掉的对象,防止不能回收掉这些内存.</p>
+<p>G1GC采用的是<B>写屏障</B>技术来记录对象之间引用关系的变化,对于新分配的对象直接认为这部分对象是已经标记完成;</p>
+<h4 id="最终标记阶段"><a class="header-anchor" href="#最终标记阶段"></a>最终标记阶段</h4>
+<p>最终标记阶段是对<B>SATB本地队列</B>进行扫描,因为在并发标记介绍以后本地的SATB队列容量可能不满,不会刷新到全局SATB队列中,因此需要全局暂停来处理这些&quot;残留的SATB本地队列&quot;;</p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/%E5%85%A8%E5%B1%80SATB%E7%BB%93%E6%9E%84.png?raw=true" alt="全局SATB与局部SATB之间的关系"></p>
+<p>最终标记处理的就是上图中mutator1线程和mutator2线程对于的局部SATB队列;</p>
+<h4 id="存活对象计数阶段"><a class="header-anchor" href="#存活对象计数阶段"></a>存活对象计数阶段</h4>
+<p>通过上面三个标记步骤(初始、并发、最终)将本次GC需要进行内存收集的对象标记出来了,这个时候就需要扫描各个区域的<B>next标记位图</B>,统计各个区域内存活对象的字节数目;<br>
+这个计数步骤可以和mutator是并发执行的,但是不能和转移线程(Remembered set)线程并行执行,因为如果并行执行会破坏region内的计数正确性;</p>
+<h4 id="收尾阶段"><a class="header-anchor" href="#收尾阶段"></a>收尾阶段</h4>
+<p>在上面两个步骤(标记、计数)中我们已经得到GC所需的最重要的两个信息:</p>
+<ol>
+<li>标记完成后存活对象和死亡对象之间的区分(标记位图)</li>
+<li>存活对象的内存占用(内存占用字节数量)</li>
+</ol>
+<p>有上面俩组数据之后,才能进行</p>
+<ul>
+<li>转移压缩</li>
+</ul>
+<p>转移压缩过程中涉及到一个比较重要的概念<B>转移效率</B>,指的是&quot;死亡对象的字节数 % 转移所需时间&quot;,换句话说,转移效率指的是<B>转移1个字节所需时间</B>;</p>
+<p>这里的转移指的是是对于存活对象转移的耗时,因为在一个需要对象回收比较多的region区域内,只需要将少量的存活对象转移出去,这块region就可以进行回收了;</p>
+<p>通过<B>历史转移效率</B>的数据,就可以尝试预测下次内存需要进行回收的时间;</p>
+<h4 id="小结"><a class="header-anchor" href="#小结"></a>小结</h4>
+<p>在标记阶段主要是通过两种数据结构<B>标记位图</B>、<B>SATB</B>来实现对region的标识和计数,流程上分为:</p>
+<ol>
+<li>初始标记阶段 -&gt; GCRoot出发</li>
+<li>并发标记阶段 -&gt; 上一步中散发的引用的对象</li>
+<li>最终标记阶段 -&gt; 标记局部SATB中的对象</li>
+<li>计数/收尾阶段 -&gt; 计数统计和转移</li>
+</ol>
+<p>对局部SATB的操作使用的是前置写屏障技术来实现的;</p>
+<p>下面详细用一节来介绍一下转移的具体过程;</p>
+<h2 id="GC的转移功能"><a class="header-anchor" href="#GC的转移功能"></a>GC的转移功能</h2>
+<h3 id="转移的先决条件"><a class="header-anchor" href="#转移的先决条件"></a>转移的先决条件</h3>
+<p>首先说一下为什么需要转移,由于内存特性会出现碎片化,因此需要对内存进行整理,才能继续分配对象,整理这个步骤具体的操作就是通过转移来实现的;</p>
+<p>转移功能是通过具体的<B>转移专用记忆集合</B>来快速索引对象的,记录的是区域与区域之间的对象间的引用关系;通过使用转移专用记忆集合,在转移时即使不扫描所有区域内的对象,也可以查询到待转移对象<br>
+所在区域被其他区域引用的情况,从而简化单个区域回收的转移处理步骤;</p>
+<blockquote>
+<p>G1GC是通过卡表(card table)来进行实现转移专用记忆集合的元素的;</p>
+</blockquote>
+<p>在上图&quot;G1GC 跨代引用布局&quot;图列中的<B>Remembered Set</B>就是<B>转移专用记忆集合</B>,记录的元素就是card table的元素地址,如下所示</p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/%E8%BD%AC%E7%A7%BB%E4%B8%93%E7%94%A8%E8%AE%B0%E5%BF%86%E9%9B%86%E5%90%88%E7%9A%84%E6%9E%84%E9%80%A0.png?raw=true" alt="转移专用记忆集合"></p>
+<blockquote>
+<p>每个区域都有一个<B>转移专业记忆集合</B>,它是通过hash列表实现的,key为引用本区域的其他区域地址,value为一个数组,元素是引用区域对应的<B>卡表</B>中的元素;<br>
+通过RS和Card Table这样的数据结构,在进行跨代引用对象的转移时可以快速的根据数据来进行查找;</p>
+</blockquote>
+<p>RS的写入是由专用的<B>转移专用记忆集合维护线程</B>来进行维护的,可以和mutator线程并发执行;</p>
+<h3 id="转移的执行步骤"><a class="header-anchor" href="#转移的执行步骤"></a>转移的执行步骤</h3>
+<p>转移的执行步骤可以分为以下三个:</p>
+<ol>
+<li>
+<p>选择回收集合<br>
+指的是根据上述标记阶段得到的信息来选择被转移的区域.被选中的区域被称为<B>回收集合</B>;</p>
+</li>
+<li>
+<p>根转移<br>
+指的是将回收集合中的由GC Root对象直接引用的对象和被其他区域引用的对象转移到其他空间中;</p>
+</li>
+<li>
+<p>转移<br>
+指的是以2步骤中转移的对象作为起点扫描其子孙对象,然后将这些对象转移到其他空间中;</p>
+</li>
+</ol>
+<h4 id="选择回收集合"><a class="header-anchor" href="#选择回收集合"></a>选择回收集合</h4>
+<p>这个步骤是G1GC算法的核心部分,在选择需要进行回收的集合时,是按照两个原则来进行选择:</p>
+<ul>
+<li><B>转移效率高</B>的区域优先</li>
+<li>整体区域转移预测的暂停时间需要在用户的容忍范围之内</li>
+</ul>
+<p>在标记的最后一个步骤<B>收尾阶段</B>中我们介绍了什么是<B>转移效率</B>的概念,简单的理解就是存活的对象越少,这个region的转移效率就越高;<br>
+然后根据转移效率对所有region进行排序,就可以得到一个region数组;<br>
+每一个region都有一个预测的转移暂停时间,G1GC在选择本次的<B>回收集合</B>就是从region数据从上到下依次累积预测暂停时间,直到大于等于用户的容忍时间阀值,这个子集就是<br>
+本次需要进行回收的集合;</p>
+<blockquote>
+<p>G1GC中的G1是Garbage First的简称,翻译成中文指的是&quot;垃圾优先的垃圾回收&quot;算法,而<B>转移效率从高到低的顺序</B>就是垃圾优先的具体实现方法;</p>
+</blockquote>
+<h4 id="根转移步骤"><a class="header-anchor" href="#根转移步骤"></a>根转移步骤</h4>
+<p><B>根转移</B>指的是将对象或者引用转移到其他区域,包括三类数据:</p>
+<ol>
+<li>由根直接引用的对象</li>
+<li>并发标记处理中的对象</li>
+<li>由其他区域对象直接引用的回收集合内的对象</li>
+</ol>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/G1GC-%E5%AF%B9%E8%B1%A1%E8%BD%AC%E7%A7%BB.png?raw=true" alt="对象转移"></p>
+<p>对象转移分为三类:</p>
+<ol>
+<li>对于引用到回收集合内的对象,将该对象添加到<B>转移队列</B>中,然后进行回收;</li>
+<li>对于引用到回收集合外的对象,将更新其他对象的转移专用记忆集合;</li>
+<li>对于其他对象引用到回收对象时,更新回收对象的转移专用记忆集合;</li>
+</ol>
+<h4 id="转移"><a class="header-anchor" href="#转移"></a>转移</h4>
+<blockquote>
+<p>在完成根转移之后,哪些被转移队列引用的对象将会<B>依次进行转移</B>.直到转移队列都被清空,转移就全部完成了;至此,回收集合内所有存活的对象都被成功转移到存活区域了;</p>
+</blockquote>
+<h4 id="小结-v2"><a class="header-anchor" href="#小结-v2"></a>小结</h4>
+<p>在<B>转移阶段</B>是整个G1GC最核心的思想实现,一个是&quot;垃圾优先的垃圾回收&quot;算法的实现,一个是&quot;根对象转移算法&quot;的实现;</p>
+<h2 id="软实时性"><a class="header-anchor" href="#软实时性"></a>软实时性</h2>
+<p>G1GC是如何实现软实时性的?</p>
+<p>在G1GC中用户可以设置以下三个值:</p>
+<ol>
+<li>
+<p>可用内存的上限<br>
+通过Xmn/xmx来指定堆空间最小/最大值,避免内存被过度占用,Xmn不建议使用,这个值会破坏我们对于暂停时间上限的配置</p>
+</li>
+<li>
+<p>G1GC暂停时间上限<br>
+使用-XX:MaxGCPauseMillis=200 为所需的最大暂停时间设置目标值,默认值为 200 毫秒.这里有一个前提是在一个GC单位时间内的暂停时间上限;</p>
+</li>
+<li>
+<p>GC单位时间<br>
+对于GC单位时间的配置,没有找到相关资料,但是肯定是有这个概念的;避免通过频繁的GC来达到暂停时间少的目的;</p>
+</li>
+</ol>
+<p>G1GC是根据<B>预测转移时间</B>和<B>预测可信度</B>这两个计算结果来实现软实时性的;</p>
+<blockquote>
+<p>在G1GC内部有一个<B>调度队列</B>,其中的元素是暂停处理的开始时间和结束时间的组合.G1GC使用这个队列来高效的调度GC的暂停任务.调度队列中保存了最近一次<br>
+暂停处理的开始时间和介绍时间.调度队列中的元素有上限,如果添加元素时超过上限,队列头部最早添加的元素就会被删除;</p>
+</blockquote>
+<p>如下展示一下<B>GC暂停处理的调度过程</B></p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/G1GC-%E6%9A%82%E5%81%9C%E5%A4%84%E7%90%86%E7%9A%84%E8%B0%83%E5%BA%A6%E6%B5%81%E7%A8%8B.png?raw=true" alt="GC暂停处理的调度过程"></p>
+<p>图中<B>1</B>表示的是在当前时间开始预测下一次发生GC的暂停时间为X,第2步表示如果此时开始GC,在一个GC的单位时间之内会超过设定的GC暂停时间的上限,因此不进行暂停;<br>
+在第3步中,如果将暂停时间延迟,在GC的单位时间内不会超过设定的GC暂停时间上限;<br>
+需要注意的是<B>调度程序会保证在任意截取的GC单位时间内,总的GC暂停时间都不会超过用户设置的GC暂停时间上限</B>,当然在某些特殊情况下也会超出设置的暂停时间上限,这就是G1GC所保证的&quot;乱实时性&quot;,这些特殊情况包括但是不限于&quot;GC的预测时间不准确&quot;和&quot;堆内存空间不足&quot;等;</p>
+<h2 id="分代G1GC模式"><a class="header-anchor" href="#分代G1GC模式"></a>分代G1GC模式</h2>
+<p>在上述的<B>并发标记阶段</B>、<B>转移阶段</B>都是介绍的G1GC的进行GC时的算法和实现,在G1GC的实现中是引入了<B>分代</B>的概念的,下面来介绍一下G1GC的分代;</p>
+<h3 id="为什么要进行分代"><a class="header-anchor" href="#为什么要进行分代"></a>为什么要进行分代?</h3>
+<blockquote>
+<p>分代:通过给对象引入&quot;年龄&quot;的做法来标记对象的重要程度,从而提升GC的效率;</p>
+</blockquote>
+<h3 id="GC模式划分"><a class="header-anchor" href="#GC模式划分"></a>GC模式划分</h3>
+<ul>
+<li>纯G1GC模式</li>
+<li>分代G1GC模式</li>
+</ul>
+<p>两者之间的不同点:</p>
+<p>内存划分的不同:</p>
+<ul>
+<li>区域是分代的</li>
+<li>回收集合的选择是分代的</li>
+</ul>
+<blockquote>
+<p>在分代G1GC模式中,区域会被划分成<B>新生代区域</B>和<B>老年代区域</B>两类;和其他分代算法类似,分代G1GC的对象也保存了自身在各次转移中存活下来的次数.新生代区域存放新生代对象,老年代区域存放老年代对象;</p>
+</blockquote>
+<p>在G1GC中新生代区域GC被称为<B>完全新生代GC</B>,老年代区域GC被称为部分新生代GC,他们之间的区别在于回收集合的选择,完全新生代GC是将<B>所有的新生代区域</B>选入回收集合,部分新生代GC是将<B>所有的新生代区域以及一部分老年代区域</B>选入回收集合中;</p>
+<p>回收方式的不同:</p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/%E6%96%B0%E7%94%9F%E4%BB%A3GC%E7%9A%84%E8%BF%87%E7%A8%8B.jpg?raw=false" alt="新生代GC的过程"></p>
+<p>从上图中可以看到部分新生代GC会将一部分老年代区域中的对象进行回收;</p>
+<h3 id="新生代区域"><a class="header-anchor" href="#新生代区域"></a>新生代区域</h3>
+<p>新生代区域会被划分成两类:</p>
+<ul>
+<li>创建区域</li>
+<li>存活区域</li>
+</ul>
+<p>创建区域指的是用于存放刚刚生成一次都没有经历过转移的对象,存活区域用来保存至少转移过一次的对象;</p>
+<p>在新生代区域中不会应用<B>转移转移写屏障</B>,因为新生代中的对象都是会被回收的,因此被引用方不会保存新生代的专用写屏障;</p>
+<h2 id="算法篇的总结"><a class="header-anchor" href="#算法篇的总结"></a>算法篇的总结</h2>
+<p><img src="" alt="mutator和GC的执行关系"></p>
+<p>在大多数时候转移专用记忆集维护线程都是和mutator并发执行的,但是在GC的存活对象计数阶段记忆维护线程也是暂停的.888888</p>
+<p>G1GC的优点:</p>
+<ol>
+<li>G1GC具备软实时性,可以由用户控制GC的暂停时间</li>
+<li>能够充分发挥高配置机器的性能,做到并发执行</li>
+<li>通过写屏障将处理粒度调整为更粗维度的卡片粒度,从而降低了写屏障发生的频率</li>
+<li>通过对象的转移,实现了区域内没有内存碎片</li>
+</ol>
+<p>G1GC的缺点:</p>
+<ol>
+<li>适用与多核处理器的设备;</li>
+<li>区域内不会出现碎片化,但是整个堆会按照区域出现碎片化;</li>
+</ol>
+<h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
+<ul>
+<li>《深入Java虚拟机：JVM G1GC的算法与实现》中村成洋(作者) 吴炎昌,杨文轩 (译者)</li>
+<li>《垃圾回收的算法与实现》中村成洋,相川光,竹内郁雄 (作者) 丁灵 (译者)<br>
+<a target="_blank" rel="noopener" href="https://wiki.openjdk.org/display/HotSpot/G1GC+Feedback">G1GC Feedback</a><br>
+<a target="_blank" rel="noopener" href="https://www.huminxi.com/2022/07/06/java%208%20vs%20java%2017%20%E5%9E%83%E5%9C%BE%E6%94%B6%E9%9B%86%E5%99%A8/">Java 8 vs Java 17 垃圾收集器</a><br>
+<a target="_blank" rel="noopener" href="https://www.bilibili.com/video/BV15B4y1972U/">G1GC最初的设计思路（上）</a><br>
+<a target="_blank" rel="noopener" href="https://developer.aliyun.com/article/1097566">JVM垃圾回收-记忆集和卡表</a><br>
+<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/444691935">图解 Remembered Set、Card Table、Write Barrier</a><br>
+<a target="_blank" rel="noopener" href="https://tech.meituan.com/2016/09/23/g1.html">Java Hotspot G1 GC的一些关键技术</a><br>
+<a target="_blank" rel="noopener" href="https://docs.oracle.com/en/java/javase/18/gctuning/garbage-first-g1-garbage-collector1.html#GUID-58968F63-9EAF-487E-A884-CF0831EA6D31">HotSpot Virtual Machine Garbage Collection Tuning Guide</a><br>
+<a target="_blank" rel="noopener" href="https://zhuanlan.zhihu.com/p/115501055">Java Memory：认识SafeRegion</a><br>
+<a target="_blank" rel="noopener" href="https://tschatzl.github.io/2022/08/04/concurrent-marking.html">Concurrent Marking in G1</a><br>
+<a target="_blank" rel="noopener" href="http://www.noobyard.com/article/p-smfxguqn-od.html">最清晰易懂的G1GC资料</a><br>
+<a target="_blank" rel="noopener" href="https://segmentfault.com/a/1190000039300766">SATB的一些理解</a><br>
+<a target="_blank" rel="noopener" href="https://www.zhihu.com/question/456166411">G1并发标记的原始快照（SATB）的过程是怎样的？</a><br>
+<a target="_blank" rel="noopener" href="https://www.jfokus.se/jfokus17/preso/Write-Barriers-in-Garbage-First-Garbage-Collector.pdf">Write Barriers in Garbage First Garbage Collector</a></li>
+</ul>
+
+                
+            </div>
+            <hr/>
+
+            
+    
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/%E7%AC%94%E8%AE%B0/">
+                                    <span class="chip bg-color">笔记</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="wechat" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
+            <div class="card">
+                <a href="/2023/04/05/20.%E7%AC%94%E8%AE%B0/40.G1GC%E7%9A%84%E7%AE%97%E6%B3%95%E4%B8%8E%E5%AE%9E%E7%8E%B0%E4%B9%8B%E7%AE%97%E6%B3%95%E7%AF%87%E7%AC%94%E8%AE%B0/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/85.jpg" class="responsive-img" alt="《深入Java虚拟机：JVM G1GC的算法与实现》-算法篇笔记">
+                        
+                        <span class="card-title">《深入Java虚拟机：JVM G1GC的算法与实现》-算法篇笔记</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-04-05
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/jvm/" class="post-category">
+                                    jvm
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E7%AC%94%E8%AE%B0/">
+                        <span class="chip bg-color">笔记</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2023/03/24/20.%E7%AC%94%E8%AE%B0/30.Java%E6%80%A7%E8%83%BD%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97-%E6%80%A7%E8%83%BD%E6%B5%8B%E8%AF%95%E7%9A%84%E6%96%B9%E6%B3%95/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/11.jpg" class="responsive-img" alt="Java性能权威指南-性能测试的方法和工具">
+                        
+                        <span class="card-title">Java性能权威指南-性能测试的方法和工具</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-03-24
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%80%A7%E8%83%BD/" class="post-category">
+                                    性能
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E7%AC%94%E8%AE%B0/">
+                        <span class="chip bg-color">笔记</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+                <div class="container row center-align"
+                    style="margin-bottom: 0px !important;">
+                    <div class="col s12 m8 l8 copy-right">
+                        
+                            <span id="year">
+                            </span>
+                            
+                                    <span id="year">
+                                    </span>
+                                    <a href="/about" target="_blank">
+                                    </a>
+                                    &nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+                                    |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery"
+                                        target="_blank">Matery</a>
+                                    <!-- <br> -->
+                                    
+                                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                                            class="white-color">
+                                            183.3k
+                                        </span>&nbsp;字
+                                        
+                                            
+                                                
+                                                    
+                                                        
+                                                            
+
+                                                                
+                                                                    
+
+                                                                        
+                                                                            <br>
+                                                                            
+                                                                                    <br>
+                                                                                    
+                    </div>
+                    <div class="col s12 m4 l4 social-link social-statis">
+                        
+
+        
+            <a href="mailto:zjytian@gmail.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我"
+                data-position="top" data-delay="50">
+                <i class="fas fa-envelope-open"></i>
+            </a>
+            
+
+                
+
+                        
+
+                                
+
+                                        
+
+                                                
+
+                                                        
+                    </div>
+                </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入关键词"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
