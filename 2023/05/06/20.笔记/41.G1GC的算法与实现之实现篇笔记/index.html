@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    1.4k
+                    2.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    5 分钟
+                    8 分钟
                 </div>
                 
 
@@ -609,10 +609,88 @@
 <h3 id="内存分配的流程"><a class="header-anchor" href="#内存分配的流程"></a>内存分配的流程</h3>
 <p>Vm堆空间申请 -&gt; VM堆空间分配 -&gt; 对象的分配<br>
 下图展示这个过程</p>
-<p>!(内存分配的流程)[<a target="_blank" rel="noopener" href="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E7%9A%84%E6%B5%81%E7%A8%8B.png?raw=true">https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/内存分配的流程.png?raw=true</a>]</p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/%E5%86%85%E5%AD%98%E5%88%86%E9%85%8D%E7%9A%84%E6%B5%81%E7%A8%8B.png?raw=true" alt="内存分配的流程"></p>
 <p>需要注意的是在Linux上,用于实现内存申请和分配的是<B>mmap()</B>,在Linux中没有申请内存空间的概念,调用mmap()后就会分配内存空间,不过并不是立即分配物理空间,在这这中间还有一层虚拟内存;只有在分配到的内存空间被访问时才会实际发生物理内存分配;</p>
 <h3 id="对象分配的流程"><a class="header-anchor" href="#对象分配的流程"></a>对象分配的流程</h3>
 <p><img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/%E5%AF%B9%E8%B1%A1%E5%88%86%E9%85%8D%E6%B5%81%E7%A8%8B.jpg?raw=true" alt="对象分配的流程"></p>
+<h3 id="TLAB"><a class="header-anchor" href="#TLAB"></a>TLAB</h3>
+<p>TLAB(Thread Local Allocation Buffer,线程本地分配缓冲区)是对象分配的要点之一;<br>
+VM是所有线程共享的内存空间,因此当需要在VM堆上分配对象时,必须锁定整个堆,以防止其他线程同时分配对象;<br>
+但是为了让不同线程工作于不同的CPU核心上时需要分配对象时不用等待VM堆上的锁释放,因此引入了TLAB的概念,解决思路就是让各个线程拥有自己的专用对象分配缓冲区,从而减少锁定次数;<br>
+当一个线程第一次分配对象时,它会从VM堆中得到一定大小的内存空间,然后作为它自己的缓冲区保存下来,当这个线程需要分配对象时,优先从这块专用区域进行分配;</p>
+<h2 id="对象结构"><a class="header-anchor" href="#对象结构"></a>对象结构</h2>
+<ul>
+<li>oopDesc类</li>
+</ul>
+<blockquote>
+<p>oopDesc类是所有GC目标对象的抽象基类,继承自oopDesc的类实例都是GC的目标对象;</p>
+</blockquote>
+<p><img src="https://github.com/agmtopy/noteBook/blob/429872403e969e497aff2255a0064c748a8385e8/png/j-jvm/oopDesc%E7%B1%BB.png?raw=true" alt="oopDesc类"></p>
+<blockquote>
+<p>在第第56行代码中的_mark变量是对象头,_mark中不仅保存了标记-清除算法的标记,还保存了对象所需的其他各种信息;在oopDesc中有一个指向自己类的指针,在代码的<br>
+第57行_metadata.在大部分情况下,这个联合体中保存的是_klass变量的值,kass保存的是指向对象类的指针.</p>
+</blockquote>
+<ul>
+<li>klass<br>
+klass继承于oopDesc,用来表示类型信息,Klass的实例是作为klassOop的一部分创建出来的;</li>
+</ul>
+<h2 id="HotSpot的线程管理"><a class="header-anchor" href="#HotSpot的线程管理"></a>HotSpot的线程管理</h2>
+<p>在Windws和Linux中都有用于调用操作系统线程的库,在Windows上我们使用的是Windows Api调用线程,在Linux上我们使用的是POSIX线程标准的Pthreads库来调用线程;</p>
+<p>在HotSpotVm内可以使用相同的方式调用不同操作系统得益于设计出来’线程抽象层’,最重要的就是<B>Thread</B>;</p>
+<h3 id="Thread类"><a class="header-anchor" href="#Thread类"></a>Thread类</h3>
+<p><img src="" alt="Thread类的继承关系"></p>
+<p>在Thread类中通过定义<B>虚函数run()</B>,子类进行实现,其中<B>JavaThread</B>表示的就是Java语言级别运行的线程,<B>NameThread类</B>是支持线程命名的,我们可以通过为对NameThread实例设置一个唯一名字;</p>
+<h3 id="线程的什么周期"><a class="header-anchor" href="#线程的什么周期"></a>线程的什么周期</h3>
+<ol>
+<li>创建Thread类的实例</li>
+<li>创建线程(调用os:create_thread)</li>
+<li>开始线程处理(调用os:start_thread)</li>
+<li>结束线程处理</li>
+<li>释放Thread类实例</li>
+</ol>
+<p>一个windows下创建线程的例子:</p>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">
+#include &lt;Windows.h&gt;
+#include &lt;stdio.h&gt;
+
+DWORD WINAPI ThreadFunc(LPVOID);
+
+int main()
+&#123;
+    HANDLE hThread;
+    DWORD threadId;
+
+    hThread &#x3D; CreateThread(NULL, 0, ThreadFunc, 0, 0, &amp;threadId); &#x2F;&#x2F; 创建线程
+    printf(&quot;我是主线程， pid &#x3D; %d\n&quot;, GetCurrentThreadId());      &#x2F;&#x2F; 输出主线程pid
+    Sleep(2000);
+&#125;
+
+DWORD WINAPI ThreadFunc(LPVOID p)
+&#123;
+    printf(&quot;我是子线程， pid &#x3D; %d\n&quot;, GetCurrentThreadId()); &#x2F;&#x2F; 输出子线程pid
+    return 0;
+&#125;
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="线程的互斥处理"><a class="header-anchor" href="#线程的互斥处理"></a>线程的互斥处理</h3>
+<ul>
+<li>什么是互斥处理?</li>
+</ul>
+<blockquote>
+<p>如果线程共享内存空间,那么就会出现多个线程同时在一个地址上进行读写的情况.有些数据会被其他线程所改变,并且这样的改变是意料之外的;对于这样被修改的对象,被称为&quot;临界区&quot;.对于&quot;临界区&quot;的处理必须要按照原子操作;</p>
+</blockquote>
+<ul>
+<li>如何实现互斥处理?</li>
+</ul>
+<ol>
+<li>
+<p>使用互斥量<br>
+互斥量可以是全局锁/标识/互斥原语等,个人理解互斥量主要是两个特点:全局可见和唯一持有</p>
+</li>
+<li>
+<p>监视器</p>
+</li>
+</ol>
+<p>\</p>
 
                 
             </div>
@@ -915,7 +993,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            184.7k
+                                            185.5k
                                         </span>&nbsp;字
                                         
                                             
