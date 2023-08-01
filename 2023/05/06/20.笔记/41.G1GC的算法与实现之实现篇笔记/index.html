@@ -422,7 +422,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    2.2k
+                    2.3k
                 </div>
                 
 
@@ -594,7 +594,7 @@
 <p>在 JDK 8 及之后的版本中，永久代已经被移除，被一个称为元空间（Metaspace）的区域所取代。因此，可以说 JDK 8 及之后的版本中没有永久代这一概念。不过，元空间和永久代的作用类似，都是用于存放类信息等元数据的区域，只不过它们的实现方式和内存模型不同。 元空间和永久代最大的不同在于，元空间使用本地内存（native memory）存储元数据，而不是像永久代一样使用虚拟机内存（Java heap）来存储。这样的好处是可以避免永久代出现的内存溢出问题，因为元空间的大小可以根据需要动态调整，并且可以使用操作系统的内存分配器来管理内存。另外，元空间与永久代相比还有一些其他的不同点，例如元空间可以通过命令行参数来配置大小、元空间的垃圾回收机制与永久代不同等等。但是，从常驻内存空间的角度来说，可以认为元空间已经取代了永久代，成为了 Java 虚拟机中存放类信息等元数据的常驻内存区域。</p>
 </blockquote>
 <p>在JVM中是通过<B>Universe:initialize_heap</B>来实现创建堆内存的功能,如下所示,会根据<B>create_heap()</B>、<B>initialize()</B>方法选择不同的实现;</p>
-<p>!(创建堆内存选择执行类)[<a target="_blank" rel="noopener" href="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/%E5%88%9B%E5%BB%BA%E5%A0%86%E5%86%85%E5%AD%98%E9%80%89%E6%8B%A9%E6%89%A7%E8%A1%8C%E7%B1%BB.png?raw=true">https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/创建堆内存选择执行类.png?raw=true</a>]</p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/%E5%88%9B%E5%BB%BA%E5%A0%86%E5%86%85%E5%AD%98%E9%80%89%E6%8B%A9%E6%89%A7%E8%A1%8C%E7%B1%BB.png?raw=true" alt="创建堆内存选择执行类"></p>
 <p>下面详细看一下<B>G1CollectedHeap</B>,其中有三个重要的成员变量:</p>
 <ol>
 <li><B>_hrs</B>:通过数组维护所有的HeapRegion</li>
@@ -604,7 +604,7 @@
 <blockquote>
 <p>管理各个区域是通过<B>HeapRegion</B>类来实现的,在G1CollectedHeap中为了快速找到每一个HeapRegion,因此用HeapRegionSeq（Heap Region Sequence）是用于表示堆区域（Heap Region）的序列或集合的地址,_hrs就是指向HeapRegionSeq的指针;</p>
 </blockquote>
-<p>!(G1GC堆的结构)[<a target="_blank" rel="noopener" href="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/G1GC%E5%A0%86%E7%BB%93%E6%9E%84.png?raw=true">https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/G1GC堆结构.png?raw=true</a>]</p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/G1GC%E5%A0%86%E7%BB%93%E6%9E%84.png?raw=true" alt="G1GC堆的结构"></p>
 <h2 id="分配器"><a class="header-anchor" href="#分配器"></a>分配器</h2>
 <h3 id="内存分配的流程"><a class="header-anchor" href="#内存分配的流程"></a>内存分配的流程</h3>
 <p>Vm堆空间申请 -&gt; VM堆空间分配 -&gt; 对象的分配<br>
@@ -638,7 +638,7 @@ klass继承于oopDesc,用来表示类型信息,Klass的实例是作为klassOop�
 <p>在Windws和Linux中都有用于调用操作系统线程的库,在Windows上我们使用的是Windows Api调用线程,在Linux上我们使用的是POSIX线程标准的Pthreads库来调用线程;</p>
 <p>在HotSpotVm内可以使用相同的方式调用不同操作系统得益于设计出来’线程抽象层’,最重要的就是<B>Thread</B>;</p>
 <h3 id="Thread类"><a class="header-anchor" href="#Thread类"></a>Thread类</h3>
-<p><img src="" alt="Thread类的继承关系"></p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/Thread%E7%B1%BB%E7%9A%84%E7%BB%A7%E6%89%BF%E5%85%B3%E7%B3%BB.png?raw=true" alt="Thread类的继承关系"></p>
 <p>在Thread类中通过定义<B>虚函数run()</B>,子类进行实现,其中<B>JavaThread</B>表示的就是Java语言级别运行的线程,<B>NameThread类</B>是支持线程命名的,我们可以通过为对NameThread实例设置一个唯一名字;</p>
 <h3 id="线程的什么周期"><a class="header-anchor" href="#线程的什么周期"></a>线程的什么周期</h3>
 <ol>
@@ -687,10 +687,13 @@ DWORD WINAPI ThreadFunc(LPVOID p)
 互斥量可以是全局锁/标识/互斥原语等,个人理解互斥量主要是两个特点:全局可见和唯一持有</p>
 </li>
 <li>
-<p>监视器</p>
+<p>监视器<br>
+线程之间通过监视器来完成互斥和协助,在jvm中监视器是由Object中的monitor对象头来进行实现,</p>
 </li>
 </ol>
-<p>\</p>
+<blockquote>
+<p><B>互斥方式可以避免线程使用共享数据时被其它线程干扰，而协作方式则帮助多个线程共同完成同一个目标</B></p>
+</blockquote>
 
                 
             </div>
@@ -751,18 +754,17 @@ DWORD WINAPI ThreadFunc(LPVOID p)
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;Current
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2023/05/06/20.%E7%AC%94%E8%AE%B0/41.G1GC%E7%9A%84%E7%AE%97%E6%B3%95%E4%B8%8E%E5%AE%9E%E7%8E%B0%E4%B9%8B%E5%AE%9E%E7%8E%B0%E7%AF%87%E7%AC%94%E8%AE%B0/">
+                <a href="/2023/06/27/2.%E5%B9%B6%E5%8F%91%E7%9F%A5%E8%AF%86/25.Netty%E5%AE%9E%E6%88%98%E7%AC%AC%E4%B8%80%E7%AB%A0/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/82.jpg" class="responsive-img" alt="G1GC的算法与实现之实现篇笔记">
+                        <img src="/medias/featureimages/40.jpg" class="responsive-img" alt="Netty实战第一章">
                         
-                        <span class="card-title">G1GC的算法与实现之实现篇笔记</span>
+                        <span class="card-title">Netty实战第一章</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -772,27 +774,26 @@ DWORD WINAPI ThreadFunc(LPVOID p)
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-05-06
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2023-06-27
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/jvm/" class="post-category">
-                                    jvm
+                            <a href="/categories/%E5%B9%B6%E5%8F%91/" class="post-category">
+                                    并发
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E7%AC%94%E8%AE%B0/">
-                        <span class="chip bg-color">笔记</span>
+                    <a href="/tags/Netty/">
+                        <span class="chip bg-color">Netty</span>
                     </a>
                     
                 </div>
@@ -993,7 +994,7 @@ DWORD WINAPI ThreadFunc(LPVOID p)
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            185.5k
+                                            187.7k
                                         </span>&nbsp;字
                                         
                                             
