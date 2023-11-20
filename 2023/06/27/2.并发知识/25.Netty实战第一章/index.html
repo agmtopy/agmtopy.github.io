@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    2.6k
+                    3.8k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    9 分钟
+                    13 分钟
                 </div>
                 
 
@@ -664,6 +664,106 @@ ChannelPipeline是典型的过滤器模式,数据经过不同的ChannelHandler�
 <li>提供当Channel注册到EventLoop或者从EventLoop注销时的通知</li>
 <li>提供有关用户自定义事件的通知</li>
 </ol>
+<p>channel重要的方法列表:</p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/f979c8e58879f1619e010dc459ca4e67871ece33/png/N-Netty%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/12.Channel%E7%9A%84%E6%96%B9%E6%B3%95.png?raw=true" alt="channel的方法"></p>
+<p>channel是<B>线程安全</B>的,可以多个线程同时操作;</p>
+<h3 id="内置的传输类型"><a class="header-anchor" href="#内置的传输类型"></a>内置的传输类型</h3>
+<p>Netty内置了一些开箱即用的传输;这些传输包括jdk、linux等的特殊类型;</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>包</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>NIO</td>
+<td>io.netty.channel.socket.nio</td>
+<td>使用java.nio.channels包作为基础,基于选择器的方式</td>
+</tr>
+<tr>
+<td>Epooll</td>
+<td>io.netty.channel.epoll</td>
+<td>由JNI驱动的epoll()和非阻塞I/O,这个传输支持只有在Linux上可用的多种特性.如SO_REUSEPORT,比NIO传输更快,并且是完全非阻塞的;</td>
+</tr>
+<tr>
+<td>OIO</td>
+<td>io.netty.channel.socket.oio</td>
+<td>使用java.net包作为基础,使用的是阻塞流</td>
+</tr>
+<tr>
+<td>Local</td>
+<td>io.netty.channel.local</td>
+<td>在JVM内部通过管道进行通信的本地传输形式</td>
+</tr>
+<tr>
+<td>Embedded</td>
+<td>io.netty.channel.embedded</td>
+<td>测试channelHandler使用</td>
+</tr>
+</tbody>
+</table>
+<h4 id="NIO-非阻塞I-O"><a class="header-anchor" href="#NIO-非阻塞I-O"></a>NIO-非阻塞I/O</h4>
+<p>NIO提供了一个所有I/O操作的全异步的实现,它是基于JDK1.4引入的NIO子系统中的选择器API来进行实现;</p>
+<p>选择器背后的基本概念是充当一个<B>注册表</B>,在哪里你将可以请求在Channel的状态发生变化时得到通知,可能发生的状态变化有:</p>
+<ul>
+<li>新的Channel已被接受并且就绪</li>
+<li>Channel连接已经完成</li>
+<li>Channel有已经就绪的可供读取的数据</li>
+<li>Channel可用于写数据</li>
+</ul>
+<p>选择器运行在一个检查状态变化并对其做出相应响应的线程上,在应用程序对状态的改变做出响应之后,选择器状态会被重置,然后继续重复这过程;</p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/4e4b9a4baccf9ccc5a16f77baa36b9117dc23f1e/png/N-Netty%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/12.%E9%80%89%E6%8B%A9%E5%B9%B6%E5%A4%84%E7%90%86%E7%8A%B6%E6%80%81%E7%9A%84%E5%8F%98%E5%8C%96%E8%BF%87%E7%A8%8B.png?raw=true" alt="选择并处理状态的变化"></p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/4e4b9a4baccf9ccc5a16f77baa36b9117dc23f1e/png/N-Netty%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/13.%E9%9B%B6%E6%8B%B7%E8%B4%9D.png?raw=true" alt="零拷贝"></p>
+<p>零拷贝其实在Windows下有API进行支持;</p>
+<h4 id="Epooll-用于Linux的本地非阻塞传输"><a class="header-anchor" href="#Epooll-用于Linux的本地非阻塞传输"></a>Epooll-用于Linux的本地非阻塞传输</h4>
+<p>Netty为Linux提供了一组NIO API,其以一种和它本身的设计更加一致的方式使用epoll,实现类是<B>EpollEventLoopGroup</B></p>
+<h4 id="OIO-旧的阻塞I-O"><a class="header-anchor" href="#OIO-旧的阻塞I-O"></a>OIO-旧的阻塞I/O</h4>
+<blockquote>
+<p>Netty的OIO传输实现代表了一种折中的办法;它可以通过常规的传输API使用,但是由于它是建立在java.net包的阻塞实现之上的,所以它不是异步的;Netty利用<B>SO_TIMEOUT</B>这个Socket标识,它指定了等待一个I/O操作完成的最大毫秒数.如果这个操作在指定时间间隔内没有完成,则将会抛出一个<B>SocketTimeout_Exception</B>,Netty将捕获这个异常并继续循环处理,在下次运行EventLoop时,它将再次尝试;</p>
+</blockquote>
+<p><img src="" alt="OIO的处理逻辑"></p>
+<h4 id="用于JVM内部通信的Local传输"><a class="header-anchor" href="#用于JVM内部通信的Local传输"></a>用于JVM内部通信的Local传输</h4>
+<blockquote>
+<p>Netty提供了一个Local传输,用于在同一个JVM中运行的客户端和服务端程序之间的异步通信.在这个传输中,和服务器Channel相关联的SocketAddress并没有绑定物理网络地址;</p>
+</blockquote>
+<h4 id="Embedded-传输"><a class="header-anchor" href="#Embedded-传输"></a>Embedded 传输</h4>
+<blockquote>
+<p>Netty提供了一种额外的传输方式,使得你可以将一组ChannelHandler作为帮助器嵌入到其他的ChannelHandler内部;</p>
+</blockquote>
+<h2 id="ByteBuf"><a class="header-anchor" href="#ByteBuf"></a>ByteBuf</h2>
+<p>网络数据的基本单位是字节,Java NIO提供了<B>ByteBuffer&lt;/B作为它的字节容器,但是这个类使用过于复杂;因此Netty在内部进行了分封装,通过API提供了两个类:<B>ByteBuf</B>和<B>ByteBufHolder</B>;</p>
+<p>ByteBuf内部会维护两个不同的<B>索引</B>,一个用于读取,一个用于写入,当你从ByteBuf中读取数据时,它的readderIndex将会递增已经被读取过的字节数.同样的,当你写入ByteBuf时,它的writeIndex也会进行递增;</p>
+<ol>
+<li>
+<p>堆缓冲区<br>
+最常用的ByteBuf模式就是将数据存储在JVM的堆空间中;</p>
+</li>
+<li>
+<p>直接缓冲区<br>
+<B>直接缓存区</B>是另外一种ByteBuf模式,我们期望用用于对象创建的内存分配永远都来自于堆中,但这并不是必须的,在JDK 1.4中引入的ButeBuffer类允许JVM实现通过本地调用来分配内存;这样可以避免每次在调用本地I/O操作之前将缓冲区的内容复制到一个中间缓冲区中;<br>
+“直接缓冲区的内存将驻留在常规的会被垃圾回收的堆内存之外”,直接缓冲区的主要缺点是<B>相对与基于堆内存的缓冲区,它们的分配和释放都比较昂贵</B></p>
+</li>
+<li>
+<p>复合缓冲区<br>
+<B>复合缓冲区</B>指的是,它为多个ByteBuf提供一个聚合视图,通过这个聚合视图可以根据需要进行添加和删除ByteBuf实例,用于补充JDK中的ByteBuffer中缺失的这个特性;<br>
+Netty中通过ByteBuf的子类 -&gt; CompositeByteBuf来实现这个功能,它提供了一个将多个缓冲区聚合成为单个合并缓冲区的虚拟实现;</p>
+</li>
+</ol>
+<h2 id="字节级操作"><a class="header-anchor" href="#字节级操作"></a>字节级操作</h2>
+<ol>
+<li>随机访问索引</li>
+<li>顺序访问索引</li>
+<li>可丢弃字节</li>
+<li>可读字节</li>
+<li>可写字节</li>
+<li>索引管理</li>
+<li>查找操作</li>
+<li>派生缓冲区</li>
+</ol>
+<h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
 
                 
             </div>
@@ -964,7 +1064,7 @@ ChannelPipeline是典型的过滤器模式,数据经过不同的ChannelHandler�
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            189.5k
+                                            191.4k
                                         </span>&nbsp;字
                                         
                                             
