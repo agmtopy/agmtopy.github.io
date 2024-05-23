@@ -6,7 +6,7 @@
   <link href="https://agmtopy.gitee.io/atom.xml" rel="self"/>
   
   <link href="https://agmtopy.gitee.io/"/>
-  <updated>2023-11-20T16:03:27.714Z</updated>
+  <updated>2024-05-23T15:34:59.057Z</updated>
   <id>https://agmtopy.gitee.io/</id>
   
   <author>
@@ -17,15 +17,108 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>深入理解分布式事务-原理与实践一</title>
-    <link href="https://agmtopy.gitee.io/2023/11/21/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1-%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5%E4%B8%80/"/>
-    <id>https://agmtopy.gitee.io/2023/11/21/%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1-%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5%E4%B8%80/</id>
+    <title>JDK21对比JDK8语法升级指南</title>
+    <link href="https://agmtopy.gitee.io/2024/04/01/12.JVM/51.jdk21%E5%AF%B9%E6%AF%94jdk8%E5%8D%87%E7%BA%A7%E6%8C%87%E5%8D%97/"/>
+    <id>https://agmtopy.gitee.io/2024/04/01/12.JVM/51.jdk21%E5%AF%B9%E6%AF%94jdk8%E5%8D%87%E7%BA%A7%E6%8C%87%E5%8D%97/</id>
+    <published>2024-04-01T14:06:00.000Z</published>
+    <updated>2024-05-23T15:34:59.057Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="JDK21对比JDK8语法升级指南"><a class="header-anchor" href="#JDK21对比JDK8语法升级指南"></a>JDK21对比JDK8语法升级指南</h2><p>JDK8经过JDK11(LTS)、JDK17(LTS)、JDK21(LTS)等多个长期支持JDK版本,目前最新版本已经到了JDK22(non lts),下一个长期支持版本为JDK25,因此长时间内JDK21都会是一个生产版本,下面从三个三个方面了解JDK8升级到JDK21中语法层面的内容:<B>新语法特性</B>、<B>新API</B>、<B>并发</B>;</p><h3 id="新语法特性"><a class="header-anchor" href="#新语法特性"></a>新语法特性</h3><ol><li><p>Record<br><a href="https://github.com/agmtopy/JDK21/blob/main/src/main/java/st/newlanguagefeatures/RecordKeyword1.java">RecordKeyword1.java</a><br><a href="(https://openjdk.org/jeps/432)">JEP 432: Record Patterns (Second Preview)</a></p></li><li><p>instanceof增强<br><a href="https://github.com/agmtopy/JDK21/blob/main/src/main/java/st/newlanguagefeatures/Instanceof2.java">Instanceof2.java</a><br><a href="https://openjdk.org/jeps/394">JEP 394: Pattern Matching for instanceof</a></p></li><li><p>Sealed Classes:密封类<br><a href="https://github.com/agmtopy/JDK21/blob/main/src/main/java/st/newlanguagefeatures/Permits3.java">Permits3.java</a><br><a href="https://openjdk.org/jeps/397">JEP 397: Sealed Classes (Second Preview)</a></p></li><li><p>TextBlock:文本块增强<br><a href="https://github.com/agmtopy/JDK21/blob/main/src/main/java/st/newlanguagefeatures/TextBlock4.java">TextBlock4.java</a><br><a href="https://openjdk.org/jeps/378">JEP 378: Text Blocks</a></p></li><li><p>switch增强<br><a href="https://github.com/agmtopy/JDK21/blob/main/src/main/java/st/newlanguagefeatures/Switch6.java">Switch6.java</a><br><a href="https://openjdk.org/jeps/361">JEP 361: Switch Expressions</a></p></li><li><p>var:局部变量类型<br><a href="https://github.com/agmtopy/JDK21/blob/main/src/main/java/st/newlanguagefeatures/Var7.java">Var7.java</a><br><a href="https://openjdk.org/jeps/323">JEP 323: Local-Variable Syntax for Lambda Parameters</a></p></li><li><p>Interface Private Method<br><a href="https://github.com/agmtopy/JDK21/blob/main/src/main/java/st/newlanguagefeatures/InterfacePrivate8.java">InterfacePrivate8</a><br><a href="https://openjdk.org/jeps/213">JEP 213: Milling Project Coin</a></p></li></ol><h3 id="新API"><a class="header-anchor" href="#新API"></a>新API</h3><ol><li><p>Collection:集合新增方法<br><a href="https://github.com/agmtopy/JDK21/blob/main/src/main/java/st/newapi/SequencedCollection1.java">SequencedCollection1.java</a><br>[<a href="https://openjdk.org/jeps/431">https://openjdk.org/jeps/431</a>](JEP 431: Sequenced Collections)</p></li><li><p>BigDecimal.Two<br><a href="https://github.com/agmtopy/JDK21/blob/main/src/main/java/st/newapi/BigDecimalTwo4.java">BigDecimalTwo4.java</a></p></li><li><p>HexFormat:16进制转换<br><a href="https://github.com/agmtopy/JDK21/blob/main/src/main/java/st/newapi/HexFormat5.java">HexFormat5.java</a></p></li><li><p>Stream.toList<br><a href="https://github.com/agmtopy/JDK21/blob/main/src/main/java/st/newapi/StreamToList6.java">StreamToList6.java</a></p></li><li><p>Stream.MapMulti:flatMap<br><a href="https://github.com/agmtopy/JDK21/blob/main/src/main/java/st/newapi/StreamToList6.java">StreamToList6.java</a></p></li><li><p>Collectors.Teeing:集合合并<br><a href="https://github.com/agmtopy/JDK21/blob/main/src/main/java/st/newapi/CollectorsTeeing8.java">CollectorsTeeing8.java</a></p></li><li><p>String增强<br><a href="https://github.com/agmtopy/JDK21/blob/main/src/main/java/st/newapi/StringIncrease9.java">StringIncrease9.java</a></p></li><li><p>Collectors.of:集合初始化<br><a href="https://github.com/agmtopy/JDK21/blob/main/src/main/java/st/newapi/CollectionsFactoryMethods10.java">CollectionsFactoryMethods10.java</a></p></li><li><p>Flow API:实现响应式规范<br><a href="https://github.com/agmtopy/JDK21/blob/main/src/main/java/st/newapi/MyPublisher11.java">MyPublisher11.java.java</a></p></li><li><p>Arrays.Mismatch:差集<br><a href="https://github.com/agmtopy/JDK21/blob/main/src/main/java/st/newapi/ArraysMismatch12.java">ArraysMismatch12.java</a></p></li></ol>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;JDK21对比JDK8语法升级指南&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;#JDK21对比JDK8语法升级指南&quot;&gt;&lt;/a&gt;JDK21对比JDK8语法升级指南&lt;/h2&gt;
+&lt;p&gt;JDK8经过JDK11(LTS)、JDK17(LTS)、JDK2</summary>
+      
+    
+    
+    
+    <category term="JVM" scheme="https://agmtopy.gitee.io/categories/JVM/"/>
+    
+    
+    <category term="jvm" scheme="https://agmtopy.gitee.io/tags/jvm/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>1.高并发系统实战-如何解决缓存不同步</title>
+    <link href="https://agmtopy.gitee.io/2024/02/27/21.%E6%9E%81%E5%AE%A2%E6%97%B6%E9%97%B4/%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98/"/>
+    <id>https://agmtopy.gitee.io/2024/02/27/21.%E6%9E%81%E5%AE%A2%E6%97%B6%E9%97%B4/%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98/</id>
+    <published>2024-02-27T13:35:37.000Z</published>
+    <updated>2024-03-09T03:40:30.366Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="高并发系统实战-如何解决缓存不同步"><a class="header-anchor" href="#高并发系统实战-如何解决缓存不同步"></a>高并发系统实战-如何解决缓存不同步</h2><p>使用缓存需要注意的地方:</p><ol><li>使用缓存需要考虑性价比</li><li>防止穿透缓存直接查询数据库场景</li><li>设置TTL</li></ol><p>缓存数据刷新场景:</p><ol><li><p>单条数据更新场景<br>常见的方法是通过’先更新数据库在删除缓存’的方式来进行出来,更严格的场景是通过延迟双删或者MQ的方式通知删除</p></li><li><p>避免大量临时缓存同时到期失效</p></li><li><p>对于高并发更新缓存的场景可以采用’singleflight(请求合并)'来进行优化</p></li><li></li></ol>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;高并发系统实战-如何解决缓存不同步&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;#高并发系统实战-如何解决缓存不同步&quot;&gt;&lt;/a&gt;高并发系统实战-如何解决缓存不同步&lt;/h2&gt;
+&lt;p&gt;使用缓存需要注意的地方:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;使用缓存需要</summary>
+      
+    
+    
+    
+    <category term="极客时间" scheme="https://agmtopy.gitee.io/categories/%E6%9E%81%E5%AE%A2%E6%97%B6%E9%97%B4/"/>
+    
+    
+    <category term="高并发" scheme="https://agmtopy.gitee.io/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/"/>
+    
+    <category term="缓存" scheme="https://agmtopy.gitee.io/tags/%E7%BC%93%E5%AD%98/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>数据结构与算法之美</title>
+    <link href="https://agmtopy.gitee.io/2023/11/25/13.LeetCode/20.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E4%B9%8B%E7%BE%8E%E4%B8%80/"/>
+    <id>https://agmtopy.gitee.io/2023/11/25/13.LeetCode/20.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E4%B9%8B%E7%BE%8E%E4%B8%80/</id>
+    <published>2023-11-25T09:20:21.000Z</published>
+    <updated>2023-11-27T15:00:12.072Z</updated>
+    
+    <content type="html"><![CDATA[<h1>数据结构与算法之美</h1><h2 id="链表"><a class="header-anchor" href="#链表"></a>链表</h2><p><img src="https://github.com/agmtopy/noteBook/blob/bcb7ec20e534a7a98747839531829e14b116a23b/png/J-%E6%9E%81%E5%AE%A2%E6%97%B6%E9%97%B4/S-%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E4%B9%8B%E7%BE%8E/%E9%93%BE%E8%A1%A8%E7%9A%84%E5%AE%9A%E4%B9%89.png?raw=true" alt="链表的定义"></p><p>链表的主要比较对象是数组,最大的差别在于内存空间是否连续不连续上,对于不连续的内存空间就需要<B>索引</B>或<B>下标</B>方式来标识;</p><p>回文串问题如何解决?</p><p>链表解决技巧:</p><ol><li>理解指针或引用的含义</li><li>警惕指针丢失和内存泄漏</li><li>哨兵概念,利用哨兵节点简化编程难度,用哨兵节点来屏蔽首尾节点的特殊处理逻辑</li><li>重点留意边界条件处理<br>如果链表为空时，代码是否能正常工作？<br>如果链表只包含一个结点时，代码是否能正常工作？<br>如果链表只包含两个结点时，代码是否能正常工作？<br>代码逻辑在处理头结点和尾结点的时候，是否能正常工作？</li><li>画图举例操作</li></ol><p>练习题LeetCode对应编号：206，141，21，19，876</p><h2 id="栈"><a class="header-anchor" href="#栈"></a>栈</h2>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;数据结构与算法之美&lt;/h1&gt;
+&lt;h2 id=&quot;链表&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;#链表&quot;&gt;&lt;/a&gt;链表&lt;/h2&gt;
+&lt;p&gt;&lt;img src=&quot;https://github.com/agmtopy/noteBook/blob/bcb7ec2</summary>
+      
+    
+    
+    
+    <category term="算法" scheme="https://agmtopy.gitee.io/categories/%E7%AE%97%E6%B3%95/"/>
+    
+    
+    <category term="LeetCode" scheme="https://agmtopy.gitee.io/tags/LeetCode/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>深入理解分布式事务-原理与实践-分布式事务基础</title>
+    <link href="https://agmtopy.gitee.io/2023/11/21/19.%E5%88%86%E5%B8%83%E5%BC%8F/1.%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1-%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5%E4%B8%80/"/>
+    <id>https://agmtopy.gitee.io/2023/11/21/19.%E5%88%86%E5%B8%83%E5%BC%8F/1.%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1-%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5%E4%B8%80/</id>
     <published>2023-11-20T16:03:27.000Z</published>
-    <updated>2023-11-20T16:03:27.714Z</updated>
+    <updated>2023-12-21T16:13:34.194Z</updated>
+    
+    <content type="html"><![CDATA[<h1>分布式事务基础</h1><h2 id="事务的基本概念"><a class="header-anchor" href="#事务的基本概念"></a>事务的基本概念</h2><h3 id="ACID"><a class="header-anchor" href="#ACID"></a>ACID</h3><ol><li>原子性</li><li>一致性</li><li>隔离性</li><li>持久性</li></ol><h3 id="事务的类型"><a class="header-anchor" href="#事务的类型"></a>事务的类型</h3><ul><li><p>扁平事务<br>事务操作中最常见、最简单的事务,无法单独提交整个事务中的部分事务,只能把整个事务全部提交或者回滚;</p></li><li><p>带有保存点的扁平事务<br>内部带有保存点的事务,可以将当前事务回滚到此位置;</p></li><li><p>链式事务<br>链式事务是在带有保存点的扁平事务的基础上,自动将当前事务的上下文隐式的传递给下一事务,也就是说一个事务的提交操作和下一个事务的开始操作合并在一起是具备原子性的;</p></li><li><p>嵌套事务<br>嵌套事务指的是有多个事务处于嵌套状态,共同完成一项任务的处理,整个任务具备原子性;嵌套事务最外层有一个顶层事务,只有当顶层事务完成后才会整体提交;</p></li><li><p>分布式事务基础<br>分布式事务指的是事务的参与者、事务所在的服务器、涉及的资源服务器以及事务管理器分别位于不同的分布式系统下的一个整体事务;</p></li></ul><h3 id="本地事务"><a class="header-anchor" href="#本地事务"></a>本地事务</h3><p>本地事务通常是由关系型数据库本身的事务特性来进行实现的,优缺点:</p><p>优点:</p><ol><li>严格支持ACID特性</li><li>事务可靠,关系型数据的事务是经过严格论证的</li><li>本地事务执行效率高</li><li>事务是由DBMS完成</li><li>不涉及网络通信</li></ol><p>缺点:</p><ol><li>不具备分布式事务的处理能力</li><li>一次事务处理过程只能连接一个支持事务的数据库,即不能用于多个事务性数据库;</li></ol><h3 id="MySql事务基础"><a class="header-anchor" href="#MySql事务基础"></a>MySql事务基础</h3><ul><li>并发带来的问题</li></ul><ol><li>更新丢失</li><li>脏读</li></ol><h2 id="Mysql事务的实现原理"><a class="header-anchor" href="#Mysql事务的实现原理"></a>Mysql事务的实现原理</h2><h2 id="Spring事务的实现原理"><a class="header-anchor" href="#Spring事务的实现原理"></a>Spring事务的实现原理</h2><h2 id="分布式事务的基本概念"><a class="header-anchor" href="#分布式事务的基本概念"></a>分布式事务的基本概念</h2><h2 id="分布式事务的理论基础"><a class="header-anchor" href="#分布式事务的理论基础"></a>分布式事务的理论基础</h2>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;分布式事务基础&lt;/h1&gt;
+&lt;h2 id=&quot;事务的基本概念&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;#事务的基本概念&quot;&gt;&lt;/a&gt;事务的基本概念&lt;/h2&gt;
+&lt;h3 id=&quot;ACID&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;#AC</summary>
+      
     
     
     
+    <category term="分布式" scheme="https://agmtopy.gitee.io/categories/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
     
+    
+    <category term="读书笔记" scheme="https://agmtopy.gitee.io/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/"/>
     
   </entry>
   
@@ -453,87 +546,6 @@
     
     
     <category term="git" scheme="https://agmtopy.gitee.io/tags/git/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>分布式数据库系统原理</title>
-    <link href="https://agmtopy.gitee.io/2022/09/27/11.%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AC%94%E8%AE%B0/31.%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/"/>
-    <id>https://agmtopy.gitee.io/2022/09/27/11.%E6%95%B0%E6%8D%AE%E5%BA%93%E7%AC%94%E8%AE%B0/31.%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86/</id>
-    <published>2022-09-27T15:11:06.000Z</published>
-    <updated>2022-11-05T07:31:16.606Z</updated>
-    
-    <content type="html"><![CDATA[<h1>分布式数据库系统原理</h1><h2 id="引言"><a class="header-anchor" href="#引言"></a>引言</h2><blockquote><p>为什么需要分布式?</p></blockquote><ul><li><B>处理逻辑</B></li><li><B>功能</B></li><li><B>数据</B></li><li><B>控制</B></li></ul><p>对于这个的理解应该是:</p><ul><li>处理逻辑:对应应用实例或者算法之类的,单点无法满足某些需求(AP)</li><li>功能:对于功能的分布式划分主要是体现在微服务的拆分上,不同的功能拆分成为不同的服务</li><li>数据:对于数据的拆分主要是单点数据服务无法满足要求的情况下,进行拆库拆表</li><li>控制:<font color="#dddd00">这个暂时不能理解?控制是否为程序或者算法的同义楠?</font></li></ul><blockquote><p>什么是分布式数据库?<br>物理上分布不同地方,通过计算机网络逻辑上相互关联的数据库</p></blockquote><h3 id="主要的问题"><a class="header-anchor" href="#主要的问题"></a>主要的问题</h3><ul><li>数据如何选择分片?</li><li>分布式事务的实现?</li><li>性能问题?</li></ul><p>如下图:</p><p><img src="https://raw.githubusercontent.com/agmtopy/noteBook/master/png/f-%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%8E%9F%E7%90%86/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E9%97%AE%E9%A2%98%E4%B9%8B%E9%97%B4%E7%9A%84%E8%81%94%E7%B3%BB.jpg" alt="分布式数据问题之间的联系"></p><h3 id="集中式数据库模型与分布式数据库模型"><a class="header-anchor" href="#集中式数据库模型与分布式数据库模型"></a>集中式数据库模型与分布式数据库模型</h3><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/f-%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%8E%9F%E7%90%86/%E9%9B%86%E4%B8%AD%E5%BC%8FDBMS%E5%88%86%E5%B1%82%E7%BB%93%E6%9E%84.jpg?raw=true" alt="集中式DBMS分层架构"></p><p>可以看到集中式数据库就是一个标准的应用分层,以MySql为例</p><p>界面: 提供不同语音的MySql Drive<br>控制: 连接校验<br>编译: sql解析<br>执行: innodb存储引擎处理<br>数据访问:MySql内核处理<br>一致性: 各种Lock和log</p><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/f-%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%8E%9F%E7%90%86/%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%BA%93%E7%B3%BB%E7%BB%9F%E7%BB%93%E6%9E%84.jpg?raw=true" alt="分布式数据库结构"></p><p>可以看到分布式数据库系统需要从三个不同的方面进行考虑:<B>物理分布</B>&lt;B&gt;异构性</B>&lt;B&gt;自治性</B></p><ul><li>物理分布:指的是组成分布式系统的服务可以在物理上隔离,可以不需要在通一台硬件机器上运行</li><li>异构性:指的是各个服务允许使用各自的协议来提供服务,这一点在工业级的分布式数据库上应该没有实现,还是遵守相同协议来降低软件复杂度</li><li>自洽性:各个服务本身就可以单独对外提供服务,不用依赖其他系统,这一点常用的分布式系统较为不同</li></ul><h3 id="基本概念"><a class="header-anchor" href="#基本概念"></a>基本概念</h3><ul><li>DBMS</li></ul><blockquote><p>DBMS-关系数据库的概念是一组结构化的数据,它是出于我们对现实世界建模的映射,一个关系数据库是以表格形式表达数据的数据库.</p></blockquote><h2 id="分布式数据库设计"><a class="header-anchor" href="#分布式数据库设计"></a>分布式数据库设计</h2><p>有两种分布式数据库的设计方法:<B>自顶向下的方法</B>和<B>自底向上的方法</B>,这也是软件领域设计的两种通用设计方法,例如我们在设计系统的时候基于底层功能实现还是上层战略定位来进行的往往会得到不同的演进路线;</p><ul><li>自顶向下:指的是在设计的时候就考虑不同的实例去支持局部的全局概念模型</li><li>自底向上:指的是将多个数据库中的信息集成为一个紧密相连的多数据库系统,常用于<B>数据仓库/数据湖</B></li></ul><h3 id="分布设计的研究问题"><a class="header-anchor" href="#分布设计的研究问题"></a>分布设计的研究问题</h3><ul><li>如何得到正确的分片结果?<br>首先,数据分片有两种维度来进行,一种是垂直分片按照业务领域进行划分,一种是水平进行分片按照特定规则来进行划分;我们会重点研究采用水平模式的设计方案.</li></ul><p>专业的分布式数据库的数据划分好复杂,会去考虑数据的分片是按照某些条件来进行的,既要保证数据的分片又要保证数据的’亲和性’;一大段一大段的高阶函数~😳😳😳</p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1&gt;分布式数据库系统原理&lt;/h1&gt;
-&lt;h2 id=&quot;引言&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;#引言&quot;&gt;&lt;/a&gt;引言&lt;/h2&gt;
-&lt;blockquote&gt;
-&lt;p&gt;为什么需要分布式?&lt;/p&gt;
-&lt;/blockquote&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;B&gt;处理逻辑</summary>
-      
-    
-    
-    
-    <category term="数据库" scheme="https://agmtopy.gitee.io/categories/%E6%95%B0%E6%8D%AE%E5%BA%93/"/>
-    
-    
-    <category term="分布式" scheme="https://agmtopy.gitee.io/tags/%E5%88%86%E5%B8%83%E5%BC%8F/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>现代操作系统原理与实现-内存管理篇</title>
-    <link href="https://agmtopy.gitee.io/2022/09/24/20.%E7%AC%94%E8%AE%B0/12.%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E7%AF%87/"/>
-    <id>https://agmtopy.gitee.io/2022/09/24/20.%E7%AC%94%E8%AE%B0/12.%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E5%86%85%E5%AD%98%E7%AE%A1%E7%90%86%E7%AF%87/</id>
-    <published>2022-09-24T09:09:44.000Z</published>
-    <updated>2022-09-25T14:22:14.661Z</updated>
-    
-    <content type="html"><![CDATA[<h1>现代操作系统原理与实现-内存管理篇</h1><p>一晃而过距离上一篇<B>硬件结构</B>已经过去了一个月有余了.最近一直在整理<B>Notion</B>上的笔记,把《深入理解Java虚拟机》的相关笔记也在notion上写和整理去了,对《现代操作系统原理与实现》的笔记也耽搁了许久;这本书应该是本年度最佳书籍了,会争取在今年把第一遍阅读的相关笔记完成,时间过的真的很快,跑题感慨了一下,下面继续有关内存部分的整理和理解吧!</p><h2 id="引言"><a class="header-anchor" href="#引言"></a>引言</h2><p>在上一章中了解到物理内存是组成操作系统的重要部分,这一章节就是介绍操作系统是如何管理和使用内存的;</p><h3 id="内存管理"><a class="header-anchor" href="#内存管理"></a>内存管理</h3><p>内存管理主要是对物理内存的管理,在早期程序是直接分配在物理内存上运行的,那个时候操作系统都不存在,这样分配会产生几个问题例如程序直接操作物理内存无法做到隔离/分配内存空间的碎片化/无法处理超过物理容量限制的分配</p><p>针对这个些问题,提出了<B>虚拟内存</B>的概念,大概是在1956年的一位德国物理学家提出的,感觉这个时间过了好久了啊,但是在翻阅资料查这些的时候发现计算机的发明居然还没有80年,太不可思议了</p><p><img src="http://www.isolves.com/d/file/p/2020/03-17/bbd1470ef6879e2f6e4847b7444fde35.jpg" alt="虚拟内存技术发展时间线"></p><h4 id="虚拟内存"><a class="header-anchor" href="#虚拟内存"></a>虚拟内存</h4><blockquote><p>虚拟内存作为物理内存和应用程序之间的一个抽象层;应用程序不在直接运行在物理内存之上,而是运行在虚拟内存之上;应用程序在运行时只知道虚拟内存地址,cpu或者硬件负责将虚拟地址转换为物理地址,操作系统负责设置虚拟地址与物理地址之间的映射;每个应用程序只能看到属于自己的虚拟内存地址,并且看到的虚拟内存地址是同一的、连续的;</p></blockquote><ul><li>虚拟内存的结构<br>下面是一张有关CPU如何将虚拟地址转换为物理地址的图:</li></ul><p><img src="https://github.com/agmtopy/noteBook/blob/master/drawio/x-%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E7%8E%B0/CPU%E8%99%9A%E6%8B%9F%E5%9C%B0%E5%9D%80%E7%BF%BB%E8%AF%91%E7%A4%BA%E6%84%8F%E5%9B%BE.drawio.png?raw=true" alt="CPU虚拟地址翻译示意图"></p><p>可以看到操作系统向CPU发生虚拟地址访问请求后,传给MMU在通过TLB转换后,将物理地址发送给操作总线,从而访问到物理内存地址;</p><p>现代操作系统都是通过分页的形式采用页表来实现的,<B>TLB</B>缓存了虚拟页号到物理页号之间的映射关系,TLB的设计非常简单就是做映射,但是却十分的高效,因为在内存数据的访问遵守<B>时空局部性原理</B></p><ul><li>虚拟内存中的换页</li></ul><p>在前面说到物理内存无法自动处理分配超过实际容量限制的场景.而虚拟内存可以做到,就是通过换页机制来实现的,具体流程如下:</p><h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2><p><a href="https://zhuanlan.zhihu.com/p/143273007">操作系统之内存管理</a><br><a href="https://ewikizh.top/wiki/Virtual_memory#cite_note-10">虚拟内存</a><br><a href="https://www.isolves.com/it/rj/jy/2020-03-17/14226.html">虚拟内存技术的前世今生</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1&gt;现代操作系统原理与实现-内存管理篇&lt;/h1&gt;
-&lt;p&gt;一晃而过距离上一篇&lt;B&gt;硬件结构&lt;/B&gt;已经过去了一个月有余了.最近一直在整理&lt;B&gt;Notion&lt;/B&gt;上的笔记,把《深入理解Java虚拟机》的相关笔记也在notion上写和整理去了,对《现代操作系统原理与实现》的笔记也</summary>
-      
-    
-    
-    
-    <category term="操作系统" scheme="https://agmtopy.gitee.io/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
-    
-    
-    <category term="笔记" scheme="https://agmtopy.gitee.io/tags/%E7%AC%94%E8%AE%B0/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>现代操作系统原理与实现-硬件结构篇</title>
-    <link href="https://agmtopy.gitee.io/2022/08/14/20.%E7%AC%94%E8%AE%B0/11.%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E7%A1%AC%E4%BB%B6%E7%BB%93%E6%9E%84%E7%AF%87/"/>
-    <id>https://agmtopy.gitee.io/2022/08/14/20.%E7%AC%94%E8%AE%B0/11.%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E7%8E%B0-%E7%A1%AC%E4%BB%B6%E7%BB%93%E6%9E%84%E7%AF%87/</id>
-    <published>2022-08-14T06:39:04.000Z</published>
-    <updated>2022-09-24T09:10:19.783Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="引言"><a class="header-anchor" href="#引言"></a>引言</h2><p>操作系统是建立在硬件结构基础上的软件实现,这一章节我们来介绍计算机的硬件结构.</p><h2 id="CPU与指令集架构"><a class="header-anchor" href="#CPU与指令集架构"></a>CPU与指令集架构</h2><blockquote><p>指令集架构是cpu与软件之间的桥梁,包括指令集\特权级\寄存器\执行模式\安全扩展\性能加速等等</p></blockquote><h3 id="指令集"><a class="header-anchor" href="#指令集"></a>指令集</h3><p>指令集包括<B>精简指令集(RISC)</B>和<B>复杂指令集(CISC)</B>两种.</p><ul><li><p>精简指令集<br>指的是没有寄存器的指令集,通过指令来模拟寄存器的操作,常见的安卓和苹果的A系/M系芯片都是使用的这种指令集</p></li><li><p>复杂指令集<br>指的是有寄存器的指令集,通过使用寄存器来执行指令,常见的Intel的X86芯片都是使用的这种指令集</p></li></ul><p>目前在生产中并没有严格隔离指令集,CISC也在集成RISC的相关指令</p><p>常用的指令类型分为4种:</p><ul><li>数据搬移指令(mov等)</li><li>寄存器计算指令(add/sub等)</li><li>内存读写指令(ldr-加载/str-读写等)</li><li>调整指令(b)</li><li>过程调用指令(bl/ret)</li><li>特权指令(mrs/msr)</li></ul><h2 id="特权级"><a class="header-anchor" href="#特权级"></a>特权级</h2><p>指的是指令运行的级别,分别是El0,El1,El2,El3</p><ul><li><p>El0<br>指的是最低特权级,应用程序通常运行在这一级别上,也可以称为<B>用户态</B></p></li><li><p>EL1<br>操作系统通常运行在这一级别上,也称为<B>内核态</B></p></li><li><p>El2<br>指的是次高特权级,操作系统通常运行在这一级别上,也称为<B>高级内核态</B>,通常虚拟机监控器需要运行在这一状态</p></li><li><p>El3<br>负责普通世界与安全世界的切换,安全世界是<B>AArch64</B>提出来的一个管理硬件交互的级别,EL3在级别上是最高的,因为可以直接操作硬件</p></li></ul><blockquote><p>EL0 &lt; EL1 &lt; EL3 &lt; EL3</p></blockquote><p>程序在运行过程中大量的发生EL0 &lt;=&gt; EL1转换,其实就是用户进程与内核进程在不断的进行切换的过程;这里需要注意一点的是<B>中断</B>是运行在EL1级别上的</p><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/%E7%8E%B0%E4%BB%A3%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/%E4%B8%AD%E6%96%AD%E5%88%87%E6%8D%A2.jpg?raw=true" alt="中断切换"></p><h2 id="寄存器"><a class="header-anchor" href="#寄存器"></a>寄存器</h2><p>寄存器是指令集中的一种数据结构,用于存储数据,比如寄存器中存储的是指令的地址,寄存器中存储的是指令的参数等等.它们是cpu的基本架构组成部分,参与指令的执行和计算过程.现代CPU往往会使用大量专用的寄存器来做专业的事情,比如帧指针寄存器,连接寄存器等</p><h2 id="物理内存与CPU缓存"><a class="header-anchor" href="#物理内存与CPU缓存"></a>物理内存与CPU缓存</h2><ul><li>物理缓存</li></ul><blockquote><p>CPU在执行的过程中,可以通过访存指令不断的向物理内存中读写数据;CPU使用物理内存的方式很简单:通过<B>总线</B>向物理内存发生一个读写请求,其中包括目标地址,物理内存在接收到请求后,会根据请求的类型进行读写操作,并返回相应的结果</p></blockquote><p>通过以上的描述可以得知CPU在进行执行时都是通过总线与内存进行交互\cpu从内存中取值后会放到私有的区域(CPU缓存)中,其实这样的设计也加大了应用人员开发出健壮/正确的并发代码难度,在编写并发相关代码时一定要仔细</p><ul><li>CPU缓存</li></ul><blockquote><p>CPU缓存是一个私有的区域,用于存储CPU执行过程中的数据;由若干个<B>缓存行</B>组成.每个缓存行包含:一个<B>有序位标识</B>标识数据是否有效和一个<B>标记地址</B>用于标记其对应的物理地址;</p></blockquote><blockquote><p>CPU以缓存行(常见的是64bit大小)为单位把物理内存读取到缓存中,也就是说如果只需要一个bit的数据,但是还是需要把该字节对应的缓存行数据全部读取到缓存中,写入反之亦然也是每次需要写出64bit大小的数据</p></blockquote><p>对于CPU缓存行最熟悉的一个作用是<B>禁止指令重排</B>,在java中我们知道valitate的一个作用是可见性,就是根据基于缓存行的<B>缓存一致性协议-MESI协议</B>来实现的</p><p>volatile的另外一个作用是可以解决编译器层面的可见性与重排序问题。而内存屏障则解决了硬件层面的可见性与重排序问题</p><h2 id="设备与中端"><a class="header-anchor" href="#设备与中端"></a>设备与中端</h2><p>常见的设备指的是输入与输出设备,常见的内存映射输入输出设备,常见的中断设备,比如硬盘,光驱,键盘,鼠标等</p><p><B>中断</B>机制是提供设备主动通知CPU的能力.设备通过向CPU发送中断来打断CPU的执行.</p><h2 id="小结"><a class="header-anchor" href="#小结"></a>小结</h2><p>本章主要介绍<B>精简指令集</B>&lt;B&gt;特权级</B>&lt;B&gt;寄存器</B>&lt;B&gt;内存与缓存</B>等硬件基本结构<br>多核CPU缓存的设计遵守<B>缓存一致性协议</B>这个是valotail可见性的基础</p><h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2><p><a href="https://www.cnblogs.com/MrLiuZF/p/15054855.html">CPU缓存</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;引言&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;#引言&quot;&gt;&lt;/a&gt;引言&lt;/h2&gt;
-&lt;p&gt;操作系统是建立在硬件结构基础上的软件实现,这一章节我们来介绍计算机的硬件结构.&lt;/p&gt;
-&lt;h2 id=&quot;CPU与指令集架构&quot;&gt;&lt;a class=&quot;head</summary>
-      
-    
-    
-    
-    <category term="操作系统" scheme="https://agmtopy.gitee.io/categories/%E6%93%8D%E4%BD%9C%E7%B3%BB%E7%BB%9F/"/>
-    
-    
-    <category term="笔记" scheme="https://agmtopy.gitee.io/tags/%E7%AC%94%E8%AE%B0/"/>
     
   </entry>
   

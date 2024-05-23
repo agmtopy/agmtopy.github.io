@@ -642,7 +642,7 @@ void os::start_thread(Thread* thread) &#123;
 <p>关于线程中断isInterrupted()和线程关闭stop()的区别在于<br>
 线程中断是不会中断线程的运行的,而线程关闭stop会关闭线程,stop()是不安全的说法来自于stop()执行后会立即释放该线程所持有的所有锁(包括synchronized持有的全局对象锁)</p>
 <h2 id="volatile不能作为线程标记位"><a class="header-anchor" href="#volatile不能作为线程标记位"></a>volatile不能作为线程标记位</h2>
-<p>volatile作为并发标记位的时候，当一个使用线程阻塞的时候，其他线程仍旧可以改变标记位的值,打但是由于线程不是活动的是不能即使获取到volatile的值，因此volatile不适合作为线程标记位。根本原因在于volatile标记的对象不是全局共享的,在内存一致性的协议下作到可见性;</p>
+<p>volatile作为并发标记位的时候，当一个使用线程阻塞的时候，其他线程仍旧可以改变标记位的值,但是由于持有线程不是活动状态,不能及时获取到volatile标记对象改变后的值，因此volatile不适合作为线程并发安全的标记位。根本原因在于volatile标记的对象不是全局共享的,在内存一致性的协议下作做不到全局可见性;</p>
 <h2 id="wait-notify-notifyAll-方法使用注意"><a class="header-anchor" href="#wait-notify-notifyAll-方法使用注意"></a>wait/notify/notifyAll()方法使用注意</h2>
 <ol>
 <li>wait()方法，必须在<B>synchronized</B>中持有锁后才能使用，因为必须持有对象的<B>monitor</B>锁，这样才能防止在执行前后线程被切换。</li>
@@ -773,39 +773,48 @@ wait必须在synchronized中使用的原因是因为防止指令的乱序执行�
         
         <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+                Current&nbsp;<i class="far fa-dot-circle"></i>
             </div>
             <div class="card">
-                <a href="/2012/11/26/1.%E6%9D%82%E8%AE%B0/2022%E7%9A%84%E4%B8%80%E4%BA%9B%E6%9D%82%E6%83%B3/">
+                <a href="/2017/02/22/2.%E5%B9%B6%E5%8F%91%E7%9F%A5%E8%AF%86/1.%E7%BA%BF%E7%A8%8B%E5%9F%BA%E7%A1%80/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/54.jpg" class="responsive-img" alt="2022的一些杂想">
+                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="线程基础">
                         
-                        <span class="card-title">2022的一些杂想</span>
+                        <span class="card-title">线程基础</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            Here's something encrypted, password is required to continue reading.
+                            
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2012-11-26
+                                <i class="far fa-clock fa-fw icon-date"></i>2017-02-22
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E6%9D%82%E8%AE%B0/" class="post-category">
-                                    杂记
+                            <a href="/categories/%E5%B9%B6%E5%8F%91/" class="post-category">
+                                    并发
                                 </a>
                             
                             
                         </span>
                     </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%A4%9A%E7%BA%BF%E7%A8%8B/">
+                        <span class="chip bg-color">多线程</span>
+                    </a>
+                    
                 </div>
                 
             </div>
@@ -955,7 +964,7 @@ wait必须在synchronized中使用的原因是因为防止指令的乱序执行�
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            191.4k
+                                            192.6k
                                         </span>&nbsp;字
                                         
                                             
