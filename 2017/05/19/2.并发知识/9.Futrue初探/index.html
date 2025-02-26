@@ -422,7 +422,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    479
+                    481
                 </div>
                 
 
@@ -445,7 +445,7 @@
             <div id="articleContent">
                 <h1>Futrue初探</h1>
 <h2 id="Runnable和Callable的区别？"><a class="header-anchor" href="#Runnable和Callable的区别？"></a>Runnable和Callable的区别？</h2>
-<p><strong>Runnable</strong>是一个无返回值，并且不能checked Exception的任务。java中之所以这样实现是因为执行Runnable方法是调用的Threa.run()方法，不是当前线程进行执行，所以就算抛出异常我们也无法捕捉到；</p>
+<p><strong>Runnable</strong>是一个无返回值，并且不能checked Exception的任务定义,java中之所以这样实现是因为执行Runnable方法是调用的Threa.run()方法，不是当前线程进行执行，所以就算抛出异常我们也无法捕捉到；</p>
 <p><strong>Callable</strong>方法定义的是一个有返回值并且可抛出异常的方法，底层采用的是<strong>submit()<strong>方法，返回的是</strong>Futrue<T></strong>，会等待线程执行完毕返回值</p>
 <h2 id="Futrue的主要功能？"><a class="header-anchor" href="#Futrue的主要功能？"></a>Futrue的主要功能？</h2>
 <blockquote>
@@ -483,7 +483,7 @@
 </ul>
 <h2 id="Futrue的注意点"><a class="header-anchor" href="#Futrue的注意点"></a>Futrue的注意点?</h2>
 <ol>
-<li>**Futrue.get()**是一个阻塞方法，在遍历Futrue时注意会方法是阻塞的去获取不同线程的返回值的，这里可以采用get(timeout)的方式</li>
+<li>**Futrue.get()**是一个阻塞方法，在遍历Futrue时注意该方法是阻塞的去获取不同线程的返回值的，这里可以采用get(timeout)的方式</li>
 <li>Futrue本身并没有产生新的线程，这里是利用Threa或者线程池的技术来执行任务的</li>
 </ol>
 <h2 id="演示代码"><a class="header-anchor" href="#演示代码"></a>演示代码</h2>
@@ -811,7 +811,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            192.6k
+                                            195.2k
                                         </span>&nbsp;字
                                         
                                             

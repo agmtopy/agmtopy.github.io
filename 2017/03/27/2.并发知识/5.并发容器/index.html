@@ -422,7 +422,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    446
+                    493
                 </div>
                 
 
@@ -444,14 +444,14 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h1>并发容器</h1>
-<p>有关并发的容器：HashMap、ConcurrentHashMap、CopyOnWriteArrayList</p>
+<p>JAVA中常见的并发的容器有HashMap、ConcurrentHashMap、CopyOnWriteArrayList</p>
 <h2 id="HashMap"><a class="header-anchor" href="#HashMap"></a>HashMap</h2>
 <p><strong>HashMap</strong>在并发场景时候存在几个问题：</p>
 <ol>
 <li>get()方法在容器扩容时，获取到的值可能会不正确。因为在扩容时候，hashMap没有保证容器安全性，可能会出现get()方法获取到镜像链表上，而镜像链表此时并没有值的情况</li>
 <li>put()方法可能会造成值消失（这也是map k-v的特性）</li>
 <li>可见性问题</li>
-<li>死循环cpu占用100%。多个线程同时扩容时，会反转散列表的节点，会有死锁场景相互等待。</li>
+<li>死循环cpu占用100%。多个线程同时扩容时,采用头插法的方式进行插入数据时，会反转散列表的节点以及下属节点之间的关系,从而产生循环节点. 当对这个循环进行遍历时,会产生死循环的情况。</li>
 </ol>
 <h2 id="ConcurrentHashMap"><a class="header-anchor" href="#ConcurrentHashMap"></a>ConcurrentHashMap</h2>
 <p><strong>ConcurrentHashMap</strong>底层是采用CAS+synchronized的方式，来保证并发安全性。</p>
@@ -764,7 +764,7 @@ CopyOnWriteArrayList底层是采用<B>ReentrantLock</B>和volatile修饰数组�
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            192.6k
+                                            195.2k
                                         </span>&nbsp;字
                                         
                                             

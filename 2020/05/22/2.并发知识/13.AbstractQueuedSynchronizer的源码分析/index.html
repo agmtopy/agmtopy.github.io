@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    51
+                    1.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    1 分钟
+                    4 分钟
                 </div>
                 
 
@@ -444,9 +444,109 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h1>AbstractQueuedSynchronizer的源码分析</h1>
-<p><strong>AQS</strong>的全称是<strong>AbstractQueuedSynchronizer</strong>，AQS提供了一个以FIFO的队列，通过定义一系列阻塞线程的操作为<strong>ReentrantLock</strong>、<strong>ReentrantReadWriteLock</strong>、<strong>Semaphore</strong>、<strong>CountDownLatch</strong>提供了底层框架支持。</p>
-<h2 id=""><a class="header-anchor" href="#"></a></h2>
+<p><strong>AQS</strong>的全称是<strong>AbstractQueuedSynchronizer</strong>,AQS提供了一个以FIFO的队列,通过定义一系列阻塞线程的操作为<strong>ReentrantLock</strong>、<strong>ReentrantReadWriteLock</strong>、<strong>Semaphore</strong>、<strong>CountDownLatch</strong>提供了底层框架支持。</p>
+<h2 id="AbstractQueuedSynchronizer的实现类图"><a class="header-anchor" href="#AbstractQueuedSynchronizer的实现类图"></a>AbstractQueuedSynchronizer的实现类图</h2>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/AbstractQueuedSynchronizer%E7%9A%84%E5%AE%9E%E7%8E%B0%E7%B1%BB.png?raw=true" alt="AbstractQueuedSynchronizer的实现类"></p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/ThreadPoolExecutor.png?raw=true" alt="AbstractQueuedSynchronizer的实现类图关系"></p>
+<p>AQS是一个用于构建锁、同步器等线程协作工具类的底层框架,下面详细的对源码进行分析;</p>
+<h2 id="AQS的源码分析"><a class="header-anchor" href="#AQS的源码分析"></a>AQS的源码分析</h2>
+<p>AQS最核心的三大部分就是<B>状态</B>、<B>队列</B>和<B>期望协作工具类去实现的获取/释放等</B>重要方法。我们就从这三个部分出发,分别展开讲解;</p>
+<h3 id="state状态"><a class="header-anchor" href="#state状态"></a>state状态</h3>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//同步状态</span>
+<span class="token keyword">private</span> <span class="token keyword">volatile</span> <span class="token keyword">int</span> state<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>在AQS中,同步状态state被定义为一个volatile的int类型变量,它表示锁的状态,初始值为0;在不同的实现类中它代表的含义各不相同,例如:</p>
+<ul>
+<li>semaphore</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//tryReleaseShared方法进行分析</span>
+  <span class="token keyword">protected</span> <span class="token keyword">final</span> <span class="token keyword">boolean</span> <span class="token function">tryReleaseShared</span><span class="token punctuation">(</span><span class="token keyword">int</span> releases<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token punctuation">;</span><span class="token punctuation">;</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+          <span class="token keyword">int</span> current <span class="token operator">=</span> <span class="token function">getState</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+          <span class="token keyword">int</span> next <span class="token operator">=</span> current <span class="token operator">+</span> releases<span class="token punctuation">;</span>
+          <span class="token keyword">if</span> <span class="token punctuation">(</span>next <span class="token operator">&lt;</span> current<span class="token punctuation">)</span> <span class="token comment">// overflow</span>
+              <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">Error</span><span class="token punctuation">(</span><span class="token string">"Maximum permit count exceeded"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+          <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">compareAndSetState</span><span class="token punctuation">(</span>current<span class="token punctuation">,</span> next<span class="token punctuation">)</span><span class="token punctuation">)</span>
+              <span class="token keyword">return</span> <span class="token boolean">true</span><span class="token punctuation">;</span>
+      <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>以tryReleaseShared进行分析,getState获取到当前信号量后,在将下一个state通过CAS的方式重新进行赋值;</p>
+<ul>
+<li></li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">
+<span class="token keyword">protected</span> <span class="token keyword">final</span> <span class="token keyword">void</span> <span class="token function">setState</span><span class="token punctuation">(</span><span class="token keyword">int</span> newState<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    state <span class="token operator">=</span> newState<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token keyword">protected</span> <span class="token keyword">final</span> <span class="token keyword">boolean</span> <span class="token function">compareAndSetState</span><span class="token punctuation">(</span><span class="token keyword">int</span> expect<span class="token punctuation">,</span> <span class="token keyword">int</span> update<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> STATE<span class="token punctuation">.</span><span class="token function">compareAndSet</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> expect<span class="token punctuation">,</span> update<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>VarHandle是JDK中用于替代unsafe的实现类,这里需要注意的是<B>setState</B>方法,它在这里采用的是直接赋值的方式,因为state被定义为一个用volatile修饰的int类型变量,所以直接赋值的方式是线程安全的;</p>
+<h3 id="FIFO队列"><a class="header-anchor" href="#FIFO队列"></a>FIFO队列</h3>
+<p>FIFO队列指的是AQS中的线程等待队列,代码如下所示,用来存储等待线程的队列,后续包括线程的等待和唤醒都是依赖该队列进行实现;</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/** CLH Nodes */</span>
+<span class="token keyword">abstract</span> <span class="token keyword">static</span> <span class="token keyword">class</span> <span class="token class-name">Node</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">volatile</span> <span class="token class-name">Node</span> prev<span class="token punctuation">;</span>       <span class="token comment">// 前驱节点</span>
+    <span class="token keyword">volatile</span> <span class="token class-name">Node</span> next<span class="token punctuation">;</span>       <span class="token comment">// 后驱节点</span>
+    <span class="token class-name">Thread</span> waiter<span class="token punctuation">;</span>            <span class="token comment">// 等待线程</span>
+    <span class="token keyword">volatile</span> <span class="token keyword">int</span> status<span class="token punctuation">;</span>      <span class="token comment">// 后驱节点状态</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>CLH队列图示<br>
+<img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/AQS%E4%B8%AD%E7%9A%84NODE%E9%98%9F%E5%88%97%E5%9B%BE%E7%A4%BA.png?raw=true" alt="CLH队列图示"></li>
+</ul>
+<p>其中需要注意的是头节点Head并不在等待队列中,因为当线程没有竞争时,是不会创建等待队列,只有当线程发生竞争时才会创建等待队列;</p>
+<blockquote>
+<p>CLH (Craig, Landin, and Hagersten) 队列是一种无锁、可扩展的自旋锁队列结构,用于实现高并发环境下的线程同步。CLH 队列锁是基于链表的等待队列（FIFO 队列）,每个线程在尝试获取锁时会自旋等待,但不会相互干扰。这种方式减少了线程之间的竞争,适合用于多核系统中减少锁争用,提升并发性能。</p>
+</blockquote>
+<p>在 Java 中,AbstractQueuedSynchronizer（AQS）中的同步队列就是基于 CLH 队列思想实现的。<br>
+CLH队列的基本思想是,每个线程在等待获取锁时,都会生成一个节点,并在其节点中记录它的状态（例如是否在等待）。队列中的每个节点都表示一个线程的状态,并且这些节点按顺序排列。线程会通过检查前驱节点的状态来判断自己是否可以获取锁。在 AQS中,CLH 队列通过Node的waitStatus字段来跟踪每个节点的状态。每个节点指向前一个节点,而当前线程通过前驱节点的状态来判断自己是否可以获取锁。这一机制可以有效实现多线程环境下的高效排队和锁的公平性。</p>
+<ul>
+<li>acquireQueued方法</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">
+<span class="token comment">// 尝试获取资源,如果成功则直接返回</span>
+<span class="token keyword">public</span> <span class="token keyword">final</span> <span class="token keyword">void</span> <span class="token function">acquire</span><span class="token punctuation">(</span><span class="token keyword">int</span> arg<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">tryAcquire</span><span class="token punctuation">(</span>arg<span class="token punctuation">)</span> <span class="token operator">&amp;&amp;</span>
+        <span class="token function">acquireQueued</span><span class="token punctuation">(</span><span class="token function">addWaiter</span><span class="token punctuation">(</span><span class="token class-name">Node</span><span class="token punctuation">.</span>EXCLUSIVE<span class="token punctuation">)</span><span class="token punctuation">,</span> arg<span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token function">selfInterrupt</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">//自旋的方式获取锁</span>
+<span class="token keyword">final</span> <span class="token keyword">boolean</span> <span class="token function">acquireQueued</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token class-name">Node</span> node<span class="token punctuation">,</span> <span class="token keyword">int</span> arg<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">boolean</span> interrupted <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+    <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token punctuation">;</span><span class="token punctuation">;</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">final</span> <span class="token class-name">Node</span> p <span class="token operator">=</span> node<span class="token punctuation">.</span><span class="token function">predecessor</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>p <span class="token operator">==</span> head <span class="token operator">&amp;&amp;</span> <span class="token function">tryAcquire</span><span class="token punctuation">(</span>arg<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token function">setHead</span><span class="token punctuation">(</span>node<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                p<span class="token punctuation">.</span>next <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span> <span class="token comment">// help GC</span>
+                <span class="token keyword">return</span> interrupted<span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">shouldParkAfterFailedAcquire</span><span class="token punctuation">(</span>p<span class="token punctuation">,</span> node<span class="token punctuation">)</span><span class="token punctuation">)</span>
+                interrupted <span class="token operator">|=</span> <span class="token function">parkAndCheckInterrupt</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">Throwable</span> t<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">cancelAcquire</span><span class="token punctuation">(</span>node<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span>interrupted<span class="token punctuation">)</span>
+            <span class="token function">selfInterrupt</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token keyword">throw</span> t<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">// 阻塞当前线程</span>
+<span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token keyword">boolean</span> <span class="token function">parkAndCheckInterrupt</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token class-name">LockSupport</span><span class="token punctuation">.</span><span class="token function">park</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">interrupted</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>先通过tryAcquire方法尝试获取锁,如果成功则直接返回;如果失败则进入acquireQueued方法,该方法中通过自旋的方式获取锁,其中阻塞线程是通过LockSupport.park方法来进行实现的;</p>
 <h2 id="总结"><a class="header-anchor" href="#总结"></a>总结:</h2>
+<h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
+<p><a target="_blank" rel="noopener" href="https://javadoop.com/post/AbstractQueuedSynchronizer">一行一行源码分析清楚AbstractQueuedSynchronizer</a><br>
+<a target="_blank" rel="noopener" href="https://coderbee.net/index.php/concurrent/20131115/577">自旋锁、排队自旋锁、MCS锁、CLH锁</a></p>
 
                 
             </div>
@@ -751,7 +851,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            192.6k
+                                            195.2k
                                         </span>&nbsp;字
                                         
                                             

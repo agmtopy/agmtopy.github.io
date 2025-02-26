@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    800
+                    1.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    3 分钟
+                    4 分钟
                 </div>
                 
 
@@ -444,11 +444,43 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h1>线程协作</h1>
-<p>线程之间相互协作</p>
+<p>线程之间相互协作,可以通过以下几种方式来进行实现:</p>
+<ol>
+<li>信号量 - semaphore</li>
+<li>栅栏 - CyclicBarrier</li>
+<li>条件 - Condittion</li>
+<li>屏障 - CountDownLatch</li>
+</ol>
 <h2 id="信号量"><a class="header-anchor" href="#信号量"></a>信号量</h2>
-<p>线程（semaphore）之间信号量的作用是于标记当前资源能否被线程访问的信号。线程访问资源时尝试用<strong>acquire</strong>，访问完成使用<strong>release</strong>归还资源</p>
+<p>线程之间信号量(semaphore)的作用是于标记当前资源能否被线程访问的信号,线程访问资源时尝试用<strong>acquire</strong>，访问完成使用<strong>release</strong>归还资源</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">import</span> <span class="token namespace">java<span class="token punctuation">.</span>util<span class="token punctuation">.</span>concurrent<span class="token punctuation">.</span></span><span class="token class-name">Semaphore</span><span class="token punctuation">;</span>
+
+<span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">SemaphoreExample</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">Semaphore</span> semaphore <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Semaphore</span><span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 允许3个线程同时访问</span>
+
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token keyword">final</span> <span class="token keyword">int</span> threadNumber <span class="token operator">=</span> i<span class="token punctuation">;</span>
+            <span class="token keyword">new</span> <span class="token class-name">Thread</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">-></span> <span class="token punctuation">&#123;</span>
+                <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+                    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Thread "</span> <span class="token operator">+</span> threadNumber <span class="token operator">+</span> <span class="token string">" is trying to acquire a permit."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    semaphore<span class="token punctuation">.</span><span class="token function">acquire</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 获取许可</span>
+                    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Thread "</span> <span class="token operator">+</span> threadNumber <span class="token operator">+</span> <span class="token string">" has acquired a permit."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    <span class="token comment">// 模拟访问共享资源</span>
+                    <span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">2000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">InterruptedException</span> e<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                    e<span class="token punctuation">.</span><span class="token function">printStackTrace</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token punctuation">&#125;</span> <span class="token keyword">finally</span> <span class="token punctuation">&#123;</span>
+                    <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"Thread "</span> <span class="token operator">+</span> threadNumber <span class="token operator">+</span> <span class="token string">" is releasing the permit."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    semaphore<span class="token punctuation">.</span><span class="token function">release</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// 释放许可</span>
+                <span class="token punctuation">&#125;</span>
+            <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="countDownLatch"><a class="header-anchor" href="#countDownLatch"></a>countDownLatch</h2>
-<p><strong>countDownLatch</strong>的作用是多线程之间的倒计时器，用于多线程之间的协作。有两种用法：</p>
+<p><strong>countDownLatch</strong>的作用是多线程之间的倒计时器，用于多线程之间进行相互协作。有两种用法：</p>
 <ol>
 <li>主线程等待其他线程运行完毕后执行</li>
 <li>其他线程等待主线程运行完毕后执行</li>
@@ -471,8 +503,9 @@
     <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"执行完毕..."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://s1.ax1x.com/2020/03/29/GZRSF1.png" alt="GZRSF1.png"></p>
+<p>最后达到的效果是,主线程需要等待其他线程执行完毕后才能继续执行;</p>
 <h2 id="CyclicBarriar"><a class="header-anchor" href="#CyclicBarriar"></a>CyclicBarriar</h2>
-<p><strong>CyclicBarriar</strong>是一组线程到达某个状态后才开始执行,与<strong>CountDownLatch</strong>不同。<strong>CountDownLatch</strong>是达到count=0以后开始执行，是作用于<strong>事件</strong>驱动。<strong>CyclicBarriar</strong>是线程驱动，N个线程到达<strong>wait</strong>的状态统一开始执行。</p>
+<p><strong>CyclicBarriar</strong>是一组线程到达某个状态后才开始执行,与<strong>CountDownLatch</strong>不同。<strong>CountDownLatch</strong>是达到count=0以后开始执行，是用于<strong>事件</strong>驱动。<strong>CyclicBarriar</strong>是线程驱动，例如N个线程到达<strong>wait</strong>的状态统一开始执行。</p>
 <ul>
 <li>CyclicBarriar演示代码</li>
 </ul>
@@ -519,6 +552,8 @@
 <li>执行结果</li>
 </ul>
 <p><img src="https://s1.ax1x.com/2020/03/29/GZIufs.png" alt="GZIufs.png"></p>
+<p>CyclicBarrier在使用上与countDownLatch很相同,都能实现等待某一条件然后在开始执行的功能,区别在与CountDownLatch是让单个线程等待倒计数完成后开始执行,而CyclicBarrier是让一组线程满足等待条件后开始执行,并且CountDownLatch不能重复使用,CyclicBarrier可以多次使用。<br>
+因此CoundDownLatch是被称为计数器,而CyclicBarrier被称为屏障;</p>
 <h2 id="Condittion"><a class="header-anchor" href="#Condittion"></a>Condittion</h2>
 <p><strong>Condittion</strong>能让不同线程之间相互协作，等待满足条件后继续执行。</p>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">ConditionDemo</span> <span class="token punctuation">&#123;</span>
@@ -565,8 +600,7 @@
 <h1>总结</h1>
 <ul>
 <li>
-<p><strong>semaphore</strong><br>
-信号量的作用是只有获得信号量的线程才能<strong>执行</strong>，其余线程只能等待持有信号量的线程释放后才有机会执行。</p>
+<p><strong>semaphore</strong> 信号量的作用是只有获得信号量的线程才能<strong>执行</strong>，其余线程只能等待持有信号量的线程释放后才有机会执行。</p>
 </li>
 <li>
 <p><strong>countDownLatch</strong>是等待一组线程执行完毕后等待线程才可以执行，是事件触发</p>
@@ -875,7 +909,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            192.6k
+                                            195.2k
                                         </span>&nbsp;字
                                         
                                             

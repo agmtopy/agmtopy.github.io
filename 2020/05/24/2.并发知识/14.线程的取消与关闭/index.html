@@ -426,7 +426,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    574
+                    603
                 </div>
                 
 
@@ -560,7 +560,7 @@ t1<span class="token punctuation">.</span><span class="token function">interrupt
 <p>执行结果：<br>
 <img src="https://s1.ax1x.com/2020/05/24/tpS00g.png" alt="tpS00g.png"></p>
 <p>总结：<br>
-在使用自定义的标志位来进行线程的取消操作时，要格外注意是否有会阻塞运行线程的操作。当存在有阻塞运行线程的操作时，会阻塞判断标志位的操作。</p>
+在使用自定义的标志位来进行线程的取消操作时，要格外注意是否有会阻塞运行线程的操作,因为阻塞线程后会影响到使用volatile关键字来进行线程操作的判断逻辑。当存在有阻塞运行线程的操作时，会阻塞判断标志位的操作。</p>
 
                 
             </div>
@@ -865,7 +865,7 @@ t1<span class="token punctuation">.</span><span class="token function">interrupt
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            192.6k
+                                            195.2k
                                         </span>&nbsp;字
                                         
                                             

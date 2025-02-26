@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    217
+                    1.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    1 分钟
+                    3 分钟
                 </div>
                 
 
@@ -444,39 +444,89 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h1>java内存模型</h1>
-<ul>
-<li>jvm内存模型<br>
-jvm虚拟机中间内存划分为：</li>
-</ul>
+<h2 id="简介"><a class="header-anchor" href="#简介"></a>简介</h2>
+<p>jvm虚拟机中内存模型通常会被划分为以下几个区域：</p>
 <ol>
-<li>堆区</li>
-<li>虚拟机栈区</li>
-<li>方法区</li>
-<li>本地方法栈</li>
 <li>程序计数器</li>
-<li>运行时常量</li>
+<li>Java虚拟机栈</li>
+<li>本地方法栈</li>
+<li>堆区</li>
+<li>方法区</li>
+<li>运行时常量池</li>
+<li>直接内存</li>
 </ol>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/JVM%E5%86%85%E5%AD%98%E6%A8%A1%E5%9E%8B.png?raw=true" alt="JVM内存模型"></p>
+<h2 id="程序计数器"><a class="header-anchor" href="#程序计数器"></a>程序计数器</h2>
+<blockquote>
+<p>程序计数器(Program Counter Register)是一块较小的内存空间，它可以看作是当前线程所执行的字节码的行号指示器;</p>
+</blockquote>
+<p>其中这里的程序计数器代表的是java指令码的程序行号指示器,不是cpu中的的指令寄存器,两者都是表示指令执行流程,但是运行层次和执行流程都不一样;</p>
+<pre class="line-numbers language-none"><code class="language-none">JVM 的程序计数器仅用于 JVM 虚拟机层级，是每个线程独有的，并且保存的是字节码指令的位置
+CPU 的指令寄存器直接与物理 CPU 的执行机制相关，存储当前正在执行的机器指令<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h2 id="Java虚拟机栈"><a class="header-anchor" href="#Java虚拟机栈"></a>Java虚拟机栈</h2>
+<blockquote>
+<p>虚拟机栈描述的是Java方法执行的线程内存模型：每个方法被执行的时候，Java虚拟机都会同步创建一个栈帧(Stack Frame)用于<B>存储局部变量表</B>、<B>操作数栈</B>、<B>动态连接</B>、<B>方法出口</B>等信息。每一个方法被调用直至执行完毕的过程，就对应着一个栈帧在虚拟机栈中从入栈到出栈的过程。</p>
+</blockquote>
+<p>虚拟机栈中的<B>存储局部变量表</B>就是我们传统意义上认为的虚拟机栈,用于表示对象引用和基本数据类型等,在编译器已经确认大小的数据模型;</p>
+<h2 id="本地方法栈"><a class="header-anchor" href="#本地方法栈"></a>本地方法栈</h2>
+<blockquote>
+<p>本地方法栈(Native Method Stacks)与虚拟机栈所发挥的作用是非常相似的，其区别只是虚拟机栈为虚拟机执行Java方法（也就是字节码）服务，而本地方法栈则是为虚拟机使用到的本地(Native)方法服务。</p>
+</blockquote>
+<h2 id="堆区"><a class="header-anchor" href="#堆区"></a>堆区</h2>
+<blockquote>
+<p>Java堆是被所有线程共享的一块内存区域，在虚拟机启动时创建。此内存区域的唯一目的就是存放对象实例;<br>
+对象的分配和回收也是发生在这块区域中,其中需要额外注意的是所有线程共享的Java堆中可以划分出多个线程私有的分配缓冲区(Thread Local Allocation Buffer，TLAB)，以提升对象分配时的效率,这块区域主要是用来存放ThreadLocal;</p>
+</blockquote>
+<h2 id="方法区"><a class="header-anchor" href="#方法区"></a>方法区</h2>
+<blockquote>
+<p>方法区(Method Area)与Java堆一样，是各个线程共享的内存区域，它用于存储已被虚拟机加载的类型信息、常量、静态变量、即时编译器编译后的代码缓存等数据;</p>
+</blockquote>
+<p>在JDK8中,方法区已从永久代中移除到元空间中,需要额外注意的一点是元空间中存储的是运行时常量池,在堆空间中存储的是字符串常量池;</p>
+<p>举个例子:</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">class</span> <span class="token class-name">Example</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token class-name">String</span> MAX_VALUE <span class="token operator">=</span> <span class="token string">"MAX_VALUE"</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <ul>
-<li>java内存模型<br>
-<strong>java内存模型</strong>是java的规范，定义了语义到实现的规范。主要有<strong>重排序</strong>、<strong>原子性</strong>、<strong>内存可见性</strong></li>
+<li>
+<p>元空间中存储</p>
+<ol>
+<li>MAX_VALUE的类型信息</li>
+<li>MAX_VALUE的值</li>
+<li>MAX_VALUE的字面值</li>
+</ol>
+</li>
+<li>
+<p>运行时常量池中存储</p>
+<ol>
+<li>“MAX_VALUE”</li>
+</ol>
+<h2 id="运行时常量池"><a class="header-anchor" href="#运行时常量池"></a>运行时常量池</h2>
+</li>
 </ul>
-<h2 id="重排序"><a class="header-anchor" href="#重排序"></a>重排序</h2>
+<blockquote>
+<p>运行时常量池(Runtime Constant Pool)是方法区的一部分。Class文件中除了有类的版本、字段、方法、接口等描述信息外，还有一项信息是常量池表(Constant Pool Table)，用于存放编译期生成的各种字面量与符号引用，这部分内容将在类加载后存放到方法区的运行时常量池中。</p>
+</blockquote>
+<h2 id="直接内存"><a class="header-anchor" href="#直接内存"></a>直接内存</h2>
+<blockquote>
+<p>直接内存(Direct Memory)并不是虚拟机运行时数据区的一部分，也不是java虚拟机规范中定义的内存区域。但是这部分内存也被频繁地使用，而且也可能导致OutOfMemoryError异常出现。</p>
+</blockquote>
+<h2 id="其他"><a class="header-anchor" href="#其他"></a>其他</h2>
+<p><strong>java内存模型</strong>是java的规范，定义了语义到实现的规范,以及<strong>重排序</strong>、<strong>原子性</strong>、<strong>内存可见性</strong>等必要规范;</p>
+<h3 id="重排序"><a class="header-anchor" href="#重排序"></a>重排序</h3>
 <p>指令重排序是通过减少执行指令，来提高整体运行速度。主要有三个地方：</p>
 <ol>
 <li>编译器优化</li>
-<li>cpu重排序</li>
+<li>cpu指令重排序</li>
 <li>内存重排序</li>
 </ol>
-<h2 id="原子操作"><a class="header-anchor" href="#原子操作"></a>原子操作</h2>
+<h3 id="原子操作"><a class="header-anchor" href="#原子操作"></a>原子操作</h3>
 <p>java中原子操作有哪些？</p>
 <ol>
-<li>除long和double之外的基本类型</li>
+<li>对除long和double之外的基本类型的读写操作</li>
 <li>所有reference的读写</li>
-<li>用volatile修饰后的变量读写</li>
 <li>j.u.c包下的原子类</li>
+<li>加锁的代码块或者方法</li>
 </ol>
-<h2 id="内存的可见性"><a class="header-anchor" href="#内存的可见性"></a>内存的可见性</h2>
-<p>内存的可见性指的是，当前线程修改内存中的值以后不能被其他线程看到</p>
 
                 
             </div>
@@ -777,7 +827,7 @@ jvm虚拟机中间内存划分为：</li>
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            192.6k
+                                            195.2k
                                         </span>&nbsp;字
                                         
                                             

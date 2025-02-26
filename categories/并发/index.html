@@ -548,6 +548,24 @@
                 </a>
                 
                 
+                <a href="/categories/JavaParser/" title="JavaParser: 1">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            style="background-color: #E8F8F5;">JavaParser
+                        <span class="tag-length">1</span>
+                    </span>
+                </a>
+                
+                
+                <a href="/categories/%E6%9E%B6%E6%9E%84/" title="架构: 1">
+                    <span class="chip center-align waves-effect waves-light
+                             chip-default "
+                            style="background-color: #F9EBEA;">架构
+                        <span class="tag-length">1</span>
+                    </span>
+                </a>
+                
+                
             </div>
         </div>
     </div>
@@ -726,7 +744,8 @@ ReadWriteLock默认有两个实现分别是Read
                         <div class="summary block-with-text">
                             
                                 通过实例理解CompletableFuture并发框架
-CompletableFuture实现Future、CompletionStage;CompletionStage的定义是作为一个用于异步执行中的处理阶段，适用于lambda表达式计算
+CompletableFuture实现Future、CompletionStage;
+CompletionStage的定义是作为一个用于异步执行中的处理阶段，适用于lambda表达式计
                             
                         </div>
                         <div class="publish-info">
@@ -830,7 +849,7 @@ CompletableFuture实现Future、CompletionStage;CompletionStage的定义是作�
                         <div class="summary block-with-text">
                             
                                 AbstractQueuedSynchronizer的源码分析
-AQS的全称是AbstractQueuedSynchronizer，AQS提供了一个以FIFO的队列，通过定义一系列阻塞线程的操作为ReentrantLock、Reentran
+AQS的全称是AbstractQueuedSynchronizer,AQS提供了一个以FIFO的队列,通过定义一系列阻塞线程的操作为ReentrantLock、Reentran
                             
                         </div>
                         <div class="publish-info">
@@ -878,9 +897,9 @@ AQS的全称是AbstractQueuedSynchronizer，AQS提供了一个以FIFO的队列�
                             
                                 final的不变性设计
 final的作用
-final是用来修饰不变性关系的，表示一种不可改变的关系。可以用来修饰变量、方法、类
+final是用来修饰对象之间不变特性关系的，表示一种不可改变的关系。可以用来修饰变量、方法、类
 修饰变量
-fianl修饰变量表示一旦赋值关系被初始化就不能被修改了；final只会保证这个变量的引用不可变，而对
+fianl修饰变量表示一旦赋值关系,那么初始化后这种关系就不能被修改了；final只会保证这
                             
                         </div>
                         <div class="publish-info">
@@ -927,21 +946,21 @@ fianl修饰变量表示一旦赋值关系被初始化就不能被修改了；fin
                         <div class="summary block-with-text">
                             
                                 java内存模型
+简介
+jvm虚拟机中内存模型通常会被划分为以下几个区域：
 
-jvm内存模型
-jvm虚拟机中间内存划分为：
-
-
-堆区
-虚拟机栈区
-方法区
-本地方法栈
 程序计数器
-运行时常量
+Java虚拟机栈
+本地方法栈
+堆区
+方法区
+运行时常量池
+直接内存
 
 
-java内存模型
-java内存模型是java的规范，定义了语义到实现的规范。主要有重排序、原子性、内存可
+程序计数器
+
+程序计数器(Program Counter Register)是
                             
                         </div>
                         <div class="publish-info">
@@ -988,11 +1007,15 @@ java内存模型是java的规范，定义了语义到实现的规范。主要有
                         <div class="summary block-with-text">
                             
                                 线程协作
-线程之间相互协作
+线程之间相互协作,可以通过以下几种方式来进行实现:
+
+信号量 - semaphore
+栅栏 - CyclicBarrier
+条件 - Condittion
+屏障 - CountDownLatch
+
 信号量
-线程（semaphore）之间信号量的作用是于标记当前资源能否被线程访问的信号。线程访问资源时尝试用acquire，访问完成使用release归还资源
-countDownLatch
-countDownLa
+线程之间信号量(sema
                             
                         </div>
                         <div class="publish-info">
@@ -1040,7 +1063,7 @@ countDownLa
                             
                                 Futrue初探
 Runnable和Callable的区别？
-Runnable是一个无返回值，并且不能checked Exception的任务。java中之所以这样实现是因为执行Runnable方法是调用的Threa.run()方法，不是当
+Runnable是一个无返回值，并且不能checked Exception的任务定义,java中之所以这样实现是因为执行Runnable方法是调用的Threa.run()方法，不
                             
                         </div>
                         <div class="publish-info">
@@ -1237,7 +1260,7 @@ Atomi
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            192.6k
+                                            195.2k
                                         </span>&nbsp;字
                                         
                                             

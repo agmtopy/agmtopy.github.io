@@ -422,7 +422,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    535
+                    604
                 </div>
                 
 
@@ -450,7 +450,7 @@
 <li><strong>ThreadLocal</strong>适用于保存每个线程独享的对象可供其他方法获取的场景<br>
 例如web应用程序中的用户信息可以保存中用线程中，从而在其他需要用到的地方直接可以获取到</li>
 </ul>
-<h2 id="ThreadLocal是不是用来解决共享资源多线程访问的？"><a class="header-anchor" href="#ThreadLocal是不是用来解决共享资源多线程访问的？"></a>ThreadLocal是不是用来解决共享资源多线程访问的？</h2>
+<h2 id="ThreadLocal是不是用来解决共享资源多线程访问的问题？"><a class="header-anchor" href="#ThreadLocal是不是用来解决共享资源多线程访问的问题？"></a>ThreadLocal是不是用来解决共享资源多线程访问的问题？</h2>
 <ul>
 <li>不是，ThreadLocal的底层机制决定了每个线程都独立拥有一份空间来存放数据。虽然在效果上线程安全的，但这并不是通过解决共享资源的方式实现的。</li>
 </ul>
@@ -524,6 +524,8 @@
     <span class="token keyword">this</span><span class="token punctuation">.</span>inheritableThreadLocals <span class="token operator">=</span>
         <span class="token class-name">ThreadLocal</span><span class="token punctuation">.</span><span class="token function">createInheritedMap</span><span class="token punctuation">(</span>parent<span class="token punctuation">.</span>inheritableThreadLocals<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p>在线程初始化方法中，会判断父线程中的<strong>inheritableThreadLocals</strong>是否有值，如果有值会将值赋给子线程</p>
+<h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2>
+<p>由于ThreadLocalMap中的Key是Thread,并且ThreadLocalMap与Key之间是弱引用的关系,Key与value之间是强引用的关系,导致Thread对象被回收后,还存在Key-Value之间的强引用关系,无法回收Value对象,造成内存泄漏;</p>
 
                 
             </div>
@@ -824,7 +826,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            192.6k
+                                            195.2k
                                         </span>&nbsp;字
                                         
                                             

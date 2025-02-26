@@ -463,11 +463,15 @@
     <span class="token comment">// 阻塞队列的添加操作,如果队列已满，则等待至队列有空间，或者超时</span>
     <span class="token keyword">boolean</span> <span class="token function">offer</span><span class="token punctuation">(</span><span class="token class-name">E</span> e<span class="token punctuation">,</span> <span class="token keyword">long</span> timeout<span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span> unit<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span><span class="token punctuation">;</span>
 
+    <span class="token comment">// ---------------------------------------------------------------------------------------------</span>
+
     <span class="token comment">// 阻塞队列的弹出操作,如果deque为空，则等待</span>
     <span class="token class-name">E</span> <span class="token function">take</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span><span class="token punctuation">;</span>
 
     <span class="token comment">// 阻塞队列的弹出操作,等待指定时间后超时,可响应中断</span>
     <span class="token class-name">E</span> <span class="token function">poll</span><span class="token punctuation">(</span><span class="token keyword">long</span> timeout<span class="token punctuation">,</span> <span class="token class-name">TimeUnit</span> unit<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">InterruptedException</span><span class="token punctuation">;</span>
+
+    <span class="token comment">// ---------------------------------------------------------------------------------------------</span>
 
     <span class="token comment">// 返回阻塞队列的大小    </span>
     <span class="token keyword">int</span> <span class="token function">remainingCapacity</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -484,7 +488,7 @@
     <span class="token comment">// 将阻塞队列中的元素拷贝到指定的数组中，并返回拷贝的元素个数</span>
     <span class="token keyword">int</span> <span class="token function">drainTo</span><span class="token punctuation">(</span><span class="token class-name">Collection</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span> <span class="token keyword">super</span> <span class="token class-name">E</span><span class="token punctuation">></span></span> c<span class="token punctuation">,</span> <span class="token keyword">int</span> maxElements<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>以上是阻塞队列<B>BlockingQueue</B>接口定义的方法,下面详细的分析一下,这几个主要的方法</p>
 <ol>
 <li><B>take()</B>的功能是移除头节点，当队列为空时，则阻塞</li>
@@ -989,7 +993,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            192.6k
+                                            195.2k
                                         </span>&nbsp;字
                                         
                                             
