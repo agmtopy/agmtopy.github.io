@@ -6,7 +6,7 @@
   <link href="https://agmtopy.gitee.io/atom.xml" rel="self"/>
   
   <link href="https://agmtopy.gitee.io/"/>
-  <updated>2025-02-25T23:19:43.179Z</updated>
+  <updated>2025-02-26T13:31:31.417Z</updated>
   <id>https://agmtopy.gitee.io/</id>
   
   <author>
@@ -21,7 +21,7 @@
     <link href="https://agmtopy.gitee.io/2024/12/12/24.%E6%9E%B6%E6%9E%84/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%89%8D%E8%A8%80/"/>
     <id>https://agmtopy.gitee.io/2024/12/12/24.%E6%9E%B6%E6%9E%84/%E7%AC%AC%E4%B8%80%E7%AB%A0-%E5%89%8D%E8%A8%80/</id>
     <published>2024-12-12T13:08:02.000Z</published>
-    <updated>2025-02-25T23:19:43.179Z</updated>
+    <updated>2025-02-26T13:31:31.417Z</updated>
     
     <content type="html"><![CDATA[<h2 id="第一章-前言"><a class="header-anchor" href="#第一章-前言"></a>第一章-前言</h2><h3 id="互联网架构演变历史"><a class="header-anchor" href="#互联网架构演变历史"></a>互联网架构演变历史</h3><h4 id="1-业务架构"><a class="header-anchor" href="#1-业务架构"></a>1. 业务架构</h4><p>1.1 单体架构<br>在互联网早期发展中,主要以单体架构为主,按照业务-&gt;应用层-&gt;数据层进行简单划分;<br>每一个业务系统就是一个单独的业务团队,数据和人员(组织关系)都是独立的,造成数据隔离和组织单体化的问题;</p><p>1.2 中台战略<br>由阿里提出来的,理念是<B>共享</B>,共享业务、系统、组织架构上的一种落地方式和实施办法;<br>关键字:共享、节约成本、协助</p>]]></content>
     
