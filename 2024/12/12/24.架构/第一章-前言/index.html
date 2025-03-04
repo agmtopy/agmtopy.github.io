@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    773
+                    2.3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    2 分钟
+                    7 分钟
                 </div>
                 
 
@@ -557,6 +557,116 @@ SOA架构需要引入ESB(企业服务总线)来进行整体调度</p>
 <li>够用就好,用的越花,风险越大</li>
 <li>简约最美</li>
 </ol>
+<h3 id="容器化技术概览"><a class="header-anchor" href="#容器化技术概览"></a>容器化技术概览</h3>
+<p>应用部署方式的演变:从硬件虚拟化(操作系统虚拟化))到容器虚拟化(容器虚拟化的演变;</p>
+<h4 id="什么是容器化"><a class="header-anchor" href="#什么是容器化"></a>什么是容器化</h4>
+<blockquote>
+<p>容器化是将应用程序或服务及其依赖或者配置,一起打包为容器映像的一种软件构建及部署技术;</p>
+</blockquote>
+<p><img src="" alt="容器化架构"></p>
+<ul>
+<li>什么是docker</li>
+</ul>
+<blockquote>
+<p>docker是go语言研发的容器引擎,基于容器化技术和沙箱机制的应用部署技术;<br>
+可适用于自动化测试、打包、持续集成、发布等场景,以下是Docker的优点:</p>
+</blockquote>
+<ol>
+<li>更高效的系统资源利用率</li>
+<li>更快速的启动时间</li>
+<li>一致的运行环境</li>
+<li>持续交付和部署</li>
+<li>更轻松的迁移</li>
+</ol>
+<p>当然docker也有缺点:</p>
+<ol>
+<li>隔离性不如虚拟机</li>
+<li>性能高于虚拟机,但是低于物理机</li>
+</ol>
+<p>docker的应用场景:<br>
+1.微服务部署场景<br>
+2. DevOps场景</p>
+<p>额外需要注意的是,对docker文件的修改只会体现在当前层,对其他层的修改会采用标记删除-复制修改的方式进行;</p>
+<h3 id="Zookeeper"><a class="header-anchor" href="#Zookeeper"></a>Zookeeper</h3>
+<h3 id="Zookeeper基础及高级应用"><a class="header-anchor" href="#Zookeeper基础及高级应用"></a>Zookeeper基础及高级应用</h3>
+<ul>
+<li>
+<p>Zookeeper数据模型<br>
+Zookeeper的数据模型是一个树形目录结构,类似于文件系统的目录结构,通过k-v的方式来进行存储,key是由’/'分割的路径;<br>
+每个Znode节点可以存储的数据大小为1MB,选择1Mb的原因是基于zookeeper作为分布式协调服务的高性能和稳定性考量,其设计初衷就是用于协调服务,而非存储大量数据;</p>
+</li>
+<li>
+<p>Zookeeper节点类型</p>
+</li>
+</ul>
+<ol>
+<li>持久化节点(默认类型)</li>
+<li>持久化顺序节点</li>
+<li>临时节点</li>
+<li>临时顺序节点<br>
+另外还有容器节点和超时节点等</li>
+</ol>
+<h4 id="Zookeeper应用场景"><a class="header-anchor" href="#Zookeeper应用场景"></a>Zookeeper应用场景</h4>
+<ul>
+<li>分布式锁</li>
+</ul>
+<blockquote>
+<p>分布式锁指的是在分布式环境下,跨进程\跨主机\跨网络的共享资源,实现互斥访问,保证一致性;在Zookeeper中,锁就是一个数据节点;</p>
+</blockquote>
+<p>普通实现:通过注册<B>临时节点</B>,各个客户端抢占创建临时节点的方式,来获取锁,其他未抢占到该节点的客户端通过监听该节点的变化来重新获取锁;<br>
+这种方式存在的问题是: 羊群效应,指的是持有锁的客户端释放锁之后,其他所有客户端由于是通过watch机制监听该节点,导致所有客户端都会收到通知,然后重新发起竞争锁的请求,从而造成大量无效竞争;<br>
+解决方案是:通过临时顺序节点,每个客户端在创建锁的时候,都会创建一个临时顺序节点,然后通过监听前一个节点的变化来获取锁;</p>
+<ul>
+<li>分布式锁-读写锁</li>
+</ul>
+<blockquote>
+<p>通过Zk实现分布式读写锁,是通过将临时顺序节点分为<B>读锁节点</B>和<B>写锁节点</B>来进行实现;</p>
+</blockquote>
+<ol>
+<li>读请求时,通过判断当前读节点,如果没有比自己更小的节点或者比自己小的节点都是读节点,那么获取读锁成功,如果比自己小的节点中有写锁节点,那么获取读锁失败;</li>
+<li>写请求时,通过判断当前写节点,如果没有比自己更小的节点,那么获取读锁成功,如果自己不是最小的节点,那么获取读锁失败;</li>
+<li>读锁或者写锁完成操作后,都要进行释放;</li>
+</ol>
+<ul>
+<li>配置中心</li>
+</ul>
+<blockquote>
+<p>使用zookeeper作为配置中心,主要是通过客户端来监听配置节点的变化来实现;</p>
+</blockquote>
+<ul>
+<li>注册中心</li>
+</ul>
+<blockquote>
+<p>使用zookeeper作为注册中心,是通过客户端来注册服务节点,调用端监听服务节点的变化来实现;</p>
+</blockquote>
+<ul>
+<li>Curator客户端的实现</li>
+</ul>
+<ol>
+<li>InterProcessMutex:分布式可重入排他锁</li>
+<li>InterProcessSemaphoreV2:分布式信号量</li>
+</ol>
+<h4 id="Zookeeper选举策略"><a class="header-anchor" href="#Zookeeper选举策略"></a>Zookeeper选举策略</h4>
+<ul>
+<li>ZAB协议</li>
+</ul>
+<p>Zookeeper的选举策略是基于ZAB协议来进行实现的,ZAB协议是一种对<B>Paxos算法</B>的简化实现,是专门未Zookeeper设计的支持崩溃恢复的原子广播协议;<br>
+基于该协议zk实现了一种主备模式(即Leader和Follower模式)的系统架构来保证集群中的各个节点的数据一致性;<br>
+在ZAB协议下,节点分为两个角色:<B>Leader</B>和<B>Follower</B>,第三个角色是Observer,Observer不参与投票;<br>
+Leader: 唯一，负责写操作和协调,一个zk集群中同一时刻只会有一个Leader,Leader发起并维护与各个follower和Observer的心跳,Leader通过心跳来维护集群中各个节点的状态,同时将写操作广播到各个节点<br>
+Follower: 多数，负责读操作并参与选举,同时Follower会响应Leader的心跳,并且接受Leader的写操作广播;Follower也可以响应客户端的写操作,然后将写操作转发给Leader,来进行完成;<br>
+Observer: 可选，专注于读操作，不参与选举,Observer的设计是为了提供读能力,因此被设计为数据是满足最终一致性的,因此可能会有读取数据延迟的问题,解决这个问题的方法是:1.强制Sync,2.客户端优先连接到Leader或者follower,3.对于强一致性的业务场景不使用Observer;</p>
+<ul>
+<li>ZAB协议的两种模式</li>
+</ul>
+<ol>
+<li>崩溃恢复模式:一旦Leader服务器进入崩溃或者网络原因导致与集群中的过半follower失去连接,那么就会进入崩溃恢复模式;zk集群会进入选举阶段,通过投票的方式来选出新的Leader;</li>
+<li>消息广播模式:Leader选出之后,就会进入消息广播模式;在该模式下,Leader会进行消息广播,需要注意的是<B>满足过半节点即可</B>,这是和Paxos算法的区别;</li>
+</ol>
+<ul>
+<li>zk的选举过程</li>
+</ul>
+<h4 id="Zookeeper集群-ZAB协议"><a class="header-anchor" href="#Zookeeper集群-ZAB协议"></a>Zookeeper集群&amp;ZAB协议</h4>
 
                 
             </div>
@@ -859,7 +969,7 @@ SOA架构需要引入ESB(企业服务总线)来进行整体调度</p>
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            195.8k
+                                            197.3k
                                         </span>&nbsp;字
                                         
                                             
