@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    2.3k
+                    2.6k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    7 分钟
+                    8 分钟
                 </div>
                 
 
@@ -664,8 +664,23 @@ Observer: 可选，专注于读操作，不参与选举,Observer的设计是为�
 <li>消息广播模式:Leader选出之后,就会进入消息广播模式;在该模式下,Leader会进行消息广播,需要注意的是<B>满足过半节点即可</B>,这是和Paxos算法的区别;</li>
 </ol>
 <ul>
-<li>zk的选举过程</li>
+<li>zk的选举过程<br>
+Zookeeper的选举过程分为两类,第一类是<B>服务器启动时的Leader选举流程</B>、<B>异常恢复场景Leader的选举过程</B><br>
+首先介绍几个概念:</li>
 </ul>
+<ol>
+<li>zxid:zxid是一个64位的数字,高32位是epoch(leader纪元),低32位是当前leader纪元内事务ID,节点初始化时为0|0;</li>
+<li>serverid:也被称为<B>myId</B>,代表服务器的ID,是一个32位的数字,初始化是通过myid文件进行初始化的;</li>
+<li>Quorum:集群中过半的节点数量;</li>
+</ol>
+<p>leader选举流程大致可以分为以下几个步骤:</p>
+<ol>
+<li>集群启动时,每个节点都会初始化自己的zxid和serverid;</li>
+<li>集群启动时,每个节点都会发起投票,投的都是自己,并且将投票信息广播出去</li>
+<li>每个节点通过对比自己的(zxid,serverid)和接收到的投票信息,来确定自己的投票结果,并且将投票信息广播出去;</li>
+<li>当某个节点收到的投票信息数量达到过半时,该节点就会成为Leader;</li>
+<li>Leader选举完成后,Leader会进行消息广播;</li>
+</ol>
 <h4 id="Zookeeper集群-ZAB协议"><a class="header-anchor" href="#Zookeeper集群-ZAB协议"></a>Zookeeper集群&amp;ZAB协议</h4>
 
                 
@@ -969,7 +984,7 @@ Observer: 可选，专注于读操作，不参与选举,Observer的设计是为�
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            197.3k
+                                            197.6k
                                         </span>&nbsp;字
                                         
                                             
