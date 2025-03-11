@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    2.6k
+                    2.8k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    8 分钟
+                    9 分钟
                 </div>
                 
 
@@ -443,7 +443,7 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="第一章-前言"><a class="header-anchor" href="#第一章-前言"></a>第一章-前言</h2>
+                <h2 id="《架构思考》-前言"><a class="header-anchor" href="#《架构思考》-前言"></a>《架构思考》-前言</h2>
 <h3 id="互联网架构演变历史"><a class="header-anchor" href="#互联网架构演变历史"></a>互联网架构演变历史</h3>
 <h4 id="1-业务架构"><a class="header-anchor" href="#1-业务架构"></a>1. 业务架构</h4>
 <p>1.1 单体架构<br>
@@ -587,7 +587,7 @@ SOA架构需要引入ESB(企业服务总线)来进行整体调度</p>
 1.微服务部署场景<br>
 2. DevOps场景</p>
 <p>额外需要注意的是,对docker文件的修改只会体现在当前层,对其他层的修改会采用标记删除-复制修改的方式进行;</p>
-<h3 id="Zookeeper"><a class="header-anchor" href="#Zookeeper"></a>Zookeeper</h3>
+<h2 id="Zookeeper"><a class="header-anchor" href="#Zookeeper"></a>Zookeeper</h2>
 <h3 id="Zookeeper基础及高级应用"><a class="header-anchor" href="#Zookeeper基础及高级应用"></a>Zookeeper基础及高级应用</h3>
 <ul>
 <li>
@@ -681,7 +681,34 @@ Zookeeper的选举过程分为两类,第一类是<B>服务器启动时的Leader�
 <li>当某个节点收到的投票信息数量达到过半时,该节点就会成为Leader;</li>
 <li>Leader选举完成后,Leader会进行消息广播;</li>
 </ol>
-<h4 id="Zookeeper集群-ZAB协议"><a class="header-anchor" href="#Zookeeper集群-ZAB协议"></a>Zookeeper集群&amp;ZAB协议</h4>
+<h2 id="Apollo配置中心"><a class="header-anchor" href="#Apollo配置中心"></a>Apollo配置中心</h2>
+<p>Apollo是分布式配置中心,主要用于管理分布式系统的配置信息;</p>
+<p>@TODO</p>
+<h2 id="Skywalking"><a class="header-anchor" href="#Skywalking"></a>Skywalking</h2>
+<h3 id="微服务系统监控的三要素"><a class="header-anchor" href="#微服务系统监控的三要素"></a>微服务系统监控的三要素</h3>
+<p>度量单位:QPS,RT,CPU使用率,接口调用量,接口成功率<br>
+日志:业务日志,数据日志,异常日志<br>
+链路追踪:记录一个请求的完整路径</p>
+<h3 id="分布式链路的组成"><a class="header-anchor" href="#分布式链路的组成"></a>分布式链路的组成</h3>
+<ol>
+<li><B>数据采集阶段</B></li>
+<li><B>数据持久化阶段</B></li>
+<li><B>数据展示阶段</B></li>
+</ol>
+<h3 id="opentraceing规范"><a class="header-anchor" href="#opentraceing规范"></a>opentraceing规范</h3>
+<ul>
+<li>trace</li>
+</ul>
+<blockquote>
+<p>一个Trace代表一个事务、请求或者是流程在分布式系统中的执行过程;OpenTracing中的一个Trace由多个Span组成,一个Spen代表系统中具有开始时间<br>
+和执行时长的逻辑单元,Span一般会有一个名称,一个Trace中的Span是首尾相连接的;</p>
+</blockquote>
+<ul>
+<li>Span</li>
+</ul>
+<blockquote>
+<p>Span代表系统中具有开始时间和执行时长的逻辑单元,Span之间通过嵌套或者顺序排列建立逻辑因果关系;</p>
+</blockquote>
 
                 
             </div>
@@ -982,7 +1009,7 @@ Zookeeper的选举过程分为两类,第一类是<B>服务器启动时的Leader�
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            198.2k
+                                            198.6k
                                         </span>&nbsp;字
                                         
                                             

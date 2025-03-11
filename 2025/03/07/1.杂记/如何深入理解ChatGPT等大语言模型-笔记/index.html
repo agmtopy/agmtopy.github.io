@@ -422,7 +422,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    662
+                    733
                 </div>
                 
 
@@ -482,7 +482,9 @@ LLM模型在给出结果时,会依赖上一步输出的token,因此要避免一�
 <h3 id="强化学习阶段"><a class="header-anchor" href="#强化学习阶段"></a>强化学习阶段</h3>
 <p><B>强化学习</B>指的是模型在给出答案后,会根据结果来增加能输出正确答题的路径的概率,减少错误答案的路径的概率,在不断的迭代中,模型会更加准确;<br>
 对于有明确答案的问题,可以使用LLM评判模型给出的答案是否正确,从而进行强化学习;<br>
-对于没有明确答案的问题,通常使用另外一个神经网络模型来模拟人类的评判标准,来进行评分,从而进行强化学习;</p>
+对于没有明确答案的问题,通常使用另外一个神经网络模型来模拟人类的评判标准,来进行评分,从而进行强化学习;<br>
+RLHF会有对抗问题,因为模型会想办法欺骗评判标准;</p>
+<p>PS:这个分享教程的格式非常好,首先是分享的知识只划分为三个段落,每个段落完成后都会进行回溯,最后进行整体回溯;</p>
 <h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
 <p><a target="_blank" rel="noopener" href="https://huggingface.co/spaces/HuggingFaceFW/blogpost-fineweb-v1">FineWeb: decanting the web for the finest text data at scale</a><br>
 <a target="_blank" rel="noopener" href="https://tiktokenizer.vercel.app/?model=cl100k_base">Tiktokenizer</a></p>
@@ -788,7 +790,7 @@ LLM模型在给出结果时,会依赖上一步输出的token,因此要避免一�
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            198.2k
+                                            198.6k
                                         </span>&nbsp;字
                                         
                                             
