@@ -422,7 +422,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    1.7k
+                    1.9k
                 </div>
                 
 
@@ -483,7 +483,7 @@ a. 后台线程主要有</li>
 </ol>
 <ul>
 <li>Master Thread<br>
-主线程主要负责将缓冲池中的数据异步刷新到磁盘中,保证数据的一致性</li>
+主线程主要负责将缓冲池中的数据异步刷新到磁盘中,保证数据的一致性,包括脏页的刷新,合并插入缓冲等操作</li>
 <li>I/O Thread<br>
 I/O Thread 主要是负责AIO(Async IO)请求的回调</li>
 <li>Purge Thread<br>
@@ -509,10 +509,11 @@ InnoDB存储引擎是基于磁盘存储,其中的数据是按照页的方式进�
 <li>InnoDB存储的锁信息</li>
 <li>数据字典</li>
 </ol>
+<p>缓冲池存在的基础是因为关系型数据库的数据访问模式是遵循<B>局部性原理</B>,即单位时间内只会访问部分数据,因此可以使用缓冲池来提高数据的访问速度;</p>
 <ul>
 <li>
 <p>LRU list,Freen lst,Flush list<br>
-数据库中的缓冲池是通过LRU算法来进行管理,但是InnoDB中的LRU算法是经过优化的,将新数据放到列表3/8处</p>
+数据库中的缓冲池是通过LRU算法来进行管理,但是InnoDB中的LRU算法是经过优化的,将新数据放到列表3/8处;其中<B>Buffer pool hit rate</B>是一个非常重要的指标,标识数据从缓冲池中读取数据的命中率,如果太低说明缓冲池不够大或者数据访问模式不符合局部性原理,通常为95%以上;</p>
 </li>
 <li>
 <p>重做日志缓冲<br>
@@ -874,7 +875,7 @@ Insert Buffer的非叶子节点是由space(待插入记录表的表空间id),off
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            198.6k
+                                            198.7k
                                         </span>&nbsp;字
                                         
                                             
