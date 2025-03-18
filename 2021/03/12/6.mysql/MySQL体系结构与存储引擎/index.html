@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    1.9k
+                    2.4k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    6 分钟
+                    8 分钟
                 </div>
                 
 
@@ -517,7 +517,10 @@ InnoDB存储引擎是基于磁盘存储,其中的数据是按照页的方式进�
 </li>
 <li>
 <p>重做日志缓冲<br>
-重做日志首先会放到缓冲区,然后按照一定的频率刷新到日志文件上,有三种情况会刷新重做日志:1.Master Thread每一秒都会将日志缓冲刷新到日志文件,2.每个事务提交时都会将重做日志刷新到文件,3.当重做日志缓冲池剩余空间小于1/2时,会将日志刷新到文件上</p>
+重做日志首先会放到缓冲区,然后按照一定的频率刷新到日志文件上,有三种情况会刷新重做日志:<br>
+1.Master Thread每一秒都会将日志缓冲刷新到日志文件;<br>
+2.每个事务提交时都会将重做日志刷新到文件<br>
+3.当重做日志缓冲池剩余空间小于1/2时,会将日志刷新到文件上</p>
 </li>
 <li>
 <p>额外的内存池<br>
@@ -568,13 +571,39 @@ Insert Buffer的非叶子节点是由space(待插入记录表的表空间id),off
 <li>Master Thread线程对Insert Buffer的刷新</li>
 </ol>
 <h2 id="两次写"><a class="header-anchor" href="#两次写"></a>两次写</h2>
-<p>两次写指的是当在直接写入某页时发生宕机,会有丢失数据的风险.通过向将脏页的数据转移到内存中的doublewrite buffer中,在将doublewrite中的数据同步写到共享表空间的物理磁盘文件上,第二次才将doublewrite buffer中的文件刷新到数据文件(.ibd)中,这样可以尽量保证数据文件的完整性</p>
+<p>两次写指的是当在直接写入某页时发生宕机,会有丢失数据的风险.通过向将脏页的数据转移到内存中的doublewrite buffer中,在将doublewrite中的数据同步写到共享表空间的物理磁盘文件上,第二次才将doublewrite buffer中的文件刷新到数据文件(.ibd)中,这样可以尽量保证数据文件的完整性<br>
+为什么需要使用redolog和doublewrite buffer同时来保证数据的完整性呢?<br>
+因为redolog是一种物理+逻辑相结合的方式的数据结构,在宕机时,redolog在设计上是为了保证事务的完整性,在故障恢复时不能处理页断裂的场景,对于页断裂的场景需要使用doublewrite buffer来进行恢复,后续事务的完整性还是通过redolog来保证的;并不是是同一页上既要使用redolog又要使用doublewrite buffer来进行恢复;</p>
 <h2 id="自适应哈希索引"><a class="header-anchor" href="#自适应哈希索引"></a>自适应哈希索引</h2>
 <p>自适应哈希索引指的是连续对热点数据的多次查询后会根据B+树索引生成对应的哈希索引,加快查询性能</p>
 <h2 id="异步IO"><a class="header-anchor" href="#异步IO"></a>异步IO</h2>
-<p>异步IO可以提高操作磁盘的效率,</p>
+<p>异步IO可以提高操作磁盘的效率,…</p>
 <h2 id="刷新邻接页"><a class="header-anchor" href="#刷新邻接页"></a>刷新邻接页</h2>
-<p>刷新邻接页指的是对脏页所在区的页进行检测,发现是脏页一并进行刷新.</p>
+<p>刷新邻接页指的是对脏页所在区的页进行检测,发现是脏页一并进行刷新</p>
+<ul>
+<li>
+<p>LRU列表 (Least Recently Used List)<br>
+用途: LRU列表主要用于管理缓冲池（Buffer Pool）中的页面。缓冲池是InnoDB用来缓存表数据和索引数据的主要内存区域</p>
+</li>
+<li>
+<p>缓冲池 (Buffer Pool)<br>
+定义: 缓冲池是InnoDB存储引擎用来缓存表数据和索引数据的主要内存区域。它用于减少磁盘I/O操作，提高数据库的读写性能。<br>
+内容:<br>
+干净页 (Clean Pages): 这些页面是最近从磁盘加载到内存中的，并且自加载以来没有被修改过。<br>
+脏页 (Dirty Pages): 这些页面是已经被修改但尚未写回到磁盘的页面。</p>
+</li>
+<li>
+<p>Flush列表<br>
+用途: Flush列表用于管理脏页（即已经被修改但尚未写入磁盘的页面）。它跟踪哪些页面需要刷新到磁盘</p>
+</li>
+<li>
+<p>脏页 (Dirty Pages)<br>
+定义: 脏页是指在缓冲池中已经被修改但还没有同步到磁盘的数据页。这些页面需要通过后台线程定期刷新回磁盘以确保数据的一致性和持久性。<br>
+内容:<br>
+脏页是缓冲池的一部分，只是这些页面的状态标记为“脏”（即已修改）。<br>
+脏页的数据在刷新到磁盘之前，仍然保留在缓冲池中，可以继续被访问和修改。</p>
+</li>
+</ul>
 
                 
             </div>
@@ -875,7 +904,7 @@ Insert Buffer的非叶子节点是由space(待插入记录表的表空间id),off
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            198.7k
+                                            199.3k
                                         </span>&nbsp;字
                                         
                                             
