@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    1.6k
+                    1.8k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    5 分钟
+                    6 分钟
                 </div>
                 
 
@@ -545,6 +545,15 @@ Varchar类型在MySQL中的定义是最大能存储65535个字节,并且是该�
 <blockquote>
 <p>在进行数据查找时,会先从B+树中查询到数据对应的页,将页加载到内存中后,根据页目录来对用户数据进行二分查找(重点)</p>
 </blockquote>
+<h2 id="约束"><a class="header-anchor" href="#约束"></a>约束</h2>
+<p>关系型数据库系统和文件系统的一个不同点是,关系型数据库本身能够保证存储数据的完整性,不需要应用程序的控制,而文件系统则需要应用程序来保证数据的完整性.当前所有的关系型数据库都提供了约束机制;<br>
+约束和索引的区别:</p>
+<blockquote>
+<p>当用户创建了一个唯一索引时就创建了一个唯一的<B>约束</B>,但是约束和索引的概念是不同的,约束更像是一个逻辑上的概念,用来保证数据的完整性,而索引是一个数据结构,即代表逻辑上的概念,同时也是物理存储的方式;</p>
+</blockquote>
+<ul>
+<li>ENUM和SET就是一种约束</li>
+</ul>
 <h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://my.oschina.net/xinxingegeya/blog/474895">MySQL聚簇索引&amp;聚集索引&amp;索引组织表</a></li>
@@ -849,7 +858,7 @@ Varchar类型在MySQL中的定义是最大能存储65535个字节,并且是该�
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            199.3k
+                                            199.5k
                                         </span>&nbsp;字
                                         
                                             

@@ -6,7 +6,7 @@
   <link href="https://agmtopy.gitee.io/atom.xml" rel="self"/>
   
   <link href="https://agmtopy.gitee.io/"/>
-  <updated>2025-03-17T14:25:36.086Z</updated>
+  <updated>2025-03-19T14:12:35.269Z</updated>
   <id>https://agmtopy.gitee.io/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="https://agmtopy.gitee.io/2025/03/17/24.%E6%9E%B6%E6%9E%84/%E7%AC%AC%E4%BA%8C%E7%AB%A0-RPC%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/"/>
     <id>https://agmtopy.gitee.io/2025/03/17/24.%E6%9E%B6%E6%9E%84/%E7%AC%AC%E4%BA%8C%E7%AB%A0-RPC%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/</id>
     <published>2025-03-17T12:51:01.000Z</published>
-    <updated>2025-03-17T14:25:36.086Z</updated>
+    <updated>2025-03-19T14:12:35.269Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="《架构思考》-RPC通信原理"><a class="header-anchor" href="#《架构思考》-RPC通信原理"></a>《架构思考》-RPC通信原理</h2><h3 id="RPC调用流程"><a class="header-anchor" href="#RPC调用流程"></a>RPC调用流程</h3><ul><li>服务端</li></ul><ol><li>网络模块</li><li>协议解码</li><li>反序列化</li><li>服务调用</li></ol><ul><li>客户端</li></ul><ol><li>调用接口方法</li><li>代理实现</li><li>序列化</li><li>协议编码</li><li>网络模块</li></ol>]]></content>
+    <content type="html"><![CDATA[<h2 id="《架构思考》-RPC通信原理"><a class="header-anchor" href="#《架构思考》-RPC通信原理"></a>《架构思考》-RPC通信原理</h2><h3 id="RPC调用流程"><a class="header-anchor" href="#RPC调用流程"></a>RPC调用流程</h3><ul><li>服务端、</li></ul><ol><li>网络模块</li><li>协议解码</li><li>反序列化</li><li>服务调用</li></ol><ul><li>客户端</li></ul><ol><li>调用接口方法</li><li>代理实现</li><li>序列化</li><li>协议编码</li><li>网络模块</li></ol>]]></content>
     
     
       
