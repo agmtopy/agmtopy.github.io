@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    1.1k
+                    1.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    3 分钟
+                    4 分钟
                 </div>
                 
 
@@ -453,7 +453,8 @@
 <h3 id="B-树索引"><a class="header-anchor" href="#B-树索引"></a>B+树索引</h3>
 <p>结构为’B+树’的索引有聚集索引/辅助索引<br>
 聚集索引是以主键来构造B+树,在叶子节点中存放行记录,也就是叶子节点称为数据页.<br>
-辅助索引是以索引key来构造B+树,叶子节点记录的是主键,因此在进行查找是会进行一次读取聚集索引的操作</p>
+辅助索引是以索引key来构造B+树,叶子节点记录的是主键,因此在进行查找是会进行一次读取聚集索引的操作<br>
+B+树索引并不能找到一个给定键值的具体行记录,而是找到一个包含该键值的数据页,然后数据库把该页读取到内存中,在通过page directory找到具体的行记录;</p>
 <h3 id="全文索引"><a class="header-anchor" href="#全文索引"></a>全文索引</h3>
 <p>全文索引指的是将存储与数据库中的全部数据中的任意内容信息查询出来的技术.<br>
 全文索引主要是用倒排索引的技术来进行实现,倒排索引需要用到一个索引辅助表,对全文中的值进行分词和索引定位</p>
@@ -814,7 +815,7 @@ RR隔离级别下,一致性非锁定读一定是读取事务开始时的一份�
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            199.5k
+                                            199.8k
                                         </span>&nbsp;字
                                         
                                             

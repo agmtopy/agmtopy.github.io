@@ -6,7 +6,7 @@
   <link href="https://agmtopy.gitee.io/atom.xml" rel="self"/>
   
   <link href="https://agmtopy.gitee.io/"/>
-  <updated>2025-03-19T14:12:35.269Z</updated>
+  <updated>2025-03-21T00:53:37.839Z</updated>
   <id>https://agmtopy.gitee.io/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="https://agmtopy.gitee.io/2025/03/17/24.%E6%9E%B6%E6%9E%84/%E7%AC%AC%E4%BA%8C%E7%AB%A0-RPC%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/"/>
     <id>https://agmtopy.gitee.io/2025/03/17/24.%E6%9E%B6%E6%9E%84/%E7%AC%AC%E4%BA%8C%E7%AB%A0-RPC%E9%80%9A%E4%BF%A1%E5%8E%9F%E7%90%86/</id>
     <published>2025-03-17T12:51:01.000Z</published>
-    <updated>2025-03-19T14:12:35.269Z</updated>
+    <updated>2025-03-21T00:53:37.839Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="《架构思考》-RPC通信原理"><a class="header-anchor" href="#《架构思考》-RPC通信原理"></a>《架构思考》-RPC通信原理</h2><h3 id="RPC调用流程"><a class="header-anchor" href="#RPC调用流程"></a>RPC调用流程</h3><ul><li>服务端、</li></ul><ol><li>网络模块</li><li>协议解码</li><li>反序列化</li><li>服务调用</li></ol><ul><li>客户端</li></ul><ol><li>调用接口方法</li><li>代理实现</li><li>序列化</li><li>协议编码</li><li>网络模块</li></ol>]]></content>
+    <content type="html"><![CDATA[<h2 id="《架构思考》-RPC通信原理"><a class="header-anchor" href="#《架构思考》-RPC通信原理"></a>《架构思考》-RPC通信原理</h2><h3 id="RPC调用流程"><a class="header-anchor" href="#RPC调用流程"></a>RPC调用流程</h3><ul><li>服务端、</li></ul><ol><li>网络模块</li><li>协议解码</li><li>反序列化</li><li>服务调用</li></ol><ul><li>客户端</li></ul><ol><li>调用接口方法</li><li>代理实现</li><li>序列化</li><li>协议编码</li><li>网络模块</li></ol><h3 id="Netty通信框架"><a class="header-anchor" href="#Netty通信框架"></a>Netty通信框架</h3><p>Reactor模型</p><ul><li><p>Reactor单线程模型</p></li><li><p>Reactor多线程模型</p></li></ul><ol><li>MainReactor主线程<ul><li>单个线程,负责接收客户端连接</li></ul></li><li>SubReactor线程池</li></ol><ul><li>负责事件检测、I/O操作</li></ul><ol start="3"><li>worker线程池</li></ol><ul><li>负责业务处理</li></ul><p>优劣分析:MainReactor主线程与SubReactor线程池职责分工明确,MainReactor主线程只负责接收客户端连接,SubReactor线程池负责事件检测、I/O操作,worker线程池负责业务处理。<br>MainReactor主线程与SubReactor线程的数据交互简单,MainReactor主线程只需要把新连接传给SubReactor线程池即可,SubReactor线程池无需返回数据;<br>多个SubReactor线程能够应对更高的并发请求;<br>缺点:编程复杂度较高</p><p>小结:Reactor多线程模型也被称呼为1+M+N模型,1代表MainReactor主线程,M代表SubReactor线程池,N代表worker线程池。广泛应用于Ngix、Netty等高性能网络框架中。</p>]]></content>
     
     
       

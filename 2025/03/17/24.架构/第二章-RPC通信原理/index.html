@@ -422,7 +422,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    57
+                    292
                 </div>
                 
 
@@ -464,6 +464,38 @@
 <li>协议编码</li>
 <li>网络模块</li>
 </ol>
+<h3 id="Netty通信框架"><a class="header-anchor" href="#Netty通信框架"></a>Netty通信框架</h3>
+<p>Reactor模型</p>
+<ul>
+<li>
+<p>Reactor单线程模型</p>
+</li>
+<li>
+<p>Reactor多线程模型</p>
+</li>
+</ul>
+<ol>
+<li>MainReactor主线程
+<ul>
+<li>单个线程,负责接收客户端连接</li>
+</ul>
+</li>
+<li>SubReactor线程池</li>
+</ol>
+<ul>
+<li>负责事件检测、I/O操作</li>
+</ul>
+<ol start="3">
+<li>worker线程池</li>
+</ol>
+<ul>
+<li>负责业务处理</li>
+</ul>
+<p>优劣分析:MainReactor主线程与SubReactor线程池职责分工明确,MainReactor主线程只负责接收客户端连接,SubReactor线程池负责事件检测、I/O操作,worker线程池负责业务处理。<br>
+MainReactor主线程与SubReactor线程的数据交互简单,MainReactor主线程只需要把新连接传给SubReactor线程池即可,SubReactor线程池无需返回数据;<br>
+多个SubReactor线程能够应对更高的并发请求;<br>
+缺点:编程复杂度较高</p>
+<p>小结:Reactor多线程模型也被称呼为1+M+N模型,1代表MainReactor主线程,M代表SubReactor线程池,N代表worker线程池。广泛应用于Ngix、Netty等高性能网络框架中。</p>
 
                 
             </div>
@@ -766,7 +798,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            199.5k
+                                            199.8k
                                         </span>&nbsp;字
                                         
                                             
