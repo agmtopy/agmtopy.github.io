@@ -426,14 +426,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    1.7k
+                    1.6k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    8 分钟
+                    7 分钟
                 </div>
                 
 
@@ -553,28 +553,28 @@ dependencies &#123;
 <ul>
 <li>task定义示例</li>
 </ul>
-<pre class="line-numbers language-gradle" data-language="gradle"><code class="language-gradle">task helloword &#123;
-    println &#39;hello word!&#39;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-gradle" data-language="gradle"><code class="language-gradle">task helloword <span class="token punctuation">&#123;</span>
+    println <span class="token string">'hello word!'</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <ul>
 <li>task依赖示例</li>
 </ul>
 <pre class="line-numbers language-gradle" data-language="gradle"><code class="language-gradle">
-&#x2F;&#x2F;task显式调用
- task task1 &#123;
-       println &#39;hello word!&#39;
- &#125;
+<span class="token comment">//task显式调用</span>
+ task task1 <span class="token punctuation">&#123;</span>
+       println <span class="token string">'hello word!'</span>
+ <span class="token punctuation">&#125;</span>
 
- task task2 &#123;
-     println &#39;hello task2!&#39;
- &#125;
+ task task2 <span class="token punctuation">&#123;</span>
+     println <span class="token string">'hello task2!'</span>
+ <span class="token punctuation">&#125;</span>
 
- task1.dependsOn task2
+ task1<span class="token punctuation">.</span>dependsOn task2
 
- &#x2F;&#x2F;task内依赖
- task task3(dependsOn: task2) &#123;
-     println &#39;hello task3!&#39;
- &#125;
+ <span class="token comment">//task内依赖</span>
+ task <span class="token function">task3</span><span class="token punctuation">(</span>dependsOn<span class="token punctuation">:</span> task2<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+     println <span class="token string">'hello task3!'</span>
+ <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <ul>
 <li>跳过依赖</li>
@@ -588,11 +588,11 @@ compile.doFirst &#123;
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="Gradle申明依赖"><a class="header-anchor" href="#Gradle申明依赖"></a>Gradle申明依赖</h3>
 <h3 id="配置远程仓库"><a class="header-anchor" href="#配置远程仓库"></a>配置远程仓库</h3>
-<pre class="line-numbers language-gradle" data-language="gradle"><code class="language-gradle">repositories &#123;
-   maven &#123;
-      url &quot;http:&#x2F;&#x2F;repo.mycompany.com&#x2F;maven2&quot;
-   &#125;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-gradle" data-language="gradle"><code class="language-gradle"><span class="token keyword">repositories</span> <span class="token punctuation">&#123;</span>
+   maven <span class="token punctuation">&#123;</span>
+      url <span class="token interpolation-string"><span class="token string">"http://repo.mycompany.com/maven2"</span></span>
+   <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="基础命令"><a class="header-anchor" href="#基础命令"></a>基础命令</h2>
 <ul>
 <li>build 编译命令</li>
@@ -636,83 +636,83 @@ compile.doFirst &#123;
 <p>gradle clean 清空所有编译、打包生成的文件(即：清空build目录)</p>
 </blockquote>
 <h2 id="build-gradle模板"><a class="header-anchor" href="#build-gradle模板"></a>build.gradle模板</h2>
-<pre class="line-numbers language-gradle" data-language="gradle"><code class="language-gradle">&#x2F;&#x2F; 创建Java项目插件，提供了所有构建和测试Java程序所需项目结构
-apply plugin: &#39;java&#39;
-&#x2F;&#x2F; 引入Maven插件，以便Gradle可以引用Maven仓库的Jar包
-apply plugin: &#39;maven&#39;
-&#x2F;&#x2F; 进行打包插件
-apply plugin: &#39;war&#39;
-&#x2F;&#x2F; Web项目服务器插件,此处配置后，不需再单独配置Web服务器
-apply plugin: &#39;jetty&#39;
-&#x2F;&#x2F; Web项目开发插件
-apply plugin: &#39;eclipse&#39;
+<pre class="line-numbers language-gradle" data-language="gradle"><code class="language-gradle"><span class="token comment">// 创建Java项目插件，提供了所有构建和测试Java程序所需项目结构</span>
+<span class="token keyword">apply</span> <span class="token keyword">plugin</span><span class="token punctuation">:</span> <span class="token string">'java'</span>
+<span class="token comment">// 引入Maven插件，以便Gradle可以引用Maven仓库的Jar包</span>
+<span class="token keyword">apply</span> <span class="token keyword">plugin</span><span class="token punctuation">:</span> <span class="token string">'maven'</span>
+<span class="token comment">// 进行打包插件</span>
+<span class="token keyword">apply</span> <span class="token keyword">plugin</span><span class="token punctuation">:</span> <span class="token string">'war'</span>
+<span class="token comment">// Web项目服务器插件,此处配置后，不需再单独配置Web服务器</span>
+<span class="token keyword">apply</span> <span class="token keyword">plugin</span><span class="token punctuation">:</span> <span class="token string">'jetty'</span>
+<span class="token comment">// Web项目开发插件</span>
+<span class="token keyword">apply</span> <span class="token keyword">plugin</span><span class="token punctuation">:</span> <span class="token string">'eclipse'</span>
 
-group &#x3D; &quot;com.suneee&quot;
-&#x2F;&#x2F; 指定编译*.java文件的JDK版本
-sourceCompatibility &#x3D; 1.8
-version &#x3D; &#39;1.0&#39;
-&#x2F;&#x2F; Web项目示例工程
-jar &#123;
-    manifest &#123;
-        attributes &#39;Implementation-Title&#39;: &#39;Gradle Quickstart&#39;, &#39;Implementation-Version&#39;: version
-        &#x2F;&#x2F; 题外话：Java项目，此处可以用来配置程序入口点
-        &#x2F;&#x2F; attributes &#39;Main-Class&#39;:&#39;com.suneee.**&#39;
-    &#125;
-&#125;
-&#x2F;&#x2F; 默认情况，Gradle没有定义任何资源库
-repositories &#123;
-    &#x2F;&#x2F; 使用Maven的中央存储库
-    mavenCentral()
-    &#x2F;&#x2F; 使用Maven的本地存储库
-    mavenLocal()
-&#125;
-&#x2F;&#x2F; 增加自定义的库
-repositories &#123;
-    flatDir&#123;
-            &#x2F;&#x2F; 项目目录下的lib文件夹
-            dirs &#39;lib&#39; 
-        &#125;
-&#125;
-&#x2F;&#x2F; 解决Gradle编译时出现： 编码GBK的不可映射字符
-[compileJava, compileTestJava]*.options*.encoding &#x3D; &#39;UTF-8&#39;
+group <span class="token operator">=</span> <span class="token interpolation-string"><span class="token string">"com.suneee"</span></span>
+<span class="token comment">// 指定编译*.java文件的JDK版本</span>
+sourceCompatibility <span class="token operator">=</span> <span class="token number">1.8</span>
+version <span class="token operator">=</span> <span class="token string">'1.0'</span>
+<span class="token comment">// Web项目示例工程</span>
+jar <span class="token punctuation">&#123;</span>
+    manifest <span class="token punctuation">&#123;</span>
+        attributes <span class="token string">'Implementation-Title'</span><span class="token punctuation">:</span> <span class="token string">'Gradle Quickstart'</span><span class="token punctuation">,</span> <span class="token string">'Implementation-Version'</span><span class="token punctuation">:</span> version
+        <span class="token comment">// 题外话：Java项目，此处可以用来配置程序入口点</span>
+        <span class="token comment">// attributes 'Main-Class':'com.suneee.**'</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token comment">// 默认情况，Gradle没有定义任何资源库</span>
+<span class="token keyword">repositories</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// 使用Maven的中央存储库</span>
+    <span class="token function">mavenCentral</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token comment">// 使用Maven的本地存储库</span>
+    <span class="token function">mavenLocal</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span>
+<span class="token comment">// 增加自定义的库</span>
+<span class="token keyword">repositories</span> <span class="token punctuation">&#123;</span>
+    flatDir<span class="token punctuation">&#123;</span>
+            <span class="token comment">// 项目目录下的lib文件夹</span>
+            dirs <span class="token string">'lib'</span> 
+        <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token comment">// 解决Gradle编译时出现： 编码GBK的不可映射字符</span>
+<span class="token punctuation">[</span>compileJava<span class="token punctuation">,</span> compileTestJava<span class="token punctuation">]</span><span class="token operator">*.</span>options<span class="token operator">*.</span>encoding <span class="token operator">=</span> <span class="token string">'UTF-8'</span>
 
-&#x2F;&#x2F; 解决项目Jar包依赖问题
-dependencies &#123;
-    &#x2F;&#x2F; 编译时，加入项目目录下lib文件
-    compile fileTree(dir:&#39;lib&#39;,include:&#39;*.jar&#39;)
-    compile &#39;c3p0:c3p0:0.9.1.2&#39;
-    compile &#39;mysql:mysql-connector-java:5.1.31&#39; 
-    compile &#39;org.springframework.data:spring-data-redis:1.3.4.RELEASE&#39;
-    compile group: &#39;com.google.code.gson&#39;, name: &#39;gson&#39;, version: &#39;2.7&#39;
-    compile group: &#39;commons-collections&#39;, name: &#39;commons-collections&#39;, version: &#39;3.2&#39;
-    testCompile &quot;org.springframework:spring-test:4.1.0.RELEASE&quot;
-    testCompile group: &#39;junit&#39;, name: &#39;junit&#39;, version: &#39;4.+&#39;
-    compile &#39;com.alibaba:dubbo:2.8.4a&#39;
-    compile &#39;org.apache.zookeeper:zookeeper:3.4.8&#39;
-    compile &#39;com.101tec:zkclient:0.8&#39;
-    compile &#39;log4j:log4j:1.2.17&#39;
-    compile group: &#39;javax.activation&#39;, name: &#39;activation&#39;, version: &#39;1.1.1&#39;
-    compile group: &#39;javax.mail&#39;, name: &#39;mail&#39;, version: &#39;1.4.7&#39;
-    compile group: &#39;org.quartz-scheduler&#39;, name: &#39;quartz&#39;, version: &#39;1.7.2&#39;
-    compile group: &#39;aspectj&#39;, name: &#39;aspectjweaver&#39;, version: &#39;1.5.4&#39;
-    compile group: &#39;org.hibernate&#39;, name: &#39;hibernate-core&#39;, version: &#39;5.1.0.Final&#39;
-    compile group: &#39;org.hibernate&#39;, name: &#39;hibernate-entitymanager&#39;, version: &#39;5.1.0.Final&#39;
-    compile group: &#39;org.springframework&#39;, name: &#39;spring-orm&#39;, version: &#39;4.2.4.RELEASE&#39;
+<span class="token comment">// 解决项目Jar包依赖问题</span>
+<span class="token keyword">dependencies</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// 编译时，加入项目目录下lib文件</span>
+    compile <span class="token function">fileTree</span><span class="token punctuation">(</span>dir<span class="token punctuation">:</span><span class="token string">'lib'</span><span class="token punctuation">,</span>include<span class="token punctuation">:</span><span class="token string">'*.jar'</span><span class="token punctuation">)</span>
+    compile <span class="token string">'c3p0:c3p0:0.9.1.2'</span>
+    compile <span class="token string">'mysql:mysql-connector-java:5.1.31'</span> 
+    compile <span class="token string">'org.springframework.data:spring-data-redis:1.3.4.RELEASE'</span>
+    compile group<span class="token punctuation">:</span> <span class="token string">'com.google.code.gson'</span><span class="token punctuation">,</span> name<span class="token punctuation">:</span> <span class="token string">'gson'</span><span class="token punctuation">,</span> version<span class="token punctuation">:</span> <span class="token string">'2.7'</span>
+    compile group<span class="token punctuation">:</span> <span class="token string">'commons-collections'</span><span class="token punctuation">,</span> name<span class="token punctuation">:</span> <span class="token string">'commons-collections'</span><span class="token punctuation">,</span> version<span class="token punctuation">:</span> <span class="token string">'3.2'</span>
+    testCompile <span class="token interpolation-string"><span class="token string">"org.springframework:spring-test:4.1.0.RELEASE"</span></span>
+    testCompile group<span class="token punctuation">:</span> <span class="token string">'junit'</span><span class="token punctuation">,</span> name<span class="token punctuation">:</span> <span class="token string">'junit'</span><span class="token punctuation">,</span> version<span class="token punctuation">:</span> <span class="token string">'4.+'</span>
+    compile <span class="token string">'com.alibaba:dubbo:2.8.4a'</span>
+    compile <span class="token string">'org.apache.zookeeper:zookeeper:3.4.8'</span>
+    compile <span class="token string">'com.101tec:zkclient:0.8'</span>
+    compile <span class="token string">'log4j:log4j:1.2.17'</span>
+    compile group<span class="token punctuation">:</span> <span class="token string">'javax.activation'</span><span class="token punctuation">,</span> name<span class="token punctuation">:</span> <span class="token string">'activation'</span><span class="token punctuation">,</span> version<span class="token punctuation">:</span> <span class="token string">'1.1.1'</span>
+    compile group<span class="token punctuation">:</span> <span class="token string">'javax.mail'</span><span class="token punctuation">,</span> name<span class="token punctuation">:</span> <span class="token string">'mail'</span><span class="token punctuation">,</span> version<span class="token punctuation">:</span> <span class="token string">'1.4.7'</span>
+    compile group<span class="token punctuation">:</span> <span class="token string">'org.quartz-scheduler'</span><span class="token punctuation">,</span> name<span class="token punctuation">:</span> <span class="token string">'quartz'</span><span class="token punctuation">,</span> version<span class="token punctuation">:</span> <span class="token string">'1.7.2'</span>
+    compile group<span class="token punctuation">:</span> <span class="token string">'aspectj'</span><span class="token punctuation">,</span> name<span class="token punctuation">:</span> <span class="token string">'aspectjweaver'</span><span class="token punctuation">,</span> version<span class="token punctuation">:</span> <span class="token string">'1.5.4'</span>
+    compile group<span class="token punctuation">:</span> <span class="token string">'org.hibernate'</span><span class="token punctuation">,</span> name<span class="token punctuation">:</span> <span class="token string">'hibernate-core'</span><span class="token punctuation">,</span> version<span class="token punctuation">:</span> <span class="token string">'5.1.0.Final'</span>
+    compile group<span class="token punctuation">:</span> <span class="token string">'org.hibernate'</span><span class="token punctuation">,</span> name<span class="token punctuation">:</span> <span class="token string">'hibernate-entitymanager'</span><span class="token punctuation">,</span> version<span class="token punctuation">:</span> <span class="token string">'5.1.0.Final'</span>
+    compile group<span class="token punctuation">:</span> <span class="token string">'org.springframework'</span><span class="token punctuation">,</span> name<span class="token punctuation">:</span> <span class="token string">'spring-orm'</span><span class="token punctuation">,</span> version<span class="token punctuation">:</span> <span class="token string">'4.2.4.RELEASE'</span>
     
-&#125;
+<span class="token punctuation">&#125;</span>
 
-test &#123;
-    systemProperties &#39;property&#39;: &#39;value&#39;
-&#125;
+test <span class="token punctuation">&#123;</span>
+    systemProperties <span class="token string">'property'</span><span class="token punctuation">:</span> <span class="token string">'value'</span>
+<span class="token punctuation">&#125;</span>
 
-&#x2F;&#x2F; 发布项目导出的Jar包到指定仓库
-uploadArchives &#123;
-    repositories &#123;
-       flatDir &#123;
-           dirs &#39;repos&#39;
-       &#125;
-    &#125;
-&#125;
+<span class="token comment">// 发布项目导出的Jar包到指定仓库</span>
+uploadArchives <span class="token punctuation">&#123;</span>
+    <span class="token keyword">repositories</span> <span class="token punctuation">&#123;</span>
+       flatDir <span class="token punctuation">&#123;</span>
+           dirs <span class="token string">'repos'</span>
+       <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2>
 <ul>
@@ -1066,7 +1066,7 @@ uploadArchives &#123;
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            199.8k
+                                            200.2k
                                         </span>&nbsp;字
                                         
                                             

@@ -447,11 +447,11 @@
 <ol>
 <li>mysql 启动命令</li>
 </ol>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker run -p <span class="token number">3306</span>:3306 --name mysql_1 -e <span class="token assign-left variable">MYSQL_ROOT_PASSWORD</span><span class="token operator">=</span><span class="token number">123456</span> -d mysql:5.7.2<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">docker</span> run <span class="token parameter variable">-p</span> <span class="token number">3306</span>:3306 <span class="token parameter variable">--name</span> mysql_1 <span class="token parameter variable">-e</span> <span class="token assign-left variable">MYSQL_ROOT_PASSWORD</span><span class="token operator">=</span><span class="token number">123456</span> <span class="token parameter variable">-d</span> mysql:5.7.2<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <ol start="2">
 <li>mongo 启动命令</li>
 </ol>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker run -itd --name mongo -p <span class="token number">27017</span>:27017 mongo --auth<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">docker</span> run <span class="token parameter variable">-itd</span> <span class="token parameter variable">--name</span> mongo <span class="token parameter variable">-p</span> <span class="token number">27017</span>:27017 mongo <span class="token parameter variable">--auth</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <ol start="3">
 <li>设置账户</li>
 </ol>
@@ -465,7 +465,7 @@ db.grantRolesToUser<span class="token punctuation">(</span><span class="token st
 <ul>
 <li>windows cmd</li>
 </ul>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker run -d --name rabbitmq -p <span class="token number">5672</span>:5672 -p <span class="token number">15672</span>:15672 -v E:<span class="token punctuation">\</span>dockerfile<span class="token punctuation">\</span>RabbitMQ:/var/lib/rabbitmq --hostname myRabbit -e <span class="token assign-left variable">RABBITMQ_DEFAULT_VHOST</span><span class="token operator">=</span>my_vhost  -e <span class="token assign-left variable">RABBITMQ_DEFAULT_USER</span><span class="token operator">=</span>admin -e <span class="token assign-left variable">RABBITMQ_DEFAULT_PASS</span><span class="token operator">=</span>admin rabbitmq:latest<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">docker</span> run <span class="token parameter variable">-d</span> <span class="token parameter variable">--name</span> rabbitmq <span class="token parameter variable">-p</span> <span class="token number">5672</span>:5672 <span class="token parameter variable">-p</span> <span class="token number">15672</span>:15672 <span class="token parameter variable">-v</span> E:<span class="token punctuation">\</span>dockerfile<span class="token punctuation">\</span>RabbitMQ:/var/lib/rabbitmq <span class="token parameter variable">--hostname</span> myRabbit <span class="token parameter variable">-e</span> <span class="token assign-left variable">RABBITMQ_DEFAULT_VHOST</span><span class="token operator">=</span>my_vhost  <span class="token parameter variable">-e</span> <span class="token assign-left variable">RABBITMQ_DEFAULT_USER</span><span class="token operator">=</span>admin <span class="token parameter variable">-e</span> <span class="token assign-left variable">RABBITMQ_DEFAULT_PASS</span><span class="token operator">=</span>admin rabbitmq:latest<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <ol start="5">
 <li>启动RabbitMQ admin命令</li>
 </ol>
@@ -772,7 +772,7 @@ git add --all ;git commit -m “$(Get-Date -Format ‘yyyyMMddHHmmss’)” ;git
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            199.8k
+                                            200.2k
                                         </span>&nbsp;字
                                         
                                             

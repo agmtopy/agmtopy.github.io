@@ -494,7 +494,7 @@ Namesrv集群是无状态的设计,每个组件(Broker、Producer、Consumer)都
         <span class="token keyword">var</span> controller <span class="token operator">=</span> <span class="token function">createNamesrvController</span><span class="token punctuation">(</span>args<span class="token punctuation">)</span>
         <span class="token function">start</span><span class="token punctuation">(</span>controller<span class="token punctuation">)</span>
         <span class="token keyword">val</span> tip <span class="token operator">=</span>
-            <span class="token string">"The Name Server boot success. serializeType="</span> <span class="token operator">+</span> RemotingCommand<span class="token punctuation">.</span><span class="token function">getSerializeTypeConfigInThisServer</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+            <span class="token string-literal singleline"><span class="token string">"The Name Server boot success. serializeType="</span></span> <span class="token operator">+</span> RemotingCommand<span class="token punctuation">.</span><span class="token function">getSerializeTypeConfigInThisServer</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
         log<span class="token operator">!!</span><span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span>tip<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token function">println</span><span class="token punctuation">(</span>tip<span class="token punctuation">)</span>
     <span class="token punctuation">&#125;</span> <span class="token keyword">catch</span> <span class="token punctuation">(</span>e<span class="token operator">:</span> Throwable<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
@@ -515,7 +515,7 @@ Namesrv集群是无状态的设计,每个组件(Broker、Producer、Consumer)都
   */</span>
 <span class="token keyword">fun</span> <span class="token function">start</span><span class="token punctuation">(</span>controller<span class="token operator">:</span> NamesrvController<span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
     <span class="token keyword">if</span> <span class="token punctuation">(</span>controller <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token keyword">throw</span> <span class="token function">IllegalArgumentException</span><span class="token punctuation">(</span><span class="token string">"NamesrvController is null"</span><span class="token punctuation">)</span>
+        <span class="token keyword">throw</span> <span class="token function">IllegalArgumentException</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"NamesrvController is null"</span></span><span class="token punctuation">)</span>
     <span class="token punctuation">&#125;</span>
 
     <span class="token comment">//NamesrvController执行初始化,如果失败时退出进程</span>
@@ -863,7 +863,7 @@ NamesrvController主要逻辑很为两个部分初始化和执行</li>
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            199.8k
+                                            200.2k
                                         </span>&nbsp;字
                                         
                                             

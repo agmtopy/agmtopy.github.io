@@ -476,8 +476,8 @@
         <span class="token keyword">synchronized</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
             <span class="token comment">//判断服务状态</span>
             <span class="token keyword">switch</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>serviceState<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-                <span class="token keyword">case</span> CREATE_JUST<span class="token operator">:</span><span class="token operator">/</span><span class="token operator">/</span>创建服务
-                    <span class="token keyword">this</span><span class="token punctuation">.</span>serviceState <span class="token operator">=</span> <span class="token class-name">ServiceState</span><span class="token punctuation">.</span>START_FAILED<span class="token punctuation">;</span>
+                <span class="token keyword">case</span> <span class="token constant">CREATE_JUST</span><span class="token operator">:</span><span class="token operator">/</span><span class="token operator">/</span>创建服务
+                    <span class="token keyword">this</span><span class="token punctuation">.</span>serviceState <span class="token operator">=</span> <span class="token class-name">ServiceState</span><span class="token punctuation">.</span><span class="token constant">START_FAILED</span><span class="token punctuation">;</span>
                     <span class="token comment">// 如果未指定Namesrv地址,尝试从远程服务器中获取地址</span>
                     <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">null</span> <span class="token operator">==</span> <span class="token keyword">this</span><span class="token punctuation">.</span>clientConfig<span class="token punctuation">.</span><span class="token function">getNamesrvAddr</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
                         <span class="token keyword">this</span><span class="token punctuation">.</span>mQClientAPIImpl<span class="token punctuation">.</span><span class="token function">fetchNameServerAddr</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -492,9 +492,9 @@
                     <span class="token keyword">this</span><span class="token punctuation">.</span>rebalanceService<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
                     <span class="token comment">// 启动推送服务                this.defaultMQProducer.getDefaultMQProducerImpl().start(false);</span>
                     log<span class="token punctuation">.</span><span class="token function">info</span><span class="token punctuation">(</span><span class="token string">"the client factory [&#123;&#125;] start OK"</span><span class="token punctuation">,</span> <span class="token keyword">this</span><span class="token punctuation">.</span>clientId<span class="token punctuation">)</span><span class="token punctuation">;</span>
-                    <span class="token keyword">this</span><span class="token punctuation">.</span>serviceState <span class="token operator">=</span> <span class="token class-name">ServiceState</span><span class="token punctuation">.</span>RUNNING<span class="token punctuation">;</span>
+                    <span class="token keyword">this</span><span class="token punctuation">.</span>serviceState <span class="token operator">=</span> <span class="token class-name">ServiceState</span><span class="token punctuation">.</span><span class="token constant">RUNNING</span><span class="token punctuation">;</span>
                     <span class="token keyword">break</span><span class="token punctuation">;</span>
-                <span class="token keyword">case</span> START_FAILED<span class="token operator">:</span>
+                <span class="token keyword">case</span> <span class="token constant">START_FAILED</span><span class="token operator">:</span>
                     <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">MQClientException</span><span class="token punctuation">(</span><span class="token string">"The Factory object["</span> <span class="token operator">+</span> <span class="token keyword">this</span><span class="token punctuation">.</span><span class="token function">getClientId</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"] has been created before, and failed."</span><span class="token punctuation">,</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
                 <span class="token keyword">default</span><span class="token operator">:</span>
                     <span class="token keyword">break</span><span class="token punctuation">;</span>
@@ -808,7 +808,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            199.8k
+                                            200.2k
                                         </span>&nbsp;字
                                         
                                             

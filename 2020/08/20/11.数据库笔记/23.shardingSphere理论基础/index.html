@@ -591,38 +591,38 @@
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="orm框架集成"><a class="header-anchor" href="#orm框架集成"></a>orm框架集成</h3>
 <h4 id="jpa框架"><a class="header-anchor" href="#jpa框架"></a>jpa框架</h4>
-<pre class="line-numbers language-yml" data-language="yml"><code class="language-yml">shardingsphere:
-    datasource:
-      names: ds0,ds1
-      ds0:
-        type: com.zaxxer.hikari.HikariDataSource
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        jdbcUrl: jdbc:mysql:&#x2F;&#x2F;127.0.0.1:3306&#x2F;ds0?useUnicode&#x3D;true&amp;characterEncoding&#x3D;utf-8&amp;serverTimezone&#x3D;GMT
-        username: root
-        password: ******
-      ds1:
-        type: com.zaxxer.hikari.HikariDataSource
-        driver-class-name: com.mysql.cj.jdbc.Driver
-        jdbcUrl: jdbc:mysql:&#x2F;&#x2F;127.0.0.1:3306&#x2F;ds1?useUnicode&#x3D;true&amp;characterEncoding&#x3D;utf-8&amp;serverTimezone&#x3D;GMT
-        username: root
-        password: ******
-      sharding:
-        default-database-strategy: # 分库规则
-          inline:
-            sharding-column: vender_id
-            algorithm-expression: ds$&#123;vender_id % 2&#125;
-        tables:
-          t_user:  #t_user表
-            key-generator-column-name: id  #主键
-            actual-data-nodes: ds$&#123;0..1&#125;.t_user$&#123;0..1&#125;    #真实数据节点
-            databaseStrategy: # 分库策略
-              inline:
-                sharding-column: vender_id # 分库键
-                algorithm-expression: ds$&#123;vender_id % 2&#125;
-            tableStrategy: #分表策略
-              inline: #行表达式
-                shardingColumn: vender_id
-                algorithmExpression: t_user$&#123;vender_id % 2&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-yml" data-language="yml"><code class="language-yml"><span class="token key atrule">shardingsphere</span><span class="token punctuation">:</span>
+    <span class="token key atrule">datasource</span><span class="token punctuation">:</span>
+      <span class="token key atrule">names</span><span class="token punctuation">:</span> ds0<span class="token punctuation">,</span>ds1
+      <span class="token key atrule">ds0</span><span class="token punctuation">:</span>
+        <span class="token key atrule">type</span><span class="token punctuation">:</span> com.zaxxer.hikari.HikariDataSource
+        <span class="token key atrule">driver-class-name</span><span class="token punctuation">:</span> com.mysql.cj.jdbc.Driver
+        <span class="token key atrule">jdbcUrl</span><span class="token punctuation">:</span> jdbc<span class="token punctuation">:</span>mysql<span class="token punctuation">:</span>//127.0.0.1<span class="token punctuation">:</span>3306/ds0<span class="token punctuation">?</span>useUnicode=true<span class="token important">&amp;characterEncoding=utf-8&amp;serverTimezone=GMT</span>
+        <span class="token key atrule">username</span><span class="token punctuation">:</span> root
+        <span class="token key atrule">password</span><span class="token punctuation">:</span> <span class="token important">******</span>
+      <span class="token key atrule">ds1</span><span class="token punctuation">:</span>
+        <span class="token key atrule">type</span><span class="token punctuation">:</span> com.zaxxer.hikari.HikariDataSource
+        <span class="token key atrule">driver-class-name</span><span class="token punctuation">:</span> com.mysql.cj.jdbc.Driver
+        <span class="token key atrule">jdbcUrl</span><span class="token punctuation">:</span> jdbc<span class="token punctuation">:</span>mysql<span class="token punctuation">:</span>//127.0.0.1<span class="token punctuation">:</span>3306/ds1<span class="token punctuation">?</span>useUnicode=true<span class="token important">&amp;characterEncoding=utf-8&amp;serverTimezone=GMT</span>
+        <span class="token key atrule">username</span><span class="token punctuation">:</span> root
+        <span class="token key atrule">password</span><span class="token punctuation">:</span> <span class="token important">******</span>
+      <span class="token key atrule">sharding</span><span class="token punctuation">:</span>
+        <span class="token key atrule">default-database-strategy</span><span class="token punctuation">:</span> <span class="token comment"># 分库规则</span>
+          <span class="token key atrule">inline</span><span class="token punctuation">:</span>
+            <span class="token key atrule">sharding-column</span><span class="token punctuation">:</span> vender_id
+            <span class="token key atrule">algorithm-expression</span><span class="token punctuation">:</span> ds$<span class="token punctuation">&#123;</span>vender_id % 2<span class="token punctuation">&#125;</span>
+        <span class="token key atrule">tables</span><span class="token punctuation">:</span>
+          <span class="token key atrule">t_user</span><span class="token punctuation">:</span>  <span class="token comment">#t_user表</span>
+            <span class="token key atrule">key-generator-column-name</span><span class="token punctuation">:</span> id  <span class="token comment">#主键</span>
+            <span class="token key atrule">actual-data-nodes</span><span class="token punctuation">:</span> ds$<span class="token punctuation">&#123;</span>0..1<span class="token punctuation">&#125;</span>.t_user$<span class="token punctuation">&#123;</span>0..1<span class="token punctuation">&#125;</span>    <span class="token comment">#真实数据节点</span>
+            <span class="token key atrule">databaseStrategy</span><span class="token punctuation">:</span> <span class="token comment"># 分库策略</span>
+              <span class="token key atrule">inline</span><span class="token punctuation">:</span>
+                <span class="token key atrule">sharding-column</span><span class="token punctuation">:</span> vender_id <span class="token comment"># 分库键</span>
+                <span class="token key atrule">algorithm-expression</span><span class="token punctuation">:</span> ds$<span class="token punctuation">&#123;</span>vender_id % 2<span class="token punctuation">&#125;</span>
+            <span class="token key atrule">tableStrategy</span><span class="token punctuation">:</span> <span class="token comment">#分表策略</span>
+              <span class="token key atrule">inline</span><span class="token punctuation">:</span> <span class="token comment">#行表达式</span>
+                <span class="token key atrule">shardingColumn</span><span class="token punctuation">:</span> vender_id
+                <span class="token key atrule">algorithmExpression</span><span class="token punctuation">:</span> t_user$<span class="token punctuation">&#123;</span>vender_id % 2<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h4 id="javaConfig"><a class="header-anchor" href="#javaConfig"></a>javaConfig</h4>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">DataSource</span> <span class="token function">getShardingDataSource</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">SQLException</span> <span class="token punctuation">&#123;</span>
         <span class="token class-name">ShardingRuleConfiguration</span> shardingRuleConfig <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ShardingRuleConfiguration</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -950,7 +950,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            199.8k
+                                            200.2k
                                         </span>&nbsp;字
                                         
                                             

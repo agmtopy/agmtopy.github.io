@@ -461,13 +461,13 @@
 <ul>
 <li>单机模式 Derby</li>
 </ul>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">docker-compose -f example/standalone-derby.yaml up<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">docker-compose</span> <span class="token parameter variable">-f</span> example/standalone-derby.yaml up<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>注意一定要启动docker desktop或者docker进程，然后就经过漫长的编译环节，编译完成后docker镜像会自动启动</p>
 <p><img src="https://i.loli.net/2021/09/08/xpdPVki2fA18yh3.jpg" alt="/镜像image.jpg"></p>
 <ul>
 <li>测试服务状态</li>
 </ul>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">curl</span> -X POST <span class="token string">'http://127.0.0.1:8848/nacos/v1/ns/instance?serviceName=nacos.naming.serviceName&amp;ip=20.18.7.10&amp;port=8080'</span>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">curl</span> <span class="token parameter variable">-X</span> POST <span class="token string">'http://127.0.0.1:8848/nacos/v1/ns/instance?serviceName=nacos.naming.serviceName&amp;ip=20.18.7.10&amp;port=8080'</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="https://i.loli.net/2021/09/08/yt43erZ8ED2SoBm.jpg" alt="/服务注册.jpg"><br>
 Nacos提供的服务以RESTful风格进行提供，因此可以直接通过http请求进行操作</p>
@@ -490,7 +490,7 @@ nacos/nacos<br>
     <span class="token class-name">String</span> dataId <span class="token operator">=</span> <span class="token string">"nacos.cfg.dataId1"</span><span class="token punctuation">;</span>
     <span class="token class-name">String</span> group <span class="token operator">=</span> <span class="token string">"test"</span><span class="token punctuation">;</span>
     <span class="token class-name">Properties</span> properties <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Properties</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    properties<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token class-name">PropertyKeyConst</span><span class="token punctuation">.</span>SERVER_ADDR<span class="token punctuation">,</span> serverAddr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    properties<span class="token punctuation">.</span><span class="token function">put</span><span class="token punctuation">(</span><span class="token class-name">PropertyKeyConst</span><span class="token punctuation">.</span><span class="token constant">SERVER_ADDR</span><span class="token punctuation">,</span> serverAddr<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token comment">//创建连接</span>
     <span class="token class-name">ConfigService</span> configService <span class="token operator">=</span> <span class="token class-name">NacosFactory</span><span class="token punctuation">.</span><span class="token function">createConfigService</span><span class="token punctuation">(</span>properties<span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token comment">//获取配置</span>
@@ -589,13 +589,13 @@ nacos/nacos<br>
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2021/09/09/7.%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9F%A5%E8%AF%86/13.rocketmq%E7%9A%84%E5%AD%98%E5%82%A8%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86%E4%B9%8Bcommitlog/">
+                <a href="/2021/09/09/7.%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9F%A5%E8%AF%86/14.rocketmq%E7%9A%84%E5%AD%98%E5%82%A8%E5%AE%9E%E7%8E%B0%E5%8E%9F%E7%90%86%E4%B9%8BMappedFile/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/71.jpg" class="responsive-img" alt="rocketmq的存储实现原理之commitlog">
+                        <img src="/medias/featureimages/21.jpg" class="responsive-img" alt="rocketmq的存储实现原理之MappedFile">
                         
-                        <span class="card-title">rocketmq的存储实现原理之commitlog</span>
+                        <span class="card-title">rocketmq的存储实现原理之MappedFile</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -829,7 +829,7 @@ nacos/nacos<br>
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            199.8k
+                                            200.2k
                                         </span>&nbsp;字
                                         
                                             

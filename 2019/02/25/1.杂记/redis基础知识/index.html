@@ -742,7 +742,7 @@
 小结:Redis淘汰key的范围主要有两种’过期key’和’全量key’,筛选策略主要有两种:‘时间/使用频率’和’随机’</li>
 </ol>
 <h4 id="大key查询"><a class="header-anchor" href="#大key查询"></a>大key查询</h4>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">./redis-cli --bigkeys -i <span class="token number">0.01</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">./redis-cli <span class="token parameter variable">--bigkeys</span> <span class="token parameter variable">-i</span> <span class="token number">0.01</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <h2 id="原理分析"><a class="header-anchor" href="#原理分析"></a>原理分析</h2>
 <h3 id="字符串-v2"><a class="header-anchor" href="#字符串-v2"></a>字符串</h3>
 <h4 id="数据结构"><a class="header-anchor" href="#数据结构"></a>数据结构</h4>
@@ -1124,7 +1124,7 @@ user -&gt; DB(update) -&gt;cache(delete)<br>
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            199.8k
+                                            200.2k
                                         </span>&nbsp;字
                                         
                                             

@@ -474,16 +474,16 @@ WSL1只需要开启Linux子系统并下载linux发行版即可,linux发行版默
 <ul>
 <li>推荐先先切换软件源</li>
 </ul>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">sed</span> -i s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list
-<span class="token function">sudo</span> <span class="token function">apt</span> update -y<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">sed</span> <span class="token parameter variable">-i</span> s@/archive.ubuntu.com/@/mirrors.aliyun.com/@g /etc/apt/sources.list
+<span class="token function">sudo</span> <span class="token function">apt</span> update <span class="token parameter variable">-y</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <ul>
 <li>安装必要软件</li>
 </ul>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> -y <span class="token function">curl</span> <span class="token function">ssh</span> <span class="token function">zip</span> <span class="token function">unzip</span> ant <span class="token function">git</span> build-essential ccache cpio g++ gcc gdb libx11-dev libxext-dev libxrender-dev libxtst-dev libxt-dev libcups2-dev libfreetype6-dev libasound2-dev libelf-dev ccache libfontconfig1-dev autoconf<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> <span class="token parameter variable">-y</span> <span class="token function">curl</span> <span class="token function">ssh</span> <span class="token function">zip</span> <span class="token function">unzip</span> ant <span class="token function">git</span> build-essential ccache cpio g++ gcc gdb libx11-dev libxext-dev libxrender-dev libxtst-dev libxt-dev libcups2-dev libfreetype6-dev libasound2-dev libelf-dev ccache libfontconfig1-dev autoconf<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <h4 id="安装BootStrap-JDK"><a class="header-anchor" href="#安装BootStrap-JDK"></a>安装BootStrap JDK</h4>
 <p>BootStrap JDK的作用是编译JDK源代码中的java代码,默认要比编译的JDK小一个版本</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> openjdk-10-jdk
-java -version<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<span class="token function">java</span> <span class="token parameter variable">-version</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <h4 id="解压JDK源代码"><a class="header-anchor" href="#解压JDK源代码"></a>解压JDK源代码</h4>
 <p>由于我比较喜欢使用VS code,VS code中已经集成了连接WSL的插件，因此只需要将JDK源代码直接拖拽到Linux的目录下即可。也可以通过WSL进行复制<br>
 得到JDK源代码后就可以进行解压</p>
@@ -806,7 +806,7 @@ SUPPORTED_OS_VERSION <span class="token operator">=</span> <span class="token nu
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            199.8k
+                                            200.2k
                                         </span>&nbsp;字
                                         
                                             

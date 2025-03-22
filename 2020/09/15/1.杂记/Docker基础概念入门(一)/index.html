@@ -551,14 +551,14 @@
 <li>反面例子</li>
 </ul>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ADD http://pyropus.ca/software/memtester/old-versions/memtester-4.3.0.tar.gz /tmp/
-RUN <span class="token function">tar</span> -xvf /tmp/memtester-4.3.0.tar.gz -C /tmp
-RUN <span class="token function">make</span> -C /tmp/memtester-4.3.0 <span class="token operator">&amp;&amp;</span> <span class="token function">make</span> -C /tmp/memtester-4.3.0 <span class="token function">install</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+RUN <span class="token function">tar</span> <span class="token parameter variable">-xvf</span> /tmp/memtester-4.3.0.tar.gz <span class="token parameter variable">-C</span> /tmp
+RUN <span class="token function">make</span> <span class="token parameter variable">-C</span> /tmp/memtester-4.3.0 <span class="token operator">&amp;&amp;</span> <span class="token function">make</span> <span class="token parameter variable">-C</span> /tmp/memtester-4.3.0 <span class="token function">install</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <ul>
 <li>替代例子</li>
 </ul>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">RUN <span class="token function">wget</span> -O /tmp/memtester-4.3.0.tar.gz http://pyropus.ca/software/memtester/old-versions/memtester-4.3.0.tar.gz <span class="token punctuation">\</span>
-<span class="token operator">&amp;&amp;</span> <span class="token function">tar</span> -xvf /tmp/memtester-4.3.0.tar.gz -C /tmp <span class="token punctuation">\</span>
-<span class="token operator">&amp;&amp;</span> <span class="token function">make</span> -C /tmp/memtester-4.3.0 <span class="token operator">&amp;&amp;</span> <span class="token function">make</span> -C /tmp/memtester-4.3.0 <span class="token function">install</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">RUN <span class="token function">wget</span> <span class="token parameter variable">-O</span> /tmp/memtester-4.3.0.tar.gz http://pyropus.ca/software/memtester/old-versions/memtester-4.3.0.tar.gz <span class="token punctuation">\</span>
+<span class="token operator">&amp;&amp;</span> <span class="token function">tar</span> <span class="token parameter variable">-xvf</span> /tmp/memtester-4.3.0.tar.gz <span class="token parameter variable">-C</span> /tmp <span class="token punctuation">\</span>
+<span class="token operator">&amp;&amp;</span> <span class="token function">make</span> <span class="token parameter variable">-C</span> /tmp/memtester-4.3.0 <span class="token operator">&amp;&amp;</span> <span class="token function">make</span> <span class="token parameter variable">-C</span> /tmp/memtester-4.3.0 <span class="token function">install</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <h3 id="基础概念"><a class="header-anchor" href="#基础概念"></a>基础概念</h3>
 <h4 id="Namespace"><a class="header-anchor" href="#Namespace"></a>Namespace</h4>
 <blockquote>
@@ -1052,7 +1052,7 @@ RUN <span class="token function">make</span> -C /tmp/memtester-4.3.0 <span class
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            199.8k
+                                            200.2k
                                         </span>&nbsp;字
                                         
                                             

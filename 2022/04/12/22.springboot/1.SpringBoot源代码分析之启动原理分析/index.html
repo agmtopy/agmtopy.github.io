@@ -515,7 +515,7 @@
 <pre class="line-numbers language-java" data-language="java"><code class="language-java">
 <span class="token comment">// FACTORIES_RESOURCE_LOCATION = "META-INF/spring.factories"</span>
 <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token class-name">SpringFactoriesLoader</span> <span class="token function">forDefaultResourceLocation</span><span class="token punctuation">(</span><span class="token annotation punctuation">@Nullable</span> <span class="token class-name">ClassLoader</span> classLoader<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-	<span class="token keyword">return</span> <span class="token function">forResourceLocation</span><span class="token punctuation">(</span>FACTORIES_RESOURCE_LOCATION<span class="token punctuation">,</span> classLoader<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">return</span> <span class="token function">forResourceLocation</span><span class="token punctuation">(</span><span class="token constant">FACTORIES_RESOURCE_LOCATION</span><span class="token punctuation">,</span> classLoader<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span>
 
 <span class="token comment">//实际调用这个方法</span>
@@ -766,7 +766,7 @@ org.springframework.boot.context.event.SpringApplicationRunListenerTest<span ari
 <span class="token comment">//ServletWebServerApplicationContextFactory.java</span>
 <span class="token annotation punctuation">@Override</span>
 <span class="token keyword">public</span> <span class="token class-name">ConfigurableApplicationContext</span> <span class="token function">create</span><span class="token punctuation">(</span><span class="token class-name">WebApplicationType</span> webApplicationType<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-	<span class="token keyword">return</span> <span class="token punctuation">(</span>webApplicationType <span class="token operator">!=</span> <span class="token class-name">WebApplicationType</span><span class="token punctuation">.</span>SERVLET<span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token keyword">null</span> <span class="token operator">:</span> <span class="token function">createContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">return</span> <span class="token punctuation">(</span>webApplicationType <span class="token operator">!=</span> <span class="token class-name">WebApplicationType</span><span class="token punctuation">.</span><span class="token constant">SERVLET</span><span class="token punctuation">)</span> <span class="token operator">?</span> <span class="token keyword">null</span> <span class="token operator">:</span> <span class="token function">createContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span>
 
 <span class="token keyword">private</span> <span class="token class-name">ConfigurableApplicationContext</span> <span class="token function">createContext</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
@@ -785,7 +785,7 @@ org.springframework.boot.context.event.SpringApplicationRunListenerTest<span ari
 </ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">postProcessApplicationContext</span><span class="token punctuation">(</span><span class="token class-name">ConfigurableApplicationContext</span> context<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
 	<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>beanNameGenerator <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-		context<span class="token punctuation">.</span><span class="token function">getBeanFactory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">registerSingleton</span><span class="token punctuation">(</span><span class="token class-name">AnnotationConfigUtils</span><span class="token punctuation">.</span>CONFIGURATION_BEAN_NAME_GENERATOR<span class="token punctuation">,</span>
+		context<span class="token punctuation">.</span><span class="token function">getBeanFactory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">registerSingleton</span><span class="token punctuation">(</span><span class="token class-name">AnnotationConfigUtils</span><span class="token punctuation">.</span><span class="token constant">CONFIGURATION_BEAN_NAME_GENERATOR</span><span class="token punctuation">,</span>
 				<span class="token keyword">this</span><span class="token punctuation">.</span>beanNameGenerator<span class="token punctuation">)</span><span class="token punctuation">;</span>
 	<span class="token punctuation">&#125;</span>
 	<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>resourceLoader <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
@@ -1227,7 +1227,7 @@ listeners<span class="token punctuation">.</span><span class="token function">st
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            199.8k
+                                            200.2k
                                         </span>&nbsp;字
                                         
                                             

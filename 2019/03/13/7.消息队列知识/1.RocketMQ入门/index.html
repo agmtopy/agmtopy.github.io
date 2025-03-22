@@ -463,7 +463,7 @@
 <li>解压<br>
 执行</li>
 </ol>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">tar</span> -zvxf jdk-8u201-linux-x64.tar.gz<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">tar</span> <span class="token parameter variable">-zvxf</span> jdk-8u201-linux-x64.tar.gz<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <ol start="2">
 <li>修改/etc/profile</li>
 </ol>
@@ -490,8 +490,8 @@
 <ul>
 <li>更新源</li>
 </ul>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">apt-get</span> update -y
-<span class="token function">apt-get</span> upgrade -y<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">apt-get</span> update <span class="token parameter variable">-y</span>
+<span class="token function">apt-get</span> upgrade <span class="token parameter variable">-y</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <ul>
 <li>安装git</li>
 </ul>
@@ -511,9 +511,9 @@
 <ul>
 <li><a target="_blank" rel="noopener" href="http://runserver.sh">runserver.sh</a></li>
 </ul>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span> <span class="token operator">!</span> -e <span class="token string">"<span class="token variable">$JAVA_HOME</span>/bin/java"</span> <span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span> <span class="token assign-left variable">JAVA_HOME</span><span class="token operator">=</span><span class="token environment constant">$HOME</span>/jdk/java
-<span class="token punctuation">[</span> <span class="token operator">!</span> -e <span class="token string">"<span class="token variable">$JAVA_HOME</span>/bin/java"</span> <span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span> <span class="token assign-left variable">JAVA_HOME</span><span class="token operator">=</span>/usr/java
-<span class="token punctuation">[</span> <span class="token operator">!</span> -e <span class="token string">"<span class="token variable">$JAVA_HOME</span>/bin/java"</span> <span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span> error_exit <span class="token string">"Please set the JAVA_HOME variable in your environment, We need java(x64)!"</span>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token punctuation">[</span> <span class="token operator">!</span> <span class="token parameter variable">-e</span> <span class="token string">"<span class="token variable">$JAVA_HOME</span>/bin/java"</span> <span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span> <span class="token assign-left variable">JAVA_HOME</span><span class="token operator">=</span><span class="token environment constant">$HOME</span>/jdk/java
+<span class="token punctuation">[</span> <span class="token operator">!</span> <span class="token parameter variable">-e</span> <span class="token string">"<span class="token variable">$JAVA_HOME</span>/bin/java"</span> <span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span> <span class="token assign-left variable">JAVA_HOME</span><span class="token operator">=</span>/usr/java
+<span class="token punctuation">[</span> <span class="token operator">!</span> <span class="token parameter variable">-e</span> <span class="token string">"<span class="token variable">$JAVA_HOME</span>/bin/java"</span> <span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span> error_exit <span class="token string">"Please set the JAVA_HOME variable in your environment, We need java(x64)!"</span>
 
 <span class="token assign-left variable">JAVA_OPT</span><span class="token operator">=</span><span class="token string">"<span class="token variable">$&#123;JAVA_OPT&#125;</span> -server -Xms256m -Xmx256m -Xmn128m -XX:MetaspaceSize=32m -XX:MaxMetaspaceSize=64m"</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
@@ -521,7 +521,7 @@
 <li><a target="_blank" rel="noopener" href="http://runbroker.sh">runbroker.sh</a></li>
 </ul>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">
-<span class="token punctuation">[</span> <span class="token operator">!</span> -e <span class="token string">"<span class="token variable">$JAVA_HOME</span>/bin/java"</span> <span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span> <span class="token assign-left variable">JAVA_HOME</span><span class="token operator">=</span>/home/java/jdk1.8.0_60
+<span class="token punctuation">[</span> <span class="token operator">!</span> <span class="token parameter variable">-e</span> <span class="token string">"<span class="token variable">$JAVA_HOME</span>/bin/java"</span> <span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span> <span class="token assign-left variable">JAVA_HOME</span><span class="token operator">=</span>/home/java/jdk1.8.0_60
 <span class="token comment">#[ ! -e "$JAVA_HOME/bin/java" ] &amp;&amp; JAVA_HOME=/usr/java</span>
 <span class="token comment">#[ ! -e "$JAVA_HOME/bin/java" ] &amp;&amp; error_exit "Please set the JAVA_HOME variable in your environment, We need java(x64)!"</span>
 
@@ -533,12 +533,12 @@
 <li>启动NameServer</li>
 </ol>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">nohup</span> <span class="token function">sh</span> bin/mqnamesrv <span class="token operator">&amp;</span>
-<span class="token function">tail</span> -f ~/logs/rocketmqlogs/namesrv.log<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<span class="token function">tail</span> <span class="token parameter variable">-f</span> ~/logs/rocketmqlogs/namesrv.log<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <ol start="3">
 <li>启动Broker</li>
 </ol>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">nohup</span> <span class="token function">sh</span> bin/mqbroker -n localhost:9876 <span class="token operator">&amp;</span>
-<span class="token function">tail</span> -f ~/logs/rocketmqlogs/broker.log <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">nohup</span> <span class="token function">sh</span> bin/mqbroker <span class="token parameter variable">-n</span> localhost:9876 <span class="token operator">&amp;</span>
+<span class="token function">tail</span> <span class="token parameter variable">-f</span> ~/logs/rocketmqlogs/broker.log <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <ol start="4">
 <li>发送和接收消息</li>
 </ol>
@@ -552,7 +552,7 @@
         producer<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> <span class="token number">10</span><span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
             <span class="token class-name">Message</span> msg <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Message</span><span class="token punctuation">(</span><span class="token string">"TopicTest"</span><span class="token punctuation">,</span> <span class="token string">"TagA"</span><span class="token punctuation">,</span>
-                    <span class="token punctuation">(</span><span class="token string">"Hello RocketMQ!!!"</span> <span class="token operator">+</span> i<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token class-name">RemotingHelper</span><span class="token punctuation">.</span>DEFAULT_CHARSET<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                    <span class="token punctuation">(</span><span class="token string">"Hello RocketMQ!!!"</span> <span class="token operator">+</span> i<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getBytes</span><span class="token punctuation">(</span><span class="token class-name">RemotingHelper</span><span class="token punctuation">.</span><span class="token constant">DEFAULT_CHARSET</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
             <span class="token class-name">SendResult</span> sendResult <span class="token operator">=</span> producer<span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span>msg<span class="token punctuation">,</span><span class="token number">10000</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
             <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span>sendResult<span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">&#125;</span>
@@ -565,11 +565,11 @@
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">MQClientException</span> <span class="token punctuation">&#123;</span>
     <span class="token class-name">DefaultMQPushConsumer</span> consumer <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">DefaultMQPushConsumer</span><span class="token punctuation">(</span><span class="token string">"PushMsgGroup"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     consumer<span class="token punctuation">.</span><span class="token function">setNamesrvAddr</span><span class="token punctuation">(</span><span class="token string">"127.0.0.1:9876"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    consumer<span class="token punctuation">.</span><span class="token function">setConsumeFromWhere</span><span class="token punctuation">(</span><span class="token class-name">ConsumeFromWhere</span><span class="token punctuation">.</span>CONSUME_FROM_FIRST_OFFSET<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    consumer<span class="token punctuation">.</span><span class="token function">setConsumeFromWhere</span><span class="token punctuation">(</span><span class="token class-name">ConsumeFromWhere</span><span class="token punctuation">.</span><span class="token constant">CONSUME_FROM_FIRST_OFFSET</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     consumer<span class="token punctuation">.</span><span class="token function">subscribe</span><span class="token punctuation">(</span><span class="token string">"TopicTest"</span><span class="token punctuation">,</span> <span class="token string">"*"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     consumer<span class="token punctuation">.</span><span class="token function">registerMessageListener</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token class-name">MessageListenerConcurrently</span><span class="token punctuation">)</span> <span class="token punctuation">(</span>msgs<span class="token punctuation">,</span> context<span class="token punctuation">)</span> <span class="token operator">-></span> <span class="token punctuation">&#123;</span>
         <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">printf</span><span class="token punctuation">(</span><span class="token class-name">Thread</span><span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">getName</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"Receive New Messages :"</span> <span class="token operator">+</span> msgs <span class="token operator">+</span> <span class="token string">"%n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token keyword">return</span> <span class="token class-name">ConsumeConcurrentlyStatus</span><span class="token punctuation">.</span>CONSUME_SUCCESS<span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token class-name">ConsumeConcurrentlyStatus</span><span class="token punctuation">.</span><span class="token constant">CONSUME_SUCCESS</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     consumer<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
@@ -893,7 +893,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            199.8k
+                                            200.2k
                                         </span>&nbsp;字
                                         
                                             

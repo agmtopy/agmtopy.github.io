@@ -496,7 +496,7 @@ TiDB在实现上比ETL + Hadddoop简单和高效低本,并且可以直接用SQL�
 <ol>
 <li>下载安装脚本</li>
 </ol>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token function">curl</span> --proto <span class="token string">'=https'</span> --tlsv1.2 -sSf https://tiup-mirrors.pingcap.com/install.sh <span class="token operator">|</span> <span class="token function">sh</span>
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token function">curl</span> <span class="token parameter variable">--proto</span> <span class="token string">'=https'</span> <span class="token parameter variable">--tlsv1.2</span> <span class="token parameter variable">-sSf</span> https://tiup-mirrors.pingcap.com/install.sh <span class="token operator">|</span> <span class="token function">sh</span>
 <span class="token comment"># 下载完成后会展示安装脚本路径  'Shell profile:'后面的就是 $&#123;your_shell_profile&#125; 替换量</span>
 <span class="token builtin class-name">source</span> <span class="token variable">$&#123;your_shell_profile&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://github.com/agmtopy/noteBook/blob/master/png/T-TiDB/%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B_1.jpg?raw=true" alt="下载安装脚本"></p>
@@ -517,7 +517,7 @@ tiup playground<span aria-hidden="true" class="line-numbers-rows"><span></span><
 tiup client
 
 <span class="token comment"># 使用MySQL 协议</span>
-mysql --host <span class="token number">127.0</span>.0.1 --port <span class="token number">4000</span> -u root<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+mysql <span class="token parameter variable">--host</span> <span class="token number">127.0</span>.0.1 <span class="token parameter variable">--port</span> <span class="token number">4000</span> <span class="token parameter variable">-u</span> root<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><img src="https://github.com/agmtopy/noteBook/blob/master/png/T-TiDB/%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B_3_tidb%E5%8D%8F%E8%AE%AE%E7%99%BB%E9%99%86.jpg?raw=true" alt="TiDB clinet"></p>
 <p>在使用MySQL客户端连接的时候,因为TiDB默认没有为root用户分配密码的,可以通过TiDB clint 登陆后使用<B>set password for root=‘123456’;</B>来修改密码</p>
 <p><img src="https://github.com/agmtopy/noteBook/blob/master/png/T-TiDB/%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B_4_%E4%BF%AE%E6%94%B9%E5%AF%86%E7%A0%81.jpg?raw=true" alt="修改root 密码"></p>
@@ -552,7 +552,7 @@ mysql --host <span class="token number">127.0</span>.0.1 --port <span class="tok
 tiup <span class="token function">install</span> bench
 
 <span class="token comment"># 使用以下命令生成数据</span>
-tiup bench tpch --sf<span class="token operator">=</span><span class="token number">1</span> prepare
+tiup bench tpch <span class="token parameter variable">--sf</span><span class="token operator">=</span><span class="token number">1</span> prepare
 
 <span class="token operator">!</span><span class="token punctuation">[</span>准备数据<span class="token punctuation">]</span><span class="token punctuation">(</span>https://github.com/agmtopy/noteBook/blob/master/png/T-TiDB/HTAP_%E5%BF%AB%E9%80%9F%E4%B8%8A%E6%89%8B_1.jpg?raw<span class="token operator">=</span>true<span class="token punctuation">)</span>
 
@@ -904,7 +904,7 @@ ALTER TABLE test.lineitem SET TIFLASH REPLICA 1;
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            199.8k
+                                            200.2k
                                         </span>&nbsp;字
                                         
                                             

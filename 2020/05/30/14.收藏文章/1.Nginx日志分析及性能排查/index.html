@@ -501,7 +501,7 @@ nginx.conf</p>
 <p>‘awk’：文本处理</p>
 <p>命令组合使用，单个命令可以使用多次，来达到多重过滤的效果，前面一个命令的输出就是后一个命令的输入，流式处理，只要学会这个命令，有多看似复杂的东西，都变得异常简单。</p>
 <p>上面介绍的都是命令，下面再介绍一个直接输出html的，其实就是利用go-access来分析nginx日志</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">cat</span> /usr/local/nginx/logs/access.log <span class="token operator">|</span> docker run --rm -i diyan/goaccess   --time-format<span class="token operator">=</span><span class="token string">'%H:%M:%S'</span>   --date-format<span class="token operator">=</span><span class="token string">'%d/%b/%Y'</span>   --log-format<span class="token operator">=</span><span class="token string">'%h %^[%d:%t %^] "%r" %s %b "%R" "%u"'</span> <span class="token operator">></span> index.html<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">cat</span> /usr/local/nginx/logs/access.log <span class="token operator">|</span> <span class="token function">docker</span> run <span class="token parameter variable">--rm</span> <span class="token parameter variable">-i</span> diyan/goaccess   --time-format<span class="token operator">=</span><span class="token string">'%H:%M:%S'</span>   --date-format<span class="token operator">=</span><span class="token string">'%d/%b/%Y'</span>   --log-format<span class="token operator">=</span><span class="token string">'%h %^[%d:%t %^] "%r" %s %b "%R" "%u"'</span> <span class="token operator">></span> index.html<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>go-access是以docker容器的形式运行的，只要你安装了docker，就能直接运行，免安装很方便</p>
 <p>以上脚本，配合日志每天的日志分割，然后在crontab里面配置一下自动运行脚本，可生成每一天的nginx报表，网站情况一幕了然，当然这里也有缺点，因为不实时</p>
 <p>想要统计实时数据，可以使用ngxtop 来查看，安装起来也很简单</p>
@@ -510,7 +510,7 @@ nginx.conf</p>
 </blockquote>
 <p>运行的话，先进到nginx目录，然后再运行，-c 指定配置文件，-t 刷新频率，单位为秒</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ <span class="token builtin class-name">cd</span> /usr/local/nginx
-$ ngxtop -c conf/nginx.conf -t <span class="token number">1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+$ ngxtop <span class="token parameter variable">-c</span> conf/nginx.conf <span class="token parameter variable">-t</span> <span class="token number">1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>但是这种实时的方式，还需要ssh远程登录，不太方便，还可以使用lua来进行实时统计，然后写一个界面把数据展示出来，通过lua-nginx-module，nginx/tengine 都可以用，如果直接安装openresty的话，就方便了，内嵌了lua，不需要重新编译nginx了</p>
 <h2 id="收藏笔记"><a class="header-anchor" href="#收藏笔记"></a>收藏笔记</h2>
 <p>日志分析现在主流的方案是采用ELK,但是这篇文章使用<strong>awk</strong>进行日志分割以及一些其他的文本处理技巧。</p>
@@ -861,7 +861,7 @@ r 表示倒序</p>
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            199.8k
+                                            200.2k
                                         </span>&nbsp;字
                                         
                                             

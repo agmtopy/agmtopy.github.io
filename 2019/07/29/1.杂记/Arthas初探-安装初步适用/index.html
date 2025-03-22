@@ -454,7 +454,7 @@
 文档地址：<strong><a target="_blank" rel="noopener" href="https://alibaba.github.io/arthas/">https://alibaba.github.io/arthas/</a></strong></p>
 <p>安装</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">wget</span> https://alibaba.github.io/arthas/arthas-boot.jar
-java -jar arthas-boot.jar<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<span class="token function">java</span> <span class="token parameter variable">-jar</span> arthas-boot.jar<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <p>linux下直接执行，window下载文件后执行</p>
 <p><img src="https://img-blog.csdnimg.cn/20190630153613103.png" alt="在这里插入图片描述"><br>
 执行完成后，显示当前path中指定的JDK中正在运行的java进程<br>
@@ -526,7 +526,7 @@ java -jar arthas-boot.jar<span aria-hidden="true" class="line-numbers-rows"><spa
 <ul>
 <li>watch 查看输入参数与输出参数</li>
 </ul>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">watch</span> com.sankuai.inf.leaf.server.service.SegmentService getId <span class="token string">'&#123;params, target, returnObj&#125;'</span> -x <span class="token number">2</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">watch</span> com.sankuai.inf.leaf.server.service.SegmentService getId <span class="token string">'&#123;params, target, returnObj&#125;'</span> <span class="token parameter variable">-x</span> <span class="token number">2</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <blockquote>
 <p><strong>params</strong>表示入参，<strong>target</strong>表示当前的类，<strong>returnObj</strong>表示返回值</p>
 </blockquote>
@@ -539,7 +539,7 @@ java -jar arthas-boot.jar<span aria-hidden="true" class="line-numbers-rows"><spa
 <ul>
 <li>sc 查看JVM已加载的类信息</li>
 </ul>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">sc -d com.sankuai.inf.leaf.server.service.SegmentService getId<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">sc <span class="token parameter variable">-d</span> com.sankuai.inf.leaf.server.service.SegmentService getId<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p><img src="https://s1.ax1x.com/2020/07/28/aVMArn.png" alt="aVMArn.png"></p>
 <ul>
 <li>thread 分析死锁</li>
@@ -860,7 +860,7 @@ java -jar arthas-boot.jar<span aria-hidden="true" class="line-numbers-rows"><spa
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            199.8k
+                                            200.2k
                                         </span>&nbsp;字
                                         
                                             

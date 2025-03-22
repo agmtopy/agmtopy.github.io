@@ -466,10 +466,10 @@
 thread 
 
 <span class="token comment"># 查看全部线程状态</span>
-thread --all
+thread <span class="token parameter variable">--all</span>
 
 <span class="token comment"># 查看指定线程执行状态</span>
-thread --pid
+thread <span class="token parameter variable">--pid</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="OOM问题"><a class="header-anchor" href="#OOM问题"></a>OOM问题</h3>
 <ol>
@@ -483,9 +483,9 @@ thread --pid
 <li>线上命令</li>
 </ol>
 <pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token comment">#生成堆转储快照dump文件命令</span>
-  jmap -dump:format<span class="token operator">=</span>b,file<span class="token operator">=</span>heapdump.hprof pid
+  jmap <span class="token parameter variable">-dump:format</span><span class="token operator">=</span>b,file<span class="token operator">=</span>heapdump.hprof pid
 <span class="token comment"># 生成堆栈信息文件命令</span>
-  jstack -l pid <span class="token operator">>></span> stack.txt
+  jstack <span class="token parameter variable">-l</span> pid <span class="token operator">>></span> stack.txt
 <span class="token comment"># Arthas命令</span>
   heapdump
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
@@ -497,27 +497,27 @@ thread --pid
 <span class="token comment"># arthas排查</span>
 
 <span class="token comment"># 获取ClassLoad Hash</span>
-sc -d com.agmtopy.source.executer.ExecutorServiceUtil
+sc <span class="token parameter variable">-d</span> com.agmtopy.source.executer.ExecutorServiceUtil
 
 <span class="token comment"># 获取对象</span>
-ognl -x <span class="token number">1</span> <span class="token string">'@com.agmtopy.source.executer.ExecutorServiceUtil@threadPoolExecutor'</span>
+ognl <span class="token parameter variable">-x</span> <span class="token number">1</span> <span class="token string">'@com.agmtopy.source.executer.ExecutorServiceUtil@threadPoolExecutor'</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <ul>
 <li>线程死锁</li>
 </ul>
 <pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">
  <span class="token comment"># arthas排查</span>
-Thread -b
+Thread <span class="token parameter variable">-b</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 <h2 id="⚙-工具"><a class="header-anchor" href="#⚙-工具"></a>⚙ 工具</h2>
 <p><B>Arthas</B>强烈推荐</p>
 <h2 id="📒-常用命令"><a class="header-anchor" href="#📒-常用命令"></a>📒 常用命令</h2>
 <h3 id="网络"><a class="header-anchor" href="#网络"></a>网络</h3>
 <pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token comment"># 采样tcp连接</span>
-<span class="token function">lsof</span> -p 进程号 <span class="token operator">></span> /tmp/进程号_lsof.txt
+<span class="token function">lsof</span> <span class="token parameter variable">-p</span> 进程号 <span class="token operator">></span> /tmp/进程号_lsof.txt
 <span class="token comment"># 查看指定端口</span>
-<span class="token function">netstat</span> -tnlp <span class="token operator">|</span> <span class="token function">grep</span> :8080
-ss -tunlp <span class="token operator">|</span><span class="token function">grep</span> :8080
+<span class="token function">netstat</span> <span class="token parameter variable">-tnlp</span> <span class="token operator">|</span> <span class="token function">grep</span> :8080
+ss <span class="token parameter variable">-tunlp</span> <span class="token operator">|</span><span class="token function">grep</span> :8080
 
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>排查网络问题步骤:</p>
@@ -544,46 +544,46 @@ a. 检查dns和域名解析</li>
 <h3 id="内存"><a class="header-anchor" href="#内存"></a>内存</h3>
 <pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">
 <span class="token comment"># 系统内存分布</span>
-pmap -pid
+pmap <span class="token parameter variable">-pid</span>
 
 <span class="token comment"># 内存占用</span>
-jmap -heap 进程号 <span class="token operator">></span> /tmp/进程号_jmap_heap.txt
+jmap <span class="token parameter variable">-heap</span> 进程号 <span class="token operator">></span> /tmp/进程号_jmap_heap.txt
 
 <span class="token comment"># 保存进程堆栈</span>
-jmap -dump:format<span class="token operator">=</span>b,file<span class="token operator">=</span>/tmp/进程号_jmap_dump.hprof 进程号
+jmap <span class="token parameter variable">-dump:format</span><span class="token operator">=</span>b,file<span class="token operator">=</span>/tmp/进程号_jmap_dump.hprof 进程号
 
 <span class="token comment"># 内存对象占比</span>
-jmap -histo <span class="token number">1</span> <span class="token operator">|</span><span class="token function">more</span>
+jmap <span class="token parameter variable">-histo</span> <span class="token number">1</span> <span class="token operator">|</span><span class="token function">more</span>
 
 <span class="token comment"># GC</span>
-jstat -gcutil 进程号 <span class="token operator">></span> /tmp/进程号_jstat_gc.txt
+jstat <span class="token parameter variable">-gcutil</span> 进程号 <span class="token operator">></span> /tmp/进程号_jstat_gc.txt
 
-jstat -gcutil <span class="token number">1</span> 1s
+jstat <span class="token parameter variable">-gcutil</span> <span class="token number">1</span> 1s
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="CPU"><a class="header-anchor" href="#CPU"></a>CPU</h3>
 <pre class="line-numbers language-shell" data-language="shell"><code class="language-shell">
 <span class="token comment"># 查看系统上下文切换</span>
-<span class="token function">vmstat</span> -w <span class="token number">1</span>
+<span class="token function">vmstat</span> <span class="token parameter variable">-w</span> <span class="token number">1</span>
 
 <span class="token comment"># 查看进程上下文切换</span>
-pidstat -p /PID -wtu  <span class="token number">5</span>
+pidstat <span class="token parameter variable">-p</span> /PID <span class="token parameter variable">-wtu</span>  <span class="token number">5</span>
 
 <span class="token comment"># 打印系统负载快照</span>
-<span class="token function">top</span> -b -n <span class="token number">2</span> <span class="token operator">></span> /tmp/top.txt
-<span class="token function">top</span> -H -n <span class="token number">1</span> -p pid <span class="token operator">></span> /tmp/pid_top.txt
+<span class="token function">top</span> <span class="token parameter variable">-b</span> <span class="token parameter variable">-n</span> <span class="token number">2</span> <span class="token operator">></span> /tmp/top.txt
+<span class="token function">top</span> <span class="token parameter variable">-H</span> <span class="token parameter variable">-n</span> <span class="token number">1</span> <span class="token parameter variable">-p</span> pid <span class="token operator">></span> /tmp/pid_top.txt
 
 <span class="token comment"># 进程列表</span>
-<span class="token function">ps</span> -mp-o THREAD,tid,time <span class="token operator">|</span> <span class="token function">sort</span> -k2r <span class="token operator">></span> /tmp/进程号_threads.txt
+<span class="token function">ps</span> -mp-o THREAD,tid,time <span class="token operator">|</span> <span class="token function">sort</span> <span class="token parameter variable">-k2r</span> <span class="token operator">></span> /tmp/进程号_threads.txt
 
 <span class="token comment"># 线程信息</span>
-jstack -l 进程号 <span class="token operator">></span> /tmp/进程号_jstack.txt
+jstack <span class="token parameter variable">-l</span> 进程号 <span class="token operator">></span> /tmp/进程号_jstack.txt
 
 <span class="token comment"># Arthas</span>
 thread 
-thread -tid
-thread -all<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+thread <span class="token parameter variable">-tid</span>
+thread <span class="token parameter variable">-all</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="I-O"><a class="header-anchor" href="#I-O"></a>I/O</h3>
-<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token function">strace</span> -p pid
+<pre class="line-numbers language-shell" data-language="shell"><code class="language-shell"><span class="token function">strace</span> <span class="token parameter variable">-p</span> pid
 iotop
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
@@ -886,7 +886,7 @@ iotop
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            199.8k
+                                            200.2k
                                         </span>&nbsp;字
                                         
                                             

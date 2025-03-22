@@ -502,7 +502,7 @@
 </blockquote>
 <h3 id="运行时加载示例"><a class="header-anchor" href="#运行时加载示例"></a>运行时加载示例</h3>
 <p>目标方法远行时加载要使用到javassist这个工具帮助我们修改class,注意javassist有两个项目,要使用<b>org.javassist</b>😂才可以</p>
-<pre class="line-numbers language-gradle" data-language="gradle"><code class="language-gradle">implementation &quot;org.javassist:javassist:3.28.0-GA&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-gradle" data-language="gradle"><code class="language-gradle"><span class="token keyword">implementation</span> <span class="token interpolation-string"><span class="token string">"org.javassist:javassist:3.28.0-GA"</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <ol>
 <li>修改AgentTarget</li>
 </ol>
@@ -511,7 +511,7 @@
     <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token class-name">String</span><span class="token punctuation">[</span><span class="token punctuation">]</span> args<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">Exception</span> <span class="token punctuation">&#123;</span>
         <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"开始打印...."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-            <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span>SECONDS<span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">TimeUnit</span><span class="token punctuation">.</span><span class="token constant">SECONDS</span><span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
             <span class="token function">println</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token punctuation">&#125;</span>
     <span class="token punctuation">&#125;</span>
@@ -604,14 +604,14 @@
 <ul>
 <li>gradle</li>
 </ul>
-<pre class="line-numbers language-gradle" data-language="gradle"><code class="language-gradle">jar &#123;
-    manifest &#123;
-        attributes &#39;Can-Redefine-Classes&#39;: true
-        attributes &#39;Can-Retransform-Classes&#39;: true
-        attributes &#39;Agent-Class&#39;: &#39;com.agmtopy.source.agent.AgentExampleDemo&#39;
-        attributes &#39;Premain-Class&#39;: &#39;com.agmtopy.source.agent.AgentExampleDemo&#39;
-    &#125;
-&#125;
+<pre class="line-numbers language-gradle" data-language="gradle"><code class="language-gradle">jar <span class="token punctuation">&#123;</span>
+    manifest <span class="token punctuation">&#123;</span>
+        attributes <span class="token string">'Can-Redefine-Classes'</span><span class="token punctuation">:</span> <span class="token boolean">true</span>
+        attributes <span class="token string">'Can-Retransform-Classes'</span><span class="token punctuation">:</span> <span class="token boolean">true</span>
+        attributes <span class="token string">'Agent-Class'</span><span class="token punctuation">:</span> <span class="token string">'com.agmtopy.source.agent.AgentExampleDemo'</span>
+        attributes <span class="token string">'Premain-Class'</span><span class="token punctuation">:</span> <span class="token string">'com.agmtopy.source.agent.AgentExampleDemo'</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <ol start="6">
 <li>执行字节码替换</li>
@@ -789,7 +789,7 @@ DEF_Agent_OnAttach(JavaVM *vm, char *args, void *reserved)
 <li>分析字节码<br>
 使用<B>HSDB</B>查看AgentTarget未进行字节码替换前的数据</li>
 </ol>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">jhsdb hsdb --pid <span class="token number">21656</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">jhsdb hsdb <span class="token parameter variable">--pid</span> <span class="token number">21656</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <ul>
 <li>常量池</li>
 </ul>
@@ -863,8 +863,8 @@ DEF_Agent_OnAttach(JavaVM *vm, char *args, void *reserved)
 <ul>
 <li>gradle</li>
 </ul>
-<pre class="line-numbers language-gradle" data-language="gradle"><code class="language-gradle">&#x2F;&#x2F;目前最新版本为1.11.6
-implementation &quot;net.bytebuddy:byte-buddy:LATEST&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-gradle" data-language="gradle"><code class="language-gradle"><span class="token comment">//目前最新版本为1.11.6</span>
+<span class="token keyword">implementation</span> <span class="token interpolation-string"><span class="token string">"net.bytebuddy:byte-buddy:LATEST"</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <ul>
 <li>AgentExampleForByteBuddy</li>
 </ul>
@@ -885,7 +885,7 @@ implementation &quot;net.bytebuddy:byte-buddy:LATEST&quot;<span aria-hidden="tru
     <span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">premain</span><span class="token punctuation">(</span><span class="token class-name">String</span> arguments<span class="token punctuation">,</span> <span class="token class-name">Instrumentation</span> inst<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
         <span class="token class-name">System</span><span class="token punctuation">.</span>out<span class="token punctuation">.</span><span class="token function">println</span><span class="token punctuation">(</span><span class="token string">"开始执行..."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
         <span class="token keyword">new</span> <span class="token class-name">AgentBuilder<span class="token punctuation">.</span>Default</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-                <span class="token punctuation">.</span><span class="token keyword">with</span><span class="token punctuation">(</span><span class="token class-name">AgentBuilder<span class="token punctuation">.</span>RedefinitionStrategy</span><span class="token punctuation">.</span>RETRANSFORMATION<span class="token punctuation">)</span>
+                <span class="token punctuation">.</span><span class="token keyword">with</span><span class="token punctuation">(</span><span class="token class-name">AgentBuilder<span class="token punctuation">.</span>RedefinitionStrategy</span><span class="token punctuation">.</span><span class="token constant">RETRANSFORMATION</span><span class="token punctuation">)</span>
                 <span class="token punctuation">.</span><span class="token keyword">with</span><span class="token punctuation">(</span><span class="token class-name">AgentBuilder<span class="token punctuation">.</span>InstallationListener<span class="token punctuation">.</span>StreamWriting</span><span class="token punctuation">.</span><span class="token function">toSystemError</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
                 <span class="token punctuation">.</span><span class="token function">type</span><span class="token punctuation">(</span><span class="token class-name">ElementMatchers</span><span class="token punctuation">.</span><span class="token function">nameContains</span><span class="token punctuation">(</span><span class="token string">"AgentTarget"</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
                 <span class="token punctuation">.</span><span class="token function">transform</span><span class="token punctuation">(</span><span class="token punctuation">(</span>builder<span class="token punctuation">,</span> td<span class="token punctuation">,</span> cl<span class="token punctuation">,</span> m<span class="token punctuation">)</span> <span class="token operator">-></span> builder<span class="token punctuation">.</span><span class="token function">visit</span><span class="token punctuation">(</span><span class="token class-name">Advice</span><span class="token punctuation">.</span><span class="token keyword">to</span><span class="token punctuation">(</span><span class="token class-name">AgentExampleForByteBuddy</span><span class="token punctuation">.</span><span class="token keyword">class</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">on</span><span class="token punctuation">(</span><span class="token class-name">MethodDescription</span><span class="token operator">::</span><span class="token function">isConstructor</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
@@ -931,7 +931,7 @@ implementation &quot;net.bytebuddy:byte-buddy:LATEST&quot;<span aria-hidden="tru
 <li>Byte-Buddy提供的API</li>
 </ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token class-name">ClassInjector<span class="token punctuation">.</span>UsingInstrumentation</span>
-         <span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span><span class="token class-name">FileJar</span><span class="token punctuation">,</span> <span class="token class-name">ClassInjector<span class="token punctuation">.</span>UsingInstrumentation<span class="token punctuation">.</span>Target</span><span class="token punctuation">.</span>BOOTSTRAP<span class="token punctuation">,</span> instrumentation<span class="token punctuation">)</span>
+         <span class="token punctuation">.</span><span class="token function">of</span><span class="token punctuation">(</span><span class="token class-name">FileJar</span><span class="token punctuation">,</span> <span class="token class-name">ClassInjector<span class="token punctuation">.</span>UsingInstrumentation<span class="token punctuation">.</span>Target</span><span class="token punctuation">.</span><span class="token constant">BOOTSTRAP</span><span class="token punctuation">,</span> instrumentation<span class="token punctuation">)</span>
          <span class="token punctuation">.</span><span class="token function">injectRaw</span><span class="token punctuation">(</span><span class="token class-name">Collections</span><span class="token punctuation">.</span><span class="token function">singletonMap</span><span class="token punctuation">(</span>instrumentation<span class="token punctuation">,</span> <span class="token class-name">ClassFileLocator
                  <span class="token punctuation">.</span>ForClassLoader</span><span class="token punctuation">.</span><span class="token function">ofSystemLoader</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
                  <span class="token punctuation">.</span><span class="token function">locate</span><span class="token punctuation">(</span><span class="token string">"com.agmtopy.source.agent.AgentExampleForByteBuddy"</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
@@ -1258,7 +1258,7 @@ implementation &quot;net.bytebuddy:byte-buddy:LATEST&quot;<span aria-hidden="tru
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            199.8k
+                                            200.2k
                                         </span>&nbsp;字
                                         
                                             

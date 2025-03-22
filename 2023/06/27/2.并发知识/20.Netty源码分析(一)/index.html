@@ -565,18 +565,18 @@ bind():用户代码入口 -&gt;   initAndRegister():初始化并注册  -&gt;  n
 
 <span class="token comment">//不设置线程数量时</span>
 <span class="token keyword">protected</span> <span class="token class-name">MultithreadEventLoopGroup</span><span class="token punctuation">(</span><span class="token keyword">int</span> nThreads<span class="token punctuation">,</span> <span class="token class-name">Executor</span> executor<span class="token punctuation">,</span> <span class="token class-name">Object</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">super</span><span class="token punctuation">(</span>nThreads <span class="token operator">==</span> <span class="token number">0</span> <span class="token operator">?</span> DEFAULT_EVENT_LOOP_THREADS <span class="token operator">:</span> nThreads<span class="token punctuation">,</span> executor<span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">super</span><span class="token punctuation">(</span>nThreads <span class="token operator">==</span> <span class="token number">0</span> <span class="token operator">?</span> <span class="token constant">DEFAULT_EVENT_LOOP_THREADS</span> <span class="token operator">:</span> nThreads<span class="token punctuation">,</span> executor<span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span>
 
-    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> DEFAULT_EVENT_LOOP_THREADS<span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> <span class="token constant">DEFAULT_EVENT_LOOP_THREADS</span><span class="token punctuation">;</span>
 
 <span class="token comment">//设置线程数量为配置参数值或默认当前核心数*2</span>
 <span class="token keyword">static</span> <span class="token punctuation">&#123;</span>
-    DEFAULT_EVENT_LOOP_THREADS <span class="token operator">=</span> <span class="token class-name">Math</span><span class="token punctuation">.</span><span class="token function">max</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token class-name">SystemPropertyUtil</span><span class="token punctuation">.</span><span class="token function">getInt</span><span class="token punctuation">(</span>
+    <span class="token constant">DEFAULT_EVENT_LOOP_THREADS</span> <span class="token operator">=</span> <span class="token class-name">Math</span><span class="token punctuation">.</span><span class="token function">max</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token class-name">SystemPropertyUtil</span><span class="token punctuation">.</span><span class="token function">getInt</span><span class="token punctuation">(</span>
             <span class="token string">"io.netty.eventLoopThreads"</span><span class="token punctuation">,</span> <span class="token class-name">NettyRuntime</span><span class="token punctuation">.</span><span class="token function">availableProcessors</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
     <span class="token keyword">if</span> <span class="token punctuation">(</span>logger<span class="token punctuation">.</span><span class="token function">isDebugEnabled</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        logger<span class="token punctuation">.</span><span class="token function">debug</span><span class="token punctuation">(</span><span class="token string">"-Dio.netty.eventLoopThreads: &#123;&#125;"</span><span class="token punctuation">,</span> DEFAULT_EVENT_LOOP_THREADS<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        logger<span class="token punctuation">.</span><span class="token function">debug</span><span class="token punctuation">(</span><span class="token string">"-Dio.netty.eventLoopThreads: &#123;&#125;"</span><span class="token punctuation">,</span> <span class="token constant">DEFAULT_EVENT_LOOP_THREADS</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span>
 
@@ -891,7 +891,7 @@ bind():用户代码入口 -&gt;   initAndRegister():初始化并注册  -&gt;  n
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            199.8k
+                                            200.2k
                                         </span>&nbsp;字
                                         
                                             

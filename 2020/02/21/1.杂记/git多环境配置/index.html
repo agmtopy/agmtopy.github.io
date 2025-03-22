@@ -445,7 +445,7 @@
             <div id="articleContent">
                 <p>疫情期间，需要在家远程办公，因此需要在电脑上配置两套git环境分别是github、gitlab的。在配置过程中遇到了一些阻碍，特此记录下来。</p>
 <h3 id="步骤一：生成SSH-Key"><a class="header-anchor" href="#步骤一：生成SSH-Key"></a>步骤一：生成SSH-Key</h3>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ssh-keygen -t rsa -C <span class="token string">"email@xx.com"</span> -f ~/.ssh/id_rsa <span class="token comment">#(或gitlab_rsa)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ssh-keygen <span class="token parameter variable">-t</span> rsa <span class="token parameter variable">-C</span> <span class="token string">"email@xx.com"</span> <span class="token parameter variable">-f</span> ~/.ssh/id_rsa <span class="token comment">#(或gitlab_rsa)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>其中email@xx.com为github或gitlab注册的邮箱<br>
 id_rsa或gitlab_rsa为生成key文件的名称，默认为id_rsa，使用别名时需要进行步骤三</p>
 <ul>
@@ -470,7 +470,7 @@ Host gitlab.com
     PreferredAuthentications publickey
     IdentityFile ~/.ssh/gitlab_rsa<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="步骤四：测试"><a class="header-anchor" href="#步骤四：测试"></a>步骤四：测试</h3>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ssh</span> -T git@github.com<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">ssh</span> <span class="token parameter variable">-T</span> git@github.com<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>使用命令进行测试</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Hi userName<span class="token operator">!</span> You've successfully authenticated, but GitHub does not provide shell access.<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>这样的提示表示成功</p>
@@ -787,7 +787,7 @@ Host gitlab.com
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            199.8k
+                                            200.2k
                                         </span>&nbsp;字
                                         
                                             
