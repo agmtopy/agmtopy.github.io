@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    562
+                    1.9k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    2 分钟
+                    7 分钟
                 </div>
                 
 
@@ -443,29 +443,79 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="事务的定义"><a class="header-anchor" href="#事务的定义"></a>事务的定义</h2>
-<p>事务是数据库与文件系统最重要的差异之一,数据库通过事务保证了数据的ACID特性,分别是原子性/一致性/隔离性/持久性</p>
-<h2 id="事务的分类"><a class="header-anchor" href="#事务的分类"></a>事务的分类</h2>
-<p>事务可以划分为:<br>
-1.扁平事务以及带有保存点的扁平事务<br>
-2.链事务<br>
-3.嵌套事务<br>
-4.分布式事务</p>
-<h2 id="事务的实现"><a class="header-anchor" href="#事务的实现"></a>事务的实现</h2>
-<p>InnoDB通过日志系统来实现事务,redo log可以保证事务的原子性/一致性/持久性,undo log可以保证事务的原子性和持久性</p>
-<h3 id="redo-log的作用"><a class="header-anchor" href="#redo-log的作用"></a>redo log的作用</h3>
-<p>redo log是重做日志,通过每次事务提交前先修改该事务要修改的页,在提交过程中如果中断,通过redo log就可以继续提交事务</p>
-<h3 id="undo-log的作用"><a class="header-anchor" href="#undo-log的作用"></a>undo log的作用</h3>
-<p>undo log是回滚日志,通过记录每个事务开始时的数据,在回滚发生中断时,可以根据undo log 继续进行事务回滚</p>
-<h2 id="redo-log"><a class="header-anchor" href="#redo-log"></a>redo log</h2>
-<p>redo log由两部分组成’redo log buffer’和’redo log file’,在进行事务connit之前都会将事务的所有日志写入日志文件中进行持久化<br>
-InnoDB提供一个参数’innodb_flush_log_at_trx_commit’来控制redo log的刷盘策略,0:由master thread进行控制 1:每次提交后进行同步刷盘 2:每次提交后只是将数据提交给文件系统,不进行主动刷盘操作</p>
-<h2 id="undo-log"><a class="header-anchor" href="#undo-log"></a>undo log</h2>
-<p>undo log是回滚日志,是逻辑日志并不是redo log的物理日志,只是在逻辑上保证了数据回滚到原始状态.例如用户执行一个insert操作,在undo log里面就需要一个delete操作</p>
-<h2 id="MVVC"><a class="header-anchor" href="#MVVC"></a>MVVC</h2>
-<p>多版本控制,InnoDB会在行记录上默认增加两个隐藏列来作为MVVC实现的基础,分别是DB_TRX_ID-最新一次事务提交版本号/DB_ROLL_PTR-删除事务的版本号<br>
-数据行和undo log组成了不同版本之间的数据链,通过对比版本号和undo log日志将所需要的数据还原出来</p>
-<p>undo log还会采用段的方式进行保存,在不同的段中存放undo log page,通过这样的方式进行存储</p>
+                <h1>事务基础概念</h1>
+<h2 id="1-事务的定义"><a class="header-anchor" href="#1-事务的定义"></a>1. 事务的定义</h2>
+<p>事务是数据库区别于简单文件系统的重要特性之一。事务指的是一组 SQL 操作，要么全部成功执行，要么全部失败回滚。可以将事务看作是一个不可分割的工作逻辑单元。事务的主要目的是确保数据库的数据的 ACID 特性，分别是原子性（Atomicity）、一致性（Consistency）、隔离性（Isolation）和持久性（Durability）。</p>
+<h2 id="2-事务的分类"><a class="header-anchor" href="#2-事务的分类"></a>2. 事务的分类</h2>
+<p>事务可以划分为以下几类：</p>
+<h3 id="2-1-扁平事务"><a class="header-anchor" href="#2-1-扁平事务"></a>2.1 扁平事务</h3>
+<p><strong>扁平事务</strong> 是最简单的一种事务，也是实际生产中使用最频繁的一种。在扁平事务中，所有的操作都处于同一层次，由 <strong>BEGIN WORK</strong> 开始，由 <strong>COMMIT WORK</strong> 或者 <strong>ROLLBACK WORK</strong> 结束。在这个过程中，所有的操作在逻辑上是原子的，要么全部成功，要么全部失败回滚。</p>
+<h3 id="2-2-带有保存点的扁平事务"><a class="header-anchor" href="#2-2-带有保存点的扁平事务"></a>2.2 带有保存点的扁平事务</h3>
+<p><strong>带有保存点的扁平事务</strong> 是在扁平事务的基础上增加了保存点的概念。在事务的执行过程中，可以设置保存点，在保存点之后的操作可以进行回滚，而保存点之前的操作不会回滚。在 MySQL 中通常使用 <strong>SAVEPOINT</strong> 来设置保存点。</p>
+<h3 id="2-3-链事务"><a class="header-anchor" href="#2-3-链事务"></a>2.3 链事务</h3>
+<p><strong>链事务</strong> 可以看作是“带有保存点的扁平事务”的一种变种。“带有保存点的扁平事务”当发生系统崩溃时，所有的保存点都会消失，因为保存点是易失的，不是持久化的。<strong>链事务</strong> 是在提交一个事务时，不需要释放数据对象，将必要的处理上下文隐式地传给下一个要开始的事务。链事务中的回滚仅限于当前事务，即只能恢复到最近的一个保存点。对于锁的处理也是只释放当前事务所持有的锁。</p>
+<h3 id="2-4-嵌套事务"><a class="header-anchor" href="#2-4-嵌套事务"></a>2.4 嵌套事务</h3>
+<p><strong>嵌套事务</strong> 是指在一个事务中可以包含另一个事务。在嵌套事务中，内层事务的提交或者回滚不会影响外层事务，但是外层事务的提交或者回滚会影响内层事务。“嵌套事务”和“链事务”的区别在于“嵌套事务”是在一个事务中包含另一个事务，而“链事务”是在一个事务提交后，另一个事务开始。</p>
+<h3 id="2-5-分布式事务"><a class="header-anchor" href="#2-5-分布式事务"></a>2.5 分布式事务</h3>
+<p><strong>分布式事务</strong> 通常指的是一个在分布式环境下运行的扁平事务，因此需要根据数据所在的位置访问并协调网络中的不同节点。常见的分布式事务协议有 2PC、3PC、TCC、Seata 等。</p>
+<h2 id="3-事务的实现"><a class="header-anchor" href="#3-事务的实现"></a>3. 事务的实现</h2>
+<ul>
+<li><strong>MySQL</strong><br>
+InnoDB 通过日志系统来实现事务，redo log 可以保证事务的原子性、一致性和持久性，undo log 可以保证事务的原子性和持久性。</li>
+<li><strong>Oracle</strong><br>
+Oracle 也是通过日志系统来实现事务，但是实现上更加复杂，并且支持回滚到任意时间点。</li>
+</ul>
+<h3 id="3-1-InnoDB-如何实现事务"><a class="header-anchor" href="#3-1-InnoDB-如何实现事务"></a>3.1 InnoDB 如何实现事务</h3>
+<p>MySQL 的 InnoDB 存储引擎使用 redo log 和 undo log 来保证事务的 ACID 属性。下面是 InnoDB 如何通过 Redo log 和 undo log 来实现事务的：</p>
+<ul>
+<li>redo Log<br>
+redo log 是重做日志。在事务提交前，先将要修改的数据页写入 redo log，如果在提交过程中发生中断，可以通过 redo log 重做事务。</li>
+</ul>
+<p>redo log 由两部分组成：<code>redo log buffer</code> 和 <code>redo log file</code>。在进行事务 commit 之前都会将事务的所有日志写入日志文件中进行持久化。<br>
+InnoDB 提供参数 <code>innodb_flush_log_at_trx_commit</code> 来控制 redo log 的刷盘策略。<code>0</code>：由 master thread 控制。<code>1</code>：每次提交后同步刷盘。<code>2</code>：每次提交后将数据写入文件系统缓存，不主动刷盘。</p>
+<p>当事务提交（commit）时，必须先将该事务的所有日志写入到 redo log 文件中进行持久化，之后事务的 commit 才算完成。</p>
+<p>redo log 基本上都是顺序写，在数据库正常运行时不需要对 redo log 文件进行读取操作。</p>
+<ul>
+<li>redo log 与 binlog 的区别</li>
+</ul>
+<ol>
+<li><strong>来源不一样</strong><br>
+redo log 是在 InnoDB 存储引擎层产生的，而 bin log 是在 MySQL 数据库的上层产生的，并且 bin log 不仅仅是针对 InnoDB 存储引擎的，MySQL 数据库中的任何存储引擎对于数据库的修改都会产生 bin log。</li>
+<li><strong>内容格式不一样</strong><br>
+redo log 是物理日志，记录的是数据页的物理修改，而 bin log 是逻辑日志，记录的是 SQL 语句的逻辑修改。</li>
+<li><strong>记录的时机不一样</strong><br>
+redo log 是在事务提交前写入，bin log 是在事务提交后一次写入。</li>
+<li><strong>作用不一样</strong><br>
+redo log 用于保证事务的原子性、一致性和持久性，而 bin log 用于数据库的备份和恢复。</li>
+</ol>
+<ul>
+<li>
+<p>redo log 刷盘时为什么不需要通过双写机制保证数据的一致性<br>
+因为 redo log 每次刷盘都是以 512 字节为单位进行，与磁盘扇区大小相同，因此通常不需要通过双写机制来保证数据的一致性。</p>
+</li>
+<li>
+<p>LSN<br>
+LSN 是 Log Sequence Number 的缩写，其代表的是日志序列号。LSN 表示事务写入 redo log 的字节总量，例如当前 lsn 为 1000，假设 T1 这个事务在此基础上在写入 100 字节的 redo log，lsn 就会变成 1100，可以把它理解为 redo log 的“时间戳”，记录了每一个日志事件发生的先后顺序。</p>
+</li>
+<li>
+<p>LSN 的作用</p>
+</li>
+</ul>
+<ol>
+<li><strong>崩溃恢复（Crash Recovery）</strong>：当 MySQL 发生崩溃时，可以使用 Redo Log 进行恢复。LSN 允许 MySQL 知道从哪个点开始重做事务。MySQL 会扫描 Redo Log，根据 LSN 的顺序，重做所有已提交但尚未完全写入磁盘的事务，从而保证数据的一致性。</li>
+<li><strong>确保事务持久性</strong>：当一个事务提交时，InnoDB 会确保该事务的所有 Redo Log 记录都已写入磁盘。只有在 Redo Log 记录被成功写入磁盘后，事务才被认为已提交。LSN 确保了即使在 MySQL 崩溃后，已提交的事务也能被恢复。</li>
+<li><strong>实现 MVCC</strong>：与 Undo Log 结合使用，来实现 MVCC。通过 LSN，可以确定某个数据在特定时间点的版本，从而实现读写并发控制。</li>
+</ol>
+<ul>
+<li>undo log<br>
+undo log 是回滚日志，它记录了事务开始前的数据状态。在事务回滚时，可以根据 undo log 撤销之前的操作。</li>
+</ul>
+<p>undo log 是逻辑日志，它在逻辑上保证了数据回滚到原始状态。例如，对于 INSERT 操作，undo log 中会记录相应的 DELETE 操作。</p>
+<h2 id="4-MVCC"><a class="header-anchor" href="#4-MVCC"></a>4. MVCC</h2>
+<p>多版本并发控制（MVCC），InnoDB 会在行记录上默认增加两个隐藏列来实现 MVCC 的基础：<code>DB_TRX_ID</code>（最新一次事务提交版本号）和 <code>DB_ROLL_PTR</code>（回滚指针）。数据行和 undo log 组成了不同版本的数据链，通过对比版本号和 undo log 日志，可以将所需的数据版本还原出来。</p>
+<p>undo log 还会采用段的方式进行保存，在不同的段中存放 undo log page，通过这样的方式进行存储</p>
+<h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2>
+<p>本文介绍了事务的基本概念、分类以及在 MySQL InnoDB 存储引擎中的实现方式。重点阐述了 redo log 和 undo log 在保证事务 ACID 特性中的作用，以及 LSN 的概念及其在崩溃恢复、持久性和 MVCC 中的应用。此外，还解释了 MVCC 的基本原理和实现机制。</p>
 
                 
             </div>
@@ -766,7 +816,7 @@ InnoDB提供一个参数’innodb_flush_log_at_trx_commit’来控制redo log的
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            200.2k
+                                            201.6k
                                         </span>&nbsp;字
                                         
                                             

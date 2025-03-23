@@ -709,15 +709,11 @@ TiDB 是 PingCAP 公司自主设计、研发的开源分布式关系型数据库
                         <div class="summary block-with-text">
                             
                                 
-通过以上几篇文章分别介绍了MySQL的文件系统/索引/锁/事务等功能点,这篇文章将对这些知识点进行汇总,描述出MySQL大概的架构
+通过以上几篇文章分别介绍了 MySQL 的文件系统、索引、锁、事务等功能点，这篇文章将对这些知识点进行汇总，描述出 MySQL 大概的架构。
 
-文件数据
-MySQL在文件数据上可以划分为MySQL系统数据/存储引擎数据
+1. 文件数据
+MySQL 在文件数据上可以划分为 MySQL 系统数据 和 存储引擎数据。
 
-文件数据
-
-系统文件
-参数
                             
                         </div>
                         <div class="publish-info">
@@ -763,15 +759,9 @@ MySQL在文件数据上可以划分为MySQL系统数据/存储引擎数据
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                事务的定义
-事务是数据库与文件系统最重要的差异之一,数据库通过事务保证了数据的ACID特性,分别是原子性/一致性/隔离性/持久性
-事务的分类
-事务可以划分为:
-1.扁平事务以及带有保存点的扁平事务
-2.链事务
-3.嵌套事务
-4.分布式事务
-
+                                事务基础概念
+1. 事务的定义
+事务是数据库区别于简单文件系统的重要特性之一。事务指的是一组 SQL 操作，要么全部成功执行，要么全部失败回滚。可以将事务看作是一个不可分割的工作逻辑单元。事务的主要目的是确保数据库的数据的 ACID 特性，
                             
                         </div>
                         <div class="publish-info">
@@ -818,19 +808,13 @@ MySQL在文件数据上可以划分为MySQL系统数据/存储引擎数据
                         <div class="summary block-with-text">
                             
                                 MySQL 索引与锁
-目录
-
-索引
+1. 索引
+InnoDB 存储引擎支持多种索引结构，以下是常见的类型及其特点：
 1.1 B+ 树索引
-1.2 全文索引
-1.3 哈希索引
-1.4 索引选择的 Cardinality 值
-锁
-2.1 锁类型
-2.2 一致性非锁定读
-2.3 一致性锁定读
-2.4 自增计数
-MySQL 锁
+B+ 树索引是 InnoDB 中最常用的索引类型，分为以下两种：
+
+聚集索引（Clustered Index）
+以主
                             
                         </div>
                         <div class="publish-info">
@@ -1282,7 +1266,7 @@ shardingSpgere实现JDBC规范，并在此基础上进行扩展
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            200.2k
+                                            201.6k
                                         </span>&nbsp;字
                                         
                                             
