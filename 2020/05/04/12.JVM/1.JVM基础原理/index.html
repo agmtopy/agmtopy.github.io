@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    717
+                    1.4k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    2 分钟
+                    5 分钟
                 </div>
                 
 
@@ -489,8 +489,49 @@ java语言规范是定义java文件的规范</p>
 <h2 id="元数据空间"><a class="header-anchor" href="#元数据空间"></a>元数据空间</h2>
 <p><strong>元数据空间</strong>是JDK8中划分出来的，用于替代JDK7已经之前的<strong>Perm区(永久代)</strong>。<br>
 <strong>元数据空间</strong>存储<strong>class信息</strong>、<strong>常量池</strong>、<strong>方法数据</strong>、<strong>方法代码</strong>等等</p>
-<h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2>
+<h2 id="小结"><a class="header-anchor" href="#小结"></a>小结</h2>
 <p>jvm中运行的参数是在<strong>栈</strong>上的信息，栈上保存的引用指向的是<strong>堆</strong>中的对象，<strong>类信息</strong>、<strong>常量</strong>等信息则是放在元数据空间中。</p>
+<h2 id="对象创建的过程"><a class="header-anchor" href="#对象创建的过程"></a>对象创建的过程</h2>
+<ul>
+<li>类加载检查</li>
+<li>分配内存空间</li>
+<li>设置对象的头部信息（对象的类型、hashcode、锁状态等）</li>
+<li>执行init方法(初始化)</li>
+<li>返回对象的引用</li>
+</ul>
+<p>对象的有两种创建方式,一种是通过TLAB分配内存，另一种是通过CAS + 自旋锁分配内存。</p>
+<p><strong>TLAB (Thread Local Allocation Buffer) 的使用场景：</strong></p>
+<ul>
+<li><strong>适用场景：</strong>
+<ol>
+<li><strong>小对象优先：</strong> TLAB 主要用于分配<strong>小对象</strong>。 这里的“小”是相对于整个堆空间而言的，具体大小由 JVM 的配置参数决定（例如，<code>TLABSize</code>）。通常，这个值设置为几 KB 到几十 KB。</li>
+<li><strong>线程频繁创建对象：</strong> TLAB 的优势在于避免了线程间的竞争，因此特别适合线程频繁创建对象的场景。例如，Web 服务器处理大量请求时，每个请求处理线程可能会创建很多临时对象。</li>
+<li><strong>内存分配速度敏感的应用：</strong> 由于 TLAB 分配不需要同步，速度非常快，因此对内存分配速度要求高的应用场景非常适用。</li>
+</ol>
+</li>
+</ul>
+<p><strong>CAS + 自旋锁 的使用场景：</strong></p>
+<ul>
+<li><strong>适用场景：</strong>
+<ol>
+<li><strong>大对象：</strong> 当对象的大小超过 TLAB 的限制时，必须直接在共享堆中分配内存。</li>
+<li><strong>TLAB 分配失败：</strong> 当 TLAB 空间不足时，线程需要从共享堆中重新申请新的 TLAB 或直接分配对象。</li>
+<li><strong>高并发环境：</strong> 虽然 TLAB 减少了线程间的竞争，但在并发量非常高的场景下，仍然可能出现多个线程同时尝试在堆中分配内存的情况。</li>
+<li><strong>竞争不是特别激烈的场景：</strong> 自旋锁适用于竞争不是特别激烈的场景。如果竞争非常激烈，线程长时间自旋会消耗大量的 CPU 资源。</li>
+</ol>
+</li>
+</ul>
+<p><strong>小结：</strong></p>
+<ul>
+<li><strong>优先使用 TLAB：</strong> JVM 会尽可能地使用 TLAB 来分配小对象，以提高分配速度和减少线程间的竞争。</li>
+<li><strong>TLAB 不足时使用 CAS + 自旋锁：</strong> 当 TLAB 空间不足或需要分配大对象时，JVM 会使用 CAS + 自旋锁 来在共享堆中分配内存。</li>
+<li><strong>动态调整和优化：</strong> JVM 会根据具体的应用场景和硬件环境，动态调整 TLAB 的大小和自旋锁的策略，以达到最佳的性能和资源利用率。</li>
+</ul>
+<p><strong>更形象的比喻：</strong></p>
+<ul>
+<li><strong>TLAB 就像每个线程的“私人储物柜”：</strong> 线程可以快速地将一些常用的物品（小对象）存放在自己的储物柜中，无需和其他线程竞争。</li>
+<li><strong>CAS + 自旋锁 就像“公共储物柜”：</strong> 如果物品太大或私人储物柜已满，线程需要到公共储物柜中寻找空间。如果公共储物柜正在被其他线程使用，则需要等待（自旋）直到可用。</li>
+</ul>
 <h1>类的加载机制</h1>
 <h2 id="流程"><a class="header-anchor" href="#流程"></a>流程</h2>
 <blockquote>
@@ -822,7 +863,7 @@ java语言规范是定义java文件的规范</p>
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            201.6k
+                                            203.2k
                                         </span>&nbsp;字
                                         
                                             

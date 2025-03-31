@@ -422,7 +422,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    1.5k
+                    1.6k
                 </div>
                 
 
@@ -641,8 +641,18 @@ void os::start_thread(Thread* thread) &#123;
 <p>在线程<B>sleep</B>期间，线程可以感受到中断信号，感受到中断信号后会清除中断位标志并且抛出<B>InterruptedException</B>异常。</p>
 <p>关于线程中断isInterrupted()和线程关闭stop()的区别在于<br>
 线程中断是不会中断线程的运行的,而线程关闭stop会关闭线程,stop()是不安全的说法来自于stop()执行后会立即释放该线程所持有的所有锁(包括synchronized持有的全局对象锁)</p>
-<h2 id="volatile不能作为线程标记位"><a class="header-anchor" href="#volatile不能作为线程标记位"></a>volatile不能作为线程标记位</h2>
-<p>volatile作为并发标记位的时候，当用来使线程阻塞的时候，其他线程仍旧可以改变标记位的值,但是由于持有线程不是活动状态,不能及时获取到volatile标记对象改变后的值，因此volatile不适合作为线程并发安全的标记位。根本原因在于volatile标记的对象不是全局共享的,在内存一致性的协议下作做不到全局可见性;</p>
+<h2 id="volatile不适合作为线程标记位"><a class="header-anchor" href="#volatile不适合作为线程标记位"></a>volatile不适合作为线程标记位</h2>
+<p>当 volatile 变量作为并发标记位，用于阻塞线程时，其他线程仍然可以改变该标记位的值。但是由于持有线程可能不是活动状态，不能及时获取到 volatile 变量改变后的值，因此 volatile 不适合作为线程并发安全的标记位。<br>
+volatile 标记的对象虽然在多线程间可见，但并不能保证原子性操作。<br>
+根本原因在于volatile标记的对象不是全局共享的,在内存一致性的协议下作做不到全局可见性;</p>
+<h3 id="volatile的使用场景"><a class="header-anchor" href="#volatile的使用场景"></a>volatile的使用场景</h3>
+<ol>
+<li>单写多读场景<br>
+1.1 配置标志<br>
+1.2 状态标志</li>
+<li>发布不可变对象</li>
+<li>保证happens-before关系</li>
+</ol>
 <h2 id="wait-notify-notifyAll-方法使用注意"><a class="header-anchor" href="#wait-notify-notifyAll-方法使用注意"></a>wait/notify/notifyAll()方法使用注意</h2>
 <ol>
 <li>wait()方法，必须在<B>synchronized</B>中持有锁后才能使用，因为必须持有对象的<B>monitor</B>锁，这样才能防止在执行前后线程被切换。</li>
@@ -964,7 +974,7 @@ wait必须在synchronized中使用的原因是因为防止指令的乱序执行�
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            201.6k
+                                            203.2k
                                         </span>&nbsp;字
                                         
                                             

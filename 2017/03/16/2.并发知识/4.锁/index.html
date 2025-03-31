@@ -486,7 +486,7 @@
 <p><strong>monitorenter</strong>指令的执行过程是</p>
 <ul>
 <li>如果执行线程尝试获取对象的monitor的计数值是0，那么就加1，标记该线程持有锁对象</li>
-<li>如果该线程已经拥有该对象，那么monitor的技术值在加1</li>
+<li>如果该线程已经拥有该对象，那么monitor的计数值在加1</li>
 <li>如果该线程尝试获取对象的monitor不为0，且执行线程不为自己，那么等待monitor为0后在尝试获取</li>
 </ul>
 <p><strong>monitorexit</strong></p>
@@ -862,7 +862,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            201.6k
+                                            203.2k
                                         </span>&nbsp;字
                                         
                                             
