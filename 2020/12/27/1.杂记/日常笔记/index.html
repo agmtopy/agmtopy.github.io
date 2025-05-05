@@ -418,7 +418,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    197
+                    222
                 </div>
                 
 
@@ -476,7 +476,12 @@ db.grantRolesToUser<span class="token punctuation">(</span><span class="token st
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ubuntu1804.exe config --default-user root<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 <p>– git快速提交图片<br>
 git add --all ;git commit -m “$(Get-Date -Format ‘yyyyMMddHHmmss’)” ;git push</p>
-
+<p>– 批量转换MTS视频格式为MP4</p>
+<pre class="line-numbers language-powershell" data-language="powershell"><code class="language-powershell">
+<span class="token function">Get-ChildItem</span> <span class="token operator">-</span><span class="token keyword">Filter</span> <span class="token string">"*.MTS"</span> <span class="token punctuation">|</span> <span class="token function">ForEach-Object</span> <span class="token punctuation">&#123;</span>
+    ffmpeg <span class="token operator">-</span>i <span class="token variable">$_</span><span class="token punctuation">.</span>FullName <span class="token string">"<span class="token function">$<span class="token punctuation">(</span><span class="token variable">$_</span><span class="token punctuation">.</span>FullName<span class="token punctuation">)</span></span>.mp4"</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
                 
             </div>
             <hr/>
@@ -772,7 +777,7 @@ git add --all ;git commit -m “$(Get-Date -Format ‘yyyyMMddHHmmss’)” ;git
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            203.2k
+                                            203.7k
                                         </span>&nbsp;字
                                         
                                             

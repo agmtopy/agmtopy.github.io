@@ -422,7 +422,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    2.6k
+                    2.8k
                 </div>
                 
 
@@ -446,124 +446,132 @@
                 <h2 id="前言"><a class="header-anchor" href="#前言"></a>前言</h2>
 <p>在Spring框架中要说最重要的方法就是<B>AbstrctApplicationContext.refresh()</B>方法,在这个方法中完成对容器的刷新和bean对象的加载过程,下面就详细对这个方法进行分析;</p>
 <h2 id="refresh-方法概述"><a class="header-anchor" href="#refresh-方法概述"></a>refresh()方法概述</h2>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
-<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">refresh</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">BeansException</span><span class="token punctuation">,</span> <span class="token class-name">IllegalStateException</span> <span class="token punctuation">&#123;</span>
-	<span class="token keyword">synchronized</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>startupShutdownMonitor<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-		<span class="token comment">//1.1 准备此上下文以进行刷新.</span>
-		<span class="token function">prepareRefresh</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">	<span class="token annotation punctuation">@Override</span>
+	<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">refresh</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">BeansException</span><span class="token punctuation">,</span> <span class="token class-name">IllegalStateException</span> <span class="token punctuation">&#123;</span>
+		<span class="token keyword">synchronized</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>startupShutdownMonitor<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+			<span class="token comment">//1.1 准备此上下文以进行刷新.</span>
+			<span class="token function">prepareRefresh</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-		<span class="token comment">//2.1 告诉子类刷新内部bean工厂.(获取beanFactory)</span>
-		<span class="token class-name">ConfigurableListableBeanFactory</span> beanFactory <span class="token operator">=</span> <span class="token function">obtainFreshBeanFactory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token comment">//2.1 告诉子类刷新内部bean工厂.(获取beanFactory)</span>
+			<span class="token class-name">ConfigurableListableBeanFactory</span> beanFactory <span class="token operator">=</span> <span class="token function">obtainFreshBeanFactory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-		<span class="token comment">//2.2 准备在这种情况下使用的bean工厂.(对beanFactory进行预处理)</span>
-		<span class="token function">prepareBeanFactory</span><span class="token punctuation">(</span>beanFactory<span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token comment">//2.2 准备在这种情况下使用的bean工厂.(对beanFactory进行预处理)</span>
+			<span class="token function">prepareBeanFactory</span><span class="token punctuation">(</span>beanFactory<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-		<span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
-			<span class="token comment">//2.3 在上下文子类中对bean工厂进行后置处理.</span>
-			<span class="token function">postProcessBeanFactory</span><span class="token punctuation">(</span>beanFactory<span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+				<span class="token comment">//2.3 在上下文子类中对bean工厂进行后置处理.</span>
+				<span class="token function">postProcessBeanFactory</span><span class="token punctuation">(</span>beanFactory<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-			<span class="token comment">//3.1 调用在上下文中注册为Bean的工厂处理器.</span>
-			<span class="token function">invokeBeanFactoryPostProcessors</span><span class="token punctuation">(</span>beanFactory<span class="token punctuation">)</span><span class="token punctuation">;</span>
+				<span class="token comment">//3.1 调用在上下文中注册为Bean的工厂处理器.</span>
+				<span class="token function">invokeBeanFactoryPostProcessors</span><span class="token punctuation">(</span>beanFactory<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-			<span class="token comment">//3.2 注册拦截Bean创建的Bean处理器.</span>
-			<span class="token function">registerBeanPostProcessors</span><span class="token punctuation">(</span>beanFactory<span class="token punctuation">)</span><span class="token punctuation">;</span>
+				<span class="token comment">//3.2 注册拦截Bean创建的Bean处理器.</span>
+				<span class="token function">registerBeanPostProcessors</span><span class="token punctuation">(</span>beanFactory<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-			<span class="token comment">//4.1 为此上下文初始化消息源.</span>
-			<span class="token function">initMessageSource</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+				<span class="token comment">//4.1 为此上下文初始化消息源.</span>
+				<span class="token function">initMessageSource</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-			<span class="token comment">//4.2 为此上下文初始化事件广播器.</span>
-			<span class="token function">initApplicationEventMulticaster</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+				<span class="token comment">//4.2 为此上下文初始化事件广播器.</span>
+				<span class="token function">initApplicationEventMulticaster</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-			<span class="token comment">//5.1 在特定上下文子类中初始化其他特殊bean.</span>
-			<span class="token function">onRefresh</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+				<span class="token comment">//5.1 在特定上下文子类中初始化其他特殊bean.</span>
+				<span class="token function">onRefresh</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-			<span class="token comment">//6 检查侦听器bean并注册它们.</span>
-			<span class="token function">registerListeners</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+				<span class="token comment">//6 检查侦听器bean并注册它们.</span>
+				<span class="token function">registerListeners</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-			<span class="token comment">//7 实例化所有剩余的（非延迟初始化）单例bean.</span>
-			<span class="token function">finishBeanFactoryInitialization</span><span class="token punctuation">(</span>beanFactory<span class="token punctuation">)</span><span class="token punctuation">;</span>
+				<span class="token comment">//7 实例化所有剩余的（非延迟初始化）单例bean.</span>
+				<span class="token function">finishBeanFactoryInitialization</span><span class="token punctuation">(</span>beanFactory<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-			<span class="token comment">//8 最后一步：发布相应事件.</span>
-			<span class="token function">finishRefresh</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-		<span class="token punctuation">&#125;</span>
-
-		<span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">BeansException</span> ex<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-			<span class="token keyword">if</span> <span class="token punctuation">(</span>logger<span class="token punctuation">.</span><span class="token function">isWarnEnabled</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-				logger<span class="token punctuation">.</span><span class="token function">warn</span><span class="token punctuation">(</span><span class="token string">"Exception encountered during context initialization - "</span> <span class="token operator">+</span>
-						<span class="token string">"cancelling refresh attempt: "</span> <span class="token operator">+</span> ex<span class="token punctuation">)</span><span class="token punctuation">;</span>
+				<span class="token comment">//8 最后一步：发布相应事件.</span>
+				<span class="token function">finishRefresh</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 			<span class="token punctuation">&#125;</span>
 
-			<span class="token comment">// 销毁已创建的单例以避免资源悬空.</span>
-			<span class="token function">destroyBeans</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token keyword">catch</span> <span class="token punctuation">(</span><span class="token class-name">BeansException</span> ex<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+				<span class="token keyword">if</span> <span class="token punctuation">(</span>logger<span class="token punctuation">.</span><span class="token function">isWarnEnabled</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+					logger<span class="token punctuation">.</span><span class="token function">warn</span><span class="token punctuation">(</span><span class="token string">"Exception encountered during context initialization - "</span> <span class="token operator">+</span>
+							<span class="token string">"cancelling refresh attempt: "</span> <span class="token operator">+</span> ex<span class="token punctuation">)</span><span class="token punctuation">;</span>
+				<span class="token punctuation">&#125;</span>
 
-			<span class="token comment">// 重置“active”标志</span>
-			<span class="token function">cancelRefresh</span><span class="token punctuation">(</span>ex<span class="token punctuation">)</span><span class="token punctuation">;</span>
+				<span class="token comment">// 销毁已创建的单例以避免资源悬空.</span>
+				<span class="token function">destroyBeans</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-			<span class="token comment">// Propagate exception to caller.</span>
-			<span class="token keyword">throw</span> ex<span class="token punctuation">;</span>
-		<span class="token punctuation">&#125;</span>
+				<span class="token comment">// 重置“active”标志</span>
+				<span class="token function">cancelRefresh</span><span class="token punctuation">(</span>ex<span class="token punctuation">)</span><span class="token punctuation">;</span>
 
-		<span class="token keyword">finally</span> <span class="token punctuation">&#123;</span>
-			<span class="token comment">//自检并重置spring中缓存的bean的元数据，因为可能不在使用</span>
-			<span class="token function">resetCommonCaches</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+				<span class="token comment">// Propagate exception to caller.</span>
+				<span class="token keyword">throw</span> ex<span class="token punctuation">;</span>
+			<span class="token punctuation">&#125;</span>
+
+			<span class="token keyword">finally</span> <span class="token punctuation">&#123;</span>
+				<span class="token comment">//自检并重置spring中缓存的bean的元数据，因为可能不在使用</span>
+				<span class="token function">resetCommonCaches</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token punctuation">&#125;</span>
 		<span class="token punctuation">&#125;</span>
 	<span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>通过源代码可以看到<B>AbstrctApplicationContext.refresh()方法</B>分为<B>8个步骤</B></p>
-<ol>
-<li>准备环境上下文</li>
-<li>创建准备beanFactory</li>
-<li>处理前置扩展点(BeanFactoryPostProcessor/BeanPostProcessor)</li>
-<li>事件广播</li>
-<li>onRefresh</li>
-<li>注册监听器</li>
-<li>实例化剩下的bean</li>
-<li>发布事件</li>
-</ol>
-<p>下面根据步骤进一步分析refresh()方法的具体操作;</p>
-<h2 id="准备环境上下文"><a class="header-anchor" href="#准备环境上下文"></a>准备环境上下文</h2>
-<p>配置应用刷新上下文环境的方法主要有<B>prepareRefresh()</B>、<B>obtainFreshBeanFactory()</B>、<B>prepareBeanFactory(beanFactory)</B></p>
-<h3 id="prepareRefresh"><a class="header-anchor" href="#prepareRefresh"></a>prepareRefresh()</h3>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">/*
- * 准备此上下文以进行刷新，设置其启动日期和
- * 活动标志，以及执行属性源的任何初始化.
- */</span>
-<span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">prepareRefresh</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-	<span class="token comment">//切换到活动状态.</span>
-	<span class="token keyword">this</span><span class="token punctuation">.</span>startupDate <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-	<span class="token keyword">this</span><span class="token punctuation">.</span>closed<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-	<span class="token keyword">this</span><span class="token punctuation">.</span>active<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+```                 
+通过源代码可以看到<span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">B</span><span class="token punctuation">></span></span><span class="token class-name">AbstractApplicationContext</span><span class="token punctuation">.</span><span class="token function">refresh</span><span class="token punctuation">(</span><span class="token punctuation">)</span>方法<span class="token operator">&lt;</span><span class="token operator">/</span><span class="token class-name">B</span><span class="token operator">></span>分为<span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">B</span><span class="token punctuation">></span></span><span class="token number">8</span>个步骤<span class="token operator">&lt;</span><span class="token operator">/</span><span class="token class-name">B</span><span class="token operator">></span>
 
-	<span class="token keyword">if</span> <span class="token punctuation">(</span>logger<span class="token punctuation">.</span><span class="token function">isDebugEnabled</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-		<span class="token keyword">if</span> <span class="token punctuation">(</span>logger<span class="token punctuation">.</span><span class="token function">isTraceEnabled</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-			logger<span class="token punctuation">.</span><span class="token function">trace</span><span class="token punctuation">(</span><span class="token string">"Refreshing "</span> <span class="token operator">+</span> <span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token number">1.</span> 准备环境上下文
+<span class="token number">2.</span> 创建准备beanFactory
+<span class="token number">3.</span> 处理前置扩展点<span class="token punctuation">(</span><span class="token class-name">BeanFactoryPostProcessor</span><span class="token operator">/</span><span class="token class-name">BeanPostProcessor</span><span class="token punctuation">)</span>
+<span class="token number">4.</span> 事件广播
+<span class="token number">5.</span> onRefresh
+<span class="token number">6.</span> 注册监听器
+<span class="token number">7.</span> 实例化剩下的bean
+<span class="token number">8.</span> 发布事件
+
+
+
+下面根据步骤进一步分析<span class="token function">refresh</span><span class="token punctuation">(</span><span class="token punctuation">)</span>方法的具体操作<span class="token punctuation">;</span>
+
+## 准备环境上下文
+
+配置应用刷新上下文环境的方法主要有<span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">B</span><span class="token punctuation">></span></span><span class="token function">prepareRefresh</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">&lt;</span><span class="token operator">/</span><span class="token class-name">B</span><span class="token operator">></span>、<span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">B</span><span class="token punctuation">></span></span><span class="token function">obtainFreshBeanFactory</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">&lt;</span><span class="token operator">/</span><span class="token class-name">B</span><span class="token operator">></span>、<span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">B</span><span class="token punctuation">></span></span><span class="token function">prepareBeanFactory</span><span class="token punctuation">(</span>beanFactory<span class="token punctuation">)</span><span class="token operator">&lt;</span><span class="token operator">/</span><span class="token class-name">B</span><span class="token operator">></span>
+
+### <span class="token function">prepareRefresh</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+```java
+	<span class="token comment">/*
+	 * 准备此上下文以进行刷新，设置其启动日期和
+	 * 活动标志，以及执行属性源的任何初始化.
+	 */</span>
+	<span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">prepareRefresh</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+		<span class="token comment">//切换到活动状态.</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span>startupDate <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">currentTimeMillis</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span>closed<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+		<span class="token keyword">this</span><span class="token punctuation">.</span>active<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+		<span class="token keyword">if</span> <span class="token punctuation">(</span>logger<span class="token punctuation">.</span><span class="token function">isDebugEnabled</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+			<span class="token keyword">if</span> <span class="token punctuation">(</span>logger<span class="token punctuation">.</span><span class="token function">isTraceEnabled</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+				logger<span class="token punctuation">.</span><span class="token function">trace</span><span class="token punctuation">(</span><span class="token string">"Refreshing "</span> <span class="token operator">+</span> <span class="token keyword">this</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token punctuation">&#125;</span>
+			<span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+				logger<span class="token punctuation">.</span><span class="token function">debug</span><span class="token punctuation">(</span><span class="token string">"Refreshing "</span> <span class="token operator">+</span> <span class="token function">getDisplayName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token punctuation">&#125;</span>
+		<span class="token punctuation">&#125;</span>
+
+		<span class="token comment">// 初始化ProperySources容器.</span>
+		<span class="token function">initPropertySources</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+		<span class="token comment">// 验证所有标记为必需的属性都是可解析的:</span>
+		<span class="token comment">// see ConfigurablePropertyResolver#setRequiredProperties</span>
+		<span class="token function">getEnvironment</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">validateRequiredProperties</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+		<span class="token comment">// ApplicationListeners设置为预处理</span>
+		<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>earlyApplicationListeners <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+			<span class="token keyword">this</span><span class="token punctuation">.</span>earlyApplicationListeners <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">LinkedHashSet</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>applicationListeners<span class="token punctuation">)</span><span class="token punctuation">;</span>
 		<span class="token punctuation">&#125;</span>
 		<span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
-			logger<span class="token punctuation">.</span><span class="token function">debug</span><span class="token punctuation">(</span><span class="token string">"Refreshing "</span> <span class="token operator">+</span> <span class="token function">getDisplayName</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token comment">// 将ApplicationListeners重新设置成预处理状态.</span>
+			<span class="token keyword">this</span><span class="token punctuation">.</span>applicationListeners<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+			<span class="token keyword">this</span><span class="token punctuation">.</span>applicationListeners<span class="token punctuation">.</span><span class="token function">addAll</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>earlyApplicationListeners<span class="token punctuation">)</span><span class="token punctuation">;</span>
 		<span class="token punctuation">&#125;</span>
-	<span class="token punctuation">&#125;</span>
-
-	<span class="token comment">// 初始化ProperySources容器.</span>
-	<span class="token function">initPropertySources</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-	<span class="token comment">// 验证所有标记为必需的属性都是可解析的:</span>
-	<span class="token comment">// see ConfigurablePropertyResolver#setRequiredProperties</span>
-	<span class="token function">getEnvironment</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">validateRequiredProperties</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-	<span class="token comment">// ApplicationListeners设置为预处理</span>
-	<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>earlyApplicationListeners <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-		<span class="token keyword">this</span><span class="token punctuation">.</span>earlyApplicationListeners <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">LinkedHashSet</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>applicationListeners<span class="token punctuation">)</span><span class="token punctuation">;</span>
-	<span class="token punctuation">&#125;</span>
-	<span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
-		<span class="token comment">// 将ApplicationListeners重新设置成预处理状态.</span>
-		<span class="token keyword">this</span><span class="token punctuation">.</span>applicationListeners<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-		<span class="token keyword">this</span><span class="token punctuation">.</span>applicationListeners<span class="token punctuation">.</span><span class="token function">addAll</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">.</span>earlyApplicationListeners<span class="token punctuation">)</span><span class="token punctuation">;</span>
-	<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p><B>prepareRefresh()</B>方法只是在清理上下文环境、设置启动事件以及初始化<B>PropertySources容器</B>等；<br>
 初始化<B>PropertySources</B>容器方法对应web应用底层是调用</p>
 <pre class="line-numbers language-none"><code class="language-none">WebApplicationContextUtils.initServletPropertySources(getPropertySources(), servletContext, servletConfig)<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-<p>实现将<B>servletContext</B>, <B>servletConfig</B>加载到<B>PropertySources容器</B>中的</p>
+<p>实现将<B>servletContext</B>, <B>servletConfig</B>加载到<B>PropertySources容器</B>中的,作用是使得 Spring 可以访问 ServletConfig 和 ServletContext 的参数，并将它们作为属性源添加到 Spring 的 Environment 中。 这样，你就可以通过 Spring 的 @Value 注解或者 Environment 对象来访问 Servlet 的初始化参数和 Web 应用的上下文参数，从而简化 Web 应用的配置和开发</p>
 <ul>
 <li>servletContext是web应用服务器为每一个应用创建的一个服务上下文对象</li>
 <li>servletConfig是操作一个servlet中的配置属性的接口</li>
@@ -1238,7 +1246,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            203.2k
+                                            203.7k
                                         </span>&nbsp;字
                                         
                                             

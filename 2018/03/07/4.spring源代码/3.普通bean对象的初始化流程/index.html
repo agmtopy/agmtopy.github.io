@@ -455,6 +455,7 @@ AbstractApplicationContext:refresh() -&gt; finishBeanFactoryInitialization()
 
 invokeInitMethods(): -&gt;invokeCustomInitMethod()-&gt;BeanUtils.findMethod()|ClassUtils.getMethodIfAvailable()-&gt;ClassUtils.getInterfaceMethodIfPossible-&gt;methodToInvoke.invoke
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="" alt="bean创建过程"></p>
 <p>上面的流程稍微复杂一点,化繁为简来看有几个总要的步骤:</p>
 <ol>
 <li>调用入口方法:finishBeanFactoryInitialization()</li>
@@ -817,11 +818,27 @@ postProcessAfterInitialization：初始化bean之后，相当于把bean注入spr
 </li>
 </ul>
 <p>BeanFactoryAware.setBeanFactory方法可在注入属性之前，也就是Setter之前拿到Bean对象;</p>
-<ul>
-<li>初始化<br>
-@PostConstruct<br>
-InitializingBean</li>
-</ul>
+<h3 id="扩展点"><a class="header-anchor" href="#扩展点"></a>扩展点</h3>
+<ol>
+<li>BeanFactoryPostProcessor</li>
+<li>BeanPostProcessor.postProcessBeforeInitialization</li>
+<li>Bean 实例化</li>
+<li>BeanPostProcessor.postProcessAfterInstantiation</li>
+<li>属性注入</li>
+<li>BeanPostProcessor.postProcessProperties (从 Spring 5.1 开始)</li>
+<li>BeanPostProcessor.postProcessPropertyValues (Spring 5.1 之前)</li>
+<li>MergedBeanDefinitionPostProcessor.postProcessMergedBeanDefinition</li>
+<li>BeanPostProcessor.postProcessBeforeInitialization</li>
+<li>@PostConstruct 注解的方法</li>
+<li>InitializingBean.afterPropertiesSet() 方法</li>
+<li>自定义的 init 方法</li>
+<li>BeanPostProcessor.postProcessAfterInitialization</li>
+<li>Bean 使用</li>
+<li>@PreDestroy 注解的方法</li>
+<li>DisposableBean.destroy() 方法</li>
+<li>自定义的 destroy 方法</li>
+</ol>
+<p>总结下来就是<B>BeanFactoryPostProcessor</B>、<B>BeanPostProcessor</B>、<B>@PostConstruct</B>、<B>InitializingBean</B>、<B>自定义的init方法</B>、</p>
 <h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
 <p><a target="_blank" rel="noopener" href="https://www.jianshu.com/p/867991f3daa0">Spring AOP源码解读1 - 程序入口</a><br>
 <a target="_blank" rel="noopener" href="https://www.sohu.com/a/214717253_714863">Spring源码分析之Bean的加载 </a></p>
@@ -1125,7 +1142,7 @@ InitializingBean</li>
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            203.2k
+                                            203.7k
                                         </span>&nbsp;字
                                         
                                             

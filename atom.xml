@@ -6,7 +6,7 @@
   <link href="https://agmtopy.gitee.io/atom.xml" rel="self"/>
   
   <link href="https://agmtopy.gitee.io/"/>
-  <updated>2025-03-22T06:34:23.609Z</updated>
+  <updated>2025-05-05T13:22:34.590Z</updated>
   <id>https://agmtopy.gitee.io/</id>
   
   <author>
@@ -15,6 +15,32 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>MAT使用指南</title>
+    <link href="https://agmtopy.gitee.io/2025/05/05/12.JVM/21.MAT%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/"/>
+    <id>https://agmtopy.gitee.io/2025/05/05/12.JVM/21.MAT%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/</id>
+    <published>2025-05-05T13:04:46.000Z</published>
+    <updated>2025-05-05T13:22:34.590Z</updated>
+    
+    <content type="html"><![CDATA[<h1>MAT使用指南</h1><p>前言:将MAT常用的使用方法记录下来以备不时之需,后续补充也在这上面进行</p><h2 id="MAT安装的常见问题"><a class="header-anchor" href="#MAT安装的常见问题"></a>MAT安装的常见问题</h2><ol><li><p>JDK版本不匹配<br>目前MAT版本为1.16.0,需要JDK17以上版版本,如果要使用JDK8作为运行时环境需要下载1.7.0版本!(R_1.7.0)[<a href="https://github.com/eclipse-mat/mat/releases/tag/R_1.7.0">https://github.com/eclipse-mat/mat/releases/tag/R_1.7.0</a>]</p></li><li><p>运行目标版本不一致</p><p>如果MAT的运行版本和目标版本不一致,会导致无法打开dump文件,需要在MAT的安装目录下找到<code>MemoryAnalyzer.ini</code>文件,修改如下:</p> <pre class="line-numbers language-none"><code class="language-none">-vm&#123;#你的jdk路径#&#125;\jdk-21.0.2\bin\javaw.exe<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><p>需要注意的是必须将<code>-vm</code>配置放到<code>-vmargs</code>之前,否则会导致MAT无法启动</p></li></ol><h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2><p><img src="https://github.com/eclipse-mat/mat" alt="MAT项目地址"></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;MAT使用指南&lt;/h1&gt;
+&lt;p&gt;前言:将MAT常用的使用方法记录下来以备不时之需,后续补充也在这上面进行&lt;/p&gt;
+&lt;h2 id=&quot;MAT安装的常见问题&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;#MAT安装的常见问题&quot;&gt;&lt;/a&gt;MAT安装的常见问题&lt;</summary>
+      
+    
+    
+    
+    <category term="JVM" scheme="https://agmtopy.gitee.io/categories/JVM/"/>
+    
+    
+    <category term="jvm" scheme="https://agmtopy.gitee.io/tags/jvm/"/>
+    
+  </entry>
   
   <entry>
     <title>Prompt工程实战</title>
@@ -513,32 +539,6 @@
     
     
     <category term="工具" scheme="https://agmtopy.gitee.io/tags/%E5%B7%A5%E5%85%B7/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>jvm-垃圾回收器及算法基础</title>
-    <link href="https://agmtopy.gitee.io/2022/12/01/12.JVM/8.%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E5%8F%8A%E7%AE%97%E6%B3%95%E5%9F%BA%E7%A1%80/"/>
-    <id>https://agmtopy.gitee.io/2022/12/01/12.JVM/8.%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E5%8F%8A%E7%AE%97%E6%B3%95%E5%9F%BA%E7%A1%80/</id>
-    <published>2022-12-01T14:02:27.000Z</published>
-    <updated>2022-12-03T14:59:41.787Z</updated>
-    
-    <content type="html"><![CDATA[<h1>垃圾回收器及算法基础</h1><h2 id="前提介绍"><a class="header-anchor" href="#前提介绍"></a>前提介绍</h2><p>垃圾回收器(GC)的理论研究在很早直接就开始了,大概是在60年代lisp语言就开始使用内存分配和垃圾回收机制来管理程序的内存了,近现代这一方向也是保持着极高的研究热度,从G1-&gt;ZGC</p><p><img src="https://github.com/agmtopy/noteBook/blob/master/excalidraw/%E5%9E%83%E5%9C%BE%E5%9B%9E%E6%94%B6%E5%99%A8%E5%8F%8A%E7%AE%97%E6%B3%95%E5%9F%BA%E7%A1%80.png?raw=true" alt="大纲"></p><h2 id="算法基础"><a class="header-anchor" href="#算法基础"></a>算法基础</h2><p>对内存空间的回收首先需要解决一个问题那些是需要进行回收的对象,针对这个问题有两种处理方案:</p><ul><li><p>引用计数算法<br>引用计数是通过对对象被引用次数来标识是否有效,存在循环引用问题,可以通过可达性分析的步骤来解决</p></li><li><p>根标记算法,从<strong>GC Roots</strong>开始遍历整个内存对象是否可达的方式来标记需要回收的对象</p><p>首先<strong>GC Roots</strong>对象包括以下的几种:</p><ul><li>虚拟机栈中引用指向的对象(reference)</li><li>方法区中类静态属性引用的对象(静态属性对象,虽然不在栈帧中)</li><li>方法区常量引用的对象(例如常量池中的对象)</li><li>本地方法栈中引用的对象</li></ul></li></ul><h2 id="对象"><a class="header-anchor" href="#对象"></a>对象</h2><ul><li><p>对象的回收</p><p>对象的回收是一个非常严肃的动作,错误的回收将会是一场对用户的灾难,因此在JVM的实现中,对于GC线程的优先级设置的非常低,其次是在标记对象不可达后,还会声明会执行一次<strong>对象</strong>的**finalize()**方法,对于这个方法是否执行完成不做保证(防止死循环/wait time)</p><ul><li>finalize():用于GC回收前对象最后一次自救的方法,但是只会执行一次,防止内存溢出</li></ul></li><li><p>对象的分配</p><p>对象的分配与垃圾收集器的选择有关,对象是优先在Eden区进行分配,</p><p>进入老年代的几种场景:</p><ol><li>大对象直接进入老年代</li><li>长期存活的对象(16次GC)</li><li>动态对象年龄判断(一半相同年龄的对象直接进入老年代)</li></ol></li></ul><h2 id="理论基础"><a class="header-anchor" href="#理论基础"></a>理论基础</h2><ul><li><p>标记类</p><p>标记-清除算法/标记-整理算法/复制算法</p><ul><li>标记整理算法是通过时间换空间形式的一种体现,通过整理回收后的内存碎片来达到可以继续分配的目的</li><li>复制算法是空间换时间的体现,通过预留一倍的空间来达到内存回收完成后没有内存碎片的问题</li></ul></li><li><p>分代类</p><p>分代算法主要是根据对象的存活周期,将对象划分为不同区域,在不同的区域上采取不同的算法来处理</p></li></ul><h2 id="HotSopt实现"><a class="header-anchor" href="#HotSopt实现"></a>HotSopt实现</h2><ul><li><p>枚举根节点</p><p>通过<strong>OopMap</strong>的的方式来快速查找GC Roots枚举</p></li><li><p>安全点</p><p>由于引用关系的变化会不断的影响GC Roots,因此HotSpot不是每条指令都会生成OopMap,而只在特定的位置才会产生OopMap,这种特殊的位置被称为<strong>Safe pint</strong>,有两种进入Safe point的方式:</p><ul><li>抢占式</li><li>主动中断式:主动中断的方式是通过设置<strong>中断标记</strong></li></ul></li><li><p>安全区域</p><p>安全区域被称为Safe Region,指的是一段不会改变引用关系的代码,在执行GC时是不会处理已进入Safe Region的线程,当这些线程在离开Sefe Region时也会检查GC是否完成</p></li></ul><h2 id="垃圾收集器"><a class="header-anchor" href="#垃圾收集器"></a>垃圾收集器</h2><ul><li><p>Parallel Scavenge收集器</p></li><li><p>Parallel  Old收集器</p><p>两种Parallel收集器分别是jdk8中默认是年轻代和老年代的垃圾收集器</p><ul><li><p>Parallel Scavenge收集器</p><p>用于<strong>新生代,<strong>关注</strong>吞吐量</strong>的多线程并行收集器</p><p>CMS是关注于停顿时间,尽可能的缩短用户线程的停顿时间,适合于有交互的web系统</p><p>Parallel是关注于吞吐量尽可能的在单位时间内多执行用户代码,缩小GC时间,适用于后台任务</p></li><li><p>Parallel Old收集器</p><p>是老年代的标记-整理算法的多线程垃圾收集器</p></li><li><p>CMS收集器(<strong>三标一清</strong>)</p><p>CMS收集器是以最短停顿时间为目标的垃圾收集器,是基于标记-清除算法演化而来,分为:</p><ol><li>初始标记阶段</li><li>并发标记阶段</li><li>重新标记阶段</li><li>并发清除阶段</li></ol><p>在初始标记和重新标记阶段会STW的方式来进行,因为初始化标记是查找**GC Roots,**重新标记是对并发标记阶段结果修正也需要STW;</p><p>整个CMS中最耗时的<strong>并发标记</strong>和<strong>并发清理阶段</strong>都可以和用户线程一起执行</p><p>CMS垃圾收集器的问题:</p><ol><li>参与线程过高,按照(coreSize+3)/4的方式分配</li><li>无法处理浮动垃圾,对于在重新标记后产生的垃圾只能在下一次GC时进行处理,占用空间,当老年代达到一个阈值后会出发full GC,当CMS在运行时产生内存不足会激活serial GC</li><li>内存碎片问题,通过full GC的方式解决</li></ol></li><li><p>G1收集器</p><ul><li>从jdk9开始G1就作为默认的垃圾处理器</li><li>在整体上G1是标记-整理算法,局部上是标记-复制算法</li></ul></li><li><p>Shenandoah/ZGC收集器</p><ul><li>亚毫秒级</li><li>无分区设计</li></ul></li></ul></li></ul><h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2><p><a href="https://www.baeldung.com/jvm-zgc-garbage-collector">ZGC简介:可扩展的实验性低延迟 JVM 垃圾收集器</a><br><a href="https://xie.infoq.cn/article/586f901cf8f38dd2f63b54a44">ZGC</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1&gt;垃圾回收器及算法基础&lt;/h1&gt;
-&lt;h2 id=&quot;前提介绍&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;#前提介绍&quot;&gt;&lt;/a&gt;前提介绍&lt;/h2&gt;
-&lt;p&gt;垃圾回收器(GC)的理论研究在很早直接就开始了,大概是在60年代lisp语言就开始使用内存分配和垃圾回</summary>
-      
-    
-    
-    
-    <category term="JVM" scheme="https://agmtopy.gitee.io/categories/JVM/"/>
-    
-    
-    <category term="jvm" scheme="https://agmtopy.gitee.io/tags/jvm/"/>
     
   </entry>
   
