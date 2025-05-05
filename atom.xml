@@ -6,7 +6,7 @@
   <link href="https://agmtopy.gitee.io/atom.xml" rel="self"/>
   
   <link href="https://agmtopy.gitee.io/"/>
-  <updated>2025-05-05T13:22:34.590Z</updated>
+  <updated>2025-05-05T15:09:12.036Z</updated>
   <id>https://agmtopy.gitee.io/</id>
   
   <author>
@@ -21,16 +21,16 @@
     <link href="https://agmtopy.gitee.io/2025/05/05/12.JVM/21.MAT%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/"/>
     <id>https://agmtopy.gitee.io/2025/05/05/12.JVM/21.MAT%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/</id>
     <published>2025-05-05T13:04:46.000Z</published>
-    <updated>2025-05-05T13:22:34.590Z</updated>
+    <updated>2025-05-05T15:09:12.036Z</updated>
     
-    <content type="html"><![CDATA[<h1>MAT使用指南</h1><p>前言:将MAT常用的使用方法记录下来以备不时之需,后续补充也在这上面进行</p><h2 id="MAT安装的常见问题"><a class="header-anchor" href="#MAT安装的常见问题"></a>MAT安装的常见问题</h2><ol><li><p>JDK版本不匹配<br>目前MAT版本为1.16.0,需要JDK17以上版版本,如果要使用JDK8作为运行时环境需要下载1.7.0版本!(R_1.7.0)[<a href="https://github.com/eclipse-mat/mat/releases/tag/R_1.7.0">https://github.com/eclipse-mat/mat/releases/tag/R_1.7.0</a>]</p></li><li><p>运行目标版本不一致</p><p>如果MAT的运行版本和目标版本不一致,会导致无法打开dump文件,需要在MAT的安装目录下找到<code>MemoryAnalyzer.ini</code>文件,修改如下:</p> <pre class="line-numbers language-none"><code class="language-none">-vm&#123;#你的jdk路径#&#125;\jdk-21.0.2\bin\javaw.exe<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre><p>需要注意的是必须将<code>-vm</code>配置放到<code>-vmargs</code>之前,否则会导致MAT无法启动</p></li></ol><h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2><p><img src="https://github.com/eclipse-mat/mat" alt="MAT项目地址"></p>]]></content>
+    <content type="html"><![CDATA[<h1>MAT使用指南</h1><p>前言:将MAT常用的使用方法记录下来以备不时之需,后续补充也在这上面进行</p><h2 id="MAT使用过程中常见问题"><a class="header-anchor" href="#MAT使用过程中常见问题"></a>MAT使用过程中常见问题</h2><ol><li>JDK版本不匹配<br>目前MAT版本为1.16.0,需要JDK17以上版版本,如果要使用JDK8作为运行时环境需要下载1.7.0版本<br><a href="https://github.com/eclipse-mat/mat/releases/tag/R_1.7.0">R_1.7.0</a></li><li>运行目标版本不一致<br><img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/MAT_%E5%90%AF%E5%8A%A8%E9%97%AE%E9%A2%98.png?raw=true" alt="MAT_启动问题"><br>如果MAT的运行版本和目标版本不一致,会导致无法打开dump文件,需要在MAT的安装目录下找到<code>MemoryAnalyzer.ini</code>文件,修改如下: <pre class="line-numbers language-none"><code class="language-none">-vm&#123;#你的jdk路径#&#125;\jdk-21.0.2\bin\javaw.exe<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>需要注意的是必须将<code>-vm</code>配置放到<code>-vmargs</code>之前,否则会导致MAT无法启动</li><li>运行时内存不足<br>如果在使用MAT的过程中出现了<code>java.lang.OutOfMemoryError: Java heap space</code>的错误,可以在<code>MemoryAnalyzer.ini</code>中添加如下配置:<pre class="line-numbers language-none"><code class="language-none">-Xms512m-Xmx2048m<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>其中<code>-Xms</code>表示初始内存大小,<code>-Xmx</code>表示最大内存大小,可以根据自己的机器配置进行调整,<B>注意MAT的内存大小一般设置为hprf文件的两倍</B></li></ol><h2 id="MAT常用功能"><a class="header-anchor" href="#MAT常用功能"></a>MAT常用功能</h2><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/MAT_%E4%B8%BB%E7%95%8C%E9%9D%A2.png?raw=true" alt="MAT主界面"></p><h3 id="Histogram"><a class="header-anchor" href="#Histogram"></a>Histogram</h3><p>直方图:用于分析对象的数量和大小<br>!(MAT_Histogram](<a href="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/MAT_Histogram.png?raw=true">https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/MAT_Histogram.png?raw=true</a>)<br>从上图中可以看到Object的数量和大小,shallow Heap表示对象本身占用的内存,retained Heap表示对象引用的内存,可以通过右键点击show object by class进行查看;<br><img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/MAT_Histogram_income.png?raw=true" alt="MAT_Histogram_incomeing"></p><h3 id="dominator-tree"><a class="header-anchor" href="#dominator-tree"></a>dominator tree</h3><p>支配树:用于分析对象的引用关系和占用大小<br><img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/MAT_dominator_tree.png?raw=true" alt="dominator tree"><br>dominator tree是MAT中最常用的功能,通过它可以很明显的分析出当前内存的占用情况,并且可以按照class,package,ClassLoad等进行分类;</p><ul><li><p>分组功能:<br><img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/MAT_dominator_tree1.png?raw=true" alt="dominator tree1"></p></li><li><p>GC Root引用功能:<br><img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/MAT_dominator_tree2.png?raw=true" alt="dominator tree2"></p></li><li><p>调用链功能:<br><img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/MAT_dominator_tree3.png?raw=true" alt="dominator tree3"></p></li></ul><h3 id="Leak-Suspects-by-Snapshot-Comparison"><a class="header-anchor" href="#Leak-Suspects-by-Snapshot-Comparison"></a>Leak Suspects by Snapshot Comparison</h3><p>疑似内存泄漏视图:通过这个视图可以快速分析内存泄漏问题<br><img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/MAT_Leak%20Suspects%20by%20Snapshot%20Comparison.png?raw=true" alt="Leak Suspects"></p><p>调整内存显示单位:<br><img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/MAT_%E8%AE%BE%E7%BD%AE%E5%8D%95%E4%BD%8D1.png?raw=true" alt="调整内存"><br><img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/MAT_%E8%AE%BE%E7%BD%AE%E5%8D%95%E4%BD%8D2.png?raw=true" alt="调整内存2"></p><h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2><p><img src="https://github.com/eclipse-mat/mat" alt="MAT项目地址"></p>]]></content>
     
     
       
       
     <summary type="html">&lt;h1&gt;MAT使用指南&lt;/h1&gt;
 &lt;p&gt;前言:将MAT常用的使用方法记录下来以备不时之需,后续补充也在这上面进行&lt;/p&gt;
-&lt;h2 id=&quot;MAT安装的常见问题&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;#MAT安装的常见问题&quot;&gt;&lt;/a&gt;MAT安装的常见问题&lt;</summary>
+&lt;h2 id=&quot;MAT使用过程中常见问题&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;#MAT使用过程中常见问题&quot;&gt;&lt;/a&gt;MAT使用过程</summary>
       
     
     
