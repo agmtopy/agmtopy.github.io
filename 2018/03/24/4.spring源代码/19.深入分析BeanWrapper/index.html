@@ -422,7 +422,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    54
+                    440
                 </div>
                 
 
@@ -444,10 +444,27 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h1>深入分析BeanWrapper</h1>
-<p><strong>BeanWrapper</strong>是一个从BeanDefinition到Bean直接的中间产物</p>
-<blockquote>
-<p>可以访问属性的通用型接口（例如对象的 bean 属性或者对象中的字段），作为 BeanWrapper 的基础接口</p>
-</blockquote>
+<p><strong>BeanWrapper</strong>是一个从BeanDefinition到Bean直接的中间产物<br>
+BeanWrapper 是 Spring 框架中的一个核心接口，它提供了对 JavaBeans 的属性访问和操作功能。通过 BeanWrapper，你可以方便地获取、设置和检查 JavaBeans 的属性，而不需要直接使用反射机制。这样可以简化代码，提高开发效率。</p>
+<p>BeanWrapper 接口<br>
+BeanWrapper 接口定义了以下主要方法：</p>
+<p>getBean(): 返回被包裹的 bean 实例。<br>
+getPropertyValue(String propertyName): 获取指定属性的值。<br>
+setPropertyValue(String propertyName, Object value): 设置指定属性的值。<br>
+isReadableProperty(String propertyName): 判断是否可以读取指定属性。<br>
+isWritableProperty(String propertyName): 判断是否可以写入指定属性。<br>
+getBeanClass(): 获取被包裹的 bean 的类。<br>
+getAutoGrowNestedPaths(): 判断是否自动增长嵌套路径。<br>
+setAutoGrowNestedPaths(boolean autoGrowNestedPaths): 设置是否自动增长嵌套路径。<br>
+getWrappedInstance(): 返回被包裹的 bean 实例（通常与 getBean() 相同）。<br>
+getWrappedClass(): 返回被包裹的 bean 的类（通常与 getBeanClass() 相同）。<br>
+BeanWrapperImpl 类<br>
+BeanWrapperImpl 是 BeanWrapper 接口的一个实现类，它提供了具体的功能实现。BeanWrapperImpl 不仅实现了 BeanWrapper 接口，还实现了 PropertyAccessor 和 PropertyEditorRegistry 接口，因此它具有更多的功能。</p>
+<p>主要功能<br>
+属性访问：通过 getPropertyValue 和 setPropertyValue 方法，可以方便地获取和设置 JavaBeans 的属性值。<br>
+属性编辑器注册：通过 registerCustomEditor 方法，可以注册自定义的 PropertyEditor，用于处理特定类型的属性转换。<br>
+嵌套属性支持：BeanWrapper 支持嵌套属性的访问，例如 user.address.street，可以通过点号分隔符访问嵌套对象的属性。<br>
+自动增长嵌套路径：如果设置了 autoGrowNestedPaths 为 true，那么在设置嵌套属性时，如果中间的嵌套对象不存在，会自动创建。</p>
 
                 
             </div>
@@ -748,7 +765,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            204k
+                                            204.4k
                                         </span>&nbsp;字
                                         
                                             
