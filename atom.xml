@@ -6,7 +6,7 @@
   <link href="https://agmtopy.gitee.io/atom.xml" rel="self"/>
   
   <link href="https://agmtopy.gitee.io/"/>
-  <updated>2025-05-26T00:14:47.074Z</updated>
+  <updated>2025-05-26T17:09:46.743Z</updated>
   <id>https://agmtopy.gitee.io/</id>
   
   <author>
@@ -15,6 +15,28 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>java性能权威指南一Java性能调优工具箱</title>
+    <link href="https://agmtopy.gitee.io/2025/05/26/12.JVM/31.java%E6%80%A7%E8%83%BD%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97(%E4%B8%80)/"/>
+    <id>https://agmtopy.gitee.io/2025/05/26/12.JVM/31.java%E6%80%A7%E8%83%BD%E6%9D%83%E5%A8%81%E6%8C%87%E5%8D%97(%E4%B8%80)/</id>
+    <published>2025-05-26T14:47:22.000Z</published>
+    <updated>2025-05-26T17:09:46.743Z</updated>
+    
+    <content type="html"><![CDATA[<h1>java性能权威指南一Java性能调优工具箱</h1><h2 id="前言"><a class="header-anchor" href="#前言"></a>前言</h2><p>说来惭愧这本书是HeapDump社区,大概是23年的礼品吧,也是目前最后一本收到的技术书籍,以下是对这本书的学习笔记;</p><p>说到Java性能优化,有两个绕不开的前置条件:</p><ol><li><p>关于对’不要过早优化’论点的误区<br>在这个一点上,个人理解是不要过早投入精力进行极致优化,例如0.99s的响应时间,投入大量精力优化到0.49s,投入和产出不成正比;<br>'过早优化’这个词语是高德纳最早提出来的,但是完整的原话是&quot;我们不应该把大量的时间耗费在哪些小的性能改进上,过早优化是所有噩梦的根源&quot;,这不是我们编写复杂、混乱、晦涩代码的借口；</p></li><li><p>性能测试的方法<br>性能测试有几个原则:</p></li></ol><ul><li>测试真实应用</li><li>理解批处理流逝时间、吞吐量和响应时间<br>这个指的是Java应用通常都会使用JIT-即时编译技术，因此需要运行一段时间后才能测试出真实的性能水平</li><li>同统计方法论应对性能变化<br>就算是计算机科学这一严谨的学科,在测试过程中也会出现毛刺现象,因此我们评估应用的性能指标一定是要基于统计学来进行分析;</li></ul><p>简单介绍过前置条件后,下面进入主菜<B>Java性能调优工具箱</B>一节;</p><h2 id="性能调优工具"><a class="header-anchor" href="#性能调优工具"></a>性能调优工具</h2><h3 id="操作系统的工具和分析"><a class="header-anchor" href="#操作系统的工具和分析"></a>操作系统的工具和分析</h3><ul><li>CPU使用率<br>性能调优的目的是<B>提高单位时间内CPU的使用率<B><br>常用的命令是有:</li></ul><ol><li>vmstat [选项] [延迟时间] [次数]</li></ol><ul><li>磁盘使用率<br>目前来说磁盘读写相比CPU还是太慢太慢了,I/O阻塞是导致大部分程序性能无法提高的原因;<br>常用的命令有:</li></ul><ol><li>isstat -xm 5<br>输出CPU使用情况、磁盘I/O统计信息，关键指标:<B>%util-磁盘使用率</B>、<B>w_await-磁盘写入时间(毫秒)</B>、<B>%iowait-等待I/O的时间占比</B>、<B>wMB/s-磁盘每秒写入大小</B></li></ol><ul><li>网络使用率<br>网络使用率类似磁盘使用率，常用的命令有:</li></ul><ol><li>netstat:netstat -a 显示所有活动的网络连接、netstat -l 显示所有正在监听的端口,新版本的Linux中使用命令<B>ss</B>进行替代;</li><li>nicstat 5:<B>%Util - 网络端口使用率</B>、<B>rKB/s 读取速度 </B>、<B>wKB/s  写入速度</B></li></ol><h3 id="JAVA监控工具"><a class="header-anchor" href="#JAVA监控工具"></a>JAVA监控工具</h3><h4 id="JDK自带工具"><a class="header-anchor" href="#JDK自带工具"></a>JDK自带工具</h4><ul><li><p>jcmd<br>用于打印VM的信息,</p></li><li><p>jconsole<br>最早的JVM图形化性能监控工具</p></li><li><p>jhat<br>读取memory dump文件</p></li><li><p>jinfo<br>查看JVM的系统属性</p></li><li><p>jstack<br>转储Java进程的堆栈信息</p></li><li><p>jstat<br>提供GC和类装载活动的信息</p></li><li><p>jvisualvm<br>监控和分析JVM性能的工具</p></li></ul><p>重点的命令有:</p><ol><li><p>内存转储 (Heap Dump)<br>jmap -dump:format=b,file=heapdump.hprof <pid><br>jcmd <pid> GC.heap_dump <PATH>/heapdump.hprof</p></li><li><p>线程转储 (Thread Dump)<br>jstack <pid> &gt; threaddump.txt<br>jcmd <pid> Thread.print &gt; threaddump.txt</p></li></ol><h3 id="性能分析工具"><a class="header-anchor" href="#性能分析工具"></a>性能分析工具</h3><h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2><p><a href="https://bbs.huaweicloud.com/blogs/395995">为什么说过早优化是万恶之源</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;java性能权威指南一Java性能调优工具箱&lt;/h1&gt;
+&lt;h2 id=&quot;前言&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;#前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;
+&lt;p&gt;说来惭愧这本书是HeapDump社区,大概是23年的礼品吧,也是目前最后一本收到的技术书籍</summary>
+      
+    
+    
+    
+    
+  </entry>
   
   <entry>
     <title>系统的稳定性建设</title>
@@ -509,35 +531,6 @@
     
     
     <category term="guava" scheme="https://agmtopy.gitee.io/tags/guava/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Class文件格式与加载</title>
-    <link href="https://agmtopy.gitee.io/2022/12/03/12.JVM/9.Class%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E4%B8%8E%E5%8A%A0%E8%BD%BD/"/>
-    <id>https://agmtopy.gitee.io/2022/12/03/12.JVM/9.Class%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F%E4%B8%8E%E5%8A%A0%E8%BD%BD/</id>
-    <published>2022-12-03T15:02:44.000Z</published>
-    <updated>2022-12-04T10:14:51.378Z</updated>
-    
-    <content type="html"><![CDATA[<h1>Class文件格式与加载</h1><h2 id="类文件结构"><a class="header-anchor" href="#类文件结构"></a>类文件结构</h2><ul><li>类文件结构也就是Class文件的结构<ul><li>魔数:用于标识Class文件的版本</li><li>常量池:主要用于保存<strong>字面量(类似于字符串等)</strong> 和 <strong>符号引用(类和接口的全限定名\字段名称以及描述符\方法名称和描述符);</strong> 由于jvm在加载Class文件时才会进行<B>动态连接</B>,因此需要保存这些方法或接口的信息</li><li>访问标识:标识这个Class的类型(接口/类/public/abstract/final等)</li><li>类索引、父类索引与接口索引集合</li><li>字段表集合</li><li>方法表集合</li><li>属性表集合</li></ul></li></ul><h2 id="虚拟机类加载机制"><a class="header-anchor" href="#虚拟机类加载机制"></a>虚拟机类加载机制:</h2><ul><li>虚拟机把描述类的数据从Class文件加载到内存中,并对数据进行校验、转换解析、初始化的过程,最终形成可以被虚拟机之间使用的Java类型对象,就是虚拟机类的加载过程.</li></ul><h3 id="类加载的步骤"><a class="header-anchor" href="#类加载的步骤"></a>类加载的步骤</h3><ol><li>加载</li><li>连接:验证→准备→解析</li><li>初始化</li><li>使用</li><li>卸载</li></ol><p>在执行顺序上:加载→验证→准备→解析→初始化,这五个步骤的顺序是固定的;</p><h4 id="加载"><a class="header-anchor" href="#加载"></a>加载</h4><ol><li>通过类的全限定名来获取定义此类的二进制字节流</li><li>将二进制字节流转换为方法区运行时的数据结构</li><li>在内存中创建这个类的Class对象,作为方法区类结构的方法映射</li></ol><ul><li>对于HotSpot虚拟机而言,Class对象比较特殊,它虽然是对象,但是存放在方法区内,作为访问类结构的对象接口</li></ul><h4 id="验证"><a class="header-anchor" href="#验证"></a>验证</h4><ol><li>文件格式的验证:文件格式\运行版本等</li><li>元数据的验证:对字节码语义信息的分析,</li><li>字节码内容的验证:通过程序来校验方法块中的内容是否正确</li></ol><p>验证阶段贯穿[加载、准备、解析]，并不是严格的线性的顺序</p><h4 id="准备"><a class="header-anchor" href="#准备"></a>准备</h4><ol><li>为类变量分配内存并设置初始值的过程，对于类变量也仅仅是进行类型初始值的赋值(零值)</li><li>final修饰的类变量在这个阶段会直接进行赋实际值的过程，因为final修饰的值会被当作常量</li></ol><h4 id="解析"><a class="header-anchor" href="#解析"></a>解析</h4><ul><li>解析阶段是虚拟机将常量池中的符号引用替换为直接引用的过程<ol><li>解析阶段会触发类的加载，当为找到Class对象时会根据类的全限定明进行加载</li><li>对字段会按照继承顺序从下先上进行查找，并校验访问权限</li><li>对类方法和接口方法的解析与字段类似</li></ol></li></ul><h4 id="初始化"><a class="header-anchor" href="#初始化"></a>初始化</h4><p>初始化就是在执行<B>clint()</B>的过程</p><p><B>clint()</B>是编译器自动收集类中所有的类变量赋值动作和静态语句块合并生成的</p><p>静态代码块可以对在它之后的类变量进行赋值，但是不能进行访问；因为类变量在<strong>准备阶段</strong>就完成的零值的赋值</p><p>虚拟机内部保证了在执行器之类的<B>clint()</B>方法之前先执行父类的<B>clint()</B>方法</p><h2 id="小结"><a class="header-anchor" href="#小结"></a>小结</h2><p><img src="https://github.com/agmtopy/noteBook/blob/master/png/j-jvm/ClassLoader_flow.jpg?raw=true" alt="Class文件整体加载结构"></p><h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2><p><a href="https://www.geeksforgeeks.org/classloader-in-java/">java中的类加载器</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h1&gt;Class文件格式与加载&lt;/h1&gt;
-&lt;h2 id=&quot;类文件结构&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;#类文件结构&quot;&gt;&lt;/a&gt;类文件结构&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;类文件结构也就是Class文件的结构
-&lt;ul&gt;
-&lt;li&gt;魔数:用于标识Class</summary>
-      
-    
-    
-    
-    <category term="JVM" scheme="https://agmtopy.gitee.io/categories/JVM/"/>
-    
-    
-    <category term="jvm" scheme="https://agmtopy.gitee.io/tags/jvm/"/>
     
   </entry>
   
