@@ -418,7 +418,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    262
+                    376
                 </div>
                 
 
@@ -485,6 +485,25 @@ git add --all ;git commit -m “$(Get-Date -Format ‘yyyyMMddHHmmss’)” ;git
 <p>分析需求:<br>
 一、从功能需求和非功能需求的角度进行思考<br>
 二、从用户+场景+行为动机+目标来拆解需求</p>
+<h3 id="git使用技巧"><a class="header-anchor" href="#git使用技巧"></a>git使用技巧</h3>
+<h4 id="使用VPN无法push代码"><a class="header-anchor" href="#使用VPN无法push代码"></a>使用VPN无法push代码</h4>
+<ol>
+<li>
+<p>查看系统端口号:<br>
+打开“设置 -&gt; 网络和Internet -&gt; 代理 -&gt; 手动设置代理服务器”，记录下当前的端口号。</p>
+</li>
+<li>
+<p>设置Git端口号:<br>
+使用命令：</p>
+</li>
+</ol>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">git</span> config <span class="token parameter variable">--global</span> http.proxy <span class="token number">127.0</span>.0.1:<span class="token operator">&lt;</span>你的端口号<span class="token operator">></span>
+<span class="token function">git</span> config <span class="token parameter variable">--global</span> https.proxy <span class="token number">127.0</span>.0.1:<span class="token operator">&lt;</span>你的端口号<span class="token operator">></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<ol start="3">
+<li>重试Git操作:<br>
+在执行git push或git pull前，建议在<B>命令行</B>中运行</li>
+</ol>
+ <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ipconfig/flushdns<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
                 
             </div>
@@ -781,7 +800,7 @@ git add --all ;git commit -m “$(Get-Date -Format ‘yyyyMMddHHmmss’)” ;git
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            213.9k
+                                            215k
                                         </span>&nbsp;字
                                         
                                             

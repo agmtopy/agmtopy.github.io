@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    404
+                    1.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    2 分钟
+                    5 分钟
                 </div>
                 
 
@@ -489,6 +489,9 @@
     <span class="token keyword">return</span> <span class="token function">newMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">value</span><span class="token punctuation">(</span>message<span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">send</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <p>其中ewMessage().value(message)对应的类是<B>TypedMessageBuilderImpl</B>,其中send()方法如下:</p>
+<ul>
+<li>TypedMessageBuilderImpl.java</li>
+</ul>
 <pre class="line-numbers language-java" data-language="java"><code class="language-java">
 <span class="token annotation punctuation">@Override</span>
 <span class="token keyword">public</span> <span class="token class-name">MessageId</span> <span class="token function">send</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">PulsarClientException</span> <span class="token punctuation">&#123;</span>
@@ -508,9 +511,137 @@
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p>send()方法底层也是通过sendAsyn()方法来进行实现的,</p>
-<h3 id="sendAsync"><a class="header-anchor" href="#sendAsync"></a>sendAsync()</h3>
-<h2 id="小结"><a class="header-anchor" href="#小结"></a>小结</h2>
+<p>send()方法底层是通过sendAsyn()方法将消息暂存到缓冲区,然后通过<B>triggerFlush()</B>发送消息;</p>
+<ul>
+<li>TypedMessageBuilderImpl.java</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
+<span class="token keyword">public</span> <span class="token class-name">CompletableFuture</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">MessageId</span><span class="token punctuation">></span></span> <span class="token function">sendAsync</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token class-name">Message</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> message <span class="token operator">=</span> <span class="token function">getMessage</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">CompletableFuture</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">MessageId</span><span class="token punctuation">></span></span> sendFuture<span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>txn <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        sendFuture <span class="token operator">=</span> producer<span class="token punctuation">.</span><span class="token function">internalSendWithTxnAsync</span><span class="token punctuation">(</span>message<span class="token punctuation">,</span> txn<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        txn<span class="token punctuation">.</span><span class="token function">registerSendOp</span><span class="token punctuation">(</span>sendFuture<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+        sendFuture <span class="token operator">=</span> producer<span class="token punctuation">.</span><span class="token function">internalSendAsync</span><span class="token punctuation">(</span>message<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">return</span> sendFuture<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在这段代码中,txn是处理事务消息的分支,internalSendAsync为内部异步发送方法</p>
+<p>ProducerImpl.internalSendAsync() -&gt; ProducerImpl.sendAsync() -&gt; ProducerImpl.serializeAndSendMessage()</p>
+<p>其中在sendAsync()中,设置了单个消息的最大长度为5Mb,其中最重要的方法在<B>synchronized(this)</B>的保护之下;</p>
+<ul>
+<li>ProducerImpl</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">
+<span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">serializeAndSendMessage</span><span class="token punctuation">(</span><span class="token class-name">MessageImpl</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span><span class="token punctuation">></span></span> msg<span class="token punctuation">,</span>
+                                         <span class="token class-name">ByteBuf</span> payload<span class="token punctuation">,</span>
+                                         <span class="token keyword">long</span> sequenceId<span class="token punctuation">,</span>
+                                         <span class="token class-name">String</span> uuid<span class="token punctuation">,</span>
+                                         <span class="token keyword">int</span> chunkId<span class="token punctuation">,</span>
+                                         <span class="token keyword">int</span> totalChunks<span class="token punctuation">,</span>
+                                         <span class="token keyword">int</span> readStartIndex<span class="token punctuation">,</span>
+                                         <span class="token keyword">int</span> chunkMaxSizeInBytes<span class="token punctuation">,</span>
+                                         <span class="token class-name">ByteBuf</span> compressedPayload<span class="token punctuation">,</span>
+                                         <span class="token keyword">boolean</span> compressed<span class="token punctuation">,</span>
+                                         <span class="token keyword">int</span> compressedPayloadSize<span class="token punctuation">,</span>
+                                         <span class="token class-name">SendCallback</span> callback<span class="token punctuation">,</span>
+                                         <span class="token class-name">ChunkedMessageCtx</span> chunkedMessageCtx<span class="token punctuation">,</span>
+                                         <span class="token class-name">MessageId</span> messageId<span class="token punctuation">)</span> <span class="token keyword">throws</span> <span class="token class-name">IOException</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">//省略batch数据块的内容....</span>
+    <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">//将消息添加到缓存中</span>
+        <span class="token keyword">boolean</span> isBatchFull <span class="token operator">=</span> batchMessageContainer<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>msg<span class="token punctuation">,</span> callback<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        lastSendFuture <span class="token operator">=</span> callback<span class="token punctuation">.</span><span class="token function">getFuture</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//设置netty批量延迟发起访问</span>
+        <span class="token function">triggerSendIfFullOrScheduleFlush</span><span class="token punctuation">(</span>isBatchFull<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">finally</span> <span class="token punctuation">&#123;</span>
+        payload<span class="token punctuation">.</span><span class="token function">release</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    isLastSequenceIdPotentialDuplicated <span class="token operator">=</span> <span class="token boolean">false</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>在完成插入缓存后,紧接着执行的是<B>producer.triggerFlush()</B></p>
+<ul>
+<li>ProducerImpl</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
+<span class="token keyword">protected</span> <span class="token keyword">void</span> <span class="token function">triggerFlush</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">isBatchMessagingEnabled</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token comment">//对ProducerImpl对象进行加锁</span>
+        <span class="token keyword">synchronized</span> <span class="token punctuation">(</span><span class="token class-name">ProducerImpl</span><span class="token punctuation">.</span><span class="token keyword">this</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+            <span class="token function">batchMessageAndSend</span><span class="token punctuation">(</span><span class="token boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>ProducerImpl</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">batchMessageAndSend</span><span class="token punctuation">(</span><span class="token keyword">boolean</span> shouldScheduleNextBatchFlush<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>batchMessageContainer<span class="token punctuation">.</span><span class="token function">isEmpty</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span><span class="token comment">//判断是否有消息,此处的消息是在batchMessageContainer.add(msg, callback)中暂存的</span>
+        <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+            lastBatchSendNanoTime <span class="token operator">=</span> <span class="token class-name">System</span><span class="token punctuation">.</span><span class="token function">nanoTime</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token class-name">List</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">OpSendMsg</span><span class="token punctuation">></span></span> opSendMsgs<span class="token punctuation">;</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>batchMessageContainer<span class="token punctuation">.</span><span class="token function">isMultiBatches</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                opSendMsgs <span class="token operator">=</span> batchMessageContainer<span class="token punctuation">.</span><span class="token function">createOpSendMsgs</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span> <span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+                opSendMsgs <span class="token operator">=</span> <span class="token class-name">Collections</span><span class="token punctuation">.</span><span class="token function">singletonList</span><span class="token punctuation">(</span>batchMessageContainer<span class="token punctuation">.</span><span class="token function">createOpSendMsg</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+            batchMessageContainer<span class="token punctuation">.</span><span class="token function">clear</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token class-name">OpSendMsg</span> opSendMsg <span class="token operator">:</span> opSendMsgs<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token comment">//正式开始发送消息</span>
+                <span class="token function">processOpSendMsg</span><span class="token punctuation">(</span>opSendMsg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>ProducerImpl</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">
+<span class="token comment">//核心方法</span>
+cnx<span class="token punctuation">.</span><span class="token function">ctx</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">channel</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">eventLoop</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">execute</span><span class="token punctuation">(</span><span class="token class-name">WriteInEventLoopCallback</span><span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> cnx<span class="token punctuation">,</span> op<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>这段代码的作用是将消息发送操作提交到 Netty 的事件循环线程（EventLoop）中异步执行,详细步骤:</p>
+<ol>
+<li>cnx.ctx().channel().eventLoop()<br>
+cnx 是一个与 Pulsar Broker 建立的连接对象。<br>
+ctx() 返回的是 Netty 的上下文（ChannelHandlerContext），用于网络 I/O 操作。<br>
+channel() 获取底层的 Netty Channel，表示当前的网络连接。<br>
+eventLoop() 获取该 Channel 绑定的 Netty EventLoop 线程。<br>
+Netty 使用 EventLoop 来处理所有 I/O 操作，确保对 Channel 的操作是线程安全的。</li>
+<li>execute(…)<br>
+将一个任务（Runnable）提交给 Netty 的 EventLoop 线程去执行。这样可以保证所有的网络操作都在同一个线程中串行化执行，避免并发问题。</li>
+<li>WriteInEventLoopCallback.create(…)<br>
+创建了一个实现了 Runnable 接口的任务对象 WriteInEventLoopCallback。该任务封装了消息发送的具体逻辑：<br>
+调用 cnx.ctx().writeAndFlush(cmd, cnx.ctx().voidPromise()) 发送消息。</li>
+</ol>
+<p>通过调用WriteInEventLoopCallback.run()方法进行发送消息</p>
+<ul>
+<li>WriteInEventLoopCallback</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token annotation punctuation">@Override</span>
+<span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>log<span class="token punctuation">.</span><span class="token function">isDebugEnabled</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        log<span class="token punctuation">.</span><span class="token function">debug</span><span class="token punctuation">(</span><span class="token string">"[&#123;&#125;] [&#123;&#125;] Sending message cnx &#123;&#125;, sequenceId &#123;&#125;"</span><span class="token punctuation">,</span> producer<span class="token punctuation">.</span>topic<span class="token punctuation">,</span> producer<span class="token punctuation">.</span>producerName<span class="token punctuation">,</span> cnx<span class="token punctuation">,</span>
+                sequenceId<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">try</span> <span class="token punctuation">&#123;</span>
+        cnx<span class="token punctuation">.</span><span class="token function">ctx</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">writeAndFlush</span><span class="token punctuation">(</span>cmd<span class="token punctuation">,</span> cnx<span class="token punctuation">.</span><span class="token function">ctx</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">voidPromise</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        op<span class="token punctuation">.</span><span class="token function">updateSentTimestamp</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span> <span class="token keyword">finally</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">recycle</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>其中cmd是一个<B>ByteBufPair</B>对象,message是存储在对象中的;</p>
+<p>通过Netty的writeAndFlush方法将消息刷新到channel中最后请求到Broker服务;</p>
+<h3 id="小结"><a class="header-anchor" href="#小结"></a>小结</h3>
+<ul>
+<li>时序图</li>
+</ul>
 <h2 id="注意事项"><a class="header-anchor" href="#注意事项"></a>注意事项</h2>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># docker启动Pulsar Standalone模式</span>
 <span class="token function">docker</span> run <span class="token parameter variable">-it</span> <span class="token parameter variable">-p</span> <span class="token number">6650</span>:6650 <span class="token parameter variable">-p</span> <span class="token number">8080</span>:8080 <span class="token parameter variable">--mount</span> <span class="token assign-left variable">source</span><span class="token operator">=</span>pulsardata,target<span class="token operator">=</span>/pulsar/data <span class="token parameter variable">--mount</span> <span class="token assign-left variable">source</span><span class="token operator">=</span>pulsarconf,target<span class="token operator">=</span>/pulsar/conf apachepulsar/pulsar:4.0.5 bin/pulsar standalone
@@ -582,18 +713,17 @@ bin/pulsar-admin namespaces create my-tenant/my-ns
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;Current
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2025/07/08/7.%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9F%A5%E8%AF%86/51.Pulsar%E5%8F%91%E9%80%81%E6%B6%88%E6%81%AF%E5%88%86%E6%9E%90/">
+                <a href="/2025/07/18/2.%E5%B9%B6%E5%8F%91%E7%9F%A5%E8%AF%86/17.CompletableFuture%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/78.jpg" class="responsive-img" alt="Pulsar发送消息分析">
+                        <img src="/medias/featureimages/67.jpg" class="responsive-img" alt="CompletableFuture常用方法总结">
                         
-                        <span class="card-title">Pulsar发送消息分析</span>
+                        <span class="card-title">CompletableFuture常用方法总结</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -603,27 +733,26 @@ bin/pulsar-admin namespaces create my-tenant/my-ns
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2025-07-08
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2025-07-18
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/" class="post-category">
-                                    消息队列
+                            <a href="/categories/%E5%B9%B6%E5%8F%91/" class="post-category">
+                                    并发
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/pulsar/">
-                        <span class="chip bg-color">pulsar</span>
+                    <a href="/tags/CompletableFuture/">
+                        <span class="chip bg-color">CompletableFuture</span>
                     </a>
                     
                 </div>
@@ -824,7 +953,7 @@ bin/pulsar-admin namespaces create my-tenant/my-ns
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            213.9k
+                                            215k
                                         </span>&nbsp;字
                                         
                                             
