@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    365
+                    1.5k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    1 分钟
+                    7 分钟
                 </div>
                 
 
@@ -446,7 +446,7 @@
                 <h1>CompletableFuture常用方法总结</h1>
 <p>下文对CompletableFuture类中的常用方法进行了总结,以备不时之需;</p>
 <h2 id="创建方法"><a class="header-anchor" href="#创建方法"></a>创建方法</h2>
-<h3 id="默认线程池执行"><a class="header-anchor" href="#默认线程池执行"></a>默认线程池执行</h3>
+<h3 id="示例"><a class="header-anchor" href="#示例"></a>示例</h3>
 <ol>
 <li>supplyAsync()</li>
 </ol>
@@ -523,7 +523,7 @@
 <p><B>supplyAsync</B><br>
 <B>runAsync</B></p>
 <h2 id="链式调用"><a class="header-anchor" href="#链式调用"></a>链式调用</h2>
-<h3 id="不切换线程"><a class="header-anchor" href="#不切换线程"></a>不切换线程</h3>
+<h3 id="示例-v2"><a class="header-anchor" href="#示例-v2"></a>示例</h3>
 <ol>
 <li>thenApply()</li>
 </ol>
@@ -543,6 +543,84 @@
     <span class="token keyword">val</span> fn2Result <span class="token operator">=</span> fn2<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
     <span class="token function">println</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"fn2Result:</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$</span><span class="token expression">fn2Result</span></span><span class="token string">"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="3">
+<li>thenRun()</li>
+</ol>
+<pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token keyword">fun</span> <span class="token function">thenRun</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">val</span> fn <span class="token operator">=</span> FutureTask<span class="token punctuation">.</span><span class="token function">create_future</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">val</span> fn2 <span class="token operator">=</span> fn<span class="token punctuation">.</span><span class="token function">thenRun</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> <span class="token function">println</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"fn_result:"</span></span> <span class="token operator">+</span> Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>name<span class="token punctuation">)</span> <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">val</span> fn2Result <span class="token operator">=</span> fn2<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token function">println</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"fn2Result:</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$</span><span class="token expression">fn2Result</span></span><span class="token string">"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="4">
+<li>thenCompose()</li>
+</ol>
+<pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token keyword">fun</span> <span class="token function">thenCompose</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">val</span> fn <span class="token operator">=</span> FutureTask<span class="token punctuation">.</span><span class="token function">create_future</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">val</span> fn2 <span class="token operator">=</span> fn<span class="token punctuation">.</span><span class="token function">thenCompose</span> <span class="token punctuation">&#123;</span> fn_result <span class="token operator">-></span> FutureTask<span class="token punctuation">.</span><span class="token function">consumer_future</span><span class="token punctuation">(</span>fn_result<span class="token punctuation">)</span> <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">val</span> fn2Result <span class="token operator">=</span> fn2<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token function">println</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"fn2Result:</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$</span><span class="token expression">fn2Result</span></span><span class="token string">"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="5">
+<li>exceptionally()</li>
+</ol>
+<pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token keyword">fun</span> <span class="token function">exceptionally</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">val</span> fn <span class="token operator">=</span> FutureTask<span class="token punctuation">.</span><span class="token function">create_future_exception</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">val</span> fn2 <span class="token operator">=</span> fn<span class="token punctuation">.</span><span class="token function">exceptionally</span> <span class="token punctuation">&#123;</span> ex <span class="token operator">-></span>
+        <span class="token keyword">var</span> threadName <span class="token operator">=</span> Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>name
+        <span class="token function">println</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"thread_name:</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$</span><span class="token expression">threadName</span></span><span class="token string">,异常堆栈为:"</span></span> <span class="token operator">+</span> ex<span class="token punctuation">.</span>message<span class="token punctuation">)</span>
+        <span class="token string-literal singleline"><span class="token string">"返回错误信息"</span></span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">val</span> fn2Result <span class="token operator">=</span> fn2<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token function">println</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"fn2Result:</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$</span><span class="token expression">fn2Result</span></span><span class="token string">"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="6">
+<li>whenComplete()</li>
+</ol>
+<pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin">    <span class="token keyword">fun</span> <span class="token function">whenComplete</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">val</span> fn <span class="token operator">=</span> FutureTask<span class="token punctuation">.</span><span class="token function">create_future</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment">//        val fn = FutureTask.create_future_exception()</span>
+        <span class="token keyword">val</span> fn2 <span class="token operator">=</span> fn<span class="token punctuation">.</span><span class="token function">whenComplete</span> <span class="token punctuation">&#123;</span> fn_result<span class="token punctuation">,</span> ex <span class="token operator">-></span>
+            <span class="token keyword">var</span> threadName <span class="token operator">=</span> Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>name
+
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>ex <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token function">println</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"thread_name:</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$</span><span class="token expression">threadName</span></span><span class="token string">,fn执行成功,返回结果为:</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$</span><span class="token expression">fn_result</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+            <span class="token punctuation">&#125;</span>
+
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>ex <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token function">println</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"thread_name:</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$</span><span class="token expression">threadName</span></span><span class="token string">,fn执行失败,异常堆栈为:"</span></span> <span class="token operator">+</span> ex<span class="token punctuation">.</span>message<span class="token punctuation">)</span>
+            <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token keyword">val</span> fn2Result <span class="token operator">=</span> fn2<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token function">println</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"fn2Result:</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$</span><span class="token expression">fn2Result</span></span><span class="token string">"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="7">
+<li>handle()</li>
+</ol>
+<pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token keyword">fun</span> <span class="token function">handle</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token keyword">val</span> fn <span class="token operator">=</span> FutureTask<span class="token punctuation">.</span><span class="token function">create_future</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment">//        val fn = FutureTask.create_future_exception()</span>
+        <span class="token keyword">val</span> fn2 <span class="token operator">=</span> fn<span class="token punctuation">.</span><span class="token function">handle</span> <span class="token punctuation">&#123;</span> fn_result<span class="token punctuation">,</span> ex <span class="token operator">-></span>
+            <span class="token keyword">var</span> threadName <span class="token operator">=</span> Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>name
+
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>ex <span class="token operator">==</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token function">println</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"thread_name:</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$</span><span class="token expression">threadName</span></span><span class="token string">,fn执行成功,返回结果为:</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$</span><span class="token expression">fn_result</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+            <span class="token punctuation">&#125;</span>
+
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>ex <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                <span class="token function">println</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"thread_name:</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$</span><span class="token expression">threadName</span></span><span class="token string">,fn执行失败,异常堆栈为:"</span></span> <span class="token operator">+</span> ex<span class="token punctuation">.</span>message<span class="token punctuation">)</span>
+            <span class="token punctuation">&#125;</span>
+            <span class="token keyword">return</span><span class="token label symbol">@handle</span> <span class="token string-literal singleline"><span class="token string">"handle执行完成"</span></span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token keyword">val</span> fn2Result <span class="token operator">=</span> fn2<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token function">println</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"fn2Result:</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$</span><span class="token expression">fn2Result</span></span><span class="token string">"</span></span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="特点-v2"><a class="header-anchor" href="#特点-v2"></a>特点:</h3>
 <table>
 <thead>
@@ -568,6 +646,267 @@
 <td>无返回结果</td>
 <td>抛出ExecutionException</td>
 <td>thenAcceptAsync(Function action, Executor executor)</td>
+</tr>
+<tr>
+<td>thenRun</td>
+<td>fn执行完成后执行Runnable,不关心fn的返回值</td>
+<td>抛出ExecutionException</td>
+<td>thenRunAsync(Runnable action,Executor executor)</td>
+<td></td>
+</tr>
+<tr>
+<td>thenCompose</td>
+<td>fn执whenComplete</td>
+<td>返回fn同类型的返回值</td>
+<td>抛出ExecutionException</td>
+<td>thenComposeAsync(Function action, Executor executor)</td>
+</tr>
+<tr>
+<td>exceptionally</td>
+<td>用于处理fn的异常</td>
+<td>有返回值</td>
+<td>抛出ExecutionException</td>
+<td>thenComposeAsync(Function action, Executor executor)</td>
+</tr>
+<tr>
+<td>whenComplete</td>
+<td>处理fn返回的结果或者执行异常</td>
+<td>有返回值</td>
+<td>抛出ExecutionException</td>
+<td>whenComplete(Function action, Executor executor)</td>
+</tr>
+<tr>
+<td>handle()</td>
+<td>处理fn返回的结果或者执行异常</td>
+<td>无返回值</td>
+<td>抛出ExecutionException</td>
+<td>handleAsync(Function action, Executor executor)</td>
+</tr>
+</tbody>
+</table>
+<p>需要注意的是<B>thenApply</B>和<B>thenCompose</B>的区别:</p>
+<ol>
+<li>thenApply返回的是<B>CompletableFuture</B>对象,thenCompose的返回值与fn原有的返回值</li>
+</ol>
+<h2 id="组合"><a class="header-anchor" href="#组合"></a>组合</h2>
+<h3 id="示例-v3"><a class="header-anchor" href="#示例-v3"></a>示例</h3>
+<ol>
+<li>allOf()</li>
+</ol>
+<pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token keyword">fun</span> <span class="token function">allOf</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">val</span> allFuture <span class="token operator">=</span> CompletableFuture<span class="token punctuation">.</span><span class="token function">allOf</span><span class="token punctuation">(</span>
+        FutureTask<span class="token punctuation">.</span><span class="token function">create_future</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        FutureTask<span class="token punctuation">.</span><span class="token function">create_future_time3s</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+        FutureTask<span class="token punctuation">.</span><span class="token function">create_future_exception</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token punctuation">)</span>
+    <span class="token keyword">val</span> result <span class="token operator">=</span> allFuture<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token function">println</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"main result:</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$</span><span class="token expression">result</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="2">
+<li>thenCombine()</li>
+</ol>
+<pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token keyword">fun</span> <span class="token function">thenCombine</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">val</span> combine <span class="token operator">=</span> FutureTask<span class="token punctuation">.</span><span class="token function">create_future</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">thenCombine</span><span class="token punctuation">(</span>FutureTask<span class="token punctuation">.</span><span class="token function">create_future_time3s</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> r1<span class="token punctuation">,</span> r2 <span class="token operator">-></span>
+        <span class="token function">println</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"BiFunction threadName:"</span></span> <span class="token operator">+</span> Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>name<span class="token punctuation">)</span>
+        <span class="token string-literal singleline"><span class="token string">"fn1的result:</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$</span><span class="token expression">r1</span></span><span class="token string">,fn2的result:</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$</span><span class="token expression">r2</span></span><span class="token string">,"</span></span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">val</span> combineResult <span class="token operator">=</span> combine<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token function">println</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"main thread result:</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$</span><span class="token expression">combineResult</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="3">
+<li>thenAcceptBoth()</li>
+</ol>
+<pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token keyword">fun</span> <span class="token function">thenAcceptBoth</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">val</span> combine <span class="token operator">=</span> FutureTask<span class="token punctuation">.</span><span class="token function">create_future</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">thenAcceptBoth</span><span class="token punctuation">(</span>FutureTask<span class="token punctuation">.</span><span class="token function">create_future_time3s</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> r1<span class="token punctuation">,</span> r2 <span class="token operator">-></span>
+        <span class="token function">println</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"BiFunction threadName:"</span></span> <span class="token operator">+</span> Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>name <span class="token operator">+</span> <span class="token string-literal singleline"><span class="token string">",fn1的result:</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$</span><span class="token expression">r1</span></span><span class="token string">,fn2的result:</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$</span><span class="token expression">r2</span></span><span class="token string">,"</span></span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">val</span> thenAcceptBothResult <span class="token operator">=</span> combine<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token function">println</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"main thread result:</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$</span><span class="token expression">thenAcceptBothResult</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="4">
+<li>runAfterBoth()</li>
+</ol>
+<pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token keyword">fun</span> <span class="token function">runAfterBoth</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">val</span> combine <span class="token operator">=</span> FutureTask<span class="token punctuation">.</span><span class="token function">create_future</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">runAfterBoth</span><span class="token punctuation">(</span>FutureTask<span class="token punctuation">.</span><span class="token function">create_future_time3s</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">println</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"Runnable threadName:"</span></span> <span class="token operator">+</span> Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>name<span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">val</span> thenAcceptBothResult <span class="token operator">=</span> combine<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token function">println</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"main thread result:</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$</span><span class="token expression">thenAcceptBothResult</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="5">
+<li>applyToEither()</li>
+</ol>
+<pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token keyword">fun</span> <span class="token function">applyToEither</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">val</span> combine <span class="token operator">=</span> FutureTask<span class="token punctuation">.</span><span class="token function">create_future</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">applyToEither</span><span class="token punctuation">(</span>FutureTask<span class="token punctuation">.</span><span class="token function">create_future_time3s</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> r1 <span class="token operator">-></span>
+        <span class="token function">println</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"Runnable threadName:"</span></span> <span class="token operator">+</span> Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>name <span class="token operator">+</span> <span class="token string-literal singleline"><span class="token string">",fn1或fn2执行结果为</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$</span><span class="token expression">r1</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+        r1
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">val</span> thenAcceptBothResult <span class="token operator">=</span> combine<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token function">println</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"main thread result:</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$</span><span class="token expression">thenAcceptBothResult</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="6">
+<li>acceptEither()</li>
+</ol>
+<pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token keyword">fun</span> <span class="token function">acceptEither</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">val</span> combine <span class="token operator">=</span> FutureTask<span class="token punctuation">.</span><span class="token function">create_future</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">acceptEither</span><span class="token punctuation">(</span>FutureTask<span class="token punctuation">.</span><span class="token function">create_future_time3s</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span> r1 <span class="token operator">-></span>
+        <span class="token function">println</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"Runnable threadName:"</span></span> <span class="token operator">+</span> Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>name <span class="token operator">+</span> <span class="token string-literal singleline"><span class="token string">",fn1或fn2执行结果为</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$</span><span class="token expression">r1</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">val</span> thenAcceptBothResult <span class="token operator">=</span> combine<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token function">println</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"main thread result:</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$</span><span class="token expression">thenAcceptBothResult</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="7">
+<li>runAfterEither()</li>
+</ol>
+<pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token keyword">fun</span> <span class="token function">runAfterEither</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">val</span> combine <span class="token operator">=</span> FutureTask<span class="token punctuation">.</span><span class="token function">create_future</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">runAfterEither</span><span class="token punctuation">(</span>FutureTask<span class="token punctuation">.</span><span class="token function">create_future_time3s</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+        <span class="token function">println</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"Runnable threadName:"</span></span> <span class="token operator">+</span> Thread<span class="token punctuation">.</span><span class="token function">currentThread</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span>name<span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">val</span> thenAcceptBothResult <span class="token operator">=</span> combine<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token function">println</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"main thread result:</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$</span><span class="token expression">thenAcceptBothResult</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="特点-v3"><a class="header-anchor" href="#特点-v3"></a>特点:</h3>
+<table>
+<thead>
+<tr>
+<th>方法名</th>
+<th>描述</th>
+<th>是否返回结果</th>
+<th>同组方法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>allOf</td>
+<td>组合多个Future</td>
+<td>无结果</td>
+<td>anyOf:入参为可变数组或数组</td>
+</tr>
+<tr>
+<td>thenCombine</td>
+<td>将fn1的结果和fn2的结果传递到BiFunction中</td>
+<td>有返回值为BiFunction</td>
+<td>thenCombineAsync(CompletionStage&lt;? extends U&gt; other,BiFunction&lt;? super T,? super U,? extends V&gt; fn,Executor executor)</td>
+</tr>
+<tr>
+<td>thenAcceptBoth</td>
+<td>fn1的结果和fn2的结果传递到BiFunction中</td>
+<td>无返回值</td>
+<td>thenAcceptBothAsync</td>
+</tr>
+<tr>
+<td>runAfterBoth</td>
+<td>fn1执行完成后执行fn2,然后执行Runnable执行线程默认为fn2的执行线程</td>
+<td>无返回值</td>
+<td>runAfterBothAsync(CompletionStage&lt;?&gt; other,Runnable action)</td>
+</tr>
+<tr>
+<td>applyToEither</td>
+<td>将fn1的结果和fn2的结果,二者任一一个结果传递到Function中</td>
+<td>有返回值为BiFunction</td>
+<td>applyToEitherAsync(CompletionStage&lt;? extends U&gt; other,Function&lt;? super T, U&gt; fn,Executor executor)</td>
+</tr>
+<tr>
+<td>acceptEither</td>
+<td>fn1或fn2执行完成,执行fn3</td>
+<td>无返回值</td>
+<td>acceptEitherAsync</td>
+</tr>
+<tr>
+<td>runAfterEither</td>
+<td>fn1或fn2执行完成,执行fn3</td>
+<td>无返回值</td>
+<td>runAfterEitherAsync</td>
+</tr>
+</tbody>
+</table>
+<p>需要注意的是<B>thenCombine</B>和<B>applyToEither</B>的区别:</p>
+<ol>
+<li>thenCombine是两个fn都完成后才执行fn3,applyToEither是任一一个fn完成后就执行fn3</li>
+</ol>
+<h2 id="获取结果"><a class="header-anchor" href="#获取结果"></a>获取结果</h2>
+<h3 id="示例-v4"><a class="header-anchor" href="#示例-v4"></a>示例</h3>
+<ol>
+<li>get()</li>
+</ol>
+<pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token keyword">fun</span> <span class="token keyword">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">val</span> future <span class="token operator">=</span> FutureTask<span class="token punctuation">.</span><span class="token function">create_future</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">val</span> result0 <span class="token operator">=</span> future<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">val</span> future_exception <span class="token operator">=</span> FutureTask<span class="token punctuation">.</span><span class="token function">create_future_exception</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">val</span> result1 <span class="token operator">=</span> future_exception<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="2">
+<li>join()</li>
+</ol>
+<pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token keyword">fun</span> <span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">val</span> future <span class="token operator">=</span> FutureTask<span class="token punctuation">.</span><span class="token function">create_future</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">var</span> list <span class="token operator">=</span> ArrayList<span class="token operator">&lt;</span>String<span class="token operator">></span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    list<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"1"</span></span><span class="token punctuation">)</span>
+
+    list<span class="token punctuation">.</span><span class="token function">forEach</span> <span class="token punctuation">&#123;</span> item <span class="token operator">-></span>
+        <span class="token keyword">val</span> result0 <span class="token operator">=</span> future<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        <span class="token function">println</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"result0:</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$</span><span class="token expression">result0</span></span><span class="token string">,item:</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$</span><span class="token expression">item</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#125;</span>
+
+
+    <span class="token keyword">val</span> future1 <span class="token operator">=</span> FutureTask<span class="token punctuation">.</span><span class="token function">create_future_exception</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    future1<span class="token punctuation">.</span><span class="token function">join</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="3">
+<li>getNow()</li>
+</ol>
+<pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token keyword">fun</span> <span class="token function">getNow</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">val</span> future <span class="token operator">=</span> FutureTask<span class="token punctuation">.</span><span class="token function">create_future_time3s</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">val</span> result <span class="token operator">=</span> future<span class="token punctuation">.</span><span class="token function">getNow</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"defaultValue"</span></span><span class="token punctuation">)</span>
+    <span class="token function">println</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"create_future_time3s result:</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$</span><span class="token expression">result</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+
+    <span class="token keyword">val</span> future1 <span class="token operator">=</span> FutureTask<span class="token punctuation">.</span><span class="token function">create_future_exception</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    TimeUnit<span class="token punctuation">.</span>SECONDS<span class="token punctuation">.</span><span class="token function">sleep</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+    future1<span class="token punctuation">.</span><span class="token function">getNow</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"exception"</span></span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ol start="4">
+<li>isDone()</li>
+</ol>
+<pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token keyword">fun</span> <span class="token function">isDone</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
+    <span class="token keyword">val</span> future <span class="token operator">=</span> FutureTask<span class="token punctuation">.</span><span class="token function">create_future_time3s</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+    <span class="token keyword">val</span> done <span class="token operator">=</span> future<span class="token punctuation">.</span>isDone
+    <span class="token function">println</span><span class="token punctuation">(</span><span class="token string-literal singleline"><span class="token string">"future是否完成:</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">$</span><span class="token expression">done</span></span><span class="token string">"</span></span><span class="token punctuation">)</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="特点-v4"><a class="header-anchor" href="#特点-v4"></a>特点:</h3>
+<table>
+<thead>
+<tr>
+<th>方法名</th>
+<th>描述</th>
+<th>是否支持lambda调用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>get</td>
+<td>阻塞的方式获取结果</td>
+<td>不支持lambda方式进行调用</td>
+</tr>
+<tr>
+<td>join</td>
+<td>阻塞的方式获取结果</td>
+<td>支持lambda方式进行调用</td>
+</tr>
+<tr>
+<td>getNow</td>
+<td>立即尝试获取结果,如果future未完成就返回默认值,非阻塞的方式</td>
+<td>不支持lambda方式进行调用</td>
+</tr>
+<tr>
+<td>isDone</td>
+<td>判断是否执行完成</td>
+<td>支持lambda方式进行调用</td>
 </tr>
 </tbody>
 </table>
@@ -873,7 +1212,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            215k
+                                            216.1k
                                         </span>&nbsp;字
                                         
                                             
