@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    521
+                    827
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    1 分钟
+                    2 分钟
                 </div>
                 
 
@@ -495,9 +495,33 @@
 <li>并发带来的问题</li>
 </ul>
 <ol>
-<li>更新丢失</li>
-<li>脏读</li>
+<li>更新丢失<br>
+<B>丢失更新</B>本质上是<B>写操作冲突</B>,解决的方法是让每个事务按照一定的顺序进行写操作;</li>
+<li>脏读<br>
+<B>脏读</B>本质上是<B>读写操作冲突</B>,解决的方法是先写后读,写完之后才能读取;</li>
+<li>不可重复读<br>
+<B>不可重复读</B>本质上是<B>读写操作冲突</B>,解决的方法是先读后写,读完之后才能进行写入操作;</li>
+<li>幻读<br>
+<B>幻读</B>本质上是<B>读写操作冲突</B>,解决的方法是先读后写,读完之后才能进行写入操作;</li>
 </ol>
+<blockquote>
+<p><B>不可重复读</B>和<B>幻读</B>的区别在于,不可重复读关注的是对字段的更新或删除操作,幻读的重点是在于插入操作;</p>
+</blockquote>
+<ul>
+<li>MySQL事务隔离级别</li>
+</ul>
+<ol>
+<li>读未提交</li>
+<li>读已提交</li>
+<li>可重复读</li>
+<li>串行化</li>
+</ol>
+<p>MySQL的默认事务隔离级别是<B>可重复读</B>,MySQL用MVCC机制保证的在克重复读级别下不会出现<B>脏读</B>&lt;B&gt;不可重复读</B>&lt;B&gt;幻读</B>,其中幻读是通过<B>间隙锁</B>来解决的;</p>
+<ul>
+<li>MySQL中锁的分类</li>
+</ul>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/f-%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%8E%9F%E7%90%86/%E9%94%81%E7%9A%84%E5%88%86%E7%B1%BB.png?raw=true" alt="MySQL中锁的分类"></p>
+<p>读锁和写锁是互斥的,读锁和读锁不互斥,写锁和写锁是互斥的;</p>
 <h2 id="Mysql事务的实现原理"><a class="header-anchor" href="#Mysql事务的实现原理"></a>Mysql事务的实现原理</h2>
 <h2 id="Spring事务的实现原理"><a class="header-anchor" href="#Spring事务的实现原理"></a>Spring事务的实现原理</h2>
 <h2 id="分布式事务的基本概念"><a class="header-anchor" href="#分布式事务的基本概念"></a>分布式事务的基本概念</h2>
@@ -802,7 +826,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            216.1k
+                                            216.4k
                                         </span>&nbsp;字
                                         
                                             
