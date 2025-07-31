@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    827
+                    1.9k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    2 分钟
+                    6 分钟
                 </div>
                 
 
@@ -521,8 +521,77 @@
 <li>MySQL中锁的分类</li>
 </ul>
 <p><img src="https://github.com/agmtopy/noteBook/blob/master/png/f-%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%8E%9F%E7%90%86/%E9%94%81%E7%9A%84%E5%88%86%E7%B1%BB.png?raw=true" alt="MySQL中锁的分类"></p>
-<p>读锁和写锁是互斥的,读锁和读锁不互斥,写锁和写锁是互斥的;</p>
-<h2 id="Mysql事务的实现原理"><a class="header-anchor" href="#Mysql事务的实现原理"></a>Mysql事务的实现原理</h2>
+<p>读锁和写锁是互斥的,读锁和读锁不互斥,写锁和写锁是互斥的;<br>
+避免死锁的几种方式:</p>
+<ol>
+<li>尽量让 数据表中的数据检索都通过索引的方式来完成,避免无效索引导致行锁升级为表锁;</li>
+<li>合理设计索引,尽量缩小锁的范围;</li>
+<li>尽量减少查询条件的范围,尽量避免间隙锁或缩小间隙锁的范围;</li>
+<li>尽量控制事务的大小,减少一次事务锁定的资源数量,缩短锁定资源的时间;</li>
+<li>如果一条SQL语句涉及事务加锁操作,则尽量将其放到最后,从而减少锁定资源的时间;</li>
+</ol>
+<ul>
+<li>InnoDB的MVCC的原理</li>
+</ul>
+<p>通过在数据行上定义两个字段:分别是<B>创建行版本号</B>&lt;B&gt;删除行版本号</B>,这两个版本号只标识该行的创建和该行的删除动作的时序;</p>
+<ol>
+<li>查询操作</li>
+</ol>
+<blockquote>
+<p>InnoDB存储引擎只会查询版本号小于或者等于当前查询事务版本号的数据行,这样做的目的是在于只能查询到当前事务开始时那一刻的数据,或者当前事务修改的数据行,并且会判断删除版本号是否大于当前事务ID;</p>
+</blockquote>
+<ol start="2">
+<li>插入操作</li>
+</ol>
+<blockquote>
+<p>在插入数据时根据当前事务的版本号来维护数据行上的创建版本号,插入操作不维护删除版本号</p>
+</blockquote>
+<ol start="3">
+<li>更新操作</li>
+</ol>
+<blockquote>
+<p>更新操作是在数据行上将上一条数据的删除版本号更新为当前更新操作的事务版本号,然后重新复制出一条新的数据行,其中创建版本号为当前更新事务的版本号;</p>
+</blockquote>
+<ol start="4">
+<li>删除操作</li>
+</ol>
+<blockquote>
+<p>删除操作是更新最新的数据行上的DB_DELETED(删除行版本号)</p>
+</blockquote>
+<h2 id="MySQL事务的实现原理"><a class="header-anchor" href="#MySQL事务的实现原理"></a>MySQL事务的实现原理</h2>
+<blockquote>
+<p>MySQL的事务实现是由于锁\MVCC\Redo Log\Undo Log共同来完成的,其中事务的隔离性是通过锁和MVCC机制,原子性和持久性是通过Redo Log,一致性是通过Undo Log来实现的;</p>
+</blockquote>
+<h3 id="Redo-Log"><a class="header-anchor" href="#Redo-Log"></a>Redo Log</h3>
+<p><B>Redo Log</B>向前,记录的是InnoDB执行的动作的日志,也被称为重做日志,用于故障恢复和保证事务的原子性和持久性;<br>
+Redo Log的日志记录格式是物理日志,记录的是磁盘上数据进行的修改操作;</p>
+<p>其中对于Redo Log写入文件的刷盘时机有以下几种规则:</p>
+<ol>
+<li>由inboodb_flush_log_at_trx_commit配置决定:设置为0或者2时每秒去刷盘,区别在于是否需要通过Log Buffer,设置为1时是每次事务提交时进行刷盘</li>
+<li>每秒刷新一次</li>
+<li>Log Buffer内存使用超过一半时</li>
+<li>当事务中存在checkpoint(检测点),checkpoint机制去刷新脏页</li>
+</ol>
+<h3 id="Undo-Log"><a class="header-anchor" href="#Undo-Log"></a>Undo Log</h3>
+<p><B>Undo Log</B>是用于回滚事务和实现MVCC机制的,采用的是和操作相反的逻辑格式记录日志;<br>
+Undo Log的回滚段分 为insert undo log和update undo log;<br>
+insert undo log指的是事务对插入新记录产生的Undo log,只作用于事务回滚时需要,在事务提交后即可丢弃;<br>
+update undo log指的是事务对记录进行删除和更新操作时产生的Undo log日志,作用于事务回滚以及一致性读,只有当所有的事务id大于该版本时才能进行删除;</p>
+<h3 id="Bin-Log"><a class="header-anchor" href="#Bin-Log"></a>Bin Log</h3>
+<p>Bin log是MySQL用于主从复制和故障恢复的日志格式,其中记录格式分为<B>Row格式</B>&lt;B&gt;Statement格式</B>&lt;B&gt;Mixed模式</B>;</p>
+<p>Row格式:保存的是对数据的修改<br>
+Statement格式:保存的是执行SQL<br>
+Mixed格式:默认是Statement,对于无法使用Statemnt格式的采用Row格式</p>
+<p>MySQL事务在提交的时候会记录事务日志和二进制日志,是先记录二进制日志在写入事务日志;<br>
+两者配合完成了事务的一致性,采用的二阶段提交流程如下所示:</p>
+<ol>
+<li>Prepare阶段<br>
+a. BinLog Buffer<br>
+b. RedoLog Buffer -&gt; RedoLog file(prepare标识)</li>
+<li>Commit 阶段<br>
+a. BinLog Buffer  -&gt; BinLog file<br>
+b. RedoLog file(prepare标识) -&gt; RedoLog file(commit标识)</li>
+</ol>
 <h2 id="Spring事务的实现原理"><a class="header-anchor" href="#Spring事务的实现原理"></a>Spring事务的实现原理</h2>
 <h2 id="分布式事务的基本概念"><a class="header-anchor" href="#分布式事务的基本概念"></a>分布式事务的基本概念</h2>
 <h2 id="分布式事务的理论基础"><a class="header-anchor" href="#分布式事务的理论基础"></a>分布式事务的理论基础</h2>
@@ -826,7 +895,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            216.4k
+                                            217.4k
                                         </span>&nbsp;字
                                         
                                             
