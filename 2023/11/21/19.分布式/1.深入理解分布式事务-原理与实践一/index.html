@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    2.2k
+                    2.7k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    7 分钟
+                    9 分钟
                 </div>
                 
 
@@ -611,7 +611,7 @@ b. RedoLog file(prepare标识) -&gt; RedoLog file(commit标识)</li>
 <p>XA分布式事务的全称是 eXtended Architecture Transaction,XA事务支持不同的数据库实例共同完成分布式事务;<br>
 XA事务的本质是一种基于<B>两阶段提交</B>的分布式事务,在使用XA分布式事务时,需要将InnoDB存储引擎的事务隔离级别设置为串行化;</p>
 <p><img src="https://github.com/agmtopy/noteBook/blob/master/png/f-%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%8E%9F%E7%90%86/XA%E4%BA%8B%E5%8A%A1%E6%A8%A1%E5%9E%8B.png?raw=true" alt="XA事务模型"></p>
-<p>参与者:</p>
+<h4 id="参与者"><a class="header-anchor" href="#参与者"></a>参与者:</h4>
 <ol>
 <li>
 <p>事务管理器<br>
@@ -626,6 +626,59 @@ XA事务的本质是一种基于<B>两阶段提交</B>的分布式事务,在使�
 主要用来发起全局事务和分支事务的操作</p>
 </li>
 </ol>
+<h4 id="XA事务的执行流程"><a class="header-anchor" href="#XA事务的执行流程"></a>XA事务的执行流程</h4>
+<p>XA事务是一个两阶段提交的分布式事务,大体的流程分为<B>Prepare阶段</B>和<B>Commit阶段</B></p>
+<ul>
+<li>Prepare阶段</li>
+</ul>
+<ol>
+<li>事务管理器™开启一个全局事务,该全局事务具有一个唯一的全局事务ID(XID)</li>
+<li>事务管理器™通知各个资源管理器(RM)开启一个各自的新事务</li>
+<li>资源管理器(RM)开始执行各自的事务分支,只写入不进行提交,处于<B>事务已开启-未提交状态</B>,注意这一步是锁定住资源的</li>
+<li>资源管理器(RM)向事务管理器™上报Prepare阶段的执行结果</li>
+</ol>
+<ul>
+<li>Commit阶段</li>
+</ul>
+<ol>
+<li>事务管理器™收集所有资源管理器(RM)的Prepare阶段的结果,超时会认为是失败</li>
+<li>事务管理器™收集所有资源管理器(RM)的结果,确认Commit阶段下发的命令是Commit还是Rollback</li>
+<li>资源管理器(RM)根据事务管理器™的结果完成Commit或者Rollback</li>
+<li>资源管理器(RM)向事务管理器™上报第二个步骤的执行结果</li>
+</ol>
+<h4 id="XA事务超时的处理策略"><a class="header-anchor" href="#XA事务超时的处理策略"></a>XA事务超时的处理策略</h4>
+<ul>
+<li>Prepare阶段</li>
+</ul>
+<ol>
+<li>TM超时回滚机制</li>
+<li>TM超时下发全局回滚</li>
+<li>RM自行回滚</li>
+</ol>
+<ul>
+<li>Commit阶段</li>
+</ul>
+<ol>
+<li>TM重试机制</li>
+<li>RM的幂等性保证</li>
+<li>回滚补偿</li>
+</ol>
+<h4 id="XA事务的性能问题"><a class="header-anchor" href="#XA事务的性能问题"></a>XA事务的性能问题</h4>
+<ol>
+<li>阻塞性(Blocking)<br>
+在准备阶段（Prepare）,资源管理器（RM）需要开始锁定资源</li>
+<li>网络开销<br>
+2PC 协议需要进行多次网络通信</li>
+<li>复杂性和单点问题<br>
+TM\RM\APP等多个组件带来的复杂性,TM会带来单点问题</li>
+</ol>
+<h4 id="XA事务的优点"><a class="header-anchor" href="#XA事务的优点"></a>XA事务的优点</h4>
+<ol>
+<li>强一致性的分布式事务解决方案</li>
+</ol>
+<ul>
+<li>Commit阶段</li>
+</ul>
 <h2 id="Spring事务的实现原理"><a class="header-anchor" href="#Spring事务的实现原理"></a>Spring事务的实现原理</h2>
 <h2 id="分布式事务的基本概念"><a class="header-anchor" href="#分布式事务的基本概念"></a>分布式事务的基本概念</h2>
 <h2 id="分布式事务的理论基础"><a class="header-anchor" href="#分布式事务的理论基础"></a>分布式事务的理论基础</h2>
@@ -929,7 +982,7 @@ XA事务的本质是一种基于<B>两阶段提交</B>的分布式事务,在使�
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            217.8k
+                                            218.3k
                                         </span>&nbsp;字
                                         
                                             
