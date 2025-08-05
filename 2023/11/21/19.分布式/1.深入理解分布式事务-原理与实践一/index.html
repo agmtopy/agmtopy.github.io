@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    2.7k
+                    3.4k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    9 分钟
+                    12 分钟
                 </div>
                 
 
@@ -676,10 +676,126 @@ TM\RM\APP等多个组件带来的复杂性,TM会带来单点问题</li>
 <ol>
 <li>强一致性的分布式事务解决方案</li>
 </ol>
-<ul>
-<li>Commit阶段</li>
-</ul>
 <h2 id="Spring事务的实现原理"><a class="header-anchor" href="#Spring事务的实现原理"></a>Spring事务的实现原理</h2>
+<h3 id="Spring事务原理"><a class="header-anchor" href="#Spring事务原理"></a>Spring事务原理</h3>
+<p>Spring实现事务的原理是<B>关闭自动提交</B>;</p>
+<h3 id="Spring事务的三大接口"><a class="header-anchor" href="#Spring事务的三大接口"></a>Spring事务的三大接口</h3>
+<blockquote>
+<p>Spring支持事务管理功能,最核心的就是Spring事务的三大接口:<B>PlatformTransactionManager</B>、<B>TransactionDefinition</B>、<B>TransactionStatus</B></p>
+</blockquote>
+<ul>
+<li>
+<p>PlatformTransactionManager<br>
+Spring不是直接管理事务,而是定义提供多种事务管理器,通过这些事务管理器将事务管理的职责委托给Hibernate\MyBatis\JPA等持久化框架;<br>
+PlatformTransactionManager就是定义事务操作的基本方法类,为Spring提供了一个统一的事务管理接口,类似于桥接的设计模式;<br>
+<img src="https://github.com/agmtopy/noteBook/blob/master/png/f-%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%8E%9F%E7%90%86/Spring_PlatformTransactionManager_%E7%B1%BB%E5%9B%BE.png?raw=true" alt="Spring_PlatformTransactionManager_类图"></p>
+</li>
+<li>
+<p>TransactionDefinition<br>
+TransactionDefinition接口主要用来定义与事务相关的方法,表示事务属性的常量信息</p>
+</li>
+</ul>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/f-%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%8E%9F%E7%90%86/Spring_TransactionDefinition_%E7%B1%BB%E5%9B%BE.png?raw=true" alt="Spring_TransactionDefinition_类图"></p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">
+<span class="token keyword">public</span> <span class="token keyword">interface</span> <span class="token class-name">TransactionDefinition</span> <span class="token punctuation">&#123;</span>
+
+	<span class="token comment">/**
+	 * 支持当前事务,如果当前没有事务就创建一个新事务
+	 */</span>
+	<span class="token keyword">int</span> <span class="token constant">PROPAGATION_REQUIRED</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+	<span class="token comment">/**
+	 * 如果当前存在事务,即加入该事务;如果当前不存在事务,即以非事务的方式运行
+	 */</span>
+	<span class="token keyword">int</span> <span class="token constant">PROPAGATION_SUPPORTS</span> <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+
+	<span class="token comment">/**
+	 * 如果当前存在事务,即加入该事务;如果当前不存在事务,立即抛出异常
+	 */</span>
+	<span class="token keyword">int</span> <span class="token constant">PROPAGATION_MANDATORY</span> <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
+
+	<span class="token comment">/**
+	 * 创建一个新事务运行,如果当前存在事务,挂起当前已存在的事务
+	 */</span>
+	<span class="token keyword">int</span> <span class="token constant">PROPAGATION_REQUIRES_NEW</span> <span class="token operator">=</span> <span class="token number">3</span><span class="token punctuation">;</span>
+
+	<span class="token comment">/**
+	 * 以非事务的方式运行,如果当前存在事务,挂起当前已存在的事务
+	 */</span>
+	<span class="token keyword">int</span> <span class="token constant">PROPAGATION_NOT_SUPPORTED</span> <span class="token operator">=</span> <span class="token number">4</span><span class="token punctuation">;</span>
+
+	<span class="token comment">/**
+	 * 以非事务的方式运行,如果当前存在事务,立即抛出异常
+	 */</span>
+	<span class="token keyword">int</span> <span class="token constant">PROPAGATION_NEVER</span> <span class="token operator">=</span> <span class="token number">5</span><span class="token punctuation">;</span>
+
+	<span class="token comment">/**
+	 * 如果当前存在事务，则创建一个嵌套事务；如果当前没有事务，则创建一个新的事务
+	 */</span>
+	<span class="token keyword">int</span> <span class="token constant">PROPAGATION_NESTED</span> <span class="token operator">=</span> <span class="token number">6</span><span class="token punctuation">;</span>
+
+	<span class="token comment">/**
+	 * 使用后端数据库默认的隔离级别
+	 */</span>
+	<span class="token keyword">int</span> <span class="token constant">ISOLATION_DEFAULT</span> <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+
+  <span class="token comment">//后续还有事务隔离级别\传播行为\超时时间等定义</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>TransactionStatus<br>
+TransactionStatus接口主要用来存储事务的执行状态,定义了一组方法,用来读取事务的状态信息;</li>
+</ul>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/f-%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%8E%9F%E7%90%86/Spring_TransactionStatus_%E7%B1%BB%E5%9B%BE.png?raw=true" alt="Spring_TransactionStatus_类图"></p>
+<h3 id="Spring事务隔离级别"><a class="header-anchor" href="#Spring事务隔离级别"></a>Spring事务隔离级别</h3>
+<p>Spring中事务存在五种隔离级别:<B>ISOLATION_DEFAULT</B>、<B>ISOLATION_READ_UNCOMMITTED</B>、<B>ISOLATION_READ_COMMITTED</B>、<B>ISOLATION_REPEATABLE_READ</B>、<B>ISOLATION_SERIALIZABLE</B></p>
+<table>
+<thead>
+<tr>
+<th>隔离级别</th>
+<th>脏读</th>
+<th>不可重复读</th>
+<th>幻读</th>
+<th>并发性能</th>
+<th>数据一致性</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ISOLATION_READ_UNCOMMITTED</code></td>
+<td>是</td>
+<td>是</td>
+<td>是</td>
+<td>最高</td>
+<td>最差</td>
+</tr>
+<tr>
+<td><code>ISOLATION_READ_COMMITTED</code></td>
+<td>否</td>
+<td>是</td>
+<td>是</td>
+<td>较高</td>
+<td>较差</td>
+</tr>
+<tr>
+<td><code>ISOLATION_REPEATABLE_READ</code></td>
+<td>否</td>
+<td>否</td>
+<td>是</td>
+<td>较低</td>
+<td>较好</td>
+</tr>
+<tr>
+<td><code>ISOLATION_SERIALIZABLE</code></td>
+<td>否</td>
+<td>否</td>
+<td>否</td>
+<td>最低</td>
+<td>最好</td>
+</tr>
+</tbody>
+</table>
+<p>这里需要注意的是Spring 事务隔离级别和数据库事务隔离级别是协同工作的。 Spring 负责发起隔离级别请求，而数据库负责实现。 最终起作用的是数据库的隔离级别。 因此，了解数据库的隔离级别支持和默认设置非常重要。 通过显式配置 Spring 的隔离级别并在不同的数据库环境下进行测试，可以确保事务隔离的正确性。</p>
+<p>Spring的事务管理器会使用JDBC驱动请求设置数据库的隔离级别,但是是需要数据库支持才可以,如果数据库忽略设置隔离级别,对于Spring事务管理器来说也无可奈何;</p>
 <h2 id="分布式事务的基本概念"><a class="header-anchor" href="#分布式事务的基本概念"></a>分布式事务的基本概念</h2>
 <h2 id="分布式事务的理论基础"><a class="header-anchor" href="#分布式事务的理论基础"></a>分布式事务的理论基础</h2>
 
@@ -982,7 +1098,7 @@ TM\RM\APP等多个组件带来的复杂性,TM会带来单点问题</li>
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            218.3k
+                                            219k
                                         </span>&nbsp;字
                                         
                                             
