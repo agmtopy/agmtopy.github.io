@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    3.4k
+                    4.4k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    12 分钟
+                    15 分钟
                 </div>
                 
 
@@ -796,8 +796,137 @@ TransactionStatus接口主要用来存储事务的执行状态,定义了一组�
 </table>
 <p>这里需要注意的是Spring 事务隔离级别和数据库事务隔离级别是协同工作的。 Spring 负责发起隔离级别请求，而数据库负责实现。 最终起作用的是数据库的隔离级别。 因此，了解数据库的隔离级别支持和默认设置非常重要。 通过显式配置 Spring 的隔离级别并在不同的数据库环境下进行测试，可以确保事务隔离的正确性。</p>
 <p>Spring的事务管理器会使用JDBC驱动请求设置数据库的隔离级别,但是是需要数据库支持才可以,如果数据库忽略设置隔离级别,对于Spring事务管理器来说也无可奈何;</p>
+<h3 id="Spring事务传播机制"><a class="header-anchor" href="#Spring事务传播机制"></a>Spring事务传播机制</h3>
+<table>
+<thead>
+<tr>
+<th>类别</th>
+<th>事务传播机制类型</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>支持当前事务的传播机制</td>
+<td>REQUIRED</td>
+<td>尝试加入现有事务或创建新的事务</td>
+</tr>
+<tr>
+<td>_</td>
+<td>SUPPORTS</td>
+<td>尝试加入现有事务或以非事务的方式执行</td>
+</tr>
+<tr>
+<td>_</td>
+<td>MANDATORY</td>
+<td>尝试加入现有事务,失败则抛出异常</td>
+</tr>
+<tr>
+<td>不支持当前事务的传播机制</td>
+<td>REQUIRES_NEW</td>
+<td>创建新的事务，挂起现有事务</td>
+</tr>
+<tr>
+<td>_</td>
+<td>NOT_SUPPORTED</td>
+<td>挂起现有事务后以非事务的方式执行</td>
+</tr>
+<tr>
+<td>_</td>
+<td>NEVER</td>
+<td>抛出异常</td>
+</tr>
+<tr>
+<td>嵌套事务</td>
+<td>NESTED</td>
+<td>创建嵌套事务（保存点），加入现有事务。外部事务回滚，内部事务也会回滚</td>
+</tr>
+</tbody>
+</table>
+<p>最常用的事务传播机制:</p>
+<ol>
+<li>REQUIRED<br>
+默认事务传播机制,适用于大部分场景</li>
+<li>NOT_SUPPORTED<br>
+非事务执行的场景,适用于允许以非事务执行的场景</li>
+<li>REQUIRED_NEW<br>
+适用于需要以事务方式保证持久化但是又不需要被外层事务所影响的场景,例如记录操作日志,即使主业务流程失败,也需要记录本次操作的场景</li>
+</ol>
+<h3 id="Spring事务失效的场景"><a class="header-anchor" href="#Spring事务失效的场景"></a>Spring事务失效的场景</h3>
+<ol>
+<li>
+<p>方法没有被public修饰<br>
+由于Spring是通过AOP的方式织入的开启事务和提交事务的,因此方式是非public的时无法代理</p>
+</li>
+<li>
+<p>同一个类中直接调用<br>
+直接调用,不经过AOP,无法开启事务;</p>
+</li>
+<li>
+<p>使用不支持事务的传播机制<br>
+例如NOT_SUPPORTED这种不开启事务的机制</p>
+</li>
+<li>
+<p>错误的catch异常/标注错误的异常类型<br>
+由于事务的回滚需要依赖方法抛出异常,如果吃掉异常,那么就不会回滚事务,这时需要判断是否符合业务逻辑;<br>
+Spring中默认回滚的异常为<B>RuntimeException</B>,如果抛出其他异常时,需要使用rollbackFor进行标识</p>
+</li>
+</ol>
 <h2 id="分布式事务的基本概念"><a class="header-anchor" href="#分布式事务的基本概念"></a>分布式事务的基本概念</h2>
+<ul>
+<li>架构目标和架构原则</li>
+</ul>
+<ol>
+<li>N+1设计</li>
+<li>回滚设计</li>
+<li>禁用设计</li>
+<li>监控设计</li>
+<li>设计多活数据中心</li>
+<li>使用成熟的技术</li>
+<li>异步设计</li>
+<li>无状态系统</li>
+<li>水平扩展而非垂直升级</li>
+<li>设计时至少要有两步前瞻性</li>
+<li>非核心则购买</li>
+<li>使用商品化硬件</li>
+<li>小构建\小发布\快速试错</li>
+<li>故障隔离</li>
+<li>自动化</li>
+</ol>
+<p>《The Art of Scalability》一书的观点很赞👍,这本书需要看;</p>
+<h3 id="分布式事务场景"><a class="header-anchor" href="#分布式事务场景"></a>分布式事务场景</h3>
+<ol>
+<li>跨JVM进程</li>
+</ol>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/f-%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%8E%9F%E7%90%86/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E5%9F%BA%E7%A1%80_%E8%B7%A8JVM%E8%B0%83%E7%94%A8%E5%9C%BA%E6%99%AF.png?raw=true" alt="分布式事务基础_跨JVM调用场景"></p>
+<ol start="2">
+<li>
+<p>同一应用调用多个数据库实例场景<br>
+<img src="https://github.com/agmtopy/noteBook/blob/master/png/f-%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%8E%9F%E7%90%86/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E5%9F%BA%E7%A1%80_%E8%B7%A8%E6%95%B0%E6%8D%AE%E5%BA%93%E8%B0%83%E7%94%A8%E5%9C%BA%E6%99%AF.png?raw=true" alt="分布式事务基础_跨数据库调用场景"></p>
+</li>
+<li>
+<p>多个应用调用同一个数据库实例场景<br>
+<img src="https://github.com/agmtopy/noteBook/blob/master/png/f-%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%8E%9F%E7%90%86/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E5%9F%BA%E7%A1%80_%E5%A4%9A%E4%B8%AA%E6%9C%8D%E5%8A%A1%E8%B0%83%E7%94%A8%E5%90%8C%E4%B8%80%E6%95%B0%E6%8D%AE%E5%BA%93%E5%9C%BA%E6%99%AF.png?raw=true" alt="分布式事务基础_多个服务调用同一数据库场景"></p>
+</li>
+</ol>
+<h3 id="数据一致性"><a class="header-anchor" href="#数据一致性"></a>数据一致性</h3>
+<p>数据一致性问题,包括数据多副本\调用超时\缓存与数据库不一致\多个缓存节点内数据不一致等问题;<br>
+常用的解决方案有:ACID特性\CAP理论\Base理论\DTP理论\2PC(两阶段提交)\3PC(三阶段提交)\TCC模型\可靠消息最终一致性模型\最大努力通知模型等;</p>
 <h2 id="分布式事务的理论基础"><a class="header-anchor" href="#分布式事务的理论基础"></a>分布式事务的理论基础</h2>
+<h3 id="CAP理论"><a class="header-anchor" href="#CAP理论"></a>CAP理论</h3>
+<p>CAP指的是Consistency（一致性）、Availability（可用性）、Partition tolerance（分区容错性）,这三个分布式系统中最重要的三个需求;<br>
+由于三者最多只能满足两点,因此有AP\CP\CA,这三种模式:</p>
+<ol>
+<li>AP模式<br>
+指的是追求系统的可用性和分区容忍性,由于分区容忍性在现实场景中很难避免,因此现在一致性还是可用性,是一种架构上的选择;Base理论就是基于AP模式的衍生</li>
+<li>CP模式<br>
+强一致性,代表系统有ZK<br>
+<a target="_blank" rel="noopener" href="http://3.AC">3.AC</a><br>
+放弃分区容忍性,架构回滚为单体应用架构</li>
+</ol>
+<h3 id="Base理论"><a class="header-anchor" href="#Base理论"></a>Base理论</h3>
+<p>Base理论是AP模式的扩展,由于CAP中的一致性指的是强一致性,是在任何时间读取任意节点的数据都必须是一致,而Base理论中的一致性指的是允许在某一段时间内数据不一致,但是最终都非达到一致;</p>
+<h2 id="分布式事务的解决方案"><a class="header-anchor" href="#分布式事务的解决方案"></a>分布式事务的解决方案</h2>
 
                 
             </div>
@@ -1098,7 +1227,7 @@ TransactionStatus接口主要用来存储事务的执行状态,定义了一组�
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            219k
+                                            220k
                                         </span>&nbsp;字
                                         
                                             
