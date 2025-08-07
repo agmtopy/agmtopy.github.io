@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    4.4k
+                    5.3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    15 分钟
+                    18 分钟
                 </div>
                 
 
@@ -928,7 +928,95 @@ Spring中默认回滚的异常为<B>RuntimeException</B>,如果抛出其他异�
 <p>Base理论是AP模式的扩展,由于CAP中的一致性指的是强一致性,是在任何时间读取任意节点的数据都必须是一致,而Base理论中的一致性指的是允许在某一段时间内数据不一致,但是最终都非达到一致;</p>
 <h2 id="分布式事务的解决方案"><a class="header-anchor" href="#分布式事务的解决方案"></a>分布式事务的解决方案</h2>
 <h3 id="强一致性的分布式事务解决方案"><a class="header-anchor" href="#强一致性的分布式事务解决方案"></a>强一致性的分布式事务解决方案</h3>
-<p>强一致性的分布式事务解决方案主要有<B>DTP模型</B>、<B>2PC模型</B>、<B>3PC模型</B>、</p>
+<p>强一致性的分布式事务解决方案主要有<B>DTP模型</B>、<B>2PC模型</B>、<B>3PC模型</B>,要求在任意时刻查询参与全局事务的各个节点的数据都是一致的;</p>
+<ul>
+<li>优缺点<br>
+优点如下:</li>
+</ul>
+<ol>
+<li>数据一致性比较高</li>
+<li>在任意时刻都能够查询到最新写入的数据</li>
+</ol>
+<p>缺点如下:</p>
+<ol>
+<li>存在性能问题,在分布式事务未完全提交和回滚之前,应用程序查询不到最新的数据</li>
+<li>实现复杂</li>
+<li>牺牲了可用性</li>
+<li>不适合高并发的场景</li>
+</ol>
+<h3 id="DTP模型"><a class="header-anchor" href="#DTP模型"></a>DTP模型</h3>
+<p>DTP模型是由X/Open组织定义的一套分布式事务标准,这套标准主要定义实现分布式事务的规范和API,具体的实现交给相应的厂商来进行实现,类似JDBC驱动,由不同的数据库厂商进行实现;常见的实现有MySQL的XA模式、</p>
+<ul>
+<li>DTP模型定义的重要概念</li>
+</ul>
+<ol>
+<li>事务:一个事务就是一个完整的工作单元,应具备特性</li>
+<li>全局事务:由事务管理器管理的事务,能够一次性操作多个资源管理器</li>
+<li>分支事务:每个资源管理器中独立的事务</li>
+<li>控制线程:执行全局事务的线程,这个线程用于协调关联应用程序\事务管理器\资源管理器等,又被称为事务上下文环境</li>
+</ol>
+<ul>
+<li>DTP模型的四大组件</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>全称</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>AP</strong></td>
+<td>Application Program</td>
+<td>事务发起者，调用事务服务</td>
+</tr>
+<tr>
+<td><strong>TM</strong></td>
+<td>Transaction Manager</td>
+<td>控制事务的全局一致性（如开启、提交、回滚事务）</td>
+</tr>
+<tr>
+<td><strong>RM</strong></td>
+<td>Resource Manager</td>
+<td>资源管理器，如数据库、消息中间件等，执行具体的事务操作</td>
+</tr>
+<tr>
+<td><strong>CM</strong></td>
+<td>Communication Resource Manager</td>
+<td>通信管理器，负责不同节点间的通信（有时合并在 RM 或 TM 中）</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>DTP模型示意图</li>
+</ul>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/f-%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%8E%9F%E7%90%86/%E5%BC%BA%E4%B8%80%E8%87%B4%E6%80%A7%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E8%A7%A3%E5%86%B3%E6%96%B9%E6%A1%88_DTP%E6%A8%A1%E5%9E%8B%E7%A4%BA%E6%84%8F%E5%9B%BE.png?raw=true" alt="DTP模型示意图"></p>
+<p>这个模型可以被划分为两个阶段:</p>
+<ol>
+<li>
+<p>Prepare阶段<br>
+这个阶段包括步骤(1,2,3,4,5,6,7,8),其中步骤3\5开始进行RM分支事务,只会修改数据但是不会提交事务,同时记录Redo Log和Undo Log,后续步骤7和步骤8指的是更新数据和记录日志的操作以及<B>锁定资源</B>;</p>
+</li>
+<li>
+<p>Commit阶段<br>
+步骤9和步骤10是RM接收到TM的命令后开始通过Redo Log刷盘或者Undo Log回滚,并释放资源;</p>
+</li>
+</ol>
+<p>从上述步骤中可以看到DTP模型中的强一致性是通过长时间锁定资源来进行实现的,实际生产中可能会产生问题;</p>
+<h3 id="2PC模型"><a class="header-anchor" href="#2PC模型"></a>2PC模型</h3>
+<p>2PC模型指的是<B>两阶段提交协议</B>,P-Prepare阶段、C-Commit阶段;其中XA模型是2PC模型的一个具体实现;</p>
+<ul>
+<li>2PC模型存在的问题</li>
+</ul>
+<ol>
+<li>同步阻塞问题:在事务执行过程中,所有参与事务的节点都会对其占用的公共资源进行加锁,导致其他访问该公共资源的进程或者线程阻塞;</li>
+<li>单点故障问题:事务管理器™发生故障时,资源管理器(RM)会一直阻塞</li>
+<li>数据不一致问题:在Commit阶段,如果TM发送的指令丢失,会导致资源管理器中的数据库可能与其他RM中的数据不一致</li>
+<li>在Commit阶段,如果TM发送完成Commit信息后宕机,然后RM宕机,导致无法确认事务是否已提交,RM有可能提交也有可能不提交;</li>
+</ol>
+<h3 id="3PC模型"><a class="header-anchor" href="#3PC模型"></a>3PC模型</h3>
 
                 
             </div>
@@ -1229,7 +1317,7 @@ Spring中默认回滚的异常为<B>RuntimeException</B>,如果抛出其他异�
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            220k
+                                            220.9k
                                         </span>&nbsp;字
                                         
                                             
