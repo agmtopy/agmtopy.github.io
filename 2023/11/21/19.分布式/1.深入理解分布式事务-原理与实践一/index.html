@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    5.3k
+                    5.4k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    18 分钟
+                    19 分钟
                 </div>
                 
 
@@ -1017,6 +1017,14 @@ Spring中默认回滚的异常为<B>RuntimeException</B>,如果抛出其他异�
 <li>在Commit阶段,如果TM发送完成Commit信息后宕机,然后RM宕机,导致无法确认事务是否已提交,RM有可能提交也有可能不提交;</li>
 </ol>
 <h3 id="3PC模型"><a class="header-anchor" href="#3PC模型"></a>3PC模型</h3>
+<blockquote>
+<p>3PC模型指的是三阶段提交模型,是为了解决2PC模型中的一些问题也提出来的,主要是将2PC模型中的Prepare阶段划分为<B>CanCommit阶段</B>、<B>PreCommit阶段</B>、<B>Commit阶段</B>;3PC 引入了超时机制和预提交阶段，从而降低了阻塞发生的概率;</p>
+</blockquote>
+<ul>
+<li>CanCommit阶段<br>
+准备阶段是事务管理器向所有参与者发送CanCommit请求,询问它们是否可以执行提交操作;</li>
+</ul>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/f-%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%8E%9F%E7%90%86/3PC%E6%A8%A1%E5%9E%8B_CanCommit%E9%98%B6%E6%AE%B5.png?raw=true" alt="3PC_CanCommit阶段"></p>
 
                 
             </div>
@@ -1317,7 +1325,7 @@ Spring中默认回滚的异常为<B>RuntimeException</B>,如果抛出其他异�
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            220.9k
+                                            221k
                                         </span>&nbsp;字
                                         
                                             
