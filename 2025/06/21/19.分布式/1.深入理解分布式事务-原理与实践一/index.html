@@ -413,7 +413,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-11-21
+                    2025-06-21
                 </div>
                 
 
@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    5.4k
+                    6.7k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    19 分钟
+                    23 分钟
                 </div>
                 
 
@@ -1025,6 +1025,113 @@ Spring中默认回滚的异常为<B>RuntimeException</B>,如果抛出其他异�
 准备阶段是事务管理器向所有参与者发送CanCommit请求,询问它们是否可以执行提交操作;</li>
 </ul>
 <p><img src="https://github.com/agmtopy/noteBook/blob/master/png/f-%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%8E%9F%E7%90%86/3PC%E6%A8%A1%E5%9E%8B_CanCommit%E9%98%B6%E6%AE%B5.png?raw=true" alt="3PC_CanCommit阶段"></p>
+<blockquote>
+<p>3PC 模型中 CanCommit 阶段的主要目的是在更早的阶段让参与者 (Participants，即资源管理器) 有机会拒绝事务，从而避免后续阶段可能发生的阻塞和资源浪费;</p>
+</blockquote>
+<ol>
+<li>
+<p>降低阻塞的可能性<br>
+3PC 模型引入了 CanCommit 阶段，允许参与者在收到 Prepare 命令之前，先检查自身的状态，判断是否能够提交事务。 如果参与者发现无法提交，则可以直接拒绝事务，从而避免了后续 Prepare 和 Commit 阶段的资源浪费和可能的阻塞</p>
+</li>
+<li>
+<p>提前发现问题，减少资源占用<br>
+CanCommit 阶段发现问题，参与者可以拒绝事务，从而释放占用的资源，避免后续阶段的资源浪费;</p>
+</li>
+<li>
+<p>提高系统的响应速度<br>
+通过在早期阶段过滤掉无法提交的事务，可以减少后续阶段的处理量，从而提高系统的整体响应速度。<br>
+如果协调者在 CanCommit 阶段收到多个参与者的 No 响应，它可以立即中止事务，避免后续不必要的处理。</p>
+</li>
+<li>
+<p>作为协调者和参与者之间的一次心跳检测</p>
+</li>
+</ol>
+<p><B>执行失败处理机制</B></p>
+<blockquote>
+<p>在CanCommit阶段有RM执行失败,在这个阶段中TM会向参与全局事务的资源管理器(RM)发送CanCommit请求,如果不能执行完成事务,则会向事务管理器响应No状态,TM收到NO响应,就中断全局事务的继续执行;</p>
+</blockquote>
+<ul>
+<li>PreCommit阶段</li>
+</ul>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/f-%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%8E%9F%E7%90%86/3PC%E6%A8%A1%E5%9E%8B_PreCommit%E9%98%B6%E6%AE%B5.png?raw=true" alt="3PC_PreCommit阶段"></p>
+<blockquote>
+<p>3PC 模型中 PreCommit 阶段的主要目的是让资源管理器开始执行事务操作,同时将Undo Log和Redo Log信息写入事务日志中,并向事务管理器™发送执行的ACK状态,<B>此时不会提交事务</B></p>
+</blockquote>
+<p><B>执行失败处理机制</B></p>
+<blockquote>
+<p>TM收到RM返回的中断后会向每个RM发送abort(中断)请求,RM在这个阶段如果收到abort请求或者超时等参加都会中断分支事务的执行;</p>
+</blockquote>
+<ul>
+<li>doCommit阶段</li>
+</ul>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/f-%E5%88%86%E5%B8%83%E5%BC%8F%E6%95%B0%E6%8D%AE%E5%8E%9F%E7%90%86/3PC%E6%A8%A1%E5%9E%8B_doCommit%E9%98%B6%E6%AE%B5.png?raw=true" alt="3PC_doCommit阶段"></p>
+<h2 id="最终一致性分布式事务解决方案"><a class="header-anchor" href="#最终一致性分布式事务解决方案"></a>最终一致性分布式事务解决方案</h2>
+<p>强一致性分布式事务解决方案要求参与事务的各个节点的数据时刻都要保持一致,因此通过资源管理器锁定的方式来保证,这样会带来性能上的问题;而最终一致性分布式事务不要求参与事务的各个节点数据要时刻保持一致,通过允许数据有中间态,只要一段时间后,数据能够达到最终一致性即可;</p>
+<p>典型方案:</p>
+<ol>
+<li>TCC模型</li>
+<li>可靠消息最终一致性模型</li>
+<li>最大努力通知型解决方案</li>
+</ol>
+<p>优点:</p>
+<ol>
+<li>性能高</li>
+<li>具备可用性</li>
+<li>适合高并发场景</li>
+</ol>
+<p>缺点:</p>
+<ol>
+<li>数据会存在一定时间范围内的不一致</li>
+<li>不适合事务要求比较高的场景</li>
+</ol>
+<h3 id="TCC模型"><a class="header-anchor" href="#TCC模型"></a>TCC模型</h3>
+<p>TCC模型本质上是一种应用层实现2PC协议的一种方式,CanCommit阶段在TCC模型中是<B>Try阶段</B>,doCommit阶段在TCC模型中是<B>Commit阶段</B>、<B>Cancel阶段</B>;</p>
+<ul>
+<li>TCC的执行流程</li>
+</ul>
+<ol>
+<li>
+<p>Try阶段<br>
+在这个阶段,不会执行任何业务逻辑,仅对业务进行检查,确保能够进行下一步操作;</p>
+</li>
+<li>
+<p>Commit阶段<br>
+全局事务管理器开始负责对各个资源管理器下发Commit提交命令</p>
+</li>
+<li>
+<p>Cancel阶段<br>
+在业务执行异常或者出现错误的情况下,需要回滚事务的操作,执行分支事务的取消操作,并且释放Try阶段预留的资源;</p>
+</li>
+</ol>
+<ul>
+<li>TCC模型的优缺点</li>
+</ul>
+<p>优点:</p>
+<ol>
+<li>TCC是在应用层控制事务,对于事务的控制又更小的粒度</li>
+<li>Confim阶段和Cancel阶段的方法具备幂等性,通过重试机制保证分布式事务执行完成后的数据一致性</li>
+<li>TCC由于是应用层协议,天然支持横向扩展,避免了XA模型的单点问题</li>
+</ol>
+<p>缺点:</p>
+<ol>
+<li>TCC嵌入到业务代码中,每个资源服务器的分支事务都需要被拆分成Try\Commit\Cancel等三个方法;</li>
+</ol>
+<ul>
+<li>TCC需要注意的问题</li>
+</ul>
+<ol>
+<li>
+<p>空回滚问题<br>
+指的是由于网络或者其他原因导致RM的Try请求为接收到,而接收到Cancel请求,Cancel在未Try的基础上错误的回滚业务数据;<br>
+解决空悬挂问题的关键是在于在执行Cancel请求时需要先判断是否已执行Try请求,常用的方法有通过流水表的形式进行判断;</p>
+</li>
+<li>
+<p>悬挂问题<br>
+指的是只进行Try,但是由于超时或者时序问题(try-延迟,cancel,try-到达)在业务数据终态后重新执行try请求了,由于TM未感知到该次Try,因此不会进行释放,常用的解决方案有:<B>Try阶段不锁资源</B>、<B>Try阶段通过业务数据判断是否能够进行</B></p>
+</li>
+</ol>
+<h3 id="可靠消息最终一致性解决方案"><a class="header-anchor" href="#可靠消息最终一致性解决方案"></a>可靠消息最终一致性解决方案</h3>
+<p>可靠消息最终一致性分布式事务解决方案指的是事务的发起方执行完成本地事务之后,发出一条消息,事务的参与方订阅该消息,本质上是通过消息系统完成事务的流转;</p>
 
                 
             </div>
@@ -1089,13 +1196,13 @@ Spring中默认回滚的异常为<B>RuntimeException</B>,如果抛出其他异�
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2023/11/25/13.LeetCode/20.%E6%95%B0%E6%8D%AE%E7%BB%93%E6%9E%84%E4%B8%8E%E7%AE%97%E6%B3%95%E4%B9%8B%E7%BE%8E%E4%B8%80/">
+                <a href="/2025/06/22/1.%E6%9D%82%E8%AE%B0/Java%E7%9A%84%E9%9A%90%E8%97%8F%E5%88%A9%E5%99%A8-%E9%B2%9C%E4%B8%BA%E4%BA%BA%E7%9F%A5%E5%8D%B4%E6%9E%81%E5%85%B7%E4%BB%B7%E5%80%BC%E7%9A%84%E5%B7%A5%E5%85%B7%E4%B8%8E%E5%BA%93/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/24.jpg" class="responsive-img" alt="数据结构与算法之美">
+                        <img src="/medias/featureimages/87.jpg" class="responsive-img" alt="Java的隐藏利器:鲜为人知却极具价值的工具与库">
                         
-                        <span class="card-title">数据结构与算法之美</span>
+                        <span class="card-title">Java的隐藏利器:鲜为人知却极具价值的工具与库</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -1106,14 +1213,14 @@ Spring中默认回滚的异常为<B>RuntimeException</B>,如果抛出其他异�
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-11-25
+                            <i class="far fa-clock fa-fw icon-date"></i>2025-06-22
                         </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E7%AE%97%E6%B3%95/" class="post-category">
-                                    算法
+                            <a href="/categories/%E6%9D%82%E8%AE%B0/" class="post-category">
+                                    杂记
                                 </a>
                             
                             
@@ -1123,8 +1230,8 @@ Spring中默认回滚的异常为<B>RuntimeException</B>,如果抛出其他异�
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/LeetCode/">
-                        <span class="chip bg-color">LeetCode</span>
+                    <a href="/tags/%E7%AC%94%E8%AE%B0/">
+                        <span class="chip bg-color">笔记</span>
                     </a>
                     
                 </div>
@@ -1138,13 +1245,13 @@ Spring中默认回滚的异常为<B>RuntimeException</B>,如果抛出其他异�
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2023/10/28/3.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1-%E5%AE%9E%E7%8E%B0%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/">
+                <a href="/2025/06/10/24.%E6%9E%B6%E6%9E%84/2.1DDD%E5%AE%9E%E8%B7%B5/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/68.jpg" class="responsive-img" alt="领域驱动设计_实现领域驱动设计-第二章">
+                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="领域驱动设计的实践">
                         
-                        <span class="card-title">领域驱动设计_实现领域驱动设计-第二章</span>
+                        <span class="card-title">领域驱动设计的实践</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -1155,14 +1262,14 @@ Spring中默认回滚的异常为<B>RuntimeException</B>,如果抛出其他异�
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-10-28
+                                <i class="far fa-clock fa-fw icon-date"></i>2025-06-10
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8/" class="post-category">
-                                    领域驱动
+                            <a href="/categories/%E6%9E%B6%E6%9E%84/" class="post-category">
+                                    架构
                                 </a>
                             
                             
@@ -1172,8 +1279,8 @@ Spring中默认回滚的异常为<B>RuntimeException</B>,如果抛出其他异�
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8/">
-                        <span class="chip bg-color">领域驱动</span>
+                    <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/">
+                        <span class="chip bg-color">领域驱动设计</span>
                     </a>
                     
                 </div>
@@ -1325,7 +1432,7 @@ Spring中默认回滚的异常为<B>RuntimeException</B>,如果抛出其他异�
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            221k
+                                            222.3k
                                         </span>&nbsp;字
                                         
                                             
