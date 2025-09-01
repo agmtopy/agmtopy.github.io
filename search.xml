@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>深入理解分布式事务-原理与实践-分布式事务原理</title>
+      <link href="2025/08/31/19.%E5%88%86%E5%B8%83%E5%BC%8F/2.%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1-%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E5%8E%9F%E7%90%86/"/>
+      <url>2025/08/31/19.%E5%88%86%E5%B8%83%E5%BC%8F/2.%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1-%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E5%8E%9F%E7%90%86/</url>
+      
+        <content type="html"><![CDATA[<h2 id="深入理解分布式事务-原理与实践-分布式事务原理"><a class="header-anchor" href="#深入理解分布式事务-原理与实践-分布式事务原理"></a>深入理解分布式事务-原理与实践-分布式事务原理</h2><p>在上一章中已经介绍了分布式事务的基础知识了,这一章将会介绍主要的几种分布式事务的原理,包括<B>XA强一致性分布式事务原理</B>、<B>TCC分布式事务原理</B>、<B>可靠消息型分布式事务原理</B>、<B>最大努力通知型分布式事务原理</B></p><h3 id="XA强一致性分布式事务原理"><a class="header-anchor" href="#XA强一致性分布式事务原理"></a>XA强一致性分布式事务原理</h3><p>X/Open组织定于的分布式事务标准规划被称为<B>X/Open DTP模型</B>,定义了事务处理的规划和API,具体的实现由各个厂商进行负责实现;</p><ul><li><p>DTP模型<br>主要定义了3个组件,分别是<B>应用程序</B>、<B>资源管理器</B>、<B>事务管理器</B><br>应用程序:定义事务边界<br>资源管理器:提供访问资源的方式<br>事务管理器:分配事务ID、监控事务的执行进度、负责事务的提交和回滚</p></li><li><p>xa规范</p></li></ul><ol><li>xa_start:负责开启或恢复一个分支事务</li><li>xa_end:负责暂停或终止一个分支事务</li><li>xa_prepare:负责对一个分支事务进行预提交操作</li><li>xa_commit:负责提交一个分支事务</li><li>xa_rollback:负责回滚一个分支事务</li><li>xa_recover:负责在系统崩溃后,恢复未完成的分支事务</li></ol><ul><li>xa事务的缺陷</li></ul><ol><li>同步阻塞<br>MySQl需要配合串行化的事务隔离级别来使用XA事务,这会导致性能下降。</li><li>单点故障<br>XA事务的协调者是事务管理器,如果事务管理器出现故障,资源管理器会一直等待,不会主动释放资源;</li><li>数据不一致<br>在二阶段过程中,如果协调者向一部分资源管理器发送了提交请求,而另一部分资源管理器由于故障未能收到提交请求,就会导致数据不一致。</li></ol><h3 id="TCC分布式事务原理"><a class="header-anchor" href="#TCC分布式事务原理"></a>TCC分布式事务原理</h3><blockquote><p>TCC分布式事务最核心的思想就是在应用层将一个完整的事务拆分成三个阶段: Try、Confirm、Cancel。在某种程度上讲,TCC是一种资源,实现了Try-Confirm-Cancel三个操作接口,本质上还是两阶段提交的变种。</p></blockquote><p>TCC分布式事务属于<B>最终一致性下的补偿性事务</B></p>]]></content>
+      
+      
+      <categories>
+          
+          <category> 分布式 </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> 读书笔记 </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>CompletableFuture常用方法总结</title>
       <link href="2025/07/18/2.%E5%B9%B6%E5%8F%91%E7%9F%A5%E8%AF%86/17.CompletableFuture%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/"/>
       <url>2025/07/18/2.%E5%B9%B6%E5%8F%91%E7%9F%A5%E8%AF%86/17.CompletableFuture%E5%B8%B8%E7%94%A8%E6%96%B9%E6%B3%95%E6%80%BB%E7%BB%93/</url>
