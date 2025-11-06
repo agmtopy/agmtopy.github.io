@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="Netty源码分析(一), agmtopy博客">
+    <meta name="keywords" content="Disruptor之基础入门, agmtopy博客">
     <meta name="description" content="你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>Netty源码分析(一) | agmtopy博客</title>
+    <title>Disruptor之基础入门 | agmtopy博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -267,12 +267,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/28.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/84.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">Netty源码分析(一)</h1>
+                    <h1 class="description center-align post-title">Disruptor之基础入门</h1>
                 </div>
             </div>
         </div>
@@ -388,8 +388,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/Netty/">
-                                <span class="chip bg-color">Netty</span>
+                            <a href="/tags/disruptor/">
+                                <span class="chip bg-color">disruptor</span>
                             </a>
                         
                     </div>
@@ -400,8 +400,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E5%B9%B6%E5%8F%91/" class="post-category">
-                                并发
+                            <a href="/categories/%E9%AB%98%E6%80%A7%E8%83%BD/" class="post-category">
+                                高性能
                             </a>
                         
                     </div>
@@ -413,7 +413,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-06-27
+                    2025-11-07
                 </div>
                 
 
@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    1.4k
+                    364
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    5 分钟
+                    1 分钟
                 </div>
                 
 
@@ -443,154 +443,19 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1>Netty源码分析(一)</h1>
-<h2 id="简述"><a class="header-anchor" href="#简述"></a>简述</h2>
-<p>从IO到NIO体现了java对于流操作的一个变迁,在到构建Netty,这一个系列文章主要讲述的就是Netty框架,第一篇文章从NIO出发;<br>
-主要分为:<br>
-Socket编程、IO模型、Netty简介、Netty示例,下面就开始今天的学习吧!</p>
-<h2 id="Socket编程"><a class="header-anchor" href="#Socket编程"></a>Socket编程</h2>
-<p>Socket最早是在4.3BSD UNIX中内置的’Berkeley Socket’演化而来,主要是用于实现进程间的通信;</p>
-<h3 id="Socket通信模型"><a class="header-anchor" href="#Socket通信模型"></a>Socket通信模型</h3>
-<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/N-Netty%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/1.Socket%E6%8A%BD%E8%B1%A1%E6%A8%A1%E5%9E%8B.png?raw=true" alt="Socket通信模型"></p>
-<p>Socket通信模型如上图所示,Socket是作为应用层与传输层之间协议,对应用层来说只要按照Socket设计的协议进行调用就可以进行通信了;</p>
-<p>常用的Socket类型有两种:“Stream Sockets”(串流式 Sockets)和&quot;Datagram Sockets&quot;(讯息式 Sockets),Stream Sockets底层使用的是TCP协议,Datagram Sockets底层使用的是UDP协议;</p>
-<blockquote>
-<p>CP 会在传输层对将上层送来的过大数据分割成多个 TCP 段（TCP segments），而 UDP 本身不会，UDP 是信息导向的（message oriented），若 UDP 信息过大时（整体数据包长度超过 MTU），则会由 host 或 router 在 IP 层对数据包进行分割，将一个 IP packet 分割成多个 IP fragments。IP fragmention 的缺点是，到达端的系统需要做 IP 数据包的重组，将多个 fragments 重组合并为原本的 IP 数据包，同时也会增加数据包遗失的可能性。如将一个 IP packet 分割成多个 IP fragments，只要其中一个 IP fragment 遗失了，到达端就会无法顺利重组 IP 数据包，因而造成数据包的遗失，若是高可靠度的应用，则上层协议需重送整个 packet 的数据。</p>
-</blockquote>
-<h3 id="简单示例"><a class="header-anchor" href="#简单示例"></a>简单示例</h3>
-<p><a target="_blank" rel="noopener" href="https://github.com/agmtopy/netty-in-action-kotlin/blob/master/src/main/kotlin/HttpServer01.kt">HttpServer01.kt</a></p>
-<p>开启8880端口,然后返回字符串&quot;socket&quot;,通过这个程序可以看到影响程序响应的因素是在于对响应的一个处理速度,示例中的程序是采用new Thread的方式,但是在还有很多改进的空间:使用线程池;</p>
-<p>这种I/O模型是标准的select/poll模型,有以下这些缺点:</p>
-<ol>
-<li>每次调用需要将数据从用户态拷贝到内核态</li>
-<li>select需要遍历内核态传递进来的全部fd（file descriptor）是指向一个打开的文件或I/O设备的数字标识符</li>
-<li>select支持的文件描述符只有1024个</li>
-</ol>
-<h2 id="NIO模型"><a class="header-anchor" href="#NIO模型"></a>NIO模型</h2>
-<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/N-Netty%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/2.IO%E6%A8%A1%E5%9E%8B.png?raw=true" alt="IO模型"></p>
-<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/N-Netty%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/3.IO%E6%A8%A1%E5%9E%8B.png?raw=true" alt="IO复用"></p>
-<h2 id="Netty模型"><a class="header-anchor" href="#Netty模型"></a>Netty模型</h2>
-<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/N-Netty%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/4.Netty%E6%95%B4%E4%BD%93%E6%B5%81%E7%A8%8B.png?raw=true" alt="Netty整体流程"></p>
-<p>下面根据这个整体流程先写一个简单示例;</p>
-<h3 id="Netty基本组件"><a class="header-anchor" href="#Netty基本组件"></a>Netty基本组件</h3>
-<h4 id="NioEventLoop组件"><a class="header-anchor" href="#NioEventLoop组件"></a>NioEventLoop组件</h4>
-<p>NioEventLoop同时处理<B>客户端连接</B>、<B>读写客户端发送过来的数据</B></p>
-<h4 id="Channel组件"><a class="header-anchor" href="#Channel组件"></a>Channel组件</h4>
-<h4 id="ByteBuf"><a class="header-anchor" href="#ByteBuf"></a>ByteBuf</h4>
-<h4 id="Pipeline"><a class="header-anchor" href="#Pipeline"></a>Pipeline</h4>
-<p>使用逻辑链,来解析数据</p>
-<h4 id="Channel-Handler"><a class="header-anchor" href="#Channel-Handler"></a>Channel Handler</h4>
-<h3 id="执行过程"><a class="header-anchor" href="#执行过程"></a>执行过程</h3>
-<h4 id="服务端执行流程"><a class="header-anchor" href="#服务端执行流程"></a>服务端执行流程</h4>
-<ol>
-<li>
-<p>创建服务端Channel<br>
-bind():用户代码入口 -&gt;   initAndRegister():初始化并注册  -&gt;  newChannel():创建服务端Channel</p>
-</li>
-<li>
-<p>初始化服务端Channel</p>
-<p>NioServerSocketChannel.class初始化方法:<br>
-1. newSocket()通过JDK来创建原生Channel<br>
-2. NioServerSockerChannelConfig配置TCP参数<br>
-3. AbstractNioChannel<br>
-3.1 configureBlocking 设置阻塞/非阻塞模式<br>
-3.2 AbstractChannel创建id/unsafe/pipeline</p>
-</li>
-</ol>
-<p>添加 ServerBootstrapAcceptor -&gt; ServerBootstrapAcceptor.init()</p>
-<p>添加Handler,</p>
-<ol start="3">
-<li>注册selector</li>
-</ol>
-<p>在创建和注册channel完成以后,会调用EventLoopGroup接口的实现类进行注册;</p>
-<p>整体流程:</p>
-<ol>
-<li>bind()作为入口</li>
-<li>AbstractBootstrap#initAndRegister作为实现方法</li>
-<li>通过EventLoopGroup的子类,NioEventLoopGroup的父类MultithreadEventLoopGroup实现的<B>register()</B>实现</li>
-</ol>
-<p>register()执行的时候是通过MultithreadEventExecutorGroup#next()方法获取事件处理器,next()方法是通过<a target="_blank" rel="noopener" href="https://github.com/netty/netty/blob/4bd20067ace14b3dfd14e4a4bb9cbe480e97d3b0/common/src/main/java/io/netty/util/concurrent/DefaultEventExecutorChooserFactory.java#L34">DefaultEventExecutorChooserFactory#newChooser</a>来进行选择,选择EventExecutor[] executors数组中的元素时,对于偶数和奇数的处理方式不同;</p>
-<p>register()方法<B>EventLoopGroup#register(Channel channel)</B>接口定义的将传入的channel注册到EvetLoop的方法;</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token class-name">ChannelFuture</span> <span class="token function">register</span><span class="token punctuation">(</span><span class="token class-name">Channel</span> channel<span class="token punctuation">,</span> <span class="token class-name">ChannelPromise</span> promise<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    channel<span class="token punctuation">.</span><span class="token function">unsafe</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">register</span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> promise<span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> promise<span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p><a target="_blank" rel="noopener" href="https://github.com/netty/netty/blob/4bd20067ace14b3dfd14e4a4bb9cbe480e97d3b0/transport/src/main/java/io/netty/channel/embedded/EmbeddedEventLoop.java#L188">EmbeddedEventLoop</a></p>
-<p>EventLoopGroup通过调用<B>channel.register</B>方法来进行处理;</p>
-<ol start="4">
-<li>端口绑定
-<ol>
-<li>AbstractBootstrap#doBind</li>
-<li>AbstractBootstrap#doBind0</li>
-<li>AbstractUnsafe#bind</li>
-<li>NioSocketChannel#doBind</li>
-<li>NioSocketChannel#doBind0</li>
-<li>SocketUtils#bind</li>
-<li>事件广播</li>
-</ol>
-</li>
-</ol>
-<p>'端口绑定’这个功能分为两个动作:1-操作端口绑定、2-绑定事件进行广播</p>
-<p>上述1~6的步骤都是将Netty将设置的端口通过JDK底层方法进行绑定,在绑定完成后是通过后续<B>事件广播</B>功能将这一事件广播出去</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java">
-<span class="token comment">//端口绑定完成以后isActive()返回true</span>
-<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>wasActive <span class="token operator">&amp;&amp;</span> <span class="token function">isActive</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token function">invokeLater</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">Runnable</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        <span class="token annotation punctuation">@Override</span>
-        <span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-            <span class="token comment">//广播事件 @TODO</span>
-            pipeline<span class="token punctuation">.</span><span class="token function">fireChannelActive</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-        <span class="token punctuation">&#125;</span>
-    <span class="token punctuation">&#125;</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<p><B>pipeline.fireChannelActive()</B>方法会调用到<B>HeadContext#channelActive</B></p>
-<h3 id="小结"><a class="header-anchor" href="#小结"></a>小结</h3>
-<h2 id="NioEventLoop组件-v2"><a class="header-anchor" href="#NioEventLoop组件-v2"></a>NioEventLoop组件</h2>
-<ol>
-<li>默认情况下,Netty服务端会启动多少线程?什么时候启动?</li>
-<li>Netty如何解决JDK空轮询问题?</li>
-<li>Netty如何保证异步串行无锁化?</li>
-</ol>
-<h3 id="NioEventLoop创建过程"><a class="header-anchor" href="#NioEventLoop创建过程"></a>NioEventLoop创建过程</h3>
-<h4 id="创建核心线程数"><a class="header-anchor" href="#创建核心线程数"></a>创建核心线程数</h4>
-<p>在我们的示例代码中可以看到</p>
-<pre class="line-numbers language-kotlin" data-language="kotlin"><code class="language-kotlin"><span class="token keyword">val</span> bossGroup <span class="token operator">=</span> <span class="token function">NioEventLoopGroup</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
-<span class="token keyword">val</span> workerGroup <span class="token operator">=</span> <span class="token function">NioEventLoopGroup</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-<p>NioEventLoopGroup有两种构造方法,一种传参,一种不传参数,进入构造方法可以看到:</p>
-<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//设置线程数量</span>
-<span class="token keyword">public</span> <span class="token class-name">NioEventLoopGroup</span><span class="token punctuation">(</span><span class="token keyword">int</span> nThreads<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">this</span><span class="token punctuation">(</span>nThreads<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token class-name">Executor</span><span class="token punctuation">)</span> <span class="token keyword">null</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-
-<span class="token comment">//不设置线程数量时</span>
-<span class="token keyword">protected</span> <span class="token class-name">MultithreadEventLoopGroup</span><span class="token punctuation">(</span><span class="token keyword">int</span> nThreads<span class="token punctuation">,</span> <span class="token class-name">Executor</span> executor<span class="token punctuation">,</span> <span class="token class-name">Object</span><span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> args<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-    <span class="token keyword">super</span><span class="token punctuation">(</span>nThreads <span class="token operator">==</span> <span class="token number">0</span> <span class="token operator">?</span> <span class="token constant">DEFAULT_EVENT_LOOP_THREADS</span> <span class="token operator">:</span> nThreads<span class="token punctuation">,</span> executor<span class="token punctuation">,</span> args<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span>
-
-    <span class="token keyword">private</span> <span class="token keyword">static</span> <span class="token keyword">final</span> <span class="token keyword">int</span> <span class="token constant">DEFAULT_EVENT_LOOP_THREADS</span><span class="token punctuation">;</span>
-
-<span class="token comment">//设置线程数量为配置参数值或默认当前核心数*2</span>
-<span class="token keyword">static</span> <span class="token punctuation">&#123;</span>
-    <span class="token constant">DEFAULT_EVENT_LOOP_THREADS</span> <span class="token operator">=</span> <span class="token class-name">Math</span><span class="token punctuation">.</span><span class="token function">max</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token class-name">SystemPropertyUtil</span><span class="token punctuation">.</span><span class="token function">getInt</span><span class="token punctuation">(</span>
-            <span class="token string">"io.netty.eventLoopThreads"</span><span class="token punctuation">,</span> <span class="token class-name">NettyRuntime</span><span class="token punctuation">.</span><span class="token function">availableProcessors</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">2</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-
-    <span class="token keyword">if</span> <span class="token punctuation">(</span>logger<span class="token punctuation">.</span><span class="token function">isDebugEnabled</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
-        logger<span class="token punctuation">.</span><span class="token function">debug</span><span class="token punctuation">(</span><span class="token string">"-Dio.netty.eventLoopThreads: &#123;&#125;"</span><span class="token punctuation">,</span> <span class="token constant">DEFAULT_EVENT_LOOP_THREADS</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span>
-
-<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h4 id="创建线程执行器"><a class="header-anchor" href="#创建线程执行器"></a>创建线程执行器</h4>
-<h3 id="NioEventLoop启动过程"><a class="header-anchor" href="#NioEventLoop启动过程"></a>NioEventLoop启动过程</h3>
-<h3 id="NioEventLoop执行逻辑"><a class="header-anchor" href="#NioEventLoop执行逻辑"></a>NioEventLoop执行逻辑</h3>
-<ol start="4">
-<li>业务逻辑:对数据包进行拆包 -&gt; 数据类型处理器</li>
-</ol>
-<h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
-<p><a target="_blank" rel="noopener" href="https://www.kancloud.cn/luoyoub/network-programming/2237006">Socket通信模型</a><br>
-<a target="_blank" rel="noopener" href="https://beej-zhcn.netdpi.net/whatissocket/liang_zhong_internet_sockets">Beej’s Guide to Network Programming简体中文</a><br>
-<a target="_blank" rel="noopener" href="https://www.cnblogs.com/ZhuChangwu/p/11237899.html">Netty中的策略模式</a></p>
+                <h1>Disruptor之基础入门</h1>
+<h2 id="什么是Disruptor"><a class="header-anchor" href="#什么是Disruptor"></a>什么是Disruptor</h2>
+<p>Disruptor是一个高性能的并发编程框架，旨在提供低延迟和高吞吐量的数据处理能力。它由LMAX交易所开发，最初用于金融交易系统，但其设计理念和实现方式使其适用于各种需要高性能数据处理的场景;<br>
+核心的设计理念是认为<B>队列是一种糟糕的抽象，因为它暗示了数据必须在不同上下文之间被复制排队进行处理,LMAX Disruptor哲学核心是通过共享内存、序列同步，而不是通过消息排队，来实现线程间通信。</B></p>
+<p>由于Disruptor只是一个队列,对于事件的处理并不会有性能上的提高,它提高的是使用传统队列时的性能损耗,传统的队列会因为锁竞争、缓存行失效等问题导致性能下降,而Disruptor通过无锁设计和缓存行填充等技术来减少这些问题,从而实现高性能的事件传递。</p>
+<h2 id="Disruptor的使用"><a class="header-anchor" href="#Disruptor的使用"></a>Disruptor的使用</h2>
+<h3 id="基础使用"><a class="header-anchor" href="#基础使用"></a>基础使用</h3>
+<ul>
+<li>单个生产者，单个消费者模型<br>
+<img src="https://github.com/agmtopy/Disruptor/blob/master/src/main/kotlin/basis/Disruptor1P1C.kt#L15" alt="Disruptor1P1C"><br>
+使用Disruptor的第一步是创建一个Disruptor实例,需要指定4个参数分别是:<br>
+1.事件工厂、环形缓冲区大小、线程工厂等参数。然后,通过Disruptor的handleEventsWith方法注册事件处理器,最后调用start方法启动Disruptor。</li>
+</ul>
 
                 
             </div>
@@ -604,8 +469,8 @@ bind():用户代码入口 -&gt;   initAndRegister():初始化并注册  -&gt;  n
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/Netty/">
-                                    <span class="chip bg-color">Netty</span>
+                                <a href="/tags/disruptor/">
+                                    <span class="chip bg-color">disruptor</span>
                                 </a>
                             
                         </div>
@@ -651,17 +516,18 @@ bind():用户代码入口 -&gt;   initAndRegister():初始化并注册  -&gt;  n
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
             <div class="card">
-                <a href="/2023/10/28/3.%E8%AE%BE%E8%AE%A1%E6%A8%A1%E5%BC%8F/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1-%E5%AE%9E%E7%8E%B0%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8%E8%AE%BE%E8%AE%A1/">
+                <a href="/2025/11/07/26.%E9%AB%98%E6%80%A7%E8%83%BD/01.Disruptor%E4%B9%8B%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/68.jpg" class="responsive-img" alt="领域驱动设计_实现领域驱动设计-第二章">
+                        <img src="/medias/featureimages/84.jpg" class="responsive-img" alt="Disruptor之基础入门">
                         
-                        <span class="card-title">领域驱动设计_实现领域驱动设计-第二章</span>
+                        <span class="card-title">Disruptor之基础入门</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -671,26 +537,27 @@ bind():用户代码入口 -&gt;   initAndRegister():初始化并注册  -&gt;  n
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-10-28
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2025-11-07
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8/" class="post-category">
-                                    领域驱动
+                            <a href="/categories/%E9%AB%98%E6%80%A7%E8%83%BD/" class="post-category">
+                                    高性能
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E9%A2%86%E5%9F%9F%E9%A9%B1%E5%8A%A8/">
-                        <span class="chip bg-color">领域驱动</span>
+                    <a href="/tags/disruptor/">
+                        <span class="chip bg-color">disruptor</span>
                     </a>
                     
                 </div>
@@ -704,13 +571,13 @@ bind():用户代码入口 -&gt;   initAndRegister():初始化并注册  -&gt;  n
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2023/06/27/2.%E5%B9%B6%E5%8F%91%E7%9F%A5%E8%AF%86/25.Netty%E5%AE%9E%E6%88%98%E7%AC%AC%E4%B8%80%E7%AB%A0/">
+                <a href="/2025/08/31/19.%E5%88%86%E5%B8%83%E5%BC%8F/2.%E6%B7%B1%E5%85%A5%E7%90%86%E8%A7%A3%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1-%E5%8E%9F%E7%90%86%E4%B8%8E%E5%AE%9E%E8%B7%B5-%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E5%8E%9F%E7%90%86/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/40.jpg" class="responsive-img" alt="Netty实战第一章">
+                        <img src="/medias/featureimages/74.jpg" class="responsive-img" alt="深入理解分布式事务-原理与实践-分布式事务原理">
                         
-                        <span class="card-title">Netty实战第一章</span>
+                        <span class="card-title">深入理解分布式事务-原理与实践-分布式事务原理</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -721,14 +588,14 @@ bind():用户代码入口 -&gt;   initAndRegister():初始化并注册  -&gt;  n
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-06-27
+                                <i class="far fa-clock fa-fw icon-date"></i>2025-08-31
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E5%B9%B6%E5%8F%91/" class="post-category">
-                                    并发
+                            <a href="/categories/%E5%88%86%E5%B8%83%E5%BC%8F/" class="post-category">
+                                    分布式
                                 </a>
                             
                             
@@ -738,8 +605,8 @@ bind():用户代码入口 -&gt;   initAndRegister():初始化并注册  -&gt;  n
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Netty/">
-                        <span class="chip bg-color">Netty</span>
+                    <a href="/tags/%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">
+                        <span class="chip bg-color">读书笔记</span>
                     </a>
                     
                 </div>
@@ -891,7 +758,7 @@ bind():用户代码入口 -&gt;   initAndRegister():初始化并注册  -&gt;  n
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            224.7k
+                                            225.1k
                                         </span>&nbsp;字
                                         
                                             
