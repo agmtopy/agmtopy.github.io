@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    364
+                    1.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    1 分钟
+                    3 分钟
                 </div>
                 
 
@@ -451,11 +451,95 @@
 <h2 id="Disruptor的使用"><a class="header-anchor" href="#Disruptor的使用"></a>Disruptor的使用</h2>
 <h3 id="基础使用"><a class="header-anchor" href="#基础使用"></a>基础使用</h3>
 <ul>
-<li>单个生产者，单个消费者模型<br>
-<img src="https://github.com/agmtopy/Disruptor/blob/master/src/main/kotlin/basis/Disruptor1P1C.kt#L15" alt="Disruptor1P1C"><br>
-使用Disruptor的第一步是创建一个Disruptor实例,需要指定4个参数分别是:<br>
-1.事件工厂、环形缓冲区大小、线程工厂等参数。然后,通过Disruptor的handleEventsWith方法注册事件处理器,最后调用start方法启动Disruptor。</li>
+<li>单个生产者,单个消费者模式</li>
 </ul>
+<p><a target="_blank" rel="noopener" href="https://github.com/agmtopy/Disruptor/blob/master/src/main/java/performance/basis/Disruptor1P1C.java">Disruptor1P1C</a><br>
+使用Disruptor步骤如下<br>
+<B>第一步</B>是创建一个Disruptor实例,需要指定4个参数分别是:</p>
+<ol>
+<li>事件工厂,用于RingBuffer<B>预创建</B>事件实例对象使用</li>
+<li>消费者线程工厂,用于创建消费者线程,这一点设计可以参考下一篇文章有详细的分析 @TODO</li>
+<li>环形缓冲区大小,必须是2的N次方,用于设置RingBuffer的大小</li>
+<li>生产者类型(单个生产者或多个生产者)</li>
+<li>等待策略(BlockingWaitStrategy、SleepingWaitStrategy、YieldingWaitStrategy、BusySpinWaitStrategy),用于设置<B>消费者等待</B>事件的策略;<br>
+<B>第二步</B>是注册消费者<br>
+<B>第三步</B>是生产者填充RingBuffer并发布事件</li>
+</ol>
+<ul>
+<li>单个消费者,多个生产者-广播模式</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://github.com/agmtopy/Disruptor/blob/master/src/main/java/performance/basis/Disruptor1P2C.java">Disruptor1P2C</a></p>
+<p>通过handleEventsWith方法注册多个消费者,消息会被多个消费者消费<br>
+<img src="https://github.com/agmtopy/noteBook/blob/master/png/d-disruptor/%E4%BA%8B%E4%BB%B6%E6%B6%88%E8%B4%B9%E6%A8%A1%E5%9E%8B_1p2c.png?raw=true" alt="事件消费模型_1p2c"></p>
+<ul>
+<li>单个消费者,单个消费组-事件模式<br>
+事件只会被同一个消费组中的某一个hadnler消费,不同消费组之间是并行消费的,消费组之间是完全隔离的互不影响</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://github.com/agmtopy/Disruptor/blob/master/src/main/java/performance/basis/Disruptor1P1G.java">Disruptor1P1G</a></p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/d-disruptor/%E4%BA%8B%E4%BB%B6%E6%B6%88%E8%B4%B9%E6%A8%A1%E5%9E%8B_1p1g.png?raw=true" alt="事件消费模型_1p1g"></p>
+<ul>
+<li>单个消费者,多个消费组-事件模式<br>
+事件只会被同一个消费组中的某一个hadnler消费,不同消费组之间是并行消费的,消费组之间是完全隔离的互不影响</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://github.com/agmtopy/Disruptor/blob/master/src/main/java/performance/basis/Disruptor1P2G.java">Disruptor1P2G</a></p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/d-disruptor/%E4%BA%8B%E4%BB%B6%E6%B6%88%E8%B4%B9%E6%A8%A1%E5%9E%8B_1p2g.png?raw=true" alt="事件消费模型_1p2g"></p>
+<ul>
+<li>单个消费者,多个消费组串行-事件模式<br>
+<a target="_blank" rel="noopener" href="https://github.com/agmtopy/Disruptor/blob/master/src/main/java/performance/basis/Disruptor1P2G.java">Disruptor1P1GThan1G</a></li>
+</ul>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/d-disruptor/%E4%BA%8B%E4%BB%B6%E6%B6%88%E8%B4%B9%E6%A8%A1%E5%9E%8B_%E5%85%B6%E4%BB%96%E6%A8%A1%E5%BC%8F.png?raw=true" alt="其他事件消费模型"></p>
+<p>小结:通过实现<B>EventHandler</B>接口的处理方法是处理<B>广播</B>模式,通过<B>WorkHandler</B>接口的处理方法是处理<B>事件</B>模式;<br>
+对事件的处理方法可以使用handleEventsWithWorkerPool方法注册多个消费组,消费者之间可以通过<B>then</B>方法串行处理,通过<B>after</B>方法配合<B>handleEventsWith</B>来指定消费组之间的依赖关系,实现链式\菱形\六边形等消费模式;</p>
+<h2 id="适用场景"><a class="header-anchor" href="#适用场景"></a>适用场景</h2>
+<p>Disruptor解决的问题是队列在高并发场景下由于锁竞争、缓存行失效等问题导致的性能瓶颈,因此对于性能瓶颈在事件处理上的场景,Disruptor并不能带来性能提升,反而会因为其复杂性带来额外的开销;<br>
+以下是一些适合使用Disruptor的场景:</p>
+<ol>
+<li>高频交易系统:需要处理大量的交易请求,对延迟和吞吐量有极高的要求;</li>
+</ol>
+<p><a target="_blank" rel="noopener" href="https://github.com/agmtopy/Disruptor/blob/master/src/main/java/performance/MatchingTransactions/ExchangeLauncher.java">ExchangeLauncher</a></p>
+<p>这个是一个简单的撮合引擎示例,使用Disruptor实现高性能的订单撮合交易,我们重点关注ExchangeLauncher对disruptord分组使用,ResultsHandler对事件的处理操作;</p>
+<ol start="2">
+<li>
+<p>日志操作:Log4j2使用Disruptor实现异步日志记录,提高日志写入性能;</p>
+<ul>
+<li>
+<p>2.1 创建Disruptor实例<br>
+<a target="_blank" rel="noopener" href="https://github.com/apache/logging-log4j2/blob/1cfcda9b4ccd4e6a0b6b6c3839e68a96fd6b87ed/log4j-core/src/main/java/org/apache/logging/log4j/core/async/AsyncLoggerDisruptor.java#L138">AsyncLoggerDisruptor.disruptor</a></p>
+</li>
+<li>
+<p>2.2 消费者Handler<br>
+<a target="_blank" rel="noopener" href="https://github.com/apache/logging-log4j2/blob/1cfcda9b4ccd4e6a0b6b6c3839e68a96fd6b87ed/log4j-core/src/main/java/org/apache/logging/log4j/core/async/AsyncLoggerDisruptor.java#L53">AsyncLoggerDisruptor.createEventHandler()</a></p>
+</li>
+<li>
+<p>2.3 生产者发布日志事件<br>
+[AsyncLogger.handleRingBufferFull()](<a target="_blank" rel="noopener" href="https://github.com/apache/logging-log4j2/blob/dc6c53ab7bb195f3878d3ee92cd0ff20634326f1/log4j-core/src/main/java/org/apache/logging/log4j/core/async/AsyncLogger.java#L277">https://github.com/apache/logging-log4j2/blob/dc6c53ab7bb195f3878d3ee92cd0ff20634326f1/log4j-core/src/main/java/org/apache/logging/log4j/core/async/AsyncLogger.java#L277</a>;</p>
+</li>
+</ul>
+</li>
+<li>
+<p>Axon Framework:使用Disruptor实现事件处理和命令处理;</p>
+<ul>
+<li>3.1 创建Disruptor实例<br>
+<a target="_blank" rel="noopener" href="https://github.com/AxonFramework/AxonFramework/blob/4.5.0/axon-disruptor/src/main/java/org/axonframework/disruptor/DisruptorEventBus.java#L244">DisruptorEventBus.createDisruptor()</a></li>
+<li>3.2 消费者Handler<br>
+<a target="_blank" rel="noopener" href="https://github.com/AxonFramework/AxonFramework/blob/4.5.0/axon-disruptor/src/main/java/org/axonframework/disruptor/DisruptorEventBus.java#L266">EventProcessorHandler</a></li>
+<li>3.3 生产者发布事件<br>
+<a target="_blank" rel="noopener" href="https://github.com/AxonFramework/AxonFramework/blob/4.5.0/axon-disruptor/src/main/java/org/axonframework/disruptor/DisruptorEventBus.java#L304">EventProcessorHandler.doDispatch()</a></li>
+</ul>
+</li>
+</ol>
+<h2 id="相关项目"><a class="header-anchor" href="#相关项目"></a>相关项目</h2>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/apache/logging-log4j2">logging-log4j2</a></li>
+<li><a target="_blank" rel="noopener" href="https://github.com/AxonFramework">AxonFramework</a></li>
+</ul>
+<h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
+<ol>
+<li><a target="_blank" rel="noopener" href="https://lmax-exchange.github.io/disruptor/disruptor.html?utm_source=chatgpt.com">Throughput Performance Testing</a></li>
+<li><a target="_blank" rel="noopener" href="https://martinfowler.com/articles/lmax.html">The LMAX Architecture</a></li>
+<li><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s/kmuG5azJnqjKRYlkiVHWqQ">Disruptor在撮合引擎的实践｜得物技术</a></li>
+<li><a target="_blank" rel="noopener" href="https://tech.meituan.com/2016/11/18/disruptor.html">高性能队列——Disruptor</a></li>
+</ol>
 
                 
             </div>
@@ -758,7 +842,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            225.1k
+                                            225.8k
                                         </span>&nbsp;字
                                         
                                             
