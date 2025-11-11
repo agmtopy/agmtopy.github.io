@@ -1,0 +1,1139 @@
+<!DOCTYPE HTML>
+<html lang="zh-Hans">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Disruptor之理论基础, agmtopy博客">
+    <meta name="description" content="你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>Disruptor之理论基础 | agmtopy博客</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="agmtopy博客" type="application/atom+xml">
+</head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">agmtopy博客</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>主页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">agmtopy博客</div>
+        <div class="logo-desc">
+            
+            你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			主页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/agmtopy" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/agmtopy" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/37.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">Disruptor之理论基础</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/disruptor/">
+                                <span class="chip bg-color">disruptor</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E9%AB%98%E6%80%A7%E8%83%BD/" class="post-category">
+                                高性能
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2025-11-09
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
+                    2.5k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
+                    8 分钟
+                </div>
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h1>Disruptor之理论基础</h1>
+<p>disruptor的设计理念主要围绕以下几个核心思想:<strong>无锁设计</strong>,<strong>缓存行填充</strong>,<strong>序列号机制</strong>,<strong>事件驱动</strong>,<strong>高吞吐量</strong>;</p>
+<h2 id="传统队列的一些问题"><a class="header-anchor" href="#传统队列的一些问题"></a>传统队列的一些问题</h2>
+<ul>
+<li>锁性能瓶颈<br>
+锁提供了一种互斥机制,通过锁可以保证数据安全性,但是锁的使用会带来性能瓶颈,根据Disruptor官网的说法使用锁的成本如下</li>
+</ul>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/d-disruptor/Disruptor%E5%AE%98%E7%BD%91%E5%AF%B9%E4%BA%8E%E9%94%81%E6%80%A7%E8%83%BD%E7%9A%84%E5%88%86%E6%9E%90.png?raw=true" alt="性能分析"><br>
+可以看到性能如下:无锁 &gt; valatile &gt; CAS &gt; lock,其中可以看到即使是CAS的性能也远远大于lock的方式,这是因为CAS不需要切换到内核态,而lock需要频繁的切换到内核态,这会带来很大的性能开销;</p>
+<p>这里有一个知识点,对于互斥锁或者信号量发生竞争时,都会使用<B>内核仲裁</B>来决定锁的归属,从用户态切换到内核态会涉及到切换上线文,上线文切换会发生<B>缓存行失效</B>,这两个开销加起来会导致锁的性能大幅下降;</p>
+<p>紧接着就引出第二点,缓存行失效的问题;</p>
+<ul>
+<li>缓存行</li>
+</ul>
+<p>缓存行指的是现代的CPU为了提高内存访问效率,在加载内存时是通过加载一个缓存行,通常缓存行的大小为64字节;<br>
+在CPU进行线程切换时,因为不同的线程可能会访问不同的内存地址,当线程切换时,CPU需要重新加载新的缓存行,这会导致之前的缓存行失效,从而带来性能下降,这也就是<B>缓存行失效问题</B>;<br>
+同一个缓存行中可能同时放着两个不同的对象,当线程修改某一个对象时,会导致整个缓存行失效,让CPU重新对整个缓存行进行加载,从而影响另一个对象的访问性能,这就是<B>缓存行伪共享问题</B>,可以通过增大数组元素中的间隔来解决;</p>
+<h2 id="Disruptor的设计理念"><a class="header-anchor" href="#Disruptor的设计理念"></a>Disruptor的设计理念</h2>
+<ul>
+<li>环形数据结构<br>
+Disruptor使用环形缓冲区(RingBuffer)作为数据存储结构,在初始化时预先分配内存,通过使用环形缓冲区可以避免频繁的内存分配和垃圾回收,从而提高性能,其中环形缓冲区只是逻辑上采用的,实际上是通过数组实现的,如图第二部分所示,当发布到第17个事件时,实际上是覆盖了第1个事件的位置;<br>
+采用连续内存的数组存储数据的好处是相邻的数据会被加载到相同的CPU cache中,所以访问遍历的速度会很快,而传统的链表结构会导致数据分散在内存中,从而影响缓存命中率;</li>
+</ul>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/d-disruptor/Disruptor%E5%AE%98%E7%BD%91_RingBuffer.png?raw=true" alt="RingBuffer结构"></p>
+<ul>
+<li>
+<p>无锁设计<br>
+Disruptor通过使用无锁设计来避免锁竞争带来的性能瓶颈,它使用了CAS操作和自旋锁等技术来实现线程间的协调,从而避免了锁的使用;</p>
+</li>
+<li>
+<p>序列号机制<br>
+Disruptor通过序列号机制来实现生产者和消费者之间的协调,每个事件都有一个唯一的序列号,生产者在发布事件时会递增序列号,消费者在消费事件时也会递增序列号,通过比较序列号来判断事件是否已经被消费;</p>
+</li>
+<li>
+<p>缓存行处理<br>
+Disruptor通过缓存行填充技术来避免缓存行伪共享问题,它在数据结构中添加填充字段,确保不同的对象不会共享同一个缓存行,从而提高缓存命中率;</p>
+</li>
+<li>
+<p>事件驱动模型<br>
+Disruptor采用事件驱动模型,生产者发布事件后,消费者会被通知进行消费,这种模型可以减少轮询等待的开销,提高系统的响应速度;</p>
+</li>
+</ul>
+<h2 id="Disruptor的实现"><a class="header-anchor" href="#Disruptor的实现"></a>Disruptor的实现</h2>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/d-disruptor/Disruptor%E5%AE%98%E7%BD%91_%E6%A0%B8%E5%BF%83%E7%B1%BB%E5%9B%BE.png?raw=true" alt="Disruptor核心类图"></p>
+<h3 id="核心数据结构-RingBuffer"><a class="header-anchor" href="#核心数据结构-RingBuffer"></a>核心数据结构:RingBuffer</h3>
+<p>RingBuffer是由数组\事件\缓冲区大小\生产者序列号(Sequencer)\消费者序列号(Sequences)组成,各自功能如下:</p>
+<ul>
+<li>数组:一个用于存储事件对象且大小固定的数组</li>
+<li>事件:RingBuffer中存储的数据单元,在RingBuffer初始化时通过事件工厂预创建</li>
+<li>缓冲区大小:RingBuffer的大小,必须是2的N次方,以便于通过位运算进行索引计算</li>
+<li>生产者序列号(Sequencer):用于跟踪生产者发布事件的位置</li>
+<li>消费者序列号(Sequences):用于跟踪消费者消费事件的位置</li>
+</ul>
+<h3 id="等待策略"><a class="header-anchor" href="#等待策略"></a>等待策略</h3>
+<p>等待策略分为消费等待策略和生产等待策略,主要用于控制生产者和消费者在等待事件时的行为</p>
+<ul>
+<li>
+<p>生产等待策略(ClaimStrategy)<br>
+确保多个生产者在并发写入时，能够安全、无冲突地获取到独占的 RingBuffer 序列号,有两种策略:</p>
+</li>
+<li>
+<p>单生产者策略(SingleThreadedClaimStrategy):适用于单个生产者的</p>
+</li>
+<li>
+<p>多生产者策略(MultiThreadedClaimStrategy):适用于多个生产者的</p>
+</li>
+<li>
+<p>消费者等待策略(WaitStrategy)<br>
+优化消费者等待新事件时的 CPU 使用效率和延迟之间的权衡,有以下几种策略:</p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>类型</th>
+<th>策略名称</th>
+<th>核心机制</th>
+<th>延迟 (Latency)</th>
+<th>CPU 占用</th>
+<th>适用场景</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>I. 极限性能型</td>
+<td>1. BusySpinWaitStrategy</td>
+<td>纯自旋空循环，不放弃 CPU。</td>
+<td>最低 (Low)</td>
+<td>极高 (Max)</td>
+<td>对延迟有毫秒级甚至纳秒级的苛刻要求，且生产者持续高产，不计 CPU 消耗。</td>
+</tr>
+<tr>
+<td>II. 平衡优化型</td>
+<td>2. YieldingWaitStrategy</td>
+<td>短暂自旋后，调用 Thread.yield() 放弃时间片。</td>
+<td>低 (Low)</td>
+<td>中等 (Medium)</td>
+<td>延迟敏感但希望适度节省 CPU 的场景，是最常用的平衡策略。</td>
+</tr>
+<tr>
+<td></td>
+<td>3. SleepingWaitStrategy</td>
+<td>自旋后，周期性地调用 Thread.sleep(1)，让出 CPU 并休眠。</td>
+<td>中等 (Moderate)</td>
+<td>低 (Low)</td>
+<td>适用于延迟要求不高，但需要更彻底节省 CPU 的多生产者场景。</td>
+</tr>
+<tr>
+<td>III. 资源友好型</td>
+<td>4. BlockingWaitStrategy</td>
+<td>使用 Java 锁和条件变量阻塞线程，被生产者唤醒。</td>
+<td>中高 (Moderate/High)</td>
+<td>最低 (Min)</td>
+<td>对延迟不敏感，追求最低 CPU 占用的场景，如日志或监控系统。</td>
+</tr>
+<tr>
+<td></td>
+<td>5. LiteBlockingWaitStrategy</td>
+<td>使用 LockSupport.parkNanos 进行轻量级阻塞。</td>
+<td>中高 (Moderate/High)</td>
+<td>最低 (Min)</td>
+<td>类似于 Blocking，但试图减少与操作系统锁的交互开销，略微更高效。</td>
+</tr>
+<tr>
+<td>IV. 高级自适应型</td>
+<td>6. PhasedBackoffWaitStrategy</td>
+<td>三阶段混合：忙等 -&gt; Yield -&gt; 阻塞/定时阻塞。</td>
+<td>自适应</td>
+<td>自适应</td>
+<td>生产者吞吐量极不稳定的场景。高负载时低延迟，空闲时低 CPU。</td>
+</tr>
+<tr>
+<td></td>
+<td>7. TimeoutBlockingWaitStrategy</td>
+<td>阻塞等待，但设有超时时间。</td>
+<td>中高 (Moderate/High)</td>
+<td>最低 (Min)</td>
+<td>需定期处理逻辑（如心跳、超时检查）的消费者，不希望永远阻塞。</td>
+</tr>
+<tr>
+<td></td>
+<td>8. LiteTimeoutBlockingWaitStrategy</td>
+<td>轻量阻塞等待，设有超时时间。</td>
+<td>中高 (Moderate/High)</td>
+<td>最低 (Min)</td>
+<td>LiteBlocking 的超时版本，结合了轻量阻塞和周期性唤醒的需求。</td>
+</tr>
+</tbody>
+</table>
+<h3 id="写入逻辑"><a class="header-anchor" href="#写入逻辑"></a>写入逻辑</h3>
+<h4 id="单生产者写入流程"><a class="header-anchor" href="#单生产者写入流程"></a>单生产者写入流程</h4>
+<p>步骤 1: 申请下一个订单流水号 (Claim)<br>
+Disruptor 单生产者：唯一的生产者直接操作自己的序列号,进行一次原子递增操作<br>
+步骤 2: 检查RingBuffer是否已满<br>
+通过比较下一个序列号和消费者的最小序列号加上缓冲区大小来判断RingBuffer是否已满,如果已满则需要等待消费者消费;<br>
+步骤 3: 替换事件<br>
+将数据写入该位置的事件对象中;<br>
+步骤 4: 发布事件<br>
+通过更新生产者序列号来发布事件,通知消费者有新事件可以消费;</p>
+<h4 id="多生产者写入流程"><a class="header-anchor" href="#多生产者写入流程"></a>多生产者写入流程</h4>
+<p>步骤 1: 抢夺下一个订单流水号 (Claim with CAS)<br>
+所有生产者同时尝试读取当前的最高序列号（例如 9），并尝试使用 CAS (Compare-and-Swap) 将其原子性地更新到 10。更新成功的生产者获得了序列号 10，可以10的位置进行写入；更新失败的生产者需要重新读取最新的最高序列号并重试。<br>
+步骤 2: 检查RingBuffer是否已满<br>
+与单生产者类似,通过比较下一个序列号和消费者的最小序列号加上缓冲区大小来判断RingBuffer是否已满,如果已满则需要等待消费者消费;<br>
+步骤 3: 替换事件<br>
+将数据写入该位置的事件对象中;<br>
+步骤 4: 按序发布事件 (Gated Publish)<br>
+多生产者需要确保事件按序发布,即使生产者抢到了序列号10,也不能直接发布,而是需要等待序列号9被发布后才能发布序列号10,通过这种方式确保事件的顺序性;</p>
+<p>简单来说就是:<B>多生产者模式下通过CAS的方式竞争下一个下入位置,更新成功的生产者向持有的那个位置进行写入,同时发布事件时必须顺序的进行发布</B></p>
+<h3 id="消费逻辑"><a class="header-anchor" href="#消费逻辑"></a>消费逻辑</h3>
+<h4 id="单个消费者消费流程"><a class="header-anchor" href="#单个消费者消费流程"></a>单个消费者消费流程</h4>
+<p>步骤 1: 检测是否有新数据<br>
+通过比较消费者的序列号和生产者的序列号来判断是否有新数据可供消费;<br>
+步骤 2: 决策是消费还是等待<br>
+如果有新数据则继续消费,否则根据等待策略进行等待;<br>
+步骤 3: 批量获取待消费事件范围<br>
+为了提高效率,消费者可以批量获取一段范围内的事件进行消费;<br>
+步骤 4: 处理事件<br>
+消费者对获取到的事件进行处理;</p>
+<h4 id="多个消费者消费流程"><a class="header-anchor" href="#多个消费者消费流程"></a>多个消费者消费流程</h4>
+<p>多个消费者的处理流程比较复杂,因为消息处理策略可以分为广播消息和事件消息两种,并且在消费上也可以分为独立消费和协同消费两种模式,所以多消费者的处理流程需要根据具体的场景来设计;</p>
+<h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
+<p><a target="_blank" rel="noopener" href="https://lmax-exchange.github.io/disruptor/user-guide/index.html">Disruptor官网</a><br>
+<a target="_blank" rel="noopener" href="https://qin.news/disruptor/">Disruptor 高性能队列原理浅析</a></p>
+
+                
+            </div>
+            <hr/>
+
+            
+    
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/disruptor/">
+                                    <span class="chip bg-color">disruptor</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="wechat" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
+            <div class="card">
+                <a href="/2025/11/09/26.%E9%AB%98%E6%80%A7%E8%83%BD/02.Disruptor%E4%B9%8B%E7%90%86%E8%AE%BA%E5%88%86%E6%9E%90/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/37.jpg" class="responsive-img" alt="Disruptor之理论基础">
+                        
+                        <span class="card-title">Disruptor之理论基础</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2025-11-09
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E9%AB%98%E6%80%A7%E8%83%BD/" class="post-category">
+                                    高性能
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/disruptor/">
+                        <span class="chip bg-color">disruptor</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2025/11/07/26.%E9%AB%98%E6%80%A7%E8%83%BD/01.Disruptor%E4%B9%8B%E5%9F%BA%E7%A1%80%E5%85%A5%E9%97%A8/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/84.jpg" class="responsive-img" alt="Disruptor之基础入门">
+                        
+                        <span class="card-title">Disruptor之基础入门</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2025-11-07
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E9%AB%98%E6%80%A7%E8%83%BD/" class="post-category">
+                                    高性能
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/disruptor/">
+                        <span class="chip bg-color">disruptor</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+                <div class="container row center-align"
+                    style="margin-bottom: 0px !important;">
+                    <div class="col s12 m8 l8 copy-right">
+                        
+                            <span id="year">
+                            </span>
+                            
+                                    <span id="year">
+                                    </span>
+                                    <a href="/about" target="_blank">
+                                    </a>
+                                    &nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+                                    |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery"
+                                        target="_blank">Matery</a>
+                                    <!-- <br> -->
+                                    
+                                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                                            class="white-color">
+                                            228.3k
+                                        </span>&nbsp;字
+                                        
+                                            
+                                                
+                                                    
+                                                        
+                                                            
+
+                                                                
+                                                                    
+
+                                                                        
+                                                                            <br>
+                                                                            
+                                                                                    <br>
+                                                                                    
+                    </div>
+                    <div class="col s12 m4 l4 social-link social-statis">
+                        
+
+        
+            <a href="mailto:zjytian@gmail.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我"
+                data-position="top" data-delay="50">
+                <i class="fas fa-envelope-open"></i>
+            </a>
+            
+
+                
+
+                        
+
+                                
+
+                                        
+
+                                                
+
+                                                        
+                    </div>
+                </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入关键词"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
