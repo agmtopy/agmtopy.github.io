@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    2.6k
+                    3.3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    10 分钟
+                    13 分钟
                 </div>
                 
 
@@ -710,12 +710,101 @@ Sequencer的publish方法同样有两个实现,分别是SingleProducerSequencer�
         mutex<span class="token punctuation">.</span><span class="token function">notifyAll</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-<h3 id="消费流程"><a class="header-anchor" href="#消费流程"></a>消费流程</h3>
+<h3 id="读取流程"><a class="header-anchor" href="#读取流程"></a>读取流程</h3>
 <p>先从消费者如何注册开始分析,消费者注册分为两种注册方式分别是<B>handleEventsWith()</B>注册广播消息处理器和<B>handleEventsWithWorkerPool</B>注册事件消费组的方式;</p>
 <ul>
-<li>广播模式<br>
-广播模式指的是消息非被每一个注册的消费器处理一次,需要继承<B>EventHandler</B>接口</li>
+<li>
+<p>广播模式<br>
+广播模式指的是消息会被每一个注册的消费器处理一次,需要继承<B>EventHandler</B>接口,实现<B>onEvent</B>方法;</p>
+</li>
+<li>
+<p>事件消费组模式<br>
+事件消费模式指的是消息会被事件消费组中的某一个消费者处理一次,需要实现<B>WorkHandler</B>接口,实现<B>onEvent</B>方法;<br>
+ps:WorkerPool的方式在Disruptor中已被废弃,建议使用EventHandler的方式;</p>
+</li>
 </ul>
+<p>下面基于disruptor4.0版本对EventHandler进行分析;</p>
+<ol>
+<li>注册流程<br>
+Disruptor#handleEventsWith()  -&gt;  <a target="_blank" rel="noopener" href="https://github.com/agmtopy/disruptor-source/blob/ff615c140fcd068c1d7296ce7f1a76cfd70e0588/src/main/java/com/lmax/disruptor/dsl/Disruptor.java#L506">createEventProcessors()</a></li>
+</ol>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">
+<span class="token class-name">EventHandlerGroup</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> <span class="token function">createEventProcessors</span><span class="token punctuation">(</span>
+            <span class="token keyword">final</span> <span class="token class-name">Sequence</span><span class="token punctuation">[</span><span class="token punctuation">]</span> barrierSequences<span class="token punctuation">,</span>
+            <span class="token keyword">final</span> <span class="token class-name">EventHandler</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span> <span class="token keyword">super</span> <span class="token class-name">T</span><span class="token punctuation">></span></span><span class="token punctuation">[</span><span class="token punctuation">]</span> eventHandlers<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token function">checkNotStarted</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">//每个消费者一个Sequence</span>
+        <span class="token keyword">final</span> <span class="token class-name">Sequence</span><span class="token punctuation">[</span><span class="token punctuation">]</span> processorSequences <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Sequence</span><span class="token punctuation">[</span>eventHandlers<span class="token punctuation">.</span>length<span class="token punctuation">]</span><span class="token punctuation">;</span>
+        <span class="token keyword">final</span> <span class="token class-name">SequenceBarrier</span> barrier <span class="token operator">=</span> ringBuffer<span class="token punctuation">.</span><span class="token function">newBarrier</span><span class="token punctuation">(</span>barrierSequences<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token comment">//依次处理EventHandler</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span> eventHandlersLength <span class="token operator">=</span> eventHandlers<span class="token punctuation">.</span>length<span class="token punctuation">;</span> i <span class="token operator">&lt;</span> eventHandlersLength<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token comment">//取出EventHandler包装成BatchEventProcessor</span>
+            <span class="token keyword">final</span> <span class="token class-name">EventHandler</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token operator">?</span> <span class="token keyword">super</span> <span class="token class-name">T</span><span class="token punctuation">></span></span> eventHandler <span class="token operator">=</span> eventHandlers<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+            <span class="token keyword">final</span> <span class="token class-name">BatchEventProcessor</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">T</span><span class="token punctuation">></span></span> batchEventProcessor <span class="token operator">=</span>
+                    <span class="token keyword">new</span> <span class="token class-name">BatchEventProcessorBuilder</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">build</span><span class="token punctuation">(</span>ringBuffer<span class="token punctuation">,</span> barrier<span class="token punctuation">,</span> eventHandler<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">//设置异常处理器</span>
+            <span class="token keyword">if</span> <span class="token punctuation">(</span>exceptionHandler <span class="token operator">!=</span> <span class="token keyword">null</span><span class="token punctuation">)</span>
+            <span class="token punctuation">&#123;</span>
+                batchEventProcessor<span class="token punctuation">.</span><span class="token function">setExceptionHandler</span><span class="token punctuation">(</span>exceptionHandler<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span>
+
+            <span class="token comment">//核心关键点1:用consumerRepository来存储EventProcessor</span>
+            consumerRepository<span class="token punctuation">.</span><span class="token function">add</span><span class="token punctuation">(</span>batchEventProcessor<span class="token punctuation">,</span> eventHandler<span class="token punctuation">,</span> barrier<span class="token punctuation">)</span><span class="token punctuation">;</span>
+            <span class="token comment">//对序列数组进行初始化</span>
+            processorSequences<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> batchEventProcessor<span class="token punctuation">.</span><span class="token function">getSequence</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+
+        <span class="token comment">//核心关键点2:更新消费者门闩,防止生产者将未消费位置覆盖</span>
+        <span class="token function">updateGatingSequencesForNextInChain</span><span class="token punctuation">(</span>barrierSequences<span class="token punctuation">,</span> processorSequences<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+        <span class="token keyword">return</span> <span class="token keyword">new</span> <span class="token class-name">EventHandlerGroup</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token keyword">this</span><span class="token punctuation">,</span> consumerRepository<span class="token punctuation">,</span> processorSequences<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这个方法中有两个地方值得注意,第一个地方是在于<B>consumerRepository</B>,用于保存消费者对象的容器,内部是通过Map的方式进行实现的</p>
+<ul>
+<li>ConsumerRepository</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">
+<span class="token keyword">class</span> <span class="token class-name">ConsumerRepository</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">EventHandlerIdentity</span><span class="token punctuation">,</span> <span class="token class-name">EventProcessorInfo</span><span class="token punctuation">></span></span> eventProcessorInfoByEventHandler <span class="token operator">=</span>
+        <span class="token keyword">new</span> <span class="token class-name">IdentityHashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">Map</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">Sequence</span><span class="token punctuation">,</span> <span class="token class-name">ConsumerInfo</span><span class="token punctuation">></span></span> eventProcessorInfoBySequence <span class="token operator">=</span>
+        <span class="token keyword">new</span> <span class="token class-name">IdentityHashMap</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">private</span> <span class="token keyword">final</span> <span class="token class-name">Collection</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token class-name">ConsumerInfo</span><span class="token punctuation">></span></span> consumerInfos <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">ArrayList</span><span class="token generics"><span class="token punctuation">&lt;</span><span class="token punctuation">></span></span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">//省略......</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>PS:IdentityHashMap中的key是比较对象引用地址</p>
+<p>第二个关键点是<B>updateGatingSequencesForNextInChain</B>方法,这个方法的作用是在于防止生产者提前将未消费的事件覆盖掉;</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/agmtopy/disruptor-source/blob/ff615c140fcd068c1d7296ce7f1a76cfd70e0588/src/main/java/com/lmax/disruptor/dsl/Disruptor.java#L573">Disruptor#updateGatingSequencesForNextInChain</a></li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">updateGatingSequencesForNextInChain</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token class-name">Sequence</span><span class="token punctuation">[</span><span class="token punctuation">]</span> barrierSequences<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token class-name">Sequence</span><span class="token punctuation">[</span><span class="token punctuation">]</span> processorSequences<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">//消费者处理序列长度大于0时,才进行处理</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>processorSequences<span class="token punctuation">.</span>length <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token comment">// 1. 把新的消费者序列 (B) 加入 RingBuffer 的监控名单</span>
+        ringBuffer<span class="token punctuation">.</span><span class="token function">addGatingSequences</span><span class="token punctuation">(</span>processorSequences<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">// 2. 把旧的屏障序列 (A) 从监控名单移除</span>
+        <span class="token comment">// 因为 B 依赖 A，所以 B 肯定比 A 慢，RingBuffer 只要盯着 B 就够了</span>
+        <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token class-name">Sequence</span> barrierSequence <span class="token operator">:</span> barrierSequences<span class="token punctuation">)</span>
+        <span class="token punctuation">&#123;</span>
+            ringBuffer<span class="token punctuation">.</span><span class="token function">removeGatingSequence</span><span class="token punctuation">(</span>barrierSequence<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token comment">// 3. 同时也告诉这个消费者组，下次如果再有人接在 B 后面（比如 .then(C)），</span>
+        <span class="token comment">// B 就变成了由于旧的序列，需要被移除</span>
+        consumerRepository<span class="token punctuation">.</span><span class="token function">unMarkEventProcessorsAsEndOfChain</span><span class="token punctuation">(</span>barrierSequences<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>因为disruptor支持消费者之间相互依赖进行消费,因此对于有相互依赖关系的两个消费者,例如A消费者完成在then B消费者这种场景,只需要判断B消费者是否完成消费即可,如果B完成表示A肯定完成,因此只需要监控B消费者的Sequences即可;</p>
 <h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
 <p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/mjunz/p/18896162">Disruptor—3.核心源码实现分析</a></p>
 
@@ -1020,7 +1109,7 @@ Sequencer的publish方法同样有两个实现,分别是SingleProducerSequencer�
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            231k
+                                            231.6k
                                         </span>&nbsp;字
                                         
                                             
