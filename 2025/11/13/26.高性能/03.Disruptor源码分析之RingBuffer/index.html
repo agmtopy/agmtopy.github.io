@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    3.3k
+                    3.8k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    13 分钟
+                    15 分钟
                 </div>
                 
 
@@ -805,6 +805,87 @@ Disruptor#handleEventsWith()  -&gt;  <a target="_blank" rel="noopener" href="htt
     <span class="token punctuation">&#125;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <p>因为disruptor支持消费者之间相互依赖进行消费,因此对于有相互依赖关系的两个消费者,例如A消费者完成在then B消费者这种场景,只需要判断B消费者是否完成消费即可,如果B完成表示A肯定完成,因此只需要监控B消费者的Sequences即可;</p>
+<p>第三步设置处理链结束的方法是<a target="_blank" rel="noopener" href="https://github.com/agmtopy/disruptor-source/blob/aa7c19701dae05d138911ee350a1b52cbca9613a/src/main/java/com/lmax/disruptor/dsl/EventProcessorInfo.java#L87">EventProcessorInfo#markAsUsedInBarrier</a><br>
+将endOfChain设置未false即可;</p>
+<ol start="2">
+<li>启动消费者流程</li>
+</ol>
+<p>disruptor的启动方法是[Disruptor#start],这个方法会调用<a target="_blank" rel="noopener" href="https://github.com/agmtopy/disruptor-source/blob/5eb647d1603c39f7f670cd718ef3e73b673c6488/src/main/java/com/lmax/disruptor/dsl/ConsumerRepository.java#L60">ConsumerRepository#startAll</a></p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">startAll</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token class-name">ThreadFactory</span> threadFactory<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    consumerInfos<span class="token punctuation">.</span><span class="token function">forEach</span><span class="token punctuation">(</span>c <span class="token operator">-></span> c<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span>threadFactory<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p><a target="_blank" rel="noopener" href="https://github.com/agmtopy/disruptor-source/blob/aa7c19701dae05d138911ee350a1b52cbca9613a/src/main/java/com/lmax/disruptor/dsl/EventProcessorInfo.java#L66">EventProcessorInfo#start</a></p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">void</span> <span class="token function">start</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token class-name">ThreadFactory</span> threadFactory<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">//通过线程工厂创建一个指定好任务的线程</span>
+    <span class="token keyword">final</span> <span class="token class-name">Thread</span> thread <span class="token operator">=</span> threadFactory<span class="token punctuation">.</span><span class="token function">newThread</span><span class="token punctuation">(</span>eventprocessor<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">null</span> <span class="token operator">==</span> thread<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">RuntimeException</span><span class="token punctuation">(</span><span class="token string">"Failed to create thread to run: "</span> <span class="token operator">+</span> eventprocessor<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">//立即启动线程执行任务</span>
+    thread<span class="token punctuation">.</span><span class="token function">start</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>通过这一个步骤又和注册consumerhandler关联到一起了,注册时将eventHandler包装成BatchEventProcessor,ConsumerInfo启动后会执行BatchEventProcessor子类的<B>run</B>方法,下面以<B>BatchEventProcessor</B>来进行分析:<br>
+BatchEventProcessor.run()方法主要做的事为:清除屏障标识、开始循环处理事件</p>
+<ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/agmtopy/disruptor-source/blob/d9fefddb24f28a8e8dfd5464029d6c01f4c1e9f2/src/main/java/com/lmax/disruptor/BatchEventProcessor.java#L149">com.lmax.disruptor.BatchEventProcessor#processEvents</a></li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">
+<span class="token keyword">private</span> <span class="token keyword">void</span> <span class="token function">processEvents</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+   <span class="token punctuation">&#123;</span>
+       <span class="token class-name">T</span> event <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+       <span class="token comment">//设置需要处理的下一个序列号</span>
+       <span class="token keyword">long</span> nextSequence <span class="token operator">=</span> sequence<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1L</span><span class="token punctuation">;</span>
+
+       <span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token boolean">true</span><span class="token punctuation">)</span>
+       <span class="token punctuation">&#123;</span>
+           <span class="token keyword">final</span> <span class="token keyword">long</span> startOfBatchSequence <span class="token operator">=</span> nextSequence<span class="token punctuation">;</span>
+           <span class="token comment">//外层try-catch处理系统异常</span>
+           <span class="token keyword">try</span>
+           <span class="token punctuation">&#123;</span>
+               <span class="token comment">//内层try-catch处理可重试异常</span>
+               <span class="token keyword">try</span>
+               <span class="token punctuation">&#123;</span>
+                   <span class="token comment">//关键点1:检测是否可以进行消费:是否有可消费的消息,是否前置消费处理器已处理完成</span>
+                   <span class="token comment">//返回的最大的可消费位置</span>
+                   <span class="token keyword">final</span> <span class="token keyword">long</span> availableSequence <span class="token operator">=</span> sequenceBarrier<span class="token punctuation">.</span><span class="token function">waitFor</span><span class="token punctuation">(</span>nextSequence<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                   <span class="token comment">//设置单次消费的最大限制</span>
+                   <span class="token keyword">final</span> <span class="token keyword">long</span> endOfBatchSequence <span class="token operator">=</span> <span class="token function">min</span><span class="token punctuation">(</span>nextSequence <span class="token operator">+</span> batchLimitOffset<span class="token punctuation">,</span> availableSequence<span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+                   <span class="token comment">//判断是否有消费,有消费时通知消费事件</span>
+                   <span class="token keyword">if</span> <span class="token punctuation">(</span>nextSequence <span class="token operator">&lt;=</span> endOfBatchSequence<span class="token punctuation">)</span>
+                   <span class="token punctuation">&#123;</span>
+                       <span class="token comment">//通知开始处理</span>
+                       eventHandler<span class="token punctuation">.</span><span class="token function">onBatchStart</span><span class="token punctuation">(</span>endOfBatchSequence <span class="token operator">-</span> nextSequence <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">,</span> availableSequence <span class="token operator">-</span> nextSequence <span class="token operator">+</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                   <span class="token punctuation">&#125;</span>
+
+                   <span class="token comment">//循环开始处理</span>
+                   <span class="token keyword">while</span> <span class="token punctuation">(</span>nextSequence <span class="token operator">&lt;=</span> endOfBatchSequence<span class="token punctuation">)</span>
+                   <span class="token punctuation">&#123;</span>
+                       <span class="token comment">//关键点2:从RingBuffer数组中获取元素</span>
+                       event <span class="token operator">=</span> dataProvider<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span>nextSequence<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                       <span class="token comment">//通知事件</span>
+                       eventHandler<span class="token punctuation">.</span><span class="token function">onEvent</span><span class="token punctuation">(</span>event<span class="token punctuation">,</span> nextSequence<span class="token punctuation">,</span> nextSequence <span class="token operator">==</span> endOfBatchSequence<span class="token punctuation">)</span><span class="token punctuation">;</span>
+                       nextSequence<span class="token operator">++</span><span class="token punctuation">;</span>
+                   <span class="token punctuation">&#125;</span>
+
+                   retriesAttempted <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+                   <span class="token comment">//设置本次读取的终止位置</span>
+                   sequence<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>endOfBatchSequence<span class="token punctuation">)</span><span class="token punctuation">;</span>
+               <span class="token punctuation">&#125;</span>
+               <span class="token comment">//省略...</span>
+           <span class="token punctuation">&#125;</span>
+           <span class="token comment">//省略...</span>
+       <span class="token punctuation">&#125;</span>
+   <span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>这个方法有两个重要的关键点,分别是关键点1负责检测是否可以进行消费和关键点2从RingBuffer数组中获取元素进行消费的动作<br>
+关键点1<B>sequenceBarrier.waitFor</B>方法的作用是在于使用传入的等待策略来等待可消费的消息;<br>
+关键点2<B>dataProvider.get(nextSequence)</B>方法的作用是去取RingBuffer中的event数组中的数据,然后在将event传递到eventHandler.onEvent方法中</p>
 <h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
 <p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/mjunz/p/18896162">Disruptor—3.核心源码实现分析</a></p>
 
@@ -1109,7 +1190,7 @@ Disruptor#handleEventsWith()  -&gt;  <a target="_blank" rel="noopener" href="htt
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            231.6k
+                                            232.1k
                                         </span>&nbsp;字
                                         
                                             
