@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    3.8k
+                    4k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    15 分钟
+                    16 分钟
                 </div>
                 
 
@@ -886,8 +886,19 @@ BatchEventProcessor.run()方法主要做的事为:清除屏障标识、开始循
 <p>这个方法有两个重要的关键点,分别是关键点1负责检测是否可以进行消费和关键点2从RingBuffer数组中获取元素进行消费的动作<br>
 关键点1<B>sequenceBarrier.waitFor</B>方法的作用是在于使用传入的等待策略来等待可消费的消息;<br>
 关键点2<B>dataProvider.get(nextSequence)</B>方法的作用是去取RingBuffer中的event数组中的数据,然后在将event传递到eventHandler.onEvent方法中</p>
+<p>整个消费流程如下所示:</p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/d-disruptor/eventHandler%E6%B3%A8%E5%86%8C%E5%92%8C%E5%90%AF%E5%8A%A8%E6%B5%81%E7%A8%8B%E5%9B%BE.png?raw=true" alt="eventHandler消费流程"></p>
+<ul>
+<li>小结<br>
+eventHandler的注册和消费流程可以说都是围绕这EventHandler的操作类<B>BatchEventProcessor</B>来进行的,其中注册流程主要是通过Disruptor将EventHandler封装成EventProcess在注册到consumerRepository中;<br>
+消费流程是通过EventProcess来启动线程任务来实现的,需要注意的是processEvents()方法中会执行消费等待策略和执行消费消息的方法;</li>
+</ul>
+<h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2>
+<p>RingBuffer从逻辑上是一个环形结构可重复填充的数组,通过Sequenced来对RingBuffer的写入和访问进行控制,同时对于所以操作采用无锁的方法极限提高性能;</p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/d-disruptor/RingBuffer_%E6%93%8D%E4%BD%9C%E6%B5%81%E7%A8%8B%E5%9B%BE.png?raw=true" alt="RingBuffer_操作流程图"></p>
 <h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
-<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/mjunz/p/18896162">Disruptor—3.核心源码实现分析</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/mjunz/p/18896162">Disruptor—3.核心源码实现分析</a><br>
+<a target="_blank" rel="noopener" href="https://trishagee.com/2011/06/22/dissecting_the_disruptor_whats_so_special_about_a_ring_buffer/">环形缓冲器有何特别之处</a></p>
 
                 
             </div>
@@ -1190,7 +1201,7 @@ BatchEventProcessor.run()方法主要做的事为:清除屏障标识、开始循
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            232.1k
+                                            232.3k
                                         </span>&nbsp;字
                                         
                                             
