@@ -422,7 +422,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    207
+                    397
                 </div>
                 
 
@@ -458,6 +458,16 @@
 <p><img src="https://github.com/agmtopy/noteBook/blob/master/png/d-disruptor/Sequenced%E7%9A%84%E5%AE%9E%E7%8E%B0%E7%B1%BB%E5%9B%BE.png?raw=true" alt="Sequenced的实现类图"></p>
 <p>Sequenced的实现类主要分为<B>EventSequencer</B>和<B>Sequencer</B>,重点分析com.lmax.disruptor.Sequencer类<br>
 <a target="_blank" rel="noopener" href="https://github.com/agmtopy/disruptor-source/blob/561297b8251ec18f96e79bf0162c37837249fbd9/src/main/java/com/lmax/disruptor/Sequencer.java#L22">Sequencer.java</a></p>
+<p>Sequencer的主要方法分为两类,分别是管理<B>Sequence</B>和创建其他协作类:<br>
+管理Sequence的方法主要有添加、移除、判断是否可用等,创建其他协作类的方法主要是创建<B>SequenceBarrier</B>和创建EventPoller</p>
+<ul>
+<li>PS:Sequenced、Sequencer、SequenceBarrier、Sequence的关系<br>
+<a target="_blank" rel="noopener" href="https://github.com/agmtopy/noteBook/blob/master/png/d-disruptor/sequenced%E5%92%8Csequencer%E5%92%8CSequenceBarrier%E7%9A%84%E5%85%B3%E7%B3%BB.png?raw=true">Sequenced、Sequencer、SequenceBarrier、Sequence的关系</a><br>
+Sequenced是定义序号动作的顶级接口,所有与序号相关的操作都需要实现该接口;<br>
+Sequencer是定一操作序号的管理动作的类,它负责管理Sequence,类似于排队模型中负责管理和发放号码的角色<br>
+Sequence只是序号,类似于排队模型中的序号<br>
+SequenceBarrier是使用序号的角色,类似于排队模型中比较序号的角色</li>
+</ul>
 
                 
             </div>
@@ -760,7 +770,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            232.5k
+                                            232.7k
                                         </span>&nbsp;字
                                         
                                             
