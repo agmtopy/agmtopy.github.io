@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    397
+                    1.8k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    1 分钟
+                    6 分钟
                 </div>
                 
 
@@ -446,6 +446,7 @@
                 <h1>Disruptor源码分析之Sequenced</h1>
 <p>Sequenced是对于生产者和RingBuffer之间操作协调的一个抽象概念类,通过Sequenced定义生产者所需要的原子操作,保证序号分配的线程安全性和正确性,下面就对Sequenced进行详细分析</p>
 <h2 id="源码分析"><a class="header-anchor" href="#源码分析"></a>源码分析</h2>
+<h3 id="Sequenced"><a class="header-anchor" href="#Sequenced"></a>Sequenced</h3>
 <ul>
 <li><a target="_blank" rel="noopener" href="https://github.com/agmtopy/disruptor-source/blob/97ee014c3079ebdeaff41acad5266f2c6b73180b/src/main/java/com/lmax/disruptor/Sequenced.java#L7">Sequenced.java</a></li>
 </ul>
@@ -462,12 +463,143 @@
 管理Sequence的方法主要有添加、移除、判断是否可用等,创建其他协作类的方法主要是创建<B>SequenceBarrier</B>和创建EventPoller</p>
 <ul>
 <li>PS:Sequenced、Sequencer、SequenceBarrier、Sequence的关系<br>
-<a target="_blank" rel="noopener" href="https://github.com/agmtopy/noteBook/blob/master/png/d-disruptor/sequenced%E5%92%8Csequencer%E5%92%8CSequenceBarrier%E7%9A%84%E5%85%B3%E7%B3%BB.png?raw=true">Sequenced、Sequencer、SequenceBarrier、Sequence的关系</a><br>
+<img src="https://github.com/agmtopy/noteBook/blob/master/png/d-disruptor/sequenced%E5%92%8Csequencer%E5%92%8CSequenceBarrier%E7%9A%84%E5%85%B3%E7%B3%BB.png?raw=true" alt="Sequenced、Sequencer、SequenceBarrier、Sequence的关系"><br>
 Sequenced是定义序号动作的顶级接口,所有与序号相关的操作都需要实现该接口;<br>
 Sequencer是定一操作序号的管理动作的类,它负责管理Sequence,类似于排队模型中负责管理和发放号码的角色<br>
 Sequence只是序号,类似于排队模型中的序号<br>
 SequenceBarrier是使用序号的角色,类似于排队模型中比较序号的角色</li>
 </ul>
+<h3 id="AbstractSequencer"><a class="header-anchor" href="#AbstractSequencer"></a>AbstractSequencer</h3>
+<p><a target="_blank" rel="noopener" href="https://github.com/agmtopy/disruptor-source/blob/108abafb46aaa53706fc9f2dcb5877e5b2585e54/src/main/java/com/lmax/disruptor/AbstractSequencer.java#L30">AbstractSequencer</a></p>
+<p>AbstractSequencer是Sequencer的各种实现的基类,负责定义和实现所有Sequencer共享的通用状态和管理逻辑;<br>
+主要实现Sequenced的getCursor、getBufferSize、addGatingSequences、removeGatingSequence、getMinimumSequence、newBarrier、newPoller这些公共方法;</p>
+<p>AbstractSequencer的基础属性有:</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//bufferSize,用于标识数组长度,在初始化过程中就是由RingBuffer设置的长度字段向下传递过来的</span>
+<span class="token keyword">protected</span> <span class="token keyword">final</span> <span class="token keyword">int</span> bufferSize<span class="token punctuation">;</span>
+<span class="token comment">//消费者的等待策略</span>
+<span class="token keyword">protected</span> <span class="token keyword">final</span> <span class="token class-name">WaitStrategy</span> waitStrategy<span class="token punctuation">;</span>
+<span class="token comment">//声明序号cursor(光标),即代表消费进度</span>
+<span class="token keyword">protected</span> <span class="token keyword">final</span> <span class="token class-name">Sequence</span> cursor <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Sequence</span><span class="token punctuation">(</span><span class="token class-name">Sequencer</span><span class="token punctuation">.</span><span class="token constant">INITIAL_CURSOR_VALUE</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token comment">//volatile修饰的Sequence数组,用于存储RingBuffer上所有消费者当前的进度标记(Sequence对象)的集合</span>
+<span class="token keyword">protected</span> <span class="token keyword">volatile</span> <span class="token class-name">Sequence</span><span class="token punctuation">[</span><span class="token punctuation">]</span> gatingSequences <span class="token operator">=</span> <span class="token keyword">new</span> <span class="token class-name">Sequence</span><span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>getMinimumSequence方法</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java">
+<span class="token comment">/**
+ * 获取当前最小的消费序列
+ * @see Sequencer#getMinimumSequence()
+ */</span>
+<span class="token annotation punctuation">@Override</span>
+<span class="token keyword">public</span> <span class="token keyword">long</span> <span class="token function">getMinimumSequence</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">return</span> <span class="token class-name">Util</span><span class="token punctuation">.</span><span class="token function">getMinimumSequence</span><span class="token punctuation">(</span>gatingSequences<span class="token punctuation">,</span> cursor<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token comment">//Util.getMinimumSequence</span>
+<span class="token keyword">public</span> <span class="token keyword">static</span> <span class="token keyword">long</span> <span class="token function">getMinimumSequence</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token class-name">Sequence</span><span class="token punctuation">[</span><span class="token punctuation">]</span> sequences<span class="token punctuation">,</span> <span class="token keyword">final</span> <span class="token keyword">long</span> minimum<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">//设置当前最小序列号</span>
+    <span class="token keyword">long</span> minimumSequence <span class="token operator">=</span> minimum<span class="token punctuation">;</span>
+    <span class="token comment">//递归循环比较获取最小的序列号</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">int</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">,</span> n <span class="token operator">=</span> sequences<span class="token punctuation">.</span>length<span class="token punctuation">;</span> i <span class="token operator">&lt;</span> n<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">long</span> value <span class="token operator">=</span> sequences<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token comment">//对比获取更小值</span>
+        minimumSequence <span class="token operator">=</span> <span class="token class-name">Math</span><span class="token punctuation">.</span><span class="token function">min</span><span class="token punctuation">(</span>minimumSequence<span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token keyword">return</span> minimumSequence<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="SingleProducerSequencer"><a class="header-anchor" href="#SingleProducerSequencer"></a>SingleProducerSequencer</h3>
+<p><a target="_blank" rel="noopener" href="https://github.com/agmtopy/disruptor-source/blob/ff615c140fcd068c1d7296ce7f1a76cfd70e0588/src/main/java/com/lmax/disruptor/SingleProducerSequencer.java#L67">SingleProducerSequencer</a></p>
+<p>SingleProducerSequencer在之前已经讲解过它的<B>next()</B>方法了,这里重点对<B>hasAvailableCapacity</B>方法进行分析</p>
+<p><a target="_blank" rel="noopener" href="https://github.com/agmtopy/disruptor-source/blob/b36e4b0e7c0f7347beb89da721e03aad0478500e/src/main/java/com/lmax/disruptor/SingleProducerSequencer.java#L112">hasAvailableCapacity()</a></p>
+<p>这个方法有两个SingleProducerSequencer自身中定义的属性参与计算</p>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token comment">//下一个序号</span>
+<span class="token keyword">long</span> nextValue <span class="token operator">=</span> <span class="token class-name">Sequence</span><span class="token punctuation">.</span><span class="token constant">INITIAL_VALUE</span><span class="token punctuation">;</span>
+<span class="token comment">//最小消费者进度的本地缓存</span>
+<span class="token keyword">long</span> cachedValue <span class="token operator">=</span> <span class="token class-name">Sequence</span><span class="token punctuation">.</span><span class="token constant">INITIAL_VALUE</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>cachedValue是本地最小消费进度变量值,由于SingleProducerSequencer是单线程生产者因此不需要用额外的线程安全手动进行保证,在判断是否还有足够容量时只需要判断是否当前的值是否满足,如果当前的值不满足时对cacheValue进行更新;</p>
+<p>另外一个方法是sameThread(),这个方法主要是用Map判断当前线程是否生产者线程,这个map的key为singleProducerSequencer,value为currentThread;</p>
+<h3 id="MultiProducerSequencer"><a class="header-anchor" href="#MultiProducerSequencer"></a>MultiProducerSequencer</h3>
+<blockquote>
+<p>MultiProducerSequencer 用于 “多个生产者并发发布事件到 RingBuffer” 的场景，负责安全、按顺序地分配序号。</p>
+</blockquote>
+<p>MultiProducerSequencer主要分析三个方法:<B>hasAvailableCapacity</B>、<B>next</B>、<B>tryNext</B></p>
+<ul>
+<li>hasAvailableCapacity<br>
+判断是否还有可用容量的方法,这个方法的实现与SingleProducerSequencer类中的实现基本类似,因为MultiProducerSequencer保证多线程访问并发安全性的是通过<B>next</B>方法实现的,并不是通过hasAvailableCapacity方法实现的;</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://github.com/agmtopy/disruptor-source/blob/82fa09be7233fd42d5aba3a829073bcc339615f4/src/main/java/com/lmax/disruptor/MultiProducerSequencer.java#L88">hasAvailableCapacity</a></p>
+<ul>
+<li>next方法<br>
+<a target="_blank" rel="noopener" href="https://github.com/agmtopy/disruptor-source/blob/82fa09be7233fd42d5aba3a829073bcc339615f4/src/main/java/com/lmax/disruptor/MultiProducerSequencer.java#L134">next方法</a>是指定传入所需数组大小后进行申请的的方法;</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">public</span> <span class="token keyword">long</span> <span class="token function">next</span><span class="token punctuation">(</span><span class="token keyword">final</span> <span class="token keyword">int</span> n<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>n <span class="token operator">&lt;</span> <span class="token number">1</span> <span class="token operator">||</span> n <span class="token operator">></span> bufferSize<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">throw</span> <span class="token keyword">new</span> <span class="token class-name">IllegalArgumentException</span><span class="token punctuation">(</span><span class="token string">"n must be > 0 and &lt; bufferSize"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">//计算生产者进度,当前生产者进度+n赋值到cursor上,返回原cursor的值</span>
+    <span class="token keyword">long</span> current <span class="token operator">=</span> cursor<span class="token punctuation">.</span><span class="token function">getAndAdd</span><span class="token punctuation">(</span>n<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">//得到写入之后的值</span>
+    <span class="token keyword">long</span> nextSequence <span class="token operator">=</span> current <span class="token operator">+</span> n<span class="token punctuation">;</span>
+    <span class="token comment">//得到循环点</span>
+    <span class="token keyword">long</span> wrapPoint <span class="token operator">=</span> nextSequence <span class="token operator">-</span> bufferSize<span class="token punctuation">;</span>
+    <span class="token comment">//得到当前最慢的消费点</span>
+    <span class="token keyword">long</span> cachedGatingSequence <span class="token operator">=</span> gatingSequenceCache<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token comment">//关键点1:判断如果循环点大于消费点说明,本次写入会覆盖,因此需要等待消费位点</span>
+    <span class="token comment">//如果最慢的消费位点大于当前生产者位点,说明GatingSequence已过期</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span>wrapPoint <span class="token operator">></span> cachedGatingSequence <span class="token operator">||</span> cachedGatingSequence <span class="token operator">></span> current<span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">long</span> gatingSequence<span class="token punctuation">;</span>
+        <span class="token comment">//关键点2:获取最新的消费位点,如果循环点还是大于消费位点,证明本次写入还是会覆盖,继续等待</span>
+        <span class="token keyword">while</span> <span class="token punctuation">(</span>wrapPoint <span class="token operator">></span> <span class="token punctuation">(</span>gatingSequence <span class="token operator">=</span> <span class="token class-name">Util</span><span class="token punctuation">.</span><span class="token function">getMinimumSequence</span><span class="token punctuation">(</span>gatingSequences<span class="token punctuation">,</span> current<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+        <span class="token punctuation">&#123;</span>
+            <span class="token class-name">LockSupport</span><span class="token punctuation">.</span><span class="token function">parkNanos</span><span class="token punctuation">(</span><span class="token number">1L</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// TODO, should we spin based on the wait strategy?</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token comment">//将gatingSequenceCache设置成最新的值</span>
+        gatingSequenceCache<span class="token punctuation">.</span><span class="token function">set</span><span class="token punctuation">(</span>gatingSequence<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+
+    <span class="token comment">//返回写入之后的值</span>
+    <span class="token keyword">return</span> nextSequence<span class="token punctuation">;</span>    
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><a target="_blank" rel="noopener" href="https://raw.githubusercontent.com/agmtopy/noteBook/32c021e91a0f789466f970b42803bd025155a811/png/d-disruptor/MultiProducerSequencer.next.png">MultiProducerSequencer.next</a></p>
+<p>关键点1:通过VarHandle来保证多线程访问的安全性,cursor.getAndAdd方法是<B>原子性</B>的,因此将cursor更新后不会存在回滚的可能性,因此生产者需要一直等待有空闲位置来写入数据,这个改动的<a target="_blank" rel="noopener" href="https://github.com/agmtopy/disruptor-source/commit/62dec2092a87279690486580c2b73a4249e31d4a">commit</a>,之前的实现是通过cursor.compareAndSet(),CAS的方式来实现的,在大量高并发场景下,会高频CAS,但是VarHandle.getAndAdd()是原子操作避免了这种场景,同时value还是整个缓冲行,性能更快;</p>
+<p>关键点2:是进行两个判断,第一个判断是判断循环点是否大于当前最慢的消费点,上图中的例子所示wrapPoint=14,但是当前最慢的消费点是12,因此满足条件,证明本次写入会将未消费的[12,14]的数据进行覆盖,因此生产者需要等待;<br>
+另外一个是当最慢消费者序列大于等于生产者序列时,说明最慢消费组序列号已过期,需要更新后在进行检查;</p>
+<p>关键点3:是判断获取最新的消费位点后,如果循环点还是大于消费位点,证明本次写入还是会覆盖,<B>继续等待</B></p>
+<p>next方法当RingBuffer数组没有可用空间时采取的做法是<B>等待</B>;</p>
+<ul>
+<li>tryNext方法<br>
+<a target="_blank" rel="noopener" href="https://github.com/agmtopy/disruptor-source/blob/82fa09be7233fd42d5aba3a829073bcc339615f4/src/main/java/com/lmax/disruptor/MultiProducerSequencer.java#L181">tryNext方法</a>是指定传入所需数组大小后进行申请的的方法,容量不够时直接抛出异常;</li>
+</ul>
+<pre class="line-numbers language-java" data-language="java"><code class="language-java"><span class="token keyword">do</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token comment">//设置当前生产位点</span>
+    current <span class="token operator">=</span> cursor<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token comment">//设置本次生产更新后的位点</span>
+    next <span class="token operator">=</span> current <span class="token operator">+</span> n<span class="token punctuation">;</span>
+    <span class="token comment">//容量不够时直接抛出异常</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span><span class="token function">hasAvailableCapacity</span><span class="token punctuation">(</span>gatingSequences<span class="token punctuation">,</span> n<span class="token punctuation">,</span> current<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+        <span class="token keyword">throw</span> <span class="token class-name">InsufficientCapacityException</span><span class="token punctuation">.</span><span class="token constant">INSTANCE</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token comment">//通过CAS的方式更新</span>
+<span class="token keyword">while</span> <span class="token punctuation">(</span><span class="token operator">!</span>cursor<span class="token punctuation">.</span><span class="token function">compareAndSet</span><span class="token punctuation">(</span>current<span class="token punctuation">,</span> next<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>可以看到这里就使用的是CAS的方式进行获取原始,并且如果获取不到时之前抛出异常;</p>
+<h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2>
+<p>Sequenced 提供统一的序号分配接口；<br>
+Sequencer 负责管理序号和消费者进度；<br>
+SingleProducerSequencer 用简单变量实现无锁高效分配；<br>
+MultiProducerSequencer 通过 atomic getAndAdd 实现多线程安全、高性能的序号分配。</p>
 
                 
             </div>
@@ -770,7 +902,7 @@ SequenceBarrier是使用序号的角色,类似于排队模型中比较序号的�
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            232.7k
+                                            234.1k
                                         </span>&nbsp;字
                                         
                                             
