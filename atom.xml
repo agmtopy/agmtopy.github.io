@@ -6,7 +6,7 @@
   <link href="https://agmtopy.gitee.io/atom.xml" rel="self"/>
   
   <link href="https://agmtopy.gitee.io/"/>
-  <updated>2025-12-03T17:22:43.538Z</updated>
+  <updated>2025-12-04T16:43:45.967Z</updated>
   <id>https://agmtopy.gitee.io/</id>
   
   <author>
@@ -15,6 +15,33 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>数据密集型应用系统设计-笔记(一)</title>
+    <link href="https://agmtopy.gitee.io/2025/12/05/20.%E7%AC%94%E8%AE%B0/50.%E6%95%B0%E6%8D%AE%E5%AF%86%E9%9B%86%E5%9E%8B%E5%BA%94%E7%94%A8%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-%E7%AC%94%E8%AE%B0%E4%B8%80/"/>
+    <id>https://agmtopy.gitee.io/2025/12/05/20.%E7%AC%94%E8%AE%B0/50.%E6%95%B0%E6%8D%AE%E5%AF%86%E9%9B%86%E5%9E%8B%E5%BA%94%E7%94%A8%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-%E7%AC%94%E8%AE%B0%E4%B8%80/</id>
+    <published>2025-12-04T16:08:04.000Z</published>
+    <updated>2025-12-04T16:43:45.967Z</updated>
+    
+    <content type="html"><![CDATA[<h1>数据密集型应用系统设计-笔记(一)</h1><p>记录在阅读《数据密集型应用》一书过程中的笔记和疑惑心得,以备后用;</p><h2 id="数据系统基础"><a class="header-anchor" href="#数据系统基础"></a>数据系统基础</h2><p>第一部分主要讲述的是<B>数据系统基础</B>部分,主要介绍数据系统特点、数据模型、数据操作这几个方面;</p><h3 id="数据系统特点"><a class="header-anchor" href="#数据系统特点"></a>数据系统特点</h3><p>数据密集型应用和计算密集型应用最大的区别是在于<B>CPU是否是瓶颈</B>,数据密集型应用的关键是在于数据量、数据的复杂度及数据的快速多变性上;<br>与数据密集型应用有关的模块(组件)通常有:</p><ol><li>数据库:用以持久化数据</li><li>高速缓存:缓存哪些复杂或者操作代价昂贵的结果,以便下次快速进行访问</li><li>索引:加快搜索效率</li><li>流式处理:持续发送数据的一种方式</li><li>批处理:定期处理大量数据</li></ol><p>一个应用系统往往是由多个数据组件共同协作,应用系统将任务进行拆解,每一个组件高效完成其中一部分功能,多个组件依靠应用层代码驱动衔接;</p><h3 id="影响系统设计的三个重要因素"><a class="header-anchor" href="#影响系统设计的三个重要因素"></a>影响系统设计的三个重要因素</h3><p><B>可靠性</B>、<B>可扩展性</B>、<B>可维护性</B></p><ul><li>可靠性</li></ul><blockquote><p>可靠性在软件领域通常可以指的是执行结果是否如期望所示、是否可以容忍错误的使用方法、性能上是否可以应对合理的负载压力、禁止未经授权的访问等等;</p></blockquote><p>可能出错的事情称为故障或错误,系统可应对错误则称为容错或弹性;故障和失效是不完全一致的,故障通常被定义为组件偏离其正常规格,而失效意味着系统作为一个整体的停止,无法提供服务的状态;<br>因此通常需要设计容错机制来避免由故障引发系统失效的场景;</p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h1&gt;数据密集型应用系统设计-笔记(一)&lt;/h1&gt;
+&lt;p&gt;记录在阅读《数据密集型应用》一书过程中的笔记和疑惑心得,以备后用;&lt;/p&gt;
+&lt;h2 id=&quot;数据系统基础&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;#数据系统基础&quot;&gt;&lt;/a&gt;数据系统基础&lt;/h2&gt;
+</summary>
+      
+    
+    
+    
+    <category term="架构设计" scheme="https://agmtopy.gitee.io/categories/%E6%9E%B6%E6%9E%84%E8%AE%BE%E8%AE%A1/"/>
+    
+    
+    <category term="笔记" scheme="https://agmtopy.gitee.io/tags/%E7%AC%94%E8%AE%B0/"/>
+    
+  </entry>
   
   <entry>
     <title>Disruptor源码分析之Sequenced</title>
@@ -496,35 +523,6 @@
     
     
     <category term="jvm" scheme="https://agmtopy.gitee.io/tags/jvm/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>1.高并发系统实战-如何解决缓存不同步</title>
-    <link href="https://agmtopy.gitee.io/2024/02/27/21.%E6%9E%81%E5%AE%A2%E6%97%B6%E9%97%B4/%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98/"/>
-    <id>https://agmtopy.gitee.io/2024/02/27/21.%E6%9E%81%E5%AE%A2%E6%97%B6%E9%97%B4/%E9%AB%98%E5%B9%B6%E5%8F%91%E7%B3%BB%E7%BB%9F%E5%AE%9E%E6%88%98/</id>
-    <published>2024-02-27T13:35:37.000Z</published>
-    <updated>2024-03-09T03:40:30.366Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="高并发系统实战-如何解决缓存不同步"><a class="header-anchor" href="#高并发系统实战-如何解决缓存不同步"></a>高并发系统实战-如何解决缓存不同步</h2><p>使用缓存需要注意的地方:</p><ol><li>使用缓存需要考虑性价比</li><li>防止穿透缓存直接查询数据库场景</li><li>设置TTL</li></ol><p>缓存数据刷新场景:</p><ol><li><p>单条数据更新场景<br>常见的方法是通过’先更新数据库在删除缓存’的方式来进行出来,更严格的场景是通过延迟双删或者MQ的方式通知删除</p></li><li><p>避免大量临时缓存同时到期失效</p></li><li><p>对于高并发更新缓存的场景可以采用’singleflight(请求合并)'来进行优化</p></li><li></li></ol>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;高并发系统实战-如何解决缓存不同步&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;#高并发系统实战-如何解决缓存不同步&quot;&gt;&lt;/a&gt;高并发系统实战-如何解决缓存不同步&lt;/h2&gt;
-&lt;p&gt;使用缓存需要注意的地方:&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;使用缓存需要</summary>
-      
-    
-    
-    
-    <category term="极客时间" scheme="https://agmtopy.gitee.io/categories/%E6%9E%81%E5%AE%A2%E6%97%B6%E9%97%B4/"/>
-    
-    
-    <category term="高并发" scheme="https://agmtopy.gitee.io/tags/%E9%AB%98%E5%B9%B6%E5%8F%91/"/>
-    
-    <category term="缓存" scheme="https://agmtopy.gitee.io/tags/%E7%BC%93%E5%AD%98/"/>
     
   </entry>
   
