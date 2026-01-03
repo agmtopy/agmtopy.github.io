@@ -4,6 +4,19 @@
   
     
     <entry>
+      <title></title>
+      <link href="2026/01/03/26.%E9%AB%98%E6%80%A7%E8%83%BD/11.Queue%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%90%86%E8%AE%BA/"/>
+      <url>2026/01/03/26.%E9%AB%98%E6%80%A7%E8%83%BD/11.Queue%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%90%86%E8%AE%BA/</url>
+      
+        <content type="html"><![CDATA[<hr><h2 id="title-Chronicle-Queue之基础理论date-2026-01-03-19-10-53categories-高性能tags-disruptor"><a class="header-anchor" href="#title-Chronicle-Queue之基础理论date-2026-01-03-19-10-53categories-高性能tags-disruptor"></a>title: Chronicle Queue之基础理论<br>date: 2026-01-03 19:10:53<br>categories: 高性能<br>tags: disruptor</h2><h1>Chronicle Queue之基础理论</h1><blockquote><p>Chronicle Queue是一个持久化的低延迟消息传递框架,适用于高性能应用程序.它支持通过锁定机制实现多个写入操作,并支持多个无锁并发读取操作;Chronicle Queue使用堆外存储,为应用程序提供了一个不受垃圾回收 (GC) 影响的环境。在 Java 中实现高性能、内存密集型应用程序;</p></blockquote>]]></content>
+      
+      
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>数据密集型应用系统设计-笔记(一)</title>
       <link href="2025/12/05/20.%E7%AC%94%E8%AE%B0/50.%E6%95%B0%E6%8D%AE%E5%AF%86%E9%9B%86%E5%9E%8B%E5%BA%94%E7%94%A8%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-%E7%AC%94%E8%AE%B0%E4%B8%80/"/>
       <url>2025/12/05/20.%E7%AC%94%E8%AE%B0/50.%E6%95%B0%E6%8D%AE%E5%AF%86%E9%9B%86%E5%9E%8B%E5%BA%94%E7%94%A8%E7%B3%BB%E7%BB%9F%E8%AE%BE%E8%AE%A1-%E7%AC%94%E8%AE%B0%E4%B8%80/</url>
