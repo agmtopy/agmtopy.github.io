@@ -409,7 +409,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    133
+                    231
                 </div>
                 
 
@@ -439,6 +439,10 @@ tags: disruptor</h2>
 <blockquote>
 <p>Chronicle Queue是一个持久化的低延迟消息传递框架,适用于高性能应用程序.它支持通过锁定机制实现多个写入操作,并支持多个无锁并发读取操作;Chronicle Queue使用堆外存储,为应用程序提供了一个不受垃圾回收 (GC) 影响的环境。在 Java 中实现高性能、内存密集型应用程序;</p>
 </blockquote>
+<p>Chronicle Queue适合在单机场景下进行数据的持久化记录,是通过内存映射文件 (Memory-Mapped Files) 直接操作堆外内存来实现的.这种方式允许应用程序将文件直接映射到内存中,从而实现高效的读写操作,避免了传统文件 I/O 的开销.</p>
+<h2 id="简单示例"><a class="header-anchor" href="#简单示例"></a>简单示例</h2>
+<h2 id="核心概念"><a class="header-anchor" href="#核心概念"></a>核心概念</h2>
+<h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2>
 
                 
             </div>
@@ -725,7 +729,7 @@ tags: disruptor</h2>
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            235.9k
+                                            236k
                                         </span>&nbsp;字
                                         
                                             

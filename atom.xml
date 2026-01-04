@@ -6,7 +6,7 @@
   <link href="https://agmtopy.gitee.io/atom.xml" rel="self"/>
   
   <link href="https://agmtopy.gitee.io/"/>
-  <updated>2026-01-03T11:14:18.107Z</updated>
+  <updated>2026-01-04T14:50:43.862Z</updated>
   <id>https://agmtopy.gitee.io/</id>
   
   <author>
@@ -21,9 +21,9 @@
     <link href="https://agmtopy.gitee.io/2026/01/03/26.%E9%AB%98%E6%80%A7%E8%83%BD/11.Queue%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%90%86%E8%AE%BA/"/>
     <id>https://agmtopy.gitee.io/2026/01/03/26.%E9%AB%98%E6%80%A7%E8%83%BD/11.Queue%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%90%86%E8%AE%BA/</id>
     <published>2026-01-03T11:10:53.114Z</published>
-    <updated>2026-01-03T11:14:18.107Z</updated>
+    <updated>2026-01-04T14:50:43.862Z</updated>
     
-    <content type="html"><![CDATA[<hr><h2 id="title-Chronicle-Queue之基础理论date-2026-01-03-19-10-53categories-高性能tags-disruptor"><a class="header-anchor" href="#title-Chronicle-Queue之基础理论date-2026-01-03-19-10-53categories-高性能tags-disruptor"></a>title: Chronicle Queue之基础理论<br>date: 2026-01-03 19:10:53<br>categories: 高性能<br>tags: disruptor</h2><h1>Chronicle Queue之基础理论</h1><blockquote><p>Chronicle Queue是一个持久化的低延迟消息传递框架,适用于高性能应用程序.它支持通过锁定机制实现多个写入操作,并支持多个无锁并发读取操作;Chronicle Queue使用堆外存储,为应用程序提供了一个不受垃圾回收 (GC) 影响的环境。在 Java 中实现高性能、内存密集型应用程序;</p></blockquote>]]></content>
+    <content type="html"><![CDATA[<hr><h2 id="title-Chronicle-Queue之基础理论date-2026-01-03-19-10-53categories-高性能tags-disruptor"><a class="header-anchor" href="#title-Chronicle-Queue之基础理论date-2026-01-03-19-10-53categories-高性能tags-disruptor"></a>title: Chronicle Queue之基础理论<br>date: 2026-01-03 19:10:53<br>categories: 高性能<br>tags: disruptor</h2><h1>Chronicle Queue之基础理论</h1><blockquote><p>Chronicle Queue是一个持久化的低延迟消息传递框架,适用于高性能应用程序.它支持通过锁定机制实现多个写入操作,并支持多个无锁并发读取操作;Chronicle Queue使用堆外存储,为应用程序提供了一个不受垃圾回收 (GC) 影响的环境。在 Java 中实现高性能、内存密集型应用程序;</p></blockquote><p>Chronicle Queue适合在单机场景下进行数据的持久化记录,是通过内存映射文件 (Memory-Mapped Files) 直接操作堆外内存来实现的.这种方式允许应用程序将文件直接映射到内存中,从而实现高效的读写操作,避免了传统文件 I/O 的开销.</p><h2 id="简单示例"><a class="header-anchor" href="#简单示例"></a>简单示例</h2><h2 id="核心概念"><a class="header-anchor" href="#核心概念"></a>核心概念</h2><h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2>]]></content>
     
     
       
