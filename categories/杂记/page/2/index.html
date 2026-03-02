@@ -575,11 +575,11 @@
                 </a>
                 
                 
-                <a href="/categories/%E9%AB%98%E6%80%A7%E8%83%BD/" title="高性能: 6">
+                <a href="/categories/%E9%AB%98%E6%80%A7%E8%83%BD/" title="高性能: 7">
                     <span class="chip center-align waves-effect waves-light
                              chip-default "
                             style="background-color: #D5F5E3;">高性能
-                        <span class="tag-length">6</span>
+                        <span class="tag-length">7</span>
                     </span>
                 </a>
                 
@@ -1202,13 +1202,14 @@ docker run imageName
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                碎碎念
+                                
+如何保证业务的一致性？
 
-TimerTask
 
-Timer timer = new Timer(false);
-timer.schedule(new RefreshTask(), 10*1000L, 30*1000L);
-private class Ref
+自己的回答
+
+分为两个部分:
+第一部分是信贷系统与第三方支付系统如何保证业务的一致性,采用的是以支付系统的结果为最终的业务结果,如果通过联机调用时返回业务终态(成功或者失败)那么即用这个终态,使用TCC的方式更
                             
                         </div>
                         <div class="publish-info">
@@ -1292,7 +1293,7 @@ private class Ref
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            236k
+                                            237.1k
                                         </span>&nbsp;字
                                         
                                             

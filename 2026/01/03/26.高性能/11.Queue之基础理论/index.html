@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="agmtopy博客">
+    <meta name="keywords" content="Chronicle Queue之基础理论, agmtopy博客">
     <meta name="description" content="你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>agmtopy博客</title>
+    <title>Chronicle Queue之基础理论 | agmtopy博客</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -267,12 +267,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/0.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/5.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title"></h1>
+                    <h1 class="description center-align post-title">Chronicle Queue之基础理论</h1>
                 </div>
             </div>
         </div>
@@ -386,12 +386,25 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">No tag</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/Chronicle-Queue/">
+                                <span class="chip bg-color">Chronicle Queue</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E9%AB%98%E6%80%A7%E8%83%BD/" class="post-category">
+                                高性能
+                            </a>
+                        
+                    </div>
                     
                 </div>
             </div>
@@ -409,7 +422,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    231
+                    326
                 </div>
                 
 
@@ -430,17 +443,15 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <hr>
-<h2 id="title-Chronicle-Queue之基础理论date-2026-01-03-19-10-53categories-高性能tags-disruptor"><a class="header-anchor" href="#title-Chronicle-Queue之基础理论date-2026-01-03-19-10-53categories-高性能tags-disruptor"></a>title: Chronicle Queue之基础理论<br>
-date: 2026-01-03 19:10:53<br>
-categories: 高性能<br>
-tags: disruptor</h2>
-<h1>Chronicle Queue之基础理论</h1>
+                <h1>Chronicle Queue之基础理论</h1>
 <blockquote>
 <p>Chronicle Queue是一个持久化的低延迟消息传递框架,适用于高性能应用程序.它支持通过锁定机制实现多个写入操作,并支持多个无锁并发读取操作;Chronicle Queue使用堆外存储,为应用程序提供了一个不受垃圾回收 (GC) 影响的环境。在 Java 中实现高性能、内存密集型应用程序;</p>
 </blockquote>
+<blockquote>
+<p>Chronicle Queue 的设计理念是将所有相关信息记录都通过持久化进程间通信 (IPC)的日志记录器进行记录。低延迟系统的一个关键要求是透明性，您可以记录足够的信息，使监控系统能够重现被监控系统的状态。这使得下游系统可以记录所需的任何信息，并执行查询，而无需直接操作关键系统。</p>
+</blockquote>
 <p>Chronicle Queue适合在单机场景下进行数据的持久化记录,是通过内存映射文件 (Memory-Mapped Files) 直接操作堆外内存来实现的.这种方式允许应用程序将文件直接映射到内存中,从而实现高效的读写操作,避免了传统文件 I/O 的开销.</p>
-<h2 id="简单示例"><a class="header-anchor" href="#简单示例"></a>简单示例</h2>
+<h2 id="快速开始"><a class="header-anchor" href="#快速开始"></a>快速开始</h2>
 <h2 id="核心概念"><a class="header-anchor" href="#核心概念"></a>核心概念</h2>
 <h2 id="总结"><a class="header-anchor" href="#总结"></a>总结</h2>
 
@@ -455,7 +466,11 @@ tags: disruptor</h2>
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">No tag</span>
+                            
+                                <a href="/tags/Chronicle-Queue/">
+                                    <span class="chip bg-color">Chronicle Queue</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -508,9 +523,9 @@ tags: disruptor</h2>
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="">
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="Chronicle Queue之基础理论">
                         
-                        <span class="card-title"></span>
+                        <span class="card-title">Chronicle Queue之基础理论</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -525,13 +540,25 @@ tags: disruptor</h2>
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            agmtopy
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E9%AB%98%E6%80%A7%E8%83%BD/" class="post-category">
+                                    高性能
+                                </a>
+                            
                             
                         </span>
                     </div>
                 </div>
 
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Chronicle-Queue/">
+                        <span class="chip bg-color">Chronicle Queue</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>
@@ -729,7 +756,7 @@ tags: disruptor</h2>
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            236k
+                                            237.1k
                                         </span>&nbsp;字
                                         
                                             

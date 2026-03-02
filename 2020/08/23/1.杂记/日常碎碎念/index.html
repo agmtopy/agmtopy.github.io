@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    343
+                    1.3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    1 分钟
+                    4 分钟
                 </div>
                 
 
@@ -443,7 +443,69 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="碎碎念"><a class="header-anchor" href="#碎碎念"></a>碎碎念</h2>
+                <ul>
+<li>如何保证业务的一致性？</li>
+</ul>
+<ol>
+<li>自己的回答</li>
+</ol>
+<pre class="line-numbers language-txt" data-language="txt"><code class="language-txt">分为两个部分:
+第一部分是信贷系统与第三方支付系统如何保证业务的一致性,采用的是以支付系统的结果为最终的业务结果,如果通过联机调用时返回业务终态(成功或者失败)那么即用这个终态,使用TCC的方式更新信贷系统下的三个子域,本质上是2PC,如果通过联机系统未能获取到业务的终态时,通过批量任务来完成状态的同步,本质上是通过最终一致性的方式来保证事务的一致性;
+第二部分是在得到支付系统返回的终态后,信贷系统内部的三个子域相互同步状态,第一个是采用信贷核心系统作为内部状态的提供者提供相应的查询状态接口,另外两个系统通过定时轮询的方式来同步状态,另外一方面通过设置状态异常的监控告警机制来对异常流水进行监控<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<ol start="2">
+<li>结合Ai后的回答</li>
+</ol>
+<pre class="line-numbers language-txt" data-language="txt"><code class="language-txt">我们采用的是“TCC + 最终一致性补偿机制”相结合的方式，分别应对“联机强交互场景”和“异常或处理中场景”。
+
+在联机交易流程中分成三个阶段：
+Try 阶段:
+额度系统预占额度
+信贷系统预生成交易流水（标记为 pending）
+调用支付系统发起扣款
+
+Confirm 阶段
+支付成功 → 确认额度扣减 + 信贷入账
+
+Cancel阶段
+支付失败 → Cancel 回滚预占额度 + 入账失败
+
+有几个需要注意的点是
+1. TCC中的操作的使用全局唯一的业务流水号进行操作
+2. Confirm和Cancel都是幂等的
+3. 数据库底层使用唯一索引作为兜底保证不会重复记账,并且在业务层所有分支事务状态必须是单向流转(INIT → TRYING → CONFIRMED/CANCELED),避免状态回滚。
+4. 通过“事务状态表 + 幂等控制 + 状态流转 + 超时补偿”来解决空悬挂、业务悬挂、重复调用和乱序问题等问题
+5. 所有关键状态变更必须在本地事务内完成，避免状态漂移
+
+对于处理中或未知状态的交易,采用最终一致性补偿的方式
+当联机调用无法获得终态（例如：支付超时\网络抖动\第三方系统处理中）
+我们采用：
+定时任务主动查询支付状态
+对异常订单做对账补偿
+同步最终状态
+
+同时配套：
+异常订单监控告警
+长时间未终态自动标红
+支持人工干预
+
+对于最重要的核算系统宕机的场景的处理:
+如果是Try阶段宕机那么该笔交易如果写入系统,后续通过最终一致性的补偿方案会设置成失败,如果没写入系统,这不存在该笔交易;
+如果是Comfirm阶段失败,Confirm失败并不会导致业务直接失败或者挂起，而是记录到事务日志表，由异步补偿线程扫描重试，超过重试阈值进入异常队列并触发告警;
+
+最后补充一下,对于选择分布式事务的解决方案,是根据金融系统在高并发场景下,我们更关注的是交易的可控性,而不是强一致性,才选择的TCC+最终一致性补偿机制结合来实现;
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<hr>
+<ul>
+<li>如果核算系统宕机2小时这么办？</li>
+</ul>
+<ol>
+<li>自己的回答</li>
+</ol>
+<pre class="line-numbers language-txt" data-language="txt"><code class="language-txt">
+首先确认宕机发生的原因,是否可以紧急修复尽量避免影响业务,如果无法修复,需要考虑是否有备用方案可以让业务正常进来,后续通过补偿来完成核算系统的业务
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<hr>
+<h2 id="碎碎念"><a class="header-anchor" href="#碎碎念"></a>碎碎念</h2>
 <ol>
 <li>TimerTask</li>
 </ol>
@@ -793,7 +855,7 @@ timer<span class="token punctuation">.</span><span class="token function">schedu
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            236k
+                                            237.1k
                                         </span>&nbsp;字
                                         
                                             
