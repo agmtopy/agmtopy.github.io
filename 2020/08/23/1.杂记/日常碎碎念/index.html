@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    1.9k
+                    2.4k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    6 分钟
+                    8 分钟
                 </div>
                 
 
@@ -534,6 +534,46 @@ Cancel阶段
 对于客户的影响是交易状态为处理中,延迟展示
 
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>线上CPU 100%的排查实战</li>
+</ul>
+<pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown">在 2025 Q1 末尾，我们核算系统某节点 CPU 飙升至 400%（机器为 4 核），触发告警。
+我先判断问题类型：QPS无明显波动、内存水位正常、CPU 持续拉高;通过 Grafana 观察 JVM 指标发现：Full GC 次数异常增加、STW 时间明显上升
+初步判断为：GC 频繁导致 CPU 被 GC 线程占满,通过查看GC日志确认：Eden 区频繁被打满,晋升失败,触发 Full GC;这说明：存在短时间大量对象创建,或单次大对象分配
+
+紧接着定位对象来源,由于线上不能使用 Arthas,我们通过：jmap dump 堆,jstack 抓线程栈,分析堆对象分布，发现：有一个接口返回的 List<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>PO</span><span class="token punctuation">></span></span> 集合异常巨大,进一步定位到：前端未传入客户号参数,导致SQL未带where条件,查询全表数据
+
+导致：
+大量数据加载进 JVM,填满 Eden 区,晋升至老年代触发频繁 Full GC,CPU 被 GC 线程打满。
+
+当时我们没有立即重启，是通过配置中心临时增加了这个接口的参数必填校验,确认问题后才滚动重启节点恢复,恢复时间约20分钟。
+
+最后在复盘这个问题后确认本质上是没有对数据进行访问防御能力,后续做了四层治理：
+
+1️⃣ 接口层防御
+必填参数校验
+默认增加分页 limit
+
+2️⃣ DAO 层防御
+禁止无 where 条件查询
+增加最大返回行数限制
+
+
+得到的经验就是：
+<span class="token list punctuation">-</span> 高 QPS 系统必须假设调用方会传错参数
+<span class="token list punctuation">-</span> 任何数据查询必须做“最大数据量保护”
+
+
+ps:内存堆栈信息是通过自动oom自动dump命令导出的
+
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>分布式事务与高并发一致性</li>
+</ul>
+<pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown">
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 <hr>
 <hr>
 <h2 id="碎碎念"><a class="header-anchor" href="#碎碎念"></a>碎碎念</h2>
@@ -886,7 +926,7 @@ timer<span class="token punctuation">.</span><span class="token function">schedu
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            237.7k
+                                            239.2k
                                         </span>&nbsp;字
                                         
                                             
