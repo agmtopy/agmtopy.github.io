@@ -45,10 +45,10 @@
   
   <entry>
     <title>Cluade Code的workflow</title>
-    <link href="https://agmtopy.gitee.io/2026/03/08/1.%E6%9D%82%E8%AE%B0/Cluade%20Code%E4%B9%8BSuperpower%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8/"/>
-    <id>https://agmtopy.gitee.io/2026/03/08/1.%E6%9D%82%E8%AE%B0/Cluade%20Code%E4%B9%8BSuperpower%E6%8F%92%E4%BB%B6%E4%BD%BF%E7%94%A8/</id>
+    <link href="https://agmtopy.gitee.io/2026/03/08/1.%E6%9D%82%E8%AE%B0/Cluade%20Code%E7%9A%84workflow/"/>
+    <id>https://agmtopy.gitee.io/2026/03/08/1.%E6%9D%82%E8%AE%B0/Cluade%20Code%E7%9A%84workflow/</id>
     <published>2026-03-08T08:16:09.000Z</published>
-    <updated>2026-03-22T15:45:38.948Z</updated>
+    <updated>2026-03-22T15:50:01.635Z</updated>
     
     <content type="html"><![CDATA[<h2 id="Cluade-Code的workflow"><a class="header-anchor" href="#Cluade-Code的workflow"></a>Cluade Code的workflow</h2><p>workflow就是内置的一组SKILLS文件,将软件开发领域中的常见任务进行结构化,并且提供了一个统一的接口来调用这些技能,从而实现了软件开发过程中的自动化和智能化;</p><p>Cluade Code的workflow目前主流的有OpenSpec、Superpowers、GSD(get-shit-done)、oh-my-claudecode、everything-claude-code,<br>这五个工具都是基于规范驱动开发 (Spec-Driven Development)的理念出发,对Cli进行增强的工具;<br>下面依次对这些工具进行使用的一个笔记;</p><h2 id="Superpowers"><a class="header-anchor" href="#Superpowers"></a>Superpowers</h2><blockquote><p>适用于追求极致代码质量、需要大规模重构的场景,缺点:极其消耗Token,且有时流程过于死板，小任务</p></blockquote><h3 id="常用命令"><a class="header-anchor" href="#常用命令"></a>常用命令</h3><p>/superpowers:brainstorm - 启动结构化头脑风暴会话进行问题探索<br>/superpowers:write-plan - 生成包含任务分解的详细实现计划<br>/superpowers:execute-plan - 执行带质量检查的系统化实现<br>/superpowers:systematic-debugging - 测试代码</p><h2 id="GSD-get-shit-done"><a class="header-anchor" href="#GSD-get-shit-done"></a>GSD(get-shit-done)</h2><h2 id="OpenSpec"><a class="header-anchor" href="#OpenSpec"></a>OpenSpec</h2><h2 id="everything-claude-code"><a class="header-anchor" href="#everything-claude-code"></a>everything-claude-code</h2><h2 id="推荐"><a class="header-anchor" href="#推荐"></a>推荐</h2><h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2><p><a href="https://github.com/gsd-build/get-shit-done">https://github.com/gsd-build/get-shit-done</a><br><a href="https://github.com/obra/superpowers">https://github.com/obra/superpowers</a><br><a href="https://github.com/affaan-m/everything-claude-code">https://github.com/affaan-m/everything-claude-code</a><br><a href="https://github.com/Yeachan-Heo/oh-my-claudecode/tree/main">https://github.com/Yeachan-Heo/oh-my-claudecode/tree/main</a></p>]]></content>
     
