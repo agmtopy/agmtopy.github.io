@@ -6,7 +6,7 @@
   <link href="https://agmtopy.gitee.io/atom.xml" rel="self"/>
   
   <link href="https://agmtopy.gitee.io/"/>
-  <updated>2026-03-22T14:57:37.674Z</updated>
+  <updated>2026-03-25T14:40:41.882Z</updated>
   <id>https://agmtopy.gitee.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>Cluade Code的workflow</title>
+    <link href="https://agmtopy.gitee.io/2026/03/18/1.%E6%9D%82%E8%AE%B0/Cluade%20Code%E7%9A%84workflow/"/>
+    <id>https://agmtopy.gitee.io/2026/03/18/1.%E6%9D%82%E8%AE%B0/Cluade%20Code%E7%9A%84workflow/</id>
+    <published>2026-03-18T08:16:09.000Z</published>
+    <updated>2026-03-25T14:40:41.882Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="Cluade-Code的workflow"><a class="header-anchor" href="#Cluade-Code的workflow"></a>Cluade Code的workflow</h2><p>workflow就是内置的一组SKILLS文件,将软件开发领域中的常见任务进行结构化,并且提供了一个统一的接口来调用这些技能,从而实现了软件开发过程中的自动化和智能化;</p><p>Cluade Code的workflow目前主流的有OpenSpec、Superpowers、GSD(get-shit-done)、oh-my-claudecode、everything-claude-code,<br>这五个工具都是基于规范驱动开发 (Spec-Driven Development)的理念出发,对Cli进行增强的工具;<br>下面依次对这些工具进行使用的一个笔记;</p><h3 id="Superpowers"><a class="header-anchor" href="#Superpowers"></a>Superpowers</h3><blockquote><p>适用于追求极致代码质量、需要大规模重构的场景,缺点:极其消耗Token,且有时流程过于死板，小任务</p></blockquote><h4 id="常用命令"><a class="header-anchor" href="#常用命令"></a>常用命令</h4><ol><li><p>brainstorming<br>在编写代码之前启动。通过提问完善初步想法，探索各种方案，分段展示设计以供验证。保存设计文档。</p></li><li><p>using-git-worktrees<br>设计方案获批后激活。在新分支上创建隔离工作区，运行项目设置，验证测试基线是否干净。</p></li><li><p>writing-plans<br>根据已批准的设计方案启动。将工作分解成易于处理的小任务（每个任务耗时 2-5 分钟）。每个任务都包含精确的文件路径、完整的代码和验证步骤。</p></li><li><p>subagent-driven-development or executing-plans<br>根据计划激活。为每个任务派遣新的子代理，并进行两阶段审查（先检查规范符合性，再检查代码质量），或者分批执行，并设置人工检查点。</p></li><li><p>test-driven-development<br>在实现阶段激活。强制执行红绿重构流程：编写失败的测试，观察其失败，编写最小代码，观察其通过，然后提交。删除测试之前编写的代码。</p></li><li><p>requesting-code-review<br>在任务间隙激活。根据计划进行审查，并按严重程度报告问题。严重问题会阻碍进度。</p></li><li><p>finishing-a-development-branch<br>当任务完成后激活。验证测试，提供选项（合并/PR/保留/丢弃），清理工作树。</p></li></ol><h4 id="执行过程"><a class="header-anchor" href="#执行过程"></a>执行过程</h4><p>/superpowers:brainstorm - 启动结构化头脑风暴会话进行问题探索</p><p>/superpowers:write-plan - 生成包含任务分解的详细实现计划</p><p>/superpowers:execute-plan - 执行带质量检查的系统化实现</p><p>/superpowers:systematic-debugging - 测试代码</p><h3 id="GSD-get-shit-done"><a class="header-anchor" href="#GSD-get-shit-done"></a>GSD(get-shit-done)</h3><h3 id="OpenSpec"><a class="header-anchor" href="#OpenSpec"></a>OpenSpec</h3><p>OpenSpec的设计理念</p><blockquote><p>→ fluid not rigid → iterative not waterfall → easy not complex → built for brownfield not just greenfield → scalable from personal projects to enterprises</p></blockquote><ul><li><p>opsx-explore<br>仔细思考想法，调查问题，明确需求<br><img src="https://github.com/agmtopy/noteBook/blob/master/png/C-Cluade-Code/openspec/1.opsx-explore.png?raw=true" alt="opsx-explore"></p></li><li><p>opsx-propose<br>一步完成变更创建和规划工件生成（默认快速路径）<br><img src="https://github.com/agmtopy/noteBook/blob/master/png/C-Cluade-Code/openspec/2.opsx-propose.png?raw=true" alt="opsx-propose"></p></li><li><p>opsx-apply<br>执行任务，并根据需要更新工件<br><img src="https://github.com/agmtopy/noteBook/blob/master/png/C-Cluade-Code/openspec/3.opsx-apply.png?raw=true" alt="opsx-apply"></p></li><li><p>opsx-archive<br>完成后归档<br><img src="https://github.com/agmtopy/noteBook/blob/master/png/C-Cluade-Code/openspec/4.opsx-archive.png?raw=true" alt="opsx-archive"></p></li></ul><p>开启opsx扩展命令</p><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 开启配置</span>openspec config profile<span class="token comment"># 更新配置</span>openspec update<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre><h3 id="everything-claude-code"><a class="header-anchor" href="#everything-claude-code"></a>everything-claude-code</h3><h3 id="agent-teams"><a class="header-anchor" href="#agent-teams"></a>agent teams</h3><p>使用teams对于小需求并不能提高效率,反而由于来回交流导致效率下降<br>agent teams适用于大型项目,明确分工的需求</p><h3 id="推荐"><a class="header-anchor" href="#推荐"></a>推荐</h3><h3 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h3><h4 id="项目地址"><a class="header-anchor" href="#项目地址"></a>项目地址</h4><p><a href="https://github.com/gsd-build/get-shit-done">https://github.com/gsd-build/get-shit-done</a><br><a href="https://github.com/obra/superpowers">https://github.com/obra/superpowers</a><br><a href="https://github.com/affaan-m/everything-claude-code">https://github.com/affaan-m/everything-claude-code</a><br><a href="https://github.com/Yeachan-Heo/oh-my-claudecode/tree/main">https://github.com/Yeachan-Heo/oh-my-claudecode/tree/main</a></p><h4 id="项目文档"><a class="header-anchor" href="#项目文档"></a>项目文档</h4><p><a href="https://github.com/Fission-AI/OpenSpec/blob/main/docs/commands.md">https://github.com/Fission-AI/OpenSpec/blob/main/docs/commands.md</a></p>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;h2 id=&quot;Cluade-Code的workflow&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;#Cluade-Code的workflow&quot;&gt;&lt;/a&gt;Cluade Code的workflow&lt;/h2&gt;
+&lt;p&gt;workflow就是内置的一组SKILLS文件</summary>
+      
+    
+    
+    
+    <category term="杂记" scheme="https://agmtopy.gitee.io/categories/%E6%9D%82%E8%AE%B0/"/>
+    
+    
+    <category term="claude code" scheme="https://agmtopy.gitee.io/tags/claude-code/"/>
+    
+  </entry>
   
   <entry>
     <title>Cluade Code使用指南</title>
@@ -32,31 +57,6 @@
 &lt;p&gt;Cluade Code使用指南主要分为3个部分,安装、使用、进阶,这三个部分&lt;/p&gt;
 &lt;h2 id=&quot;安装与配置&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;#安装与配置&quot;&gt;&lt;/a&gt;安装与配置&lt;/h2&gt;
 </summary>
-      
-    
-    
-    
-    <category term="杂记" scheme="https://agmtopy.gitee.io/categories/%E6%9D%82%E8%AE%B0/"/>
-    
-    
-    <category term="claude code" scheme="https://agmtopy.gitee.io/tags/claude-code/"/>
-    
-  </entry>
-  
-  <entry>
-    <title>Cluade Code的workflow</title>
-    <link href="https://agmtopy.gitee.io/2026/03/08/1.%E6%9D%82%E8%AE%B0/Cluade%20Code%E7%9A%84workflow/"/>
-    <id>https://agmtopy.gitee.io/2026/03/08/1.%E6%9D%82%E8%AE%B0/Cluade%20Code%E7%9A%84workflow/</id>
-    <published>2026-03-08T08:16:09.000Z</published>
-    <updated>2026-03-24T01:03:43.904Z</updated>
-    
-    <content type="html"><![CDATA[<h2 id="Cluade-Code的workflow"><a class="header-anchor" href="#Cluade-Code的workflow"></a>Cluade Code的workflow</h2><p>workflow就是内置的一组SKILLS文件,将软件开发领域中的常见任务进行结构化,并且提供了一个统一的接口来调用这些技能,从而实现了软件开发过程中的自动化和智能化;</p><p>Cluade Code的workflow目前主流的有OpenSpec、Superpowers、GSD(get-shit-done)、oh-my-claudecode、everything-claude-code,<br>这五个工具都是基于规范驱动开发 (Spec-Driven Development)的理念出发,对Cli进行增强的工具;<br>下面依次对这些工具进行使用的一个笔记;</p><h2 id="Superpowers"><a class="header-anchor" href="#Superpowers"></a>Superpowers</h2><blockquote><p>适用于追求极致代码质量、需要大规模重构的场景,缺点:极其消耗Token,且有时流程过于死板，小任务</p></blockquote><h3 id="常用命令"><a class="header-anchor" href="#常用命令"></a>常用命令</h3><p>/superpowers:brainstorm - 启动结构化头脑风暴会话进行问题探索<br>/superpowers:write-plan - 生成包含任务分解的详细实现计划<br>/superpowers:execute-plan - 执行带质量检查的系统化实现<br>/superpowers:systematic-debugging - 测试代码</p><h2 id="GSD-get-shit-done"><a class="header-anchor" href="#GSD-get-shit-done"></a>GSD(get-shit-done)</h2><h2 id="OpenSpec"><a class="header-anchor" href="#OpenSpec"></a>OpenSpec</h2><p>OpenSpec的设计理念</p><blockquote><p>→ fluid not rigid → iterative not waterfall → easy not complex → built for brownfield not just greenfield → scalable from personal projects to enterprises</p></blockquote><ul><li><p>opsx-explore<br>仔细思考想法，调查问题，明确需求<br><img src="https://github.com/agmtopy/noteBook/blob/master/png/C-Cluade-Code/openspec/1.opsx-explore.png" alt="opsx-explore"></p></li><li><p>opsx-propose<br>一步完成变更创建和规划工件生成（默认快速路径）<br><img src="https://github.com/agmtopy/noteBook/blob/master/png/C-Cluade-Code/openspec/2.opsx-propose.png" alt="opsx-propose"></p></li><li><p>opsx-apply<br>执行任务，并根据需要更新工件<br><img src="https://github.com/agmtopy/noteBook/blob/master/png/C-Cluade-Code/openspec/3.opsx-apply.png" alt="opsx-apply"></p></li><li><p>opsx-archive<br>完成后归档<br><img src="https://github.com/agmtopy/noteBook/blob/master/png/C-Cluade-Code/openspec/4.opsx-archive.png" alt="opsx-archive"></p></li></ul><h2 id="everything-claude-code"><a class="header-anchor" href="#everything-claude-code"></a>everything-claude-code</h2><h2 id="agent-teams"><a class="header-anchor" href="#agent-teams"></a>agent teams</h2><p>使用teams对于小需求并不能提高效率,反而由于来回交流导致效率下降<br>agent teams适用于大型项目,明确分工的需求</p><h2 id="推荐"><a class="header-anchor" href="#推荐"></a>推荐</h2><h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2><h3 id="项目地址"><a class="header-anchor" href="#项目地址"></a>项目地址</h3><p><a href="https://github.com/gsd-build/get-shit-done">https://github.com/gsd-build/get-shit-done</a><br><a href="https://github.com/obra/superpowers">https://github.com/obra/superpowers</a><br><a href="https://github.com/affaan-m/everything-claude-code">https://github.com/affaan-m/everything-claude-code</a><br><a href="https://github.com/Yeachan-Heo/oh-my-claudecode/tree/main">https://github.com/Yeachan-Heo/oh-my-claudecode/tree/main</a></p><h3 id="项目文档"><a class="header-anchor" href="#项目文档"></a>项目文档</h3><p><a href="https://github.com/Fission-AI/OpenSpec/blob/main/docs/commands.md">https://github.com/Fission-AI/OpenSpec/blob/main/docs/commands.md</a></p>]]></content>
-    
-    
-      
-      
-    <summary type="html">&lt;h2 id=&quot;Cluade-Code的workflow&quot;&gt;&lt;a class=&quot;header-anchor&quot; href=&quot;#Cluade-Code的workflow&quot;&gt;&lt;/a&gt;Cluade Code的workflow&lt;/h2&gt;
-&lt;p&gt;workflow就是内置的一组SKILLS文件</summary>
       
     
     

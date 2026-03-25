@@ -413,7 +413,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2026-03-08
+                    2026-03-18
                 </div>
                 
 
@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    444
+                    800
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    1 分钟
+                    3 分钟
                 </div>
                 
 
@@ -448,17 +448,48 @@
 <p>Cluade Code的workflow目前主流的有OpenSpec、Superpowers、GSD(get-shit-done)、oh-my-claudecode、everything-claude-code,<br>
 这五个工具都是基于规范驱动开发 (Spec-Driven Development)的理念出发,对Cli进行增强的工具;<br>
 下面依次对这些工具进行使用的一个笔记;</p>
-<h2 id="Superpowers"><a class="header-anchor" href="#Superpowers"></a>Superpowers</h2>
+<h3 id="Superpowers"><a class="header-anchor" href="#Superpowers"></a>Superpowers</h3>
 <blockquote>
 <p>适用于追求极致代码质量、需要大规模重构的场景,缺点:极其消耗Token,且有时流程过于死板，小任务</p>
 </blockquote>
-<h3 id="常用命令"><a class="header-anchor" href="#常用命令"></a>常用命令</h3>
-<p>/superpowers:brainstorm - 启动结构化头脑风暴会话进行问题探索<br>
-/superpowers:write-plan - 生成包含任务分解的详细实现计划<br>
-/superpowers:execute-plan - 执行带质量检查的系统化实现<br>
-/superpowers:systematic-debugging - 测试代码</p>
-<h2 id="GSD-get-shit-done"><a class="header-anchor" href="#GSD-get-shit-done"></a>GSD(get-shit-done)</h2>
-<h2 id="OpenSpec"><a class="header-anchor" href="#OpenSpec"></a>OpenSpec</h2>
+<h4 id="常用命令"><a class="header-anchor" href="#常用命令"></a>常用命令</h4>
+<ol>
+<li>
+<p>brainstorming<br>
+在编写代码之前启动。通过提问完善初步想法，探索各种方案，分段展示设计以供验证。保存设计文档。</p>
+</li>
+<li>
+<p>using-git-worktrees<br>
+设计方案获批后激活。在新分支上创建隔离工作区，运行项目设置，验证测试基线是否干净。</p>
+</li>
+<li>
+<p>writing-plans<br>
+根据已批准的设计方案启动。将工作分解成易于处理的小任务（每个任务耗时 2-5 分钟）。每个任务都包含精确的文件路径、完整的代码和验证步骤。</p>
+</li>
+<li>
+<p>subagent-driven-development or executing-plans<br>
+根据计划激活。为每个任务派遣新的子代理，并进行两阶段审查（先检查规范符合性，再检查代码质量），或者分批执行，并设置人工检查点。</p>
+</li>
+<li>
+<p>test-driven-development<br>
+在实现阶段激活。强制执行红绿重构流程：编写失败的测试，观察其失败，编写最小代码，观察其通过，然后提交。删除测试之前编写的代码。</p>
+</li>
+<li>
+<p>requesting-code-review<br>
+在任务间隙激活。根据计划进行审查，并按严重程度报告问题。严重问题会阻碍进度。</p>
+</li>
+<li>
+<p>finishing-a-development-branch<br>
+当任务完成后激活。验证测试，提供选项（合并/PR/保留/丢弃），清理工作树。</p>
+</li>
+</ol>
+<h4 id="执行过程"><a class="header-anchor" href="#执行过程"></a>执行过程</h4>
+<p>/superpowers:brainstorm - 启动结构化头脑风暴会话进行问题探索</p>
+<p>/superpowers:write-plan - 生成包含任务分解的详细实现计划</p>
+<p>/superpowers:execute-plan - 执行带质量检查的系统化实现</p>
+<p>/superpowers:systematic-debugging - 测试代码</p>
+<h3 id="GSD-get-shit-done"><a class="header-anchor" href="#GSD-get-shit-done"></a>GSD(get-shit-done)</h3>
+<h3 id="OpenSpec"><a class="header-anchor" href="#OpenSpec"></a>OpenSpec</h3>
 <p>OpenSpec的设计理念</p>
 <blockquote>
 <p>→ fluid not rigid → iterative not waterfall → easy not complex → built for brownfield not just greenfield → scalable from personal projects to enterprises</p>
@@ -467,36 +498,41 @@
 <li>
 <p>opsx-explore<br>
 仔细思考想法，调查问题，明确需求<br>
-<img src="https://github.com/agmtopy/noteBook/blob/master/png/C-Cluade-Code/openspec/1.opsx-explore.png" alt="opsx-explore"></p>
+<img src="https://github.com/agmtopy/noteBook/blob/master/png/C-Cluade-Code/openspec/1.opsx-explore.png?raw=true" alt="opsx-explore"></p>
 </li>
 <li>
 <p>opsx-propose<br>
 一步完成变更创建和规划工件生成（默认快速路径）<br>
-<img src="https://github.com/agmtopy/noteBook/blob/master/png/C-Cluade-Code/openspec/2.opsx-propose.png" alt="opsx-propose"></p>
+<img src="https://github.com/agmtopy/noteBook/blob/master/png/C-Cluade-Code/openspec/2.opsx-propose.png?raw=true" alt="opsx-propose"></p>
 </li>
 <li>
 <p>opsx-apply<br>
 执行任务，并根据需要更新工件<br>
-<img src="https://github.com/agmtopy/noteBook/blob/master/png/C-Cluade-Code/openspec/3.opsx-apply.png" alt="opsx-apply"></p>
+<img src="https://github.com/agmtopy/noteBook/blob/master/png/C-Cluade-Code/openspec/3.opsx-apply.png?raw=true" alt="opsx-apply"></p>
 </li>
 <li>
 <p>opsx-archive<br>
 完成后归档<br>
-<img src="https://github.com/agmtopy/noteBook/blob/master/png/C-Cluade-Code/openspec/4.opsx-archive.png" alt="opsx-archive"></p>
+<img src="https://github.com/agmtopy/noteBook/blob/master/png/C-Cluade-Code/openspec/4.opsx-archive.png?raw=true" alt="opsx-archive"></p>
 </li>
 </ul>
-<h2 id="everything-claude-code"><a class="header-anchor" href="#everything-claude-code"></a>everything-claude-code</h2>
-<h2 id="agent-teams"><a class="header-anchor" href="#agent-teams"></a>agent teams</h2>
+<p>开启opsx扩展命令</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 开启配置</span>
+openspec config profile
+<span class="token comment"># 更新配置</span>
+openspec update<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="everything-claude-code"><a class="header-anchor" href="#everything-claude-code"></a>everything-claude-code</h3>
+<h3 id="agent-teams"><a class="header-anchor" href="#agent-teams"></a>agent teams</h3>
 <p>使用teams对于小需求并不能提高效率,反而由于来回交流导致效率下降<br>
 agent teams适用于大型项目,明确分工的需求</p>
-<h2 id="推荐"><a class="header-anchor" href="#推荐"></a>推荐</h2>
-<h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
-<h3 id="项目地址"><a class="header-anchor" href="#项目地址"></a>项目地址</h3>
+<h3 id="推荐"><a class="header-anchor" href="#推荐"></a>推荐</h3>
+<h3 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h3>
+<h4 id="项目地址"><a class="header-anchor" href="#项目地址"></a>项目地址</h4>
 <p><a target="_blank" rel="noopener" href="https://github.com/gsd-build/get-shit-done">https://github.com/gsd-build/get-shit-done</a><br>
 <a target="_blank" rel="noopener" href="https://github.com/obra/superpowers">https://github.com/obra/superpowers</a><br>
 <a target="_blank" rel="noopener" href="https://github.com/affaan-m/everything-claude-code">https://github.com/affaan-m/everything-claude-code</a><br>
 <a target="_blank" rel="noopener" href="https://github.com/Yeachan-Heo/oh-my-claudecode/tree/main">https://github.com/Yeachan-Heo/oh-my-claudecode/tree/main</a></p>
-<h3 id="项目文档"><a class="header-anchor" href="#项目文档"></a>项目文档</h3>
+<h4 id="项目文档"><a class="header-anchor" href="#项目文档"></a>项目文档</h4>
 <p><a target="_blank" rel="noopener" href="https://github.com/Fission-AI/OpenSpec/blob/main/docs/commands.md">https://github.com/Fission-AI/OpenSpec/blob/main/docs/commands.md</a></p>
 
                 
@@ -558,17 +594,18 @@ agent teams适用于大型项目,明确分工的需求</p>
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;Current
+            </div>
             <div class="card">
-                <a href="/2026/03/08/1.%E6%9D%82%E8%AE%B0/Cluade%20Code%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/">
+                <a href="/2026/03/18/1.%E6%9D%82%E8%AE%B0/Cluade%20Code%E7%9A%84workflow/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="Cluade Code使用指南">
+                        <img src="/medias/featureimages/36.jpg" class="responsive-img" alt="Cluade Code的workflow">
                         
-                        <span class="card-title">Cluade Code使用指南</span>
+                        <span class="card-title">Cluade Code的workflow</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -578,9 +615,9 @@ agent teams适用于大型项目,明确分工的需求</p>
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2026-03-08
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2026-03-18
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -593,6 +630,7 @@ agent teams适用于大型项目,明确分工的需求</p>
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -611,13 +649,13 @@ agent teams适用于大型项目,明确分工的需求</p>
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2026/01/03/26.%E9%AB%98%E6%80%A7%E8%83%BD/11.Queue%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%90%86%E8%AE%BA/">
+                <a href="/2026/03/08/1.%E6%9D%82%E8%AE%B0/Cluade%20Code%E4%BD%BF%E7%94%A8%E6%8C%87%E5%8D%97/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="Chronicle Queue之基础理论">
+                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="Cluade Code使用指南">
                         
-                        <span class="card-title">Chronicle Queue之基础理论</span>
+                        <span class="card-title">Cluade Code使用指南</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -628,14 +666,14 @@ agent teams适用于大型项目,明确分工的需求</p>
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2026-01-03
+                                <i class="far fa-clock fa-fw icon-date"></i>2026-03-08
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E9%AB%98%E6%80%A7%E8%83%BD/" class="post-category">
-                                    高性能
+                            <a href="/categories/%E6%9D%82%E8%AE%B0/" class="post-category">
+                                    杂记
                                 </a>
                             
                             
@@ -645,8 +683,8 @@ agent teams适用于大型项目,明确分工的需求</p>
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/Chronicle-Queue/">
-                        <span class="chip bg-color">Chronicle Queue</span>
+                    <a href="/tags/claude-code/">
+                        <span class="chip bg-color">claude code</span>
                     </a>
                     
                 </div>
@@ -798,7 +836,7 @@ agent teams适用于大型项目,明确分工的需求</p>
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            239.9k
+                                            240.3k
                                         </span>&nbsp;字
                                         
                                             
