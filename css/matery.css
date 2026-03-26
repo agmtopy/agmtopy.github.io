@@ -285,6 +285,22 @@ header .nav-transparent {
     box-shadow: none;
 }
 
+/* 导航栏自动隐藏效果 */
+#headNav {
+    transition: transform 0.5s ease;
+}
+
+#headNav.nav-hidden {
+    transform: translateY(-100%);
+}
+
+/* 确保导航栏在隐藏时仍然保持透明/着色状态 */
+#headNav.nav-hidden.nav-transparent {
+    background-color: transparent !important;
+    background-image: none;
+    box-shadow: none;
+}
+
 header nav .brand-span {
     font-size: 1.45rem;
 }

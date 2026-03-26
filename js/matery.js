@@ -127,12 +127,15 @@ $(function () {
     /*监听滚动条位置*/
     let $nav = $('#headNav');
     let $backTop = $('.top-scroll');
+    let navHidden = false; // 导航栏状态标记
+
     // 当页面处于文章中部的时候刷新页面，因为此时无滚动，所以需要判断位置,给导航加上绿色。
     showOrHideNavBg($(window).scrollTop());
     $(window).scroll(function () {
         /* 回到顶部按钮根据滚动条的位置的显示和隐藏.*/
         let scroll = $(window).scrollTop();
         showOrHideNavBg(scroll);
+        handleNavAutoHide(scroll);
     });
 
     function showOrHideNavBg(position) {
@@ -143,6 +146,31 @@ $(function () {
         } else {
             $nav.removeClass('nav-transparent');
             $backTop.slideDown(300);
+        }
+    }
+
+    // 导航栏自动隐藏功能
+    function handleNavAutoHide(currentScrollTop) {
+        // 在顶部时，显示导航栏
+        if (currentScrollTop < 100) {
+            showNavbar();
+        } else {
+            // 不在顶部时，无论向上还是向下滚动，都隐藏导航栏
+            hideNavbar();
+        }
+    }
+
+    function showNavbar() {
+        if (navHidden) {
+            $nav.removeClass('nav-hidden');
+            navHidden = false;
+        }
+    }
+
+    function hideNavbar() {
+        if (!navHidden) {
+            $nav.addClass('nav-hidden');
+            navHidden = true;
         }
     }
 
