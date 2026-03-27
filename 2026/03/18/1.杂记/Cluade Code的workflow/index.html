@@ -422,7 +422,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    803
+                    913
                 </div>
                 
 
@@ -452,6 +452,25 @@
 <blockquote>
 <p>适用于追求极致代码质量、需要大规模重构的场景,缺点:极其消耗Token,且有时流程过于死板,小任务不适合</p>
 </blockquote>
+<h4 id="执行命令"><a class="header-anchor" href="#执行命令"></a>执行命令</h4>
+<ol>
+<li>
+<p>/superpowers:brainstorm - 启动结构化头脑风暴会话进行问题探索<br>
+<img src="https://github.com/agmtopy/noteBook/blob/master/png/C-Cluade-Code/superpower/1.superpowers-brainstorm.png?raw=true" alt="superpowers:brainstorm"><br>
+通过对话引导式的方式澄清需求</p>
+</li>
+<li>
+<p>/superpowers:write-plan - 生成包含任务分解的详细实现计划<br>
+<img src="https://github.com/agmtopy/noteBook/blob/master/png/C-Cluade-Code/superpower/2.superpowers-write-plan.png?raw=true" alt="superpowers:write-plan"><br>
+通过需求生成执行计划,默认执行计划是在~/.claude/plans下,记得挪到项目中</p>
+</li>
+<li>
+<p>/superpowers:execute-plan - 执行带质量检查的系统化实现<br>
+<img src="https://github.com/agmtopy/noteBook/blob/master/png/C-Cluade-Code/superpower/2.superpowers-write-plan-result.png?raw=true" alt="superpowers:execute-plan-result"></p>
+</li>
+</ol>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/C-Cluade-Code/superpower/3.superpowers-execute-plan-result-1.png?raw=true" alt="superpowers:execute-plan-result"><br>
+按计划进行执行,并且每次执行完成计划后都会验证代码</p>
 <h4 id="常用命令"><a class="header-anchor" href="#常用命令"></a>常用命令</h4>
 <ol>
 <li>
@@ -483,11 +502,8 @@
 当任务完成后激活。验证测试，提供选项（合并/PR/保留/丢弃），清理工作树。</p>
 </li>
 </ol>
-<h4 id="执行过程"><a class="header-anchor" href="#执行过程"></a>执行过程</h4>
-<p>/superpowers:brainstorm - 启动结构化头脑风暴会话进行问题探索</p>
-<p>/superpowers:write-plan - 生成包含任务分解的详细实现计划</p>
-<p>/superpowers:execute-plan - 执行带质量检查的系统化实现</p>
-<p>/superpowers:systematic-debugging - 测试代码</p>
+<h4 id="经验"><a class="header-anchor" href="#经验"></a>经验</h4>
+<p>使用过程中<B>brainstorm</B>、<B>debugging</B>比较好用,其他的命令有时候会过于死板,不适合小任务,而且消耗Token较多,需要根据实际情况选择使用;</p>
 <h3 id="GSD-get-shit-done"><a class="header-anchor" href="#GSD-get-shit-done"></a>GSD(get-shit-done)</h3>
 <h3 id="OpenSpec"><a class="header-anchor" href="#OpenSpec"></a>OpenSpec</h3>
 <p>OpenSpec的设计理念</p>
@@ -836,7 +852,7 @@ agent teams适用于大型项目,明确分工的需求</p>
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            240.3k
+                                            240.4k
                                         </span>&nbsp;字
                                         
                                             
