@@ -422,14 +422,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    913
+                    1.9k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    3 分钟
+                    6 分钟
                 </div>
                 
 
@@ -444,7 +444,7 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <h2 id="Cluade-Code的workflow"><a class="header-anchor" href="#Cluade-Code的workflow"></a>Cluade Code的workflow</h2>
-<p>workflow就是内置的一组SKILLS文件,将软件开发领域中的常见任务进行结构化,并且提供了一个统一的接口来调用这些技能,从而实现了软件开发过程中的自动化和智能化;</p>
+<p>workflow就是ai深度嵌入研发流程中的的一套人机合作的流程,用于是一种研发流程级别的框架;</p>
 <p>Cluade Code的workflow目前主流的有OpenSpec、Superpowers、GSD(get-shit-done)、oh-my-claudecode、everything-claude-code,<br>
 这五个工具都是基于规范驱动开发 (Spec-Driven Development)的理念出发,对Cli进行增强的工具;<br>
 下面依次对这些工具进行使用的一个笔记;</p>
@@ -505,6 +505,80 @@
 <h4 id="经验"><a class="header-anchor" href="#经验"></a>经验</h4>
 <p>使用过程中<B>brainstorm</B>、<B>debugging</B>比较好用,其他的命令有时候会过于死板,不适合小任务,而且消耗Token较多,需要根据实际情况选择使用;</p>
 <h3 id="GSD-get-shit-done"><a class="header-anchor" href="#GSD-get-shit-done"></a>GSD(get-shit-done)</h3>
+<p>GSD主要是想要解决context容量被填满的问题,context填满后会带来模型幻觉问题;</p>
+<h4 id="常用命令-v2"><a class="header-anchor" href="#常用命令-v2"></a>常用命令</h4>
+<ol>
+<li>/gsd:map-codebase 理解现有代码库</li>
+</ol>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/C-Cluade-Code/GSD/1.gsd-map-codebase.png?raw=true" alt="gsd:map-codebase"></p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/C-Cluade-Code/GSD/1.gsd-map-codebase-result.png?raw=true" alt="gsd:map-codebase-result"></p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/C-Cluade-Code/GSD/1.gsd-map-codebase-result_1.png?raw=true" alt="gsd:map-codebase-result_1"></p>
+<ol start="2">
+<li>/gsd:new-project 初始化项目/需求</li>
+</ol>
+<pre class="line-numbers language-txt" data-language="txt"><code class="language-txt">一个命令，一条完整流程。系统会：
+提问：一直问到它彻底理解你的想法（目标、约束、技术偏好、边界情况）
+研究：并行拉起代理调研领域知识（可选，但强烈建议）
+需求梳理：提取哪些属于 v1、v2，哪些不在范围内
+路线图：创建与需求映射的阶段规划
+你审核并批准路线图后，就可以开始构建<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/C-Cluade-Code/GSD/2.gsd-new-project.png?raw=true" alt="gsd:new-project"></p>
+<ol start="3">
+<li>/gsd:discuss-phase 讨论阶段</li>
+</ol>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/C-Cluade-Code/GSD/3.gsd-discuss-phase.png?raw=true" alt="gsd:discuss-phase"></p>
+<pre class="line-numbers language-txt" data-language="txt"><code class="language-txt">
+系统会分析该阶段，并根据要构建的内容识别灰区：
+
+视觉功能：布局、信息密度、交互、空状态
+API / CLI：返回格式、flags、错误处理、详细程度
+内容系统：结构、语气、深度、流转方式
+组织型任务：分组标准、命名、去重、例外情况
+对每个你选择的区域，系统都会持续追问，直到你满意为止。最终产物 CONTEXT.md 会直接喂给后续两个步骤：
+
+研究代理会读取它：知道该研究哪些模式（例如“用户想要卡片布局” → 去研究卡片组件库）
+规划代理会读取它：知道哪些决策已经锁定（例如“已决定使用无限滚动” → 计划里就会包含滚动处理）
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/C-Cluade-Code/GSD/3.gsd-discuss-phase_result.png?raw=true" alt="gsd-discuss-phase_result"></p>
+<p>规划阶段完成后得到01-CONTEXT.md文件</p>
+<ol start="3">
+<li>
+<p>/gsd:plan-phase 规划阶段<br>
+根据discuss讨论出的规划方案,分解成具体的任务,然后检查任务和需求是否一致;<br>
+<img src="https://github.com/agmtopy/noteBook/blob/master/png/C-Cluade-Code/GSD/6.gsd-plan-phase.png?raw=true" alt="gsd:plan-phase"></p>
+</li>
+<li>
+<p>/gsd:execute-phase 执行阶段<br>
+根据plan计划阶段的任务列表进行执行<br>
+<img src="https://github.com/agmtopy/noteBook/blob/master/png/C-Cluade-Code/GSD/4.gsd-execute-phase.png?raw=true" alt="gsd:execute-phase"></p>
+</li>
+<li>
+<p>/gsd:verify-work 验证阶段<br>
+验证阶段自动执行不需要手动触发</p>
+</li>
+</ol>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/C-Cluade-Code/GSD/5.gsd-verify-phase.png?raw=true" alt="gsd:verify-phase"></p>
+<h4 id="执行过程"><a class="header-anchor" href="#执行过程"></a>执行过程</h4>
+<p>执行过程就是不断的重复<B>gsd:discuss-phase</B> -&gt; <B>gsd:plan-phase</B> -&gt; <B>gsd:execute-phase</B> -&gt; <B>gsd:execute-phase</B></p>
+<h4 id="quick-快速模型"><a class="header-anchor" href="#quick-快速模型"></a>quick 快速模型</h4>
+<p>对于小需求,实际上是不需要用到完整的GSD workflow,因此可以GSD也提供了/gsd:quick来完成</p>
+<pre class="line-numbers language-txt" data-language="txt"><code class="language-txt">适用于不需要完整规划的临时任务。
+
+快速模式保留 GSD 的核心保障（原子提交、状态跟踪），但路径更短：
+
+相同的代理体系：同样是 planner + executor，质量不降
+跳过可选步骤：默认不启用 research、plan checker、verifier
+独立跟踪：数据存放在 .planning/quick/，不和 phase 混在一起
+--discuss 参数： 在规划前先进行轻量讨论，理清灰区。
+
+--research 参数： 在规划前拉起研究代理。调查实现方式、库选型和潜在坑点。适合你不确定怎么下手的场景。
+
+--full 参数： 启用计划检查（最多 2 轮迭代）和执行后验证。
+
+参数可组合使用：--discuss --research --full 可同时获得讨论 + 研究 + 计划检查 + 验证。
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="小结"><a class="header-anchor" href="#小结"></a>小结</h4>
+<p>和superpower一样太重了,步骤和文档太多,适合团队项目,但是用起来总有一种过渡阶段的过度&amp;过渡工具的感觉</p>
 <h3 id="OpenSpec"><a class="header-anchor" href="#OpenSpec"></a>OpenSpec</h3>
 <p>OpenSpec的设计理念</p>
 <blockquote>
@@ -538,10 +612,13 @@ openspec config profile
 <span class="token comment"># 更新配置</span>
 openspec update<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 <h3 id="everything-claude-code"><a class="header-anchor" href="#everything-claude-code"></a>everything-claude-code</h3>
+<p>太复杂了,不想用</p>
 <h3 id="agent-teams"><a class="header-anchor" href="#agent-teams"></a>agent teams</h3>
 <p>使用teams对于小需求并不能提高效率,反而由于来回交流导致效率下降<br>
 agent teams适用于大型项目,明确分工的需求</p>
 <h3 id="推荐"><a class="header-anchor" href="#推荐"></a>推荐</h3>
+<p>默认小需求修复Bug直接使用Claude Code的<B>Plan mode</B>即可,新项目&amp;团队协助使用<B>OpenSpec</B>,目前使用感受来看SDD的实际是想要解决上下文管理问题带来的幻觉和指挥模型做什么的问题,因此中间过程中生成的数据或者文档,并不适合人来进行审查,太多了,但是如果不审查,到了后续阶段在来修正的代价有比较大,因此比较好的工作流是需要审核的文档不需要太多并且能管理上下文的workflow是更好的选择;<br>
+目前还有一些workflow,例如Spec Kit以及国产的Trellis等,后续在进行研究</p>
 <h3 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h3>
 <h4 id="项目地址"><a class="header-anchor" href="#项目地址"></a>项目地址</h4>
 <p><a target="_blank" rel="noopener" href="https://github.com/gsd-build/get-shit-done">https://github.com/gsd-build/get-shit-done</a><br>
@@ -549,7 +626,11 @@ agent teams适用于大型项目,明确分工的需求</p>
 <a target="_blank" rel="noopener" href="https://github.com/affaan-m/everything-claude-code">https://github.com/affaan-m/everything-claude-code</a><br>
 <a target="_blank" rel="noopener" href="https://github.com/Yeachan-Heo/oh-my-claudecode/tree/main">https://github.com/Yeachan-Heo/oh-my-claudecode/tree/main</a></p>
 <h4 id="项目文档"><a class="header-anchor" href="#项目文档"></a>项目文档</h4>
-<p><a target="_blank" rel="noopener" href="https://github.com/Fission-AI/OpenSpec/blob/main/docs/commands.md">https://github.com/Fission-AI/OpenSpec/blob/main/docs/commands.md</a></p>
+<p><a target="_blank" rel="noopener" href="https://github.com/Fission-AI/OpenSpec/blob/main/docs/commands.md">https://github.com/Fission-AI/OpenSpec/blob/main/docs/commands.md</a><br>
+<a target="_blank" rel="noopener" href="https://docs.trytrellis.app/zh">https://docs.trytrellis.app/zh</a></p>
+<h4 id="参考资料-v2"><a class="header-anchor" href="#参考资料-v2"></a>参考资料</h4>
+<p><a target="_blank" rel="noopener" href="https://github.com/gsd-build/get-shit-done/blob/main/README.zh-CN.md#%E5%AE%83%E6%98%AF%E6%80%8E%E4%B9%88%E5%B7%A5%E4%BD%9C%E7%9A%84">GSD工作原理</a><br>
+<a target="_blank" rel="noopener" href="https://linux.do/t/topic/1539636">trytrellis</a></p>
 
                 
             </div>
@@ -852,7 +933,7 @@ agent teams适用于大型项目,明确分工的需求</p>
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            240.4k
+                                            241.4k
                                         </span>&nbsp;字
                                         
                                             
