@@ -1,0 +1,1278 @@
+<!DOCTYPE HTML>
+<html lang="zh-Hans">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Cluade Code使用指南, agmtopy博客">
+    <meta name="description" content="你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>Cluade Code使用指南 | agmtopy博客</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="agmtopy博客" type="application/atom+xml">
+</head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">agmtopy博客</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>主页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">agmtopy博客</div>
+        <div class="logo-desc">
+            
+            你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			主页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/agmtopy" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/agmtopy" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/44.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">Cluade Code使用指南</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/claude-code/">
+                                <span class="chip bg-color">claude code</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/%E6%9D%82%E8%AE%B0/" class="post-category">
+                                杂记
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2026-03-08
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
+                    1.3k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
+                    5 分钟
+                </div>
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h1>Cluade Code使用指南</h1>
+<p>Cluade Code使用指南主要分为3个部分,安装、使用、进阶,这三个部分</p>
+<h2 id="安装与配置"><a class="header-anchor" href="#安装与配置"></a>安装与配置</h2>
+<p>Cluade Code现在最新的安装方式主要是通过下载安装包进行,可以参考官网的<a target="_blank" rel="noopener" href="https://code.claude.com/docs/zh-CN/quickstart">快速指南</a>,另外一种方式就是通过npm进行管理安装</p>
+<h3 id="安装Cluade与安装Cluade-Code"><a class="header-anchor" href="#安装Cluade与安装Cluade-Code"></a>安装Cluade与安装Cluade Code</h3>
+<ul>
+<li>安装Cluade</li>
+</ul>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 安装最新版本</span>
+<span class="token function">npm</span> <span class="token function">install</span> <span class="token parameter variable">-g</span> @anthropic-ai/claude-code
+
+<span class="token comment"># 安装指定版本</span>
+<span class="token function">npm</span> <span class="token function">install</span> <span class="token parameter variable">-g</span> @anthropic-ai/claude-code@2.0.64 
+
+<span class="token comment"># 检查版本</span>
+claude <span class="token parameter variable">-version</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>可选:安装Cluade-code-router(ccr)</li>
+</ul>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment"># 安装最新版本</span>
+<span class="token function">npm</span> <span class="token function">install</span> <span class="token parameter variable">-g</span> @musistudio/claude-code-router
+
+<span class="token comment"># 检查版本</span>
+ccr version
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="配置Cluade-Code"><a class="header-anchor" href="#配置Cluade-Code"></a>配置Cluade Code</h3>
+<p>在配置底层模型时,首先要跳过Anthropic的登录限制,在.claude.json配置中增加hasCompletedOnboarding参数即可</p>
+<ul>
+<li>~/.claude.json</li>
+</ul>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+    <span class="token property">"hasCompletedOnboarding"</span><span class="token operator">:</span> <span class="token boolean">true</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>Cluade Code直接使用Anthropic自家的Opus/Sonnet模型是最好的,但是对我来是还是太贵了,因此使用的是Cluade Code + 国内开源大模型的方式;<br>
+有两种配置方案,一种是大模型支持Anthropic协议的调用,一种是使用cluade-code-router将anthropic请求转换成支持openai协议的请求,再来请求大模型;</p>
+<p>第一种直接使用Anthropic协议</p>
+<ul>
+<li>.claude/settings.json</li>
+</ul>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json">
+<span class="token punctuation">&#123;</span>
+  <span class="token property">"env"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"ANTHROPIC_AUTH_TOKEN"</span><span class="token operator">:</span> <span class="token string">"#you_token#"</span><span class="token punctuation">,</span>
+    <span class="token property">"ANTHROPIC_BASE_URL"</span><span class="token operator">:</span> <span class="token string">"#服务商URL#"</span><span class="token punctuation">,</span>
+    <span class="token property">"ANTHROPIC_MODEL"</span><span class="token operator">:</span> <span class="token string">"ZhipuAI/GLM-5"</span><span class="token punctuation">,</span>
+    <span class="token property">"ANTHROPIC_SMALL_FAST_MODEL"</span><span class="token operator">:</span><span class="token string">"ZhipuAI/GLM-5"</span><span class="token punctuation">,</span>
+    <span class="token property">"API_TIMEOUT_MS"</span><span class="token operator">:</span> <span class="token string">"3000000"</span><span class="token punctuation">,</span>
+    <span class="token property">"CLAUDE_CODE_DISABLE_NONESSENTIAL_TRAFFIC"</span><span class="token operator">:</span> <span class="token string">"1"</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>其中’ANTHROPIC_AUTH_TOKEN’,'ANTHROPIC_BASE_URL’是必填的,使用ANTHROPIC协议可以在Claude Code中看到使用的模型为Custom model模型;</p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/C-Cluade-Code/%E4%BD%BF%E7%94%A8ANTHROPIC%E5%8D%8F%E8%AE%AE.png?raw=true" alt="使用ANTHROPIC协议.png"></p>
+<p>第二种使用Cluade-Code-Router,简称(ccr)来进行桥接</p>
+<p>首先.claude/settings.json文件不能有内容,为空即可</p>
+<ul>
+<li>~/.claude-code-router/config.json</li>
+</ul>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+  <span class="token property">"Providers"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+    <span class="token punctuation">&#123;</span>
+      <span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"modelscope"</span><span class="token punctuation">,</span>
+      <span class="token property">"api_base_url"</span><span class="token operator">:</span> <span class="token string">"#服务商URL#"</span><span class="token punctuation">,</span>
+      <span class="token property">"api_key"</span><span class="token operator">:</span> <span class="token string">"#you_token#"</span><span class="token punctuation">,</span>
+      <span class="token property">"models"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+        <span class="token string">"ZhipuAI/GLM-5"</span><span class="token punctuation">,</span>
+        <span class="token string">"moonshotai/Kimi-K2.5"</span><span class="token punctuation">,</span>
+        <span class="token string">"Qwen/Qwen3-Coder-480B-A35B-Instruct"</span>
+      <span class="token punctuation">]</span><span class="token punctuation">,</span>
+      <span class="token property">"transformer"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+        <span class="token property">"use"</span><span class="token operator">:</span> <span class="token punctuation">[</span>
+          <span class="token string">"cleancache"</span>
+        <span class="token punctuation">]</span>
+      <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">]</span><span class="token punctuation">,</span>
+  <span class="token property">"Router"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"default"</span><span class="token operator">:</span> <span class="token string">"modelscope,ZhipuAI/GLM-5"</span><span class="token punctuation">,</span>
+    <span class="token property">"background"</span><span class="token operator">:</span> <span class="token string">"modelscope,Qwen/Qwen3-Coder-480B-A35B-Instruct"</span><span class="token punctuation">,</span>
+    <span class="token property">"think"</span><span class="token operator">:</span> <span class="token string">"modelscope,ZhipuAI/GLM-5"</span><span class="token punctuation">,</span>
+    <span class="token property">"longContext"</span><span class="token operator">:</span> <span class="token string">"modelscope,ZhipuAI/GLM-5"</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>配置一和配置二的URL不一样,拿modelscope来举例,在配置一中为:‘<a target="_blank" rel="noopener" href="https://api-inference.modelscope.cn">https://api-inference.modelscope.cn</a>’,在配置二中为:‘<a target="_blank" rel="noopener" href="https://api-inference.modelscope.cn/v1/chat/completions">https://api-inference.modelscope.cn/v1/chat/completions</a>’<br>
+区别在于后缀是否有’/v1/chat/completions’,这个也可以看做是openai协议要求;<br>
+使用第二种之后看到的模型就是Sonnet,但是实际上调用的是ccr路由的模型</p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/C-Cluade-Code/%E4%BD%BF%E7%94%A8Open%20Ai%E5%8D%8F%E8%AE%AE.png?raw=true" alt="使用openai协议.png"></p>
+<h2 id="使用"><a class="header-anchor" href="#使用"></a>使用</h2>
+<p>使用部分主要分为ccr使用与claude code使用两个部分,</p>
+<h3 id="ccr使用"><a class="header-anchor" href="#ccr使用"></a>ccr使用</h3>
+<ul>
+<li>基础命令</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>ccr code</td>
+<td>启动cluade code</td>
+</tr>
+<tr>
+<td>2</td>
+<td>ccr start</td>
+<td>启动,使用ccr code时,包含该命令</td>
+</tr>
+<tr>
+<td>3</td>
+<td>ccr restart</td>
+<td>重启启动,调整配置后一定需要重启</td>
+</tr>
+<tr>
+<td>4</td>
+<td>ccr model</td>
+<td>切换模型</td>
+</tr>
+</tbody>
+</table>
+<p>详细高级用法可以参考ccr项目,自定义路由规则、设置预设等</p>
+<h3 id="claude-code基础用法"><a class="header-anchor" href="#claude-code基础用法"></a>claude code基础用法</h3>
+<p>claude code模式分为:</p>
+<ul>
+<li>
+<p>‘默认’<br>
+修改文件前会先获取授权</p>
+</li>
+<li>
+<p>‘规划’<br>
+只讨论方案,不修改文件</p>
+</li>
+<li>
+<p>‘自动’<br>
+自动修改文件或操作</p>
+</li>
+</ul>
+<p>通过shift + tab的方式来进行修改</p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/C-Cluade-Code/claude%20code%E7%9A%84%E4%B8%89%E7%A7%8D%E6%A8%A1%E5%BC%8F.png?raw=true" alt="三种模式"></p>
+<ul>
+<li>快捷键</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>快捷键</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>shift + tab</td>
+<td>自动切换模式</td>
+</tr>
+<tr>
+<td>2</td>
+<td>shift + enter</td>
+<td>输入换行</td>
+</tr>
+<tr>
+<td>3</td>
+<td>ctrl + b</td>
+<td>将当前任务置于后台</td>
+</tr>
+<tr>
+<td>4</td>
+<td>ctrl + d</td>
+<td>退出claude code</td>
+</tr>
+<tr>
+<td>5</td>
+<td>esc + esc</td>
+<td>回滚,主要选择回滚会话还是文件,只能回滚cc创建的文件,通过cc调用工具创建的文件无法回滚</td>
+</tr>
+<tr>
+<td>6</td>
+<td>shift + enter</td>
+<td>输入换行</td>
+</tr>
+<tr>
+<td>7</td>
+<td>ctrl + r</td>
+<td>搜索历史</td>
+</tr>
+<tr>
+<td>8</td>
+<td>ctrl + C</td>
+<td>终止操作</td>
+</tr>
+<tr>
+<td>9</td>
+<td>ctrl + S</td>
+<td>暂存提示词</td>
+</tr>
+<tr>
+<td>10</td>
+<td>ctrl + R</td>
+<td>恢复最近的提示词</td>
+</tr>
+</tbody>
+</table>
+<ul>
+<li>基础命令</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>序号</th>
+<th>命令</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>1</td>
+<td>/init</td>
+<td>初始化项目的claude.md文件</td>
+</tr>
+<tr>
+<td>2</td>
+<td>/tasks</td>
+<td>查看后台执行任务</td>
+</tr>
+<tr>
+<td>3</td>
+<td>/compact</td>
+<td>压缩上下文</td>
+</tr>
+<tr>
+<td>4</td>
+<td>/clear</td>
+<td>清除上下文,类似开启一个新的会话</td>
+</tr>
+<tr>
+<td>5</td>
+<td>/memory</td>
+<td>修改claude.md文件</td>
+</tr>
+<tr>
+<td>6</td>
+<td>/cost</td>
+<td>查看费用,私有模型不适用</td>
+</tr>
+<tr>
+<td>7</td>
+<td>/status</td>
+<td>查看系统状态</td>
+</tr>
+<tr>
+<td>8</td>
+<td>/resume</td>
+<td>选择对话历史</td>
+</tr>
+<tr>
+<td>8</td>
+<td>/rewind</td>
+<td>选择回滚历史,注意是要回滚代码还是会话</td>
+</tr>
+</tbody>
+</table>
+<h2 id="Cluade-Code进阶技巧"><a class="header-anchor" href="#Cluade-Code进阶技巧"></a>Cluade Code进阶技巧</h2>
+<h3 id="常用命令"><a class="header-anchor" href="#常用命令"></a>常用命令</h3>
+<ul>
+<li>/btw</li>
+</ul>
+<blockquote>
+<p>分支对话,并不会影响当前上下文</p>
+</blockquote>
+<ul>
+<li>/insights</li>
+</ul>
+<blockquote>
+<p>分析claude code最近一个月的使用,给出改进建议</p>
+</blockquote>
+<ul>
+<li>/simplify</li>
+</ul>
+<blockquote>
+<p>审查你最近更改的文件以查找代码重用、质量和效率问题，然后修复它们。在实现功能或错误修复后运行它来清理你的工作。它并行生成三个审查代理（代码重用、代码质量、效率），汇总他们的发现，并应用修复。可以设置传入参数以专注于特定问题,例如/simplify focus on memory efficiency。</p>
+</blockquote>
+<ul>
+<li>/loop</li>
+</ul>
+<blockquote>
+<p>定时任务,最长7天</p>
+</blockquote>
+<h3 id="使用原则"><a class="header-anchor" href="#使用原则"></a>使用原则</h3>
+<ol>
+<li>
+<p>禁止使用dangerously模式<br>
+工具是用来使用的,不要把责任下放给工具</p>
+</li>
+<li>
+<p>回滚文件使用git来操作,cc只回滚会话</p>
+</li>
+<li>
+<p>并行处理是效率倍增的关键</p>
+</li>
+<li>
+<p>使用#命令随时写入记忆<br>
+在对话中输入 # 加内容，可以直接写入 CLAUDE.md文件</p>
+</li>
+</ol>
+<h3 id="使用claude-code示例"><a class="header-anchor" href="#使用claude-code示例"></a>使用claude code示例</h3>
+<p>项目背景:创建一个windows下的截图工具</p>
+<h4 id="设置StatusLine"><a class="header-anchor" href="#设置StatusLine"></a>设置StatusLine</h4>
+<ul>
+<li>/.claude/settings.json</li>
+</ul>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+  <span class="token property">"statusLine"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"command"</span><span class="token punctuation">,</span>
+    <span class="token property">"command"</span><span class="token operator">:</span> <span class="token string">"bash /#user#/.claude/statusline-command.sh"</span><span class="token punctuation">,</span>
+    <span class="token property">"refreshInterval"</span><span class="token operator">:</span> <span class="token number">1</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li>statusline-command.sh状态脚本</li>
+</ul>
+<p><a target="_blank" rel="noopener" href="https://github.com/agmtopy/noteBook/blob/master/statusline-command.sh">statusline-command.sh</a></p>
+<p><img src="https://github.com/agmtopy/noteBook/blob/master/png/C-Cluade-Code/statusline.png?raw=true" alt="statusline"></p>
+<h3 id="高级功能"><a class="header-anchor" href="#高级功能"></a>高级功能</h3>
+<h4 id="hook"><a class="header-anchor" href="#hook"></a>hook</h4>
+<h4 id="skill"><a class="header-anchor" href="#skill"></a>skill</h4>
+<h4 id="SubAgent"><a class="header-anchor" href="#SubAgent"></a>SubAgent</h4>
+<h4 id="agent-teams"><a class="header-anchor" href="#agent-teams"></a>agent teams</h4>
+<ul>
+<li>调整配置</li>
+</ul>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json">## settings.json
+<span class="token punctuation">&#123;</span>
+  <span class="token property">"env"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS"</span><span class="token operator">:</span> <span class="token string">"1"</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="参考资料"><a class="header-anchor" href="#参考资料"></a>参考资料</h2>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/knqiufan/p/19449849">Claude Code 完全指南：使用方式、技巧与最佳实践</a><br>
+<a target="_blank" rel="noopener" href="https://musistudio.github.io/claude-code-router/blog">claude-code-router项目</a><br>
+<a target="_blank" rel="noopener" href="https://musistudio.github.io/claude-code-router/blog/2025/02/25/project-motivation">发起claude-code-router项目原因</a></p>
+
+                
+            </div>
+            <hr/>
+
+            
+    
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/claude-code/">
+                                    <span class="chip bg-color">claude code</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="wechat" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2026/03/18/25.AIGC/4.Cluade%20Code%E7%9A%84workflow/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/36.jpg" class="responsive-img" alt="Cluade Code的workflow">
+                        
+                        <span class="card-title">Cluade Code的workflow</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2026-03-18
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E6%9D%82%E8%AE%B0/" class="post-category">
+                                    杂记
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/claude-code/">
+                        <span class="chip bg-color">claude code</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2026/01/03/26.%E9%AB%98%E6%80%A7%E8%83%BD/11.Queue%E4%B9%8B%E5%9F%BA%E7%A1%80%E7%90%86%E8%AE%BA/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/5.jpg" class="responsive-img" alt="Chronicle Queue之基础理论">
+                        
+                        <span class="card-title">Chronicle Queue之基础理论</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2026-01-03
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E9%AB%98%E6%80%A7%E8%83%BD/" class="post-category">
+                                    高性能
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Chronicle-Queue/">
+                        <span class="chip bg-color">Chronicle Queue</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;TOC</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+                <div class="container row center-align"
+                    style="margin-bottom: 0px !important;">
+                    <div class="col s12 m8 l8 copy-right">
+                        
+                            <span id="year">
+                            </span>
+                            
+                                    <span id="year">
+                                    </span>
+                                    <a href="/about" target="_blank">
+                                    </a>
+                                    &nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+                                    |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery"
+                                        target="_blank">Matery</a>
+                                    <!-- <br> -->
+                                    
+                                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                                            class="white-color">
+                                            243.1k
+                                        </span>&nbsp;字
+                                        
+                                            
+                                                
+                                                    
+                                                        
+                                                            
+
+                                                                
+                                                                    
+
+                                                                        
+                                                                            <br>
+                                                                            
+                                                                                    <br>
+                                                                                    
+                    </div>
+                    <div class="col s12 m4 l4 social-link social-statis">
+                        
+
+        
+            <a href="mailto:zjytian@gmail.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我"
+                data-position="top" data-delay="50">
+                <i class="fas fa-envelope-open"></i>
+            </a>
+            
+
+                
+
+                        
+
+                                
+
+                                        
+
+                                                
+
+                                                        
+                    </div>
+                </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入关键词"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
