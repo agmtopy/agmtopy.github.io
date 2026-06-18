@@ -400,7 +400,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    828
+                    816
                 </div>
                 
 
@@ -485,41 +485,41 @@
 <ol start="2">
 <li>分库分表配置规则(基于yml文件)</li>
 </ol>
-<pre class="line-numbers language-yml" data-language="yml"><code class="language-yml">spring:
-  shardingsphere:
-    datasource:
-      names: ds0,ds1
-      # 数据源ds0
-      ds0:
-        type: com.alibaba.druid.pool.DruidDataSource
-        driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql:&#x2F;&#x2F;127.0.0.1:3306&#x2F;ds0?useUnicode&#x3D;true&amp;characterEncoding&#x3D;utf-8&amp;serverTimezone&#x3D;GMT
-        username: root
-        password: 111111
-      # 数据源ds1
-      ds1:
-        type: com.alibaba.druid.pool.DruidDataSource
-        driver-class-name: com.mysql.jdbc.Driver
-        url: jdbc:mysql:&#x2F;&#x2F;127.0.0.1:3306&#x2F;ds1?useUnicode&#x3D;true&amp;characterEncoding&#x3D;utf-8&amp;serverTimezone&#x3D;GMT
-        username: root
-        password: 111111
-    sharding:
-      default-database-strategy: # 分库规则
-        inline:
-          sharding-column: vender_id
-          algorithm-expression: ds$&#123;vender_id % 2&#125;
-      tables:
-        t_user:  #t_user表
-          key-generator-column-name: id  #主键
-          actual-data-nodes: ds$&#123;0..1&#125;.t_user    #真实数据节点
-          database-strategy: # 分库策略
-            inline:
-              sharding-column: vender_id # 分库键
-              algorithm-expression: ds$&#123;vender_id % 2&#125;
-#          tableStrategy: #分表策略
-#            inline: #行表达式
-#              shardingColumn: vender_id
-#              algorithmExpression: t_user$&#123;vender_id % 2&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-yml" data-language="yml"><code class="language-yml"><span class="token key atrule">spring</span><span class="token punctuation">:</span>
+  <span class="token key atrule">shardingsphere</span><span class="token punctuation">:</span>
+    <span class="token key atrule">datasource</span><span class="token punctuation">:</span>
+      <span class="token key atrule">names</span><span class="token punctuation">:</span> ds0<span class="token punctuation">,</span>ds1
+      <span class="token comment"># 数据源ds0</span>
+      <span class="token key atrule">ds0</span><span class="token punctuation">:</span>
+        <span class="token key atrule">type</span><span class="token punctuation">:</span> com.alibaba.druid.pool.DruidDataSource
+        <span class="token key atrule">driver-class-name</span><span class="token punctuation">:</span> com.mysql.jdbc.Driver
+        <span class="token key atrule">url</span><span class="token punctuation">:</span> jdbc<span class="token punctuation">:</span>mysql<span class="token punctuation">:</span>//127.0.0.1<span class="token punctuation">:</span>3306/ds0<span class="token punctuation">?</span>useUnicode=true<span class="token important">&amp;characterEncoding=utf-8&amp;serverTimezone=GMT</span>
+        <span class="token key atrule">username</span><span class="token punctuation">:</span> root
+        <span class="token key atrule">password</span><span class="token punctuation">:</span> <span class="token number">111111</span>
+      <span class="token comment"># 数据源ds1</span>
+      <span class="token key atrule">ds1</span><span class="token punctuation">:</span>
+        <span class="token key atrule">type</span><span class="token punctuation">:</span> com.alibaba.druid.pool.DruidDataSource
+        <span class="token key atrule">driver-class-name</span><span class="token punctuation">:</span> com.mysql.jdbc.Driver
+        <span class="token key atrule">url</span><span class="token punctuation">:</span> jdbc<span class="token punctuation">:</span>mysql<span class="token punctuation">:</span>//127.0.0.1<span class="token punctuation">:</span>3306/ds1<span class="token punctuation">?</span>useUnicode=true<span class="token important">&amp;characterEncoding=utf-8&amp;serverTimezone=GMT</span>
+        <span class="token key atrule">username</span><span class="token punctuation">:</span> root
+        <span class="token key atrule">password</span><span class="token punctuation">:</span> <span class="token number">111111</span>
+    <span class="token key atrule">sharding</span><span class="token punctuation">:</span>
+      <span class="token key atrule">default-database-strategy</span><span class="token punctuation">:</span> <span class="token comment"># 分库规则</span>
+        <span class="token key atrule">inline</span><span class="token punctuation">:</span>
+          <span class="token key atrule">sharding-column</span><span class="token punctuation">:</span> vender_id
+          <span class="token key atrule">algorithm-expression</span><span class="token punctuation">:</span> ds$<span class="token punctuation">&#123;</span>vender_id % 2<span class="token punctuation">&#125;</span>
+      <span class="token key atrule">tables</span><span class="token punctuation">:</span>
+        <span class="token key atrule">t_user</span><span class="token punctuation">:</span>  <span class="token comment">#t_user表</span>
+          <span class="token key atrule">key-generator-column-name</span><span class="token punctuation">:</span> id  <span class="token comment">#主键</span>
+          <span class="token key atrule">actual-data-nodes</span><span class="token punctuation">:</span> ds$<span class="token punctuation">&#123;</span>0..1<span class="token punctuation">&#125;</span>.t_user    <span class="token comment">#真实数据节点</span>
+          <span class="token key atrule">database-strategy</span><span class="token punctuation">:</span> <span class="token comment"># 分库策略</span>
+            <span class="token key atrule">inline</span><span class="token punctuation">:</span>
+              <span class="token key atrule">sharding-column</span><span class="token punctuation">:</span> vender_id <span class="token comment"># 分库键</span>
+              <span class="token key atrule">algorithm-expression</span><span class="token punctuation">:</span> ds$<span class="token punctuation">&#123;</span>vender_id % 2<span class="token punctuation">&#125;</span>
+<span class="token comment">#          tableStrategy: #分表策略</span>
+<span class="token comment">#            inline: #行表达式</span>
+<span class="token comment">#              shardingColumn: vender_id</span>
+<span class="token comment">#              algorithmExpression: t_user$&#123;vender_id % 2&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 <ol start="3">
 <li>创建DataSource</li>
 </ol>
@@ -836,7 +836,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            243.1k
+                                            243.6k
                                         </span>&nbsp;字
                                         
                                             

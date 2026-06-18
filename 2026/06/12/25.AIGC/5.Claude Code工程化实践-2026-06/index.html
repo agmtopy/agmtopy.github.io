@@ -400,14 +400,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>字数:&nbsp;&nbsp;
-                    1.7k
+                    2.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时间:&nbsp;&nbsp;
-                    5 分钟
+                    7 分钟
                 </div>
                 
 
@@ -421,10 +421,7 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>好的，明白了。这次我削减了过度修饰的描写（如“抓起键盘就写”、“心里发毛”等），将前两个版本的长处结合：保留第一版的<strong>结构清晰度</strong>与第二版的<strong>平实大白话</strong>，让整篇文章既有条理，又读起来自然顺畅。</p>
-<hr>
-<h2 id="结合优化后的版本"><a class="header-anchor" href="#结合优化后的版本"></a>结合优化后的版本</h2>
-<h2 id="Claude-Code-工程化实践"><a class="header-anchor" href="#Claude-Code-工程化实践"></a>Claude Code 工程化实践</h2>
+                <h2 id="Claude-Code-工程化实践"><a class="header-anchor" href="#Claude-Code-工程化实践"></a>Claude Code 工程化实践</h2>
 <h3 id="前言"><a class="header-anchor" href="#前言"></a>前言</h3>
 <p>这一个季度里，对 Claude Code 的使用的一个总结,最开始的“自己主导 + Claude Code 协助”，逐渐过渡到了“Claude Code 主导 + 自己协助”的模式。在这个过程中，有大量的Vibe Coding和工作中的工程化的实践。</p>
 <p>当下是2026/06这个时间节点，对当前的协作和实践方式做个阶段性总结,整篇文章将分为“一些理解”<strong>和</strong>“工程实践”两部分来谈。</p>
@@ -434,7 +431,7 @@
 <p>我们对 AI 的使用方式，已经从传统的“辅助开发”进入到了“AI 主导、人类辅助和决策”的阶段。从最开始的提示词对话，到现在的自主执行，AI 的发展速度确实非常快。</p>
 <p>需要强调的是，虽然是 AI 在主导，但工程师进行协助是不可或缺的。因为大模型本质是在进行数学上的预测，虽然它现阶段展示出来的智力水平很高,远超我们😭，但尚未真正涌现出&quot;智慧&quot;。</p>
 <p>这个时候，工程师现在的角色发生了变化,从执行角色变成了指挥和质检角色，主要负责检查 AI 的产物（这个过程其实挺累的）、指导 AI 完成工作等更有智力含量的事情。</p>
-<h4 id="2-协作方式转变：拒绝“许愿式提问”"><a class="header-anchor" href="#2-协作方式转变：拒绝“许愿式提问”"></a>2. 协作方式转变：拒绝“许愿式提问”</h4>
+<h4 id="2-协作方式：拒绝“许愿式提问”"><a class="header-anchor" href="#2-协作方式：拒绝“许愿式提问”"></a>2. 协作方式：拒绝“许愿式提问”</h4>
 <p>AI 就像是一个拥有大量知识、学富五车的中学生。它需要你明确告诉它每一步的产物是什么，它才会顺着去推理。因此，<strong>明确的目标和步骤是非常重要的</strong>。</p>
 <p>在工程实践中要避免“许愿式提问”，它每次执行才消耗那么有限的Token，完成不了你那模糊的宏大许愿。提问时，需要明确告诉它你想要什么样的产物，以及每一步的阶段性结果是什么，这样它才能更好地去推理。</p>
 <h4 id="3-研发流程需要适配“AI-主导”的新模式"><a class="header-anchor" href="#3-研发流程需要适配“AI-主导”的新模式"></a>3. 研发流程需要适配“AI 主导”的新模式</h4>
@@ -485,6 +482,31 @@
 <p>CLAUDE.md文件有三个维度,分别是用户维度-项目维度-模块维度,规则的互斥时,以作用粒度最细的规则为准</p>
 <h4 id="5-insights分析使用习惯"><a class="header-anchor" href="#5-insights分析使用习惯"></a>5. insights分析使用习惯</h4>
 <p>/insights 通过这个命令可以把近期使用的习惯进行分析,一般一个月分析一次,会拿一个文件夹专门存放,然后根据这个分析报告调整claude.md文件;</p>
+<h4 id="6-对于模型的搭配使用"><a class="header-anchor" href="#6-对于模型的搭配使用"></a>6. 对于模型的搭配使用</h4>
+<p>能力强的模型，让他尽量做一些规划的工作；能力弱的模型，让他做具体的实现操作。并且做完规划之后的产物，可以使用多个不同的模型来相互检查核实。</p>
+<h4 id="7-工作流程的loop化"><a class="header-anchor" href="#7-工作流程的loop化"></a>7. 工作流程的loop化</h4>
+<p>工作流程的loop化这个指的是将现有需要人工参与的工作，通过程序的调度，来完成自动化，举个例子:<br>
+写代码 -&gt; 编译代码  -&gt; 发现失败原因   -&gt;  修复(写代码) -&gt; 编译代码 …这个循环<br>
+在claude code中的/goal命令，ps:/loop命令是定时命令，不是Loop Engineering</p>
+<hr>
+<h3 id="三、总结"><a class="header-anchor" href="#三、总结"></a>三、总结</h3>
+<p>从这一阶段的实践来看，Claude Code 带来的变化并不只是“开发效率提升”，而更像是一次<strong>研发范式的重构</strong>：人和 AI 在软件生产中的分工边界正在重新划定。</p>
+<p>整体可以归纳为三个核心变化：</p>
+<p><strong>第一，从“人写代码”转向“人定义系统，AI 执行实现”。</strong><br>
+工程师不再是逐行实现逻辑的执行者，而是逐步转向系统设计者与约束制定者。代码的生成过程被外包给 AI，但系统质量仍然由人通过 Spec、约束和验证来控制。</p>
+<p><strong>第二，从“任务驱动开发”转向“结构化协作”。</strong><br>
+AI 并不擅长模糊目标下的探索式执行，因此工程实践中需要用更结构化的方式去驱动它：明确阶段产物、拆分步骤、强化 Plan → Execute 的流程约束。本质上是用工程化手段弥补模型的不确定性。</p>
+<p><strong>第三，从“工具使用”转向“Agent 化协作体系”。</strong><br>
+Claude Code 不再只是一个代码工具，而逐渐演变为多个职责清晰的执行单元（Task-oriented Agent）。研发流程也随之从“人 + 工具”变成“人 + 多 Agent 协作系统”。</p>
+<hr>
+<p>从实践层面看，有几个长期有效的原则可以保留下来：</p>
+<ul>
+<li><strong>始终坚持 Spec 先行，而不是代码先行</strong></li>
+<li><strong>避免端到端大而全的 Workflow 设计，优先模块化 Agent</strong></li>
+<li><strong>把 AI 当作执行系统，而不是对话工具</strong></li>
+<li><strong>人类职责集中在：目标定义 / 约束设计 / 结果审查</strong></li>
+</ul>
+<hr>
 
                 
             </div>
@@ -545,18 +567,17 @@
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;Current
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2026/06/12/25.AIGC/5.Claude%20Code%E5%B7%A5%E7%A8%8B%E5%8C%96%E5%AE%9E%E8%B7%B5-2026-06/">
+                <a href="/2026/06/17/25.AIGC/6..ai%E4%B8%BB%E5%AF%BC%E4%B8%8B%E7%9A%84%E9%A1%B9%E7%9B%AE%E6%9E%B6%E6%9E%84%E6%8E%A2%E7%B4%A2/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/39.jpg" class="responsive-img" alt="Claude Code工程化实践-2026.06">
+                        <img src="/medias/featureimages/69.jpg" class="responsive-img" alt="ai主导下的项目架构探索">
                         
-                        <span class="card-title">Claude Code工程化实践-2026.06</span>
+                        <span class="card-title">ai主导下的项目架构探索</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -566,9 +587,9 @@
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2026-06-12
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2026-06-17
+                        </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -581,12 +602,11 @@
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/claude-code/">
-                        <span class="chip bg-color">claude code</span>
+                    <a href="/tags/cola/">
+                        <span class="chip bg-color">cola</span>
                     </a>
                     
                 </div>
@@ -787,7 +807,7 @@
                                     
                                         &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
                                             class="white-color">
-                                            243.1k
+                                            243.6k
                                         </span>&nbsp;字
                                         
                                             
