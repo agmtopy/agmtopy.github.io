@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>agmtopy博客</title>
+  <meta name="description" content="你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯">
+<meta property="og:type" content="website">
+<meta property="og:title" content="agmtopy博客">
+<meta property="og:url" content="https://agmtopy.gitee.io/page/31/index.html">
+<meta property="og:site_name" content="agmtopy博客">
+<meta property="og:description" content="你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯">
+<meta property="og:locale">
+<meta property="article:author" content="agmtopy">
+<meta name="twitter:card" content="summary">
+  <link rel="icon" href="/images/logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('warmpaper-theme');
+        if (saved === 'dark' || saved === 'light') {
+          document.documentElement.setAttribute('data-theme', saved);
+        }
+      } catch (e) {}
+    })();
+  </script>
+<meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="agmtopy博客" type="application/atom+xml">
+</head>
+
+<body>
+  <div class="site-wrapper">
+    <header class="site-header">
+  <div class="header-inner">
+    <a class="site-title" href="/"><img class="site-logo" src="/images/logo.svg" alt="Logo">agmtopy博客</a>
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span class="nav-toggle-icon"></span>
+    </button>
+    <nav class="site-nav">
+      
+        <a class="nav-link" href="/">Home</a>
+      
+        <a class="nav-link" href="/tags">Tags</a>
+      
+        <a class="nav-link" href="/categories">Categories</a>
+      
+        <a class="nav-link" href="/about">About</a>
+      
+      <button class="theme-toggle" type="button" aria-label="切换主题" title="切换主题" data-theme-state="light">
+        <svg class="icon-sun" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+        </svg>
+        <svg class="icon-moon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+    <main class="main-content">
+      
+<div class="post-list">
+  
+    <article class="post-card">
+  <h2 class="post-card-title">
+    <a href="/2018/03/17/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/10.spring%E4%B8%AD%E8%B5%84%E6%BA%90%E7%9A%84%E5%8A%A0%E8%BD%BD/">spring中资源的加载</a>
+  </h2>
+  <div class="post-card-meta">
+    <time datetime="2018-03-17T15:44:43.000Z">2018-03-17</time>
+    
+      <span class="separator">&middot;</span>
+      
+        <a href="/categories/spring/">spring</a>
+      
+    
+  </div>
+  <div class="post-card-excerpt">
+    
+      <p>spring中资源的加载
+对于资源的加载这个场景首先要划分边界,spring抽象出两个组件：Resource、ResourceLoader
+Resource接口
+Resource是对资源的一种抽象，提供一系列操作文件的方法
+定义
+
+resource.java
+
+public interface Resource extends InputStreamSource &#123;
+    //文件是否...</p>
+    
+  </div>
+  <a class="read-more" href="/2018/03/17/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/10.spring%E4%B8%AD%E8%B5%84%E6%BA%90%E7%9A%84%E5%8A%A0%E8%BD%BD/">Read More &rarr;</a>
+  
+    <div class="post-card-tags">
+      
+        <a href="/tags/spring%E6%BA%90%E4%BB%A3%E7%A0%81/">#spring源代码</a>
+      
+    </div>
+  
+</article>
+
+  
+    <article class="post-card">
+  <h2 class="post-card-title">
+    <a href="/2018/03/17/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/9.spring%E6%BA%90%E4%BB%A3%E7%A0%81%E5%9F%BA%E7%A1%80%E5%92%8C%E7%BB%84%E4%BB%B6/">spring源代码基础和组件</a>
+  </h2>
+  <div class="post-card-meta">
+    <time datetime="2018-03-17T14:41:30.000Z">2018-03-17</time>
+    
+      <span class="separator">&middot;</span>
+      
+        <a href="/categories/spring/">spring</a>
+      
+    
+  </div>
+  <div class="post-card-excerpt">
+    
+      <p>spring的IoC理解
+IoC名词含义指的是控制反转或依赖注入，但是本质上指的是我们在不同的类中相互依赖的不是类本身，而是不同的类提供出来的不同服务，本质是依赖于服务。由于业务处理逻辑本身是一种无状态的处理过程，因此不该使用者去关心服务提供者的生命周期(创建、初始化、销毁),使用者关心于提供的服务本身。IoC本质上就是去控制类的生命周期，让开发者关注于服务本身的工具。
+注入方式
+从上一个问题又引...</p>
+    
+  </div>
+  <a class="read-more" href="/2018/03/17/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/9.spring%E6%BA%90%E4%BB%A3%E7%A0%81%E5%9F%BA%E7%A1%80%E5%92%8C%E7%BB%84%E4%BB%B6/">Read More &rarr;</a>
+  
+    <div class="post-card-tags">
+      
+        <a href="/tags/spring%E6%BA%90%E4%BB%A3%E7%A0%81/">#spring源代码</a>
+      
+    </div>
+  
+</article>
+
+  
+    <article class="post-card">
+  <h2 class="post-card-title">
+    <a href="/2018/03/17/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/8.spring%E8%B0%83%E8%AF%95%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">spring调试环境搭建</a>
+  </h2>
+  <div class="post-card-meta">
+    <time datetime="2018-03-17T14:14:13.000Z">2018-03-17</time>
+    
+      <span class="separator">&middot;</span>
+      
+        <a href="/categories/spring/">spring</a>
+      
+    
+  </div>
+  <div class="post-card-excerpt">
+    
+      <p>spring调试环境搭建
+环境依赖
+
+Gradle
+Git
+JDK1.8+
+
+clone
+跳过，下载后导入idea会自动使用Gradle来Build项目
+gradlew :spring-oxm:compileTestJava
+
+...</p>
+    
+  </div>
+  <a class="read-more" href="/2018/03/17/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/8.spring%E8%B0%83%E8%AF%95%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/">Read More &rarr;</a>
+  
+    <div class="post-card-tags">
+      
+        <a href="/tags/spring%E6%BA%90%E4%BB%A3%E7%A0%81/">#spring源代码</a>
+      
+    </div>
+  
+</article>
+
+  
+    <article class="post-card">
+  <h2 class="post-card-title">
+    <a href="/2018/03/13/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/7.spring%20JDBC%E6%8C%81%E4%B9%85%E5%8C%96%E8%AE%BE%E8%AE%A1/">spring JDBC持久化设计</a>
+  </h2>
+  <div class="post-card-meta">
+    <time datetime="2018-03-12T17:02:45.000Z">2018-03-13</time>
+    
+      <span class="separator">&middot;</span>
+      
+        <a href="/categories/spring/">spring</a>
+      
+    
+  </div>
+  <div class="post-card-excerpt">
+    
+      <p>spring JDBC持久化设计
+spring中大量运用到模板模式，简单回顾一下模板模式就是
+
+抽象类中定义好产品的步骤，不同的子类去实现相同的步骤方法，客户端调用抽象类的方法，执行统一的产品步骤，从而返回结果有点类似于桥接模式的一半，将建造过程抽象出来，形成统一的模板方法。可以使用钩子方法改造模板方法流程，从而增加健壮性。
+
+JdbcTemplate分析
+使用代码
+server:
+  port:...</p>
+    
+  </div>
+  <a class="read-more" href="/2018/03/13/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/7.spring%20JDBC%E6%8C%81%E4%B9%85%E5%8C%96%E8%AE%BE%E8%AE%A1/">Read More &rarr;</a>
+  
+    <div class="post-card-tags">
+      
+        <a href="/tags/spring%E6%BA%90%E4%BB%A3%E7%A0%81/">#spring源代码</a>
+      
+    </div>
+  
+</article>
+
+  
+    <article class="post-card">
+  <h2 class="post-card-title">
+    <a href="/2018/03/12/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/6.spring%20MVC%E5%88%86%E6%9E%90/">spring MVC分析</a>
+  </h2>
+  <div class="post-card-meta">
+    <time datetime="2018-03-12T14:29:53.000Z">2018-03-12</time>
+    
+      <span class="separator">&middot;</span>
+      
+        <a href="/categories/spring/">spring</a>
+      
+    
+  </div>
+  <div class="post-card-excerpt">
+    
+      <p>spring MVC分析
+本章主要分析一下spring MVC的过程，主要从一下几个方面：
+spring MVC概述
+如果要在web环境中使用IOC容器，需要Spring IOC在启动过程中把web容器导入。在这个过程中一方面处理Web容器的启动，另一方面通过设计特定的web容器拦截器将IOC容器加载到web环境中进行初始化。
+
+web.xml文件描述
+
+&lt;servlet>
+    &lt;...</p>
+    
+  </div>
+  <a class="read-more" href="/2018/03/12/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/6.spring%20MVC%E5%88%86%E6%9E%90/">Read More &rarr;</a>
+  
+    <div class="post-card-tags">
+      
+        <a href="/tags/spring%E6%BA%90%E4%BB%A3%E7%A0%81/">#spring源代码</a>
+      
+    </div>
+  
+</article>
+
+  
+    <article class="post-card">
+  <h2 class="post-card-title">
+    <a href="/2018/03/10/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/5.AOP%E6%BA%90%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/">AOP源代码分析</a>
+  </h2>
+  <div class="post-card-meta">
+    <time datetime="2018-03-10T15:06:13.000Z">2018-03-10</time>
+    
+      <span class="separator">&middot;</span>
+      
+        <a href="/categories/spring/">spring</a>
+      
+    
+  </div>
+  <div class="post-card-excerpt">
+    
+      <p>AOP源代码分析
+阅读spring的源代码，来查看spring是如何实现AOP增强的
+被AOP代理的Bean对象创建过程
+在普通bean的加载流程中，如果一个bean是被AOP拦截增强后doCreateBean方法返回的是CGLib动态代理类生成的对象
+
+CGLib动态代理对象
+
+
+
+未被AOP增强的对象
+
+
+可以得出结论,spring是在bean的创建时期对bean就进行了增强。我们继续往下看
+...</p>
+    
+  </div>
+  <a class="read-more" href="/2018/03/10/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/5.AOP%E6%BA%90%E4%BB%A3%E7%A0%81%E5%88%86%E6%9E%90/">Read More &rarr;</a>
+  
+    <div class="post-card-tags">
+      
+        <a href="/tags/spring%E6%BA%90%E4%BB%A3%E7%A0%81/">#spring源代码</a>
+      
+    </div>
+  
+</article>
+
+  
+</div>
+
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/30/">← Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/29/">29</a><a class="page-number" href="/page/30/">30</a><span class="page-number current">31</span><a class="page-number" href="/page/32/">32</a><a class="page-number" href="/page/33/">33</a><a class="page-number" href="/page/34/">34</a><a class="extend next" rel="next" href="/page/32/">Next →</a>
+  </nav>
+
+
+
+    </main>
+    <footer class="site-footer">
+  
+    <p>&copy; 2026 agmtopy</p>
+  
+</footer>
+
+  </div>
+  
+<script src="/js/main.js"></script>
+
+</body>
+</html>

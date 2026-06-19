@@ -1,1232 +1,319 @@
-<!DOCTYPE HTML>
+<!DOCTYPE html>
 <html lang="zh-Hans">
-
-
 <head>
-    <meta charset="utf-8">
-    <meta name="keywords" content="agmtopy博客">
-    <meta name="description" content="你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <meta name="renderer" content="webkit|ie-stand|ie-comp">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="format-detection" content="telephone=no">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <!-- Global site tag (gtag.js) - Google Analytics -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>agmtopy博客</title>
+  <meta name="description" content="你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯">
+<meta property="og:type" content="website">
+<meta property="og:title" content="agmtopy博客">
+<meta property="og:url" content="https://agmtopy.gitee.io/page/10/index.html">
+<meta property="og:site_name" content="agmtopy博客">
+<meta property="og:description" content="你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯">
+<meta property="og:locale">
+<meta property="article:author" content="agmtopy">
+<meta name="twitter:card" content="summary">
+  <link rel="icon" href="/images/logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
 
-
-    <title>agmtopy博客</title>
-    <link rel="icon" type="image/png" href="/favicon.png">
-
-    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
-    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
-    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
-    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/matery.css">
-    <link rel="stylesheet" type="text/css" href="/css/my.css">
-
-    <script src="/libs/jquery/jquery.min.js"></script>
-
+  
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('warmpaper-theme');
+        if (saved === 'dark' || saved === 'light') {
+          document.documentElement.setAttribute('data-theme', saved);
+        }
+      } catch (e) {}
+    })();
+  </script>
 <meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="agmtopy博客" type="application/atom+xml">
 </head>
 
-
-
-
 <body>
-    <header class="navbar-fixed">
-    <nav id="headNav" class="bg-color nav-transparent">
-        <div id="navContainer" class="nav-wrapper container">
-            <div class="brand-logo">
-                <a href="/" class="waves-effect waves-light">
-                    
-                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
-                    
-                    <span class="logo-span">agmtopy博客</span>
-                </a>
-            </div>
-            
-
-<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
-<ul class="right nav-menu">
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/" class="waves-effect waves-light">
+  <div class="site-wrapper">
+    <header class="site-header">
+  <div class="header-inner">
+    <a class="site-title" href="/"><img class="site-logo" src="/images/logo.svg" alt="Logo">agmtopy博客</a>
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span class="nav-toggle-icon"></span>
+    </button>
+    <nav class="site-nav">
       
-      <i class="fas fa-home" style="zoom: 0.6;"></i>
+        <a class="nav-link" href="/">Home</a>
       
-      <span>主页</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/tags" class="waves-effect waves-light">
+        <a class="nav-link" href="/tags">Tags</a>
       
-      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+        <a class="nav-link" href="/categories">Categories</a>
       
-      <span>标签</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/categories" class="waves-effect waves-light">
+        <a class="nav-link" href="/about">About</a>
       
-      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
-      
-      <span>分类</span>
-    </a>
-    
-  </li>
-  
-  <li class="hide-on-med-and-down nav-item">
-    
-    <a href="/about" class="waves-effect waves-light">
-      
-      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
-      
-      <span>关于</span>
-    </a>
-    
-  </li>
-  
-  <li>
-    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
-      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
-    </a>
-  </li>
-</ul>
-
-
-<div id="mobile-nav" class="side-nav sidenav">
-
-    <div class="mobile-head bg-color">
-        
-        <img src="/medias/logo.png" class="logo-img circle responsive-img">
-        
-        <div class="logo-name">agmtopy博客</div>
-        <div class="logo-desc">
-            
-            你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯
-            
-        </div>
-    </div>
-
-    
-
-    <ul class="menu-list mobile-menu-list">
-        
-        <li class="m-nav-item">
-	  
-		<a href="/" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-home"></i>
-			
-			主页
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/tags" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-tags"></i>
-			
-			标签
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/categories" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-bookmark"></i>
-			
-			分类
-		</a>
-          
-        </li>
-        
-        <li class="m-nav-item">
-	  
-		<a href="/about" class="waves-effect waves-light">
-			
-			    <i class="fa-fw fas fa-user-circle"></i>
-			
-			关于
-		</a>
-          
-        </li>
-        
-        
-        <li><div class="divider"></div></li>
-        <li>
-            <a href="https://github.com/agmtopy" class="waves-effect waves-light" target="_blank">
-                <i class="fab fa-github-square fa-fw"></i>Fork Me
-            </a>
-        </li>
-        
-    </ul>
-</div>
-
-
-        </div>
-
-        
-            <style>
-    .nav-transparent .github-corner {
-        display: none !important;
-    }
-
-    .github-corner {
-        position: absolute;
-        z-index: 10;
-        top: 0;
-        right: 0;
-        border: 0;
-        transform: scale(1.1);
-    }
-
-    .github-corner svg {
-        color: #0f9d58;
-        fill: #fff;
-        height: 64px;
-        width: 64px;
-    }
-
-    .github-corner:hover .octo-arm {
-        animation: a 0.56s ease-in-out;
-    }
-
-    .github-corner .octo-arm {
-        animation: none;
-    }
-
-    @keyframes a {
-        0%,
-        to {
-            transform: rotate(0);
-        }
-        20%,
-        60% {
-            transform: rotate(-25deg);
-        }
-        40%,
-        80% {
-            transform: rotate(10deg);
-        }
-    }
-</style>
-
-<a href="https://github.com/agmtopy" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
-   data-tooltip="Fork Me" data-position="left" data-delay="50">
-    <svg viewBox="0 0 250 250" aria-hidden="true">
-        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
-        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
-              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
-        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
-              fill="currentColor" class="octo-body"></path>
-    </svg>
-</a>
-        
+      <button class="theme-toggle" type="button" aria-label="切换主题" title="切换主题" data-theme-state="light">
+        <svg class="icon-sun" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+        </svg>
+        <svg class="icon-moon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
     </nav>
-
+  </div>
 </header>
 
+    <main class="main-content">
+      
+<div class="post-list">
+  
+    <article class="post-card">
+  <h2 class="post-card-title">
+    <a href="/2022/03/25/1.%E6%9D%82%E8%AE%B0/GitLab_CI-CD%E4%BB%8B%E7%BB%8D%E5%92%8C%E4%BD%BF%E7%94%A8/">GitLab CI/CD与GitHub Actions的介绍和使用</a>
+  </h2>
+  <div class="post-card-meta">
+    <time datetime="2022-03-25T15:27:37.000Z">2022-03-25</time>
     
-    <div class="bg-cover pd-header about-cover">
-    <div class="container">
-    <div class="row">
-    <div class="col s10 offset-s1 m8 offset-m2 l8 offset-l2">
-        <div class="brand">
-            <div class="title center-align">
-                
-                agmtopy
-                
-            </div>
+      <span class="separator">&middot;</span>
+      
+        <a href="/categories/%E6%9D%82%E8%AE%B0/">杂记</a>
+      
+    
+  </div>
+  <div class="post-card-excerpt">
+    
+      <p>GitLab CI/CD与GitHub Actions的介绍和使用
+本篇日志主要是用来记录GitLab的CI/CD与GitHub Actions的介绍和使用。先从操作GitLab的CI/CD开始
+GitLab CI/CD
+GitLab支持多种CI方式,本身有Ai DevOps的支持,如下所示
 
-            <div class="description center-align">
-                
-                <span id="subtitle"></span>
-                <script src="https://cdn.jsdelivr.net/npm/typed.js@2.0.11"></script>
-                <script>
-                    var typed = new Typed("#subtitle", {
-                        strings: [ 
-                            
-                                "你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯",
-                            
-                        ],
-                        startDelay: 300,
-                        typeSpeed: 160,
-                        loop: false,
-                        backSpeed: 30,
-                        showCursor: true
-                    });
-                </script>
-                
-            </div>
-        </div>
+启动Ai DevOps后gitlab会根据项目的语言使用一套预设的模板,具体可以参考GitLab Ai ...</p>
+    
+  </div>
+  <a class="read-more" href="/2022/03/25/1.%E6%9D%82%E8%AE%B0/GitLab_CI-CD%E4%BB%8B%E7%BB%8D%E5%92%8C%E4%BD%BF%E7%94%A8/">Read More &rarr;</a>
+  
+    <div class="post-card-tags">
+      
+        <a href="/tags/git/">#git</a>
+      
     </div>
+  
+</article>
+
+  
+    <article class="post-card">
+  <h2 class="post-card-title">
+    <a href="/2022/03/19/7.%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9F%A5%E8%AF%86/50.pulsar%E7%9A%84%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/">pulsar的简单使用</a>
+  </h2>
+  <div class="post-card-meta">
+    <time datetime="2022-03-19T05:45:03.000Z">2022-03-19</time>
+    
+      <span class="separator">&middot;</span>
+      
+        <a href="/categories/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">消息队列</a>
+      
+    
+  </div>
+  <div class="post-card-excerpt">
+    
+      <p>pulsar的简单使用
+Apache Pulsar 是一个云原生的分布式消息传递和流媒体平台，最初由 Yahoo! 创建。现在是作为Apache软件基金会的顶级项目.
+在pulsar这个项目中还大量使用了另外一个Apache的顶级项目Bookkeeper作为存储层的解决方案,在研究完成Pulsar之后也会对Bookkeeper进行研究.
+本文用于记录本地安装Pulsar的过程,希望对你有所帮助,祝...</p>
+    
+  </div>
+  <a class="read-more" href="/2022/03/19/7.%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9F%A5%E8%AF%86/50.pulsar%E7%9A%84%E7%AE%80%E5%8D%95%E4%BD%BF%E7%94%A8/">Read More &rarr;</a>
+  
+    <div class="post-card-tags">
+      
+        <a href="/tags/pulsar/">#pulsar</a>
+      
+    </div>
+  
+</article>
+
+  
+    <article class="post-card">
+  <h2 class="post-card-title">
+    <a href="/2022/03/07/20.%E7%AC%94%E8%AE%B0/2.%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86-%E5%86%85%E5%AD%98%E9%83%A8%E5%88%86/">编译原理-内存部分</a>
+  </h2>
+  <div class="post-card-meta">
+    <time datetime="2022-03-07T12:42:49.000Z">2022-03-07</time>
+    
+      <span class="separator">&middot;</span>
+      
+        <a href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">编译原理</a>
+      
+    
+  </div>
+  <div class="post-card-excerpt">
+    
+      <p>编译原理-内存部分
+这一篇主要是对后端编译器对内存布局的分析和笔记,之前的有关词法/语法方面的理论知识实在是太枯燥了,翻了又翻是在是难以理解,只能暂时放下那一部分的内容了.
+在编译时主要将内存划分为两个部分栈、堆：
+栈主要是作为程序的临时空间实现方法、局部变量的区域
+堆主要是作为分配大对象的区域
+存储组织
+
+存储组织指的是内存区域，字节是内存中的最小编址单元.一个字节包含8个bit.多个连续的字节...</p>
+    
+  </div>
+  <a class="read-more" href="/2022/03/07/20.%E7%AC%94%E8%AE%B0/2.%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86-%E5%86%85%E5%AD%98%E9%83%A8%E5%88%86/">Read More &rarr;</a>
+  
+    <div class="post-card-tags">
+      
+        <a href="/tags/%E7%AC%94%E8%AE%B0/">#笔记</a>
+      
+    </div>
+  
+</article>
+
+  
+    <article class="post-card">
+  <h2 class="post-card-title">
+    <a href="/2022/03/05/20.%E7%AC%94%E8%AE%B0/1.%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86-%E8%AF%8D%E6%B3%95%E8%AF%AD%E6%B3%95%E7%90%86%E8%AE%BA/">编译原理-词法语法理论</a>
+  </h2>
+  <div class="post-card-meta">
+    <time datetime="2022-03-05T07:01:11.908Z">2022-03-05</time>
+    
+      <span class="separator">&middot;</span>
+      
+        <a href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">编译原理</a>
+      
+    
+  </div>
+  <div class="post-card-excerpt">
+    
+      <p>编译原理-词法语法理论
+第二章创建一个简单的语法指导器里面设计了很多理论知识,暂时只记录关键概念。这一章看的很困，外面阳光明媚，只能通过打字来压制一下困意😂😂😂
+关键概念
+
+
+语法制导翻译器
+语法制导翻译器是用于构建语法翻译器的程序
+
+
+语法的定义
+
+
+
+一种用于描述程序设计语言语法的表示方法 - “上下文无关文法”,这种文法用于前端编译器
+
+
+语法分析器
+
+语法分析是决定如何通过一个文法生...</p>
+    
+  </div>
+  <a class="read-more" href="/2022/03/05/20.%E7%AC%94%E8%AE%B0/1.%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86-%E8%AF%8D%E6%B3%95%E8%AF%AD%E6%B3%95%E7%90%86%E8%AE%BA/">Read More &rarr;</a>
+  
+    <div class="post-card-tags">
+      
+        <a href="/tags/%E7%AC%94%E8%AE%B0/">#笔记</a>
+      
+    </div>
+  
+</article>
+
+  
+    <article class="post-card">
+  <h2 class="post-card-title">
+    <a href="/2022/03/03/20.%E7%AC%94%E8%AE%B0/0.%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86-%E5%BC%95%E8%A8%80-/">编译原理-引言</a>
+  </h2>
+  <div class="post-card-meta">
+    <time datetime="2022-03-03T13:13:20.000Z">2022-03-03</time>
+    
+      <span class="separator">&middot;</span>
+      
+        <a href="/categories/%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86/">编译原理</a>
+      
+    
+  </div>
+  <div class="post-card-excerpt">
+    
+      <p>编译原理-引言
+大概是在开始学习编写程序的时候购入了一系列的计算机基础书籍,由于自己的原因导致很多书都只是寥寥翻开几页,就匆匆放下了.
+近来这两年,随着年纪的增大忽然有了一个念头就是自己的程序生涯已经快要结束,但是还有那么多书未看未读,有一些惋惜和不舍.不舍的既有对知识的向往也有对年轻的奢望,惋惜的是荒废了大好年华.不如把既有的书籍看完,也是完成当初对自己的期待和结束吧.
+碎碎念了很久,让我们接下...</p>
+    
+  </div>
+  <a class="read-more" href="/2022/03/03/20.%E7%AC%94%E8%AE%B0/0.%E7%BC%96%E8%AF%91%E5%8E%9F%E7%90%86-%E5%BC%95%E8%A8%80-/">Read More &rarr;</a>
+  
+    <div class="post-card-tags">
+      
+        <a href="/tags/%E7%AC%94%E8%AE%B0/">#笔记</a>
+      
+    </div>
+  
+</article>
+
+  
+    <article class="post-card">
+  <h2 class="post-card-title">
+    <a href="/2022/01/20/1.%E6%9D%82%E8%AE%B0/redis%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E6%8C%81%E4%B9%85%E5%8C%96%E7%9A%84/">redis如何实现持久化的</a>
+  </h2>
+  <div class="post-card-meta">
+    <time datetime="2022-01-20T15:07:22.000Z">2022-01-20</time>
+    
+      <span class="separator">&middot;</span>
+      
+        <a href="/categories/%E6%9D%82%E8%AE%B0/">杂记</a>
+      
+    
+  </div>
+  <div class="post-card-excerpt">
+    
+      <p>redis如何实现持久化的
+redis目前实现持久化主要有两种方式,一种是通过RDB文件,另外一种是通过AOF文件.
+redis对于持久化支持4种部署方式
+
+无持久性
+RDB
+AOF
+RDB + AOF
+
+让就让我们来详细比较和分析以下redis底层是如何实现的RDB和AOF机制的
+RDB文件
+
+RDB定义
+
+
+RDB 持久性指的是在指定时间间隔后执行记录当前数据集的全部数据快照
+
+RDB文件就类...</p>
+    
+  </div>
+  <a class="read-more" href="/2022/01/20/1.%E6%9D%82%E8%AE%B0/redis%E5%A6%82%E4%BD%95%E5%AE%9E%E7%8E%B0%E6%8C%81%E4%B9%85%E5%8C%96%E7%9A%84/">Read More &rarr;</a>
+  
+    <div class="post-card-tags">
+      
+        <a href="/tags/redis/">#redis</a>
+      
+    </div>
+  
+</article>
+
+  
 </div>
 
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/9/">← Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/8/">8</a><a class="page-number" href="/page/9/">9</a><span class="page-number current">10</span><a class="page-number" href="/page/11/">11</a><a class="page-number" href="/page/12/">12</a><span class="space">&hellip;</span><a class="page-number" href="/page/34/">34</a><a class="extend next" rel="next" href="/page/11/">Next →</a>
+  </nav>
 
-<script>
-    // 每天切换 banner 图.  Switch banner image every day.
-    var bannerUrl = "/medias/banner/" + new Date().getDay() + '.jpg';
-    $('.bg-cover').css('background-image', 'url(' + bannerUrl + ')');
-</script>
 
 
-    </div>
-</div>
-
-
-<main class="content">
-
-    
-
-    
-
-    <!-- 所有文章卡片 -->
-    <article id="articles" class="container articles">
-        <div class="row article-row">
-            
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2020/07/29/10.netty%E7%AC%94%E8%AE%B0/1.Netty%E5%85%A5%E9%97%A8%E5%9F%BA%E7%A1%80%E4%B8%80/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/55.jpg" class="responsive-img" alt="Netty入门基础一">
-                            
-                            <span class="card-title">Netty入门基础一</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                Netty入门基础
-Netty是什么？
-
-Netty 是一个异步事件驱动的网络应用框架，用于快速开发可维护的高性能服务器和客户端。
-
-Netty针对java nio做了封装和改进
-简单实例
-socket
-
-SocketServerDemo
-
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-29
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/Netty/" class="post-category">
-                                    Netty
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/categories/Netty/">
-                            <span class="chip bg-color">Netty</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2020/07/12/1.%E6%9D%82%E8%AE%B0/Leaf%E7%BE%8E%E5%9B%A2%E7%82%B9%E8%AF%84%E5%88%86%E5%B8%83%E5%BC%8FID%E7%94%9F%E6%88%90%E7%B3%BB%E7%BB%9F%E8%B0%83%E7%A0%94/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/51.jpg" class="responsive-img" alt="Leaf美团点评分布式ID生成系统">
-                            
-                            <span class="card-title">Leaf美团点评分布式ID生成系统</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                Leaf-美团点评分布式ID生成系统
-leaf作为一个分布式id生成系统，代码简洁且高效，理论指导部分为Leaf——美团点评分布式ID生成系统,工程实践为https://github.com/Meituan-Dianping/Leaf
-理论
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-12
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E6%9D%82%E8%AE%B0/" class="post-category">
-                                    杂记
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/categories/%E6%9D%82%E8%AE%B0/">
-                            <span class="chip bg-color">杂记</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2020/07/06/1.%E6%9D%82%E8%AE%B0/%E7%B3%BB%E7%BB%9F%E4%B8%9A%E5%8A%A1%E7%9B%91%E6%8E%A7%E7%9A%84%E6%80%9D%E8%80%83/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/129.jpg" class="responsive-img" alt="系统业务监控的思考">
-                            
-                            <span class="card-title">系统业务监控的思考</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                
-系统业务监控，主要的目的是为了让内部人员可以更清楚当前系统的业务运行状态。它和系统运行级的监控分别代表的一个是业务维度的监控、一个是系统资源维度的监控，关注的点不一样。业务监控复杂的点在于监控策略与业务强关联并且数据准确性要求较高。以下根
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-07-06
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E6%9D%82%E8%AE%B0/" class="post-category">
-                                    杂记
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/categories/%E6%9D%82%E8%AE%B0/">
-                            <span class="chip bg-color">杂记</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2020/06/25/1.%E6%9D%82%E8%AE%B0/java%E9%9D%A2%E8%AF%95%E6%9D%82%E8%AE%B0/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/47.jpg" class="responsive-img" alt="java面试杂记">
-                            
-                            <span class="card-title">java面试杂记</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                数据库知识
-4-1.数据库设计原则
-
-
-单张数据表字段不宜超过20个,如果超过20个,需要考虑拆分表
-数据表字段都应该是not null,如果有null值,需要考虑用无意义值填充
-索引不应该过多,最多不需要超过6个
-不过度遵守数据库范式,通
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-06-25
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E6%9D%82%E8%AE%B0/" class="post-category">
-                                    杂记
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/categories/%E6%9D%82%E8%AE%B0/">
-                            <span class="chip bg-color">杂记</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2020/06/23/1.%E6%9D%82%E8%AE%B0/%E5%88%86%E5%B8%83%E5%BC%8F%E4%B8%AD%E7%9A%84%E4%B8%80%E8%87%B4%E6%80%A7paxos%E7%AE%97%E6%B3%95%E4%BB%A5%E5%8F%8A%E5%85%B6%E5%AE%9E%E7%8E%B0zab%E5%8D%8F%E8%AE%AE/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/98.jpg" class="responsive-img" alt="分布式中的一致性paxos算法以及其实现zab协议">
-                            
-                            <span class="card-title">分布式中的一致性paxos算法以及其实现zab协议</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                分布式中的一致性paxos算法以及其实现zab协议
-分布式最重要的问题就是如何解决，不同节点中数据的一致性。paxos算法就是最重要的解决这个问题的理论。
-paxos基础
-Quorum机制
-
-Quorum机制是表示在分布式系统中，只要大于总
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-06-23
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E6%9D%82%E8%AE%B0/" class="post-category">
-                                    杂记
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/categories/%E6%9D%82%E8%AE%B0/">
-                            <span class="chip bg-color">杂记</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2020/06/20/1.%E6%9D%82%E8%AE%B0/%E3%80%8Ajava8%E5%AE%9E%E6%88%98%E3%80%8B%E8%AF%BB%E4%B9%A6%E7%AC%94%E8%AE%B0/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/68.jpg" class="responsive-img" alt="《java8实战》读书笔记">
-                            
-                            <span class="card-title">《java8实战》读书笔记</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                《java8实战》读书笔记
-主要是关于java8的一些笔记。
-基础
-java8中设计的三个编程概念
-
-流处理
-函数传递
-并行与共享的可变数据
-
-函数传递
-
-行为参数化(函数传递)就是可以帮助你处理频繁变更的需求的一种软件开发模式
-
-
-例1:
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-06-20
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E6%9D%82%E8%AE%B0/" class="post-category">
-                                    杂记
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/categories/%E6%9D%82%E8%AE%B0/">
-                            <span class="chip bg-color">杂记</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2020/06/16/1.%E6%9D%82%E8%AE%B0/gradle%E7%9A%84%E5%AE%89%E8%A3%85%E4%B8%8E%E4%BD%BF%E7%94%A8/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/26.jpg" class="responsive-img" alt="gradle的安装与使用">
-                            
-                            <span class="card-title">gradle的安装与使用</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                gradle的安装与使用
-
-由于新的项目大多是使用gradle进行依赖管理，因此在这里将其用法做一下总结
-
-安装
-主要步骤是：
-
-下载安装包
-配置环境变量
-查看版本号
-
-
-gradle -v
-
-
-显示对应版本号表示安装成功
-
-
-基础知识
-g
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-06-16
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E6%9D%82%E8%AE%B0/" class="post-category">
-                                    杂记
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/categories/%E6%9D%82%E8%AE%B0/">
-                            <span class="chip bg-color">杂记</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2020/06/14/13.LeetCode/8.%E6%9C%80%E9%95%BF%E5%85%AC%E5%85%B1%E5%89%8D%E7%BC%80/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/75.jpg" class="responsive-img" alt="最长公共前缀_LeetCode08">
-                            
-                            <span class="card-title">最长公共前缀_LeetCode08</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                最长公共前缀_LeetCode08
-题目
-编写一个函数来查找字符串数组中的最长公共前缀。
-如果不存在公共前缀，返回空字符串 “”。
-
-示例 1:
-
-输入: [&quot;flower&quot;,&quot;flow&quot;,&quot
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-06-14
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E7%AE%97%E6%B3%95/" class="post-category">
-                                    算法
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/categories/%E7%AE%97%E6%B3%95/">
-                            <span class="chip bg-color">算法</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2020/06/12/14.%E6%94%B6%E8%97%8F%E6%96%87%E7%AB%A0/7.mysql%E5%9F%BA%E7%A1%80%E7%9F%A5%E8%AF%86/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/63.jpg" class="responsive-img" alt="mysql基础知识">
-                            
-                            <span class="card-title">mysql基础知识</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                mysql基础知识
-收藏于三太子敖丙的数据库基础知识
-这个公众号的原创文章非常不错，值得推荐
-
-mysql的执行流程
-
-
-主要分为一下几个流程:
-
-连接器
-查询缓存
-分析器
-优化器
-执行器
-执行引擎
-
-连接器
-连接器是负责和客户端建立连接、
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-06-12
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E6%96%87%E7%AB%A0%E6%94%B6%E8%97%8F/" class="post-category">
-                                    文章收藏
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/categories/%E6%96%87%E7%AB%A0%E6%94%B6%E8%97%8F/">
-                            <span class="chip bg-color">文章收藏</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2020/06/10/12.JVM/3.JDK%E7%B1%BB%E5%8A%A0%E8%BD%BD%E6%9C%BA%E5%88%B6/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/113.jpg" class="responsive-img" alt="JDK类加载机制">
-                            
-                            <span class="card-title">JDK类加载机制</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                jdk的类加载机制
-类加载的过程
-
-类加载主要分为：
-加载 -&gt; 验证 -&gt; 准备 -&gt; 解析 -&gt; 初始化
-
-加载
-
-
-加载的主要作用是将外部的 .class 文件，加载到 Java 的方法区内
-
-
-验证
-
-
-验证
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-06-10
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/JVM/" class="post-category">
-                                    JVM
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/categories/JVM/">
-                            <span class="chip bg-color">JVM</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2020/06/10/12.JVM/4.JVM%E9%97%AE%E9%A2%98%E6%8E%92%E6%9F%A5%E6%80%9D%E8%B7%AF/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/80.jpg" class="responsive-img" alt="JVM问题排查思路">
-                            
-                            <span class="card-title">JVM问题排查思路</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                JVM问题排查思路
-GC log
-启动脚本
--verbose:gc -XX:+PrintGCDetails -XX:+PrintGCDateStamps 
--XX:+PrintGCApplicationStoppedTime -XX:+Pr
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-06-10
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/JVM/" class="post-category">
-                                    JVM
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/categories/JVM/">
-                            <span class="chip bg-color">JVM</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-            
-            <div class="article col s12 m6 l4" data-aos="zoom-in">
-                <div class="card">
-                    <a href="/2020/06/09/14.%E6%94%B6%E8%97%8F%E6%96%87%E7%AB%A0/6.%E6%B7%B1%E5%85%A5%E5%AD%A6%E4%B9%A0Java%E7%BA%BF%E7%A8%8B%E6%B1%A0/">
-                        <div class="card-image">
-                            
-                            
-                            <img src="/medias/featureimages/92.jpg" class="responsive-img" alt="深入学习Java线程池">
-                            
-                            <span class="card-title">深入学习Java线程池</span>
-                        </div>
-                    </a>
-
-                    <div class="card-content article-content">
-                        <div class="summary block-with-text">
-                            
-                                深入学习Java线程池
-转载自:
-原文链接： stackify 翻译： ImportNew.com - 一杯哈希不加盐
-译文链接： http:&#x2F;&#x2F;www.importnew.com&#x2F;29212.html
-导语
-
-                            
-                        </div>
-                        <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2020-06-09
-                            </span>
-                            <span class="publish-author">
-                                
-                                <i class="fas fa-bookmark fa-fw icon-category"></i>
-                                
-                                <a href="/categories/%E6%96%87%E7%AB%A0%E6%94%B6%E8%97%8F/" class="post-category">
-                                    文章收藏
-                                </a>
-                                
-                                
-                            </span>
-                        </div>
-                    </div>
-
-                    
-                    <div class="card-action article-tags">
-                        
-                        <a href="/categories/%E6%96%87%E7%AB%A0%E6%94%B6%E8%97%8F/">
-                            <span class="chip bg-color">文章收藏</span>
-                        </a>
-                        
-                    </div>
-                    
-                </div>
-            </div>
-            
-        </div>
-    </article>
-
-</main>
-
-
-<div class="container paging">
-    <div class="row">
-        <div class="col s6 m4 l4">
-            
-            <a href="/page/9/"
-               class="left btn-floating btn-large waves-effect waves-light bg-color">
-                <i class="fas fa-angle-left"></i>
-            </a>
-            
-        </div>
-        <div class="page-info col m4 l4 hide-on-small-only">
-            <div class="center-align b-text-gray">10 / 17</div>
-        </div>
-        <div class="col s6 m4 l4">
-            
-            <a href="/page/11/"
-               class="right btn-floating btn-large waves-effect waves-light bg-color">
-                <i class="fas fa-angle-right"></i>
-            </a>
-            
-        </div>
-    </div>
-</div>
-
-
-
-
-    <footer class="page-footer bg-color">
-    
-                <div class="container row center-align"
-                    style="margin-bottom: 0px !important;">
-                    <div class="col s12 m8 l8 copy-right">
-                        
-                            <span id="year">
-                            </span>
-                            
-                                    <span id="year">
-                                    </span>
-                                    <a href="/about" target="_blank">
-                                    </a>
-                                    &nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
-                                    |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery"
-                                        target="_blank">Matery</a>
-                                    <!-- <br> -->
-                                    
-                                        &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                                            class="white-color">
-                                            244k
-                                        </span>&nbsp;字
-                                        
-                                            
-                                                
-                                                    
-                                                        
-                                                            
-
-                                                                
-                                                                    
-
-                                                                        
-                                                                            <br>
-                                                                            
-                                                                                    <br>
-                                                                                    
-                    </div>
-                    <div class="col s12 m4 l4 social-link social-statis">
-                        
-
-        
-            <a href="mailto:zjytian@gmail.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我"
-                data-position="top" data-delay="50">
-                <i class="fas fa-envelope-open"></i>
-            </a>
-            
-
-                
-
-                        
-
-                                
-
-                                        
-
-                                                
-
-                                                        
-                    </div>
-                </div>
+    </main>
+    <footer class="site-footer">
+  
+    <p>&copy; 2026 agmtopy</p>
+  
 </footer>
 
-<div class="progress-bar"></div>
-
-    <!-- 搜索遮罩框 -->
-<div id="searchModal" class="modal">
-    <div class="modal-content">
-        <div class="search-header">
-            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
-            <input type="search" id="searchInput" name="s" placeholder="请输入关键词"
-                   class="search-input">
-        </div>
-        <div id="searchResult"></div>
-    </div>
-</div>
-
-<script type="text/javascript">
-$(function () {
-    var searchFunc = function (path, search_id, content_id) {
-        'use strict';
-        $.ajax({
-            url: path,
-            dataType: "xml",
-            success: function (xmlResponse) {
-                // get the contents from search data
-                var datas = $("entry", xmlResponse).map(function () {
-                    return {
-                        title: $("title", this).text(),
-                        content: $("content", this).text(),
-                        url: $("url", this).text()
-                    };
-                }).get();
-                var $input = document.getElementById(search_id);
-                var $resultContent = document.getElementById(content_id);
-                $input.addEventListener('input', function () {
-                    var str = '<ul class=\"search-result-list\">';
-                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
-                    $resultContent.innerHTML = "";
-                    if (this.value.trim().length <= 0) {
-                        return;
-                    }
-                    // perform local searching
-                    datas.forEach(function (data) {
-                        var isMatch = true;
-                        var data_title = data.title.trim().toLowerCase();
-                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
-                        var data_url = data.url;
-                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
-                        var index_title = -1;
-                        var index_content = -1;
-                        var first_occur = -1;
-                        // only match artiles with not empty titles and contents
-                        if (data_title !== '' && data_content !== '') {
-                            keywords.forEach(function (keyword, i) {
-                                index_title = data_title.indexOf(keyword);
-                                index_content = data_content.indexOf(keyword);
-                                if (index_title < 0 && index_content < 0) {
-                                    isMatch = false;
-                                } else {
-                                    if (index_content < 0) {
-                                        index_content = 0;
-                                    }
-                                    if (i === 0) {
-                                        first_occur = index_content;
-                                    }
-                                }
-                            });
-                        }
-                        // show search results
-                        if (isMatch) {
-                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
-                            var content = data.content.trim().replace(/<[^>]+>/g, "");
-                            if (first_occur >= 0) {
-                                // cut out 100 characters
-                                var start = first_occur - 20;
-                                var end = first_occur + 80;
-                                if (start < 0) {
-                                    start = 0;
-                                }
-                                if (start === 0) {
-                                    end = 100;
-                                }
-                                if (end > content.length) {
-                                    end = content.length;
-                                }
-                                var match_content = content.substr(start, end);
-                                // highlight all keywords
-                                keywords.forEach(function (keyword) {
-                                    var regS = new RegExp(keyword, "gi");
-                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
-                                });
-
-                                str += "<p class=\"search-result\">" + match_content + "...</p>"
-                            }
-                            str += "</li>";
-                        }
-                    });
-                    str += "</ul>";
-                    $resultContent.innerHTML = str;
-                });
-            }
-        });
-    };
-
-    searchFunc('/search.xml', 'searchInput', 'searchResult');
-});
-</script>
-
-    <!-- 回到顶部按钮 -->
-<div id="backTop" class="top-scroll">
-    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
-        <i class="fas fa-arrow-up"></i>
-    </a>
-</div>
-
-
-    <script src="/libs/materialize/materialize.min.js"></script>
-    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
-    <script src="/libs/aos/aos.js"></script>
-    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
-    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
-    <script src="/js/matery.js"></script>
-
-    <!-- Baidu Analytics -->
-
-    <!-- Baidu Push -->
-
-<script>
-    (function () {
-        var bp = document.createElement('script');
-        var curProtocol = window.location.protocol.split(':')[0];
-        if (curProtocol === 'https') {
-            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
-        } else {
-            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
-        }
-        var s = document.getElementsByTagName("script")[0];
-        s.parentNode.insertBefore(bp, s);
-    })();
-</script>
-
-    
-    <script src="/libs/others/clicklove.js" async="async"></script>
-    
-    
-    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
-    
-
-    
-
-    
-
-    <!--腾讯兔小巢-->
-    
-    
-
-    
-
-    
-
-    
-    <script src="/libs/instantpage/instantpage.js" type="module"></script>
-    
+  </div>
+  
+<script src="/js/main.js"></script>
 
 </body>
-
 </html>

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>agmtopy博客</title>
+  <meta name="description" content="你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯">
+<meta property="og:type" content="website">
+<meta property="og:title" content="agmtopy博客">
+<meta property="og:url" content="https://agmtopy.gitee.io/page/30/index.html">
+<meta property="og:site_name" content="agmtopy博客">
+<meta property="og:description" content="你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯">
+<meta property="og:locale">
+<meta property="article:author" content="agmtopy">
+<meta name="twitter:card" content="summary">
+  <link rel="icon" href="/images/logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('warmpaper-theme');
+        if (saved === 'dark' || saved === 'light') {
+          document.documentElement.setAttribute('data-theme', saved);
+        }
+      } catch (e) {}
+    })();
+  </script>
+<meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="agmtopy博客" type="application/atom+xml">
+</head>
+
+<body>
+  <div class="site-wrapper">
+    <header class="site-header">
+  <div class="header-inner">
+    <a class="site-title" href="/"><img class="site-logo" src="/images/logo.svg" alt="Logo">agmtopy博客</a>
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span class="nav-toggle-icon"></span>
+    </button>
+    <nav class="site-nav">
+      
+        <a class="nav-link" href="/">Home</a>
+      
+        <a class="nav-link" href="/tags">Tags</a>
+      
+        <a class="nav-link" href="/categories">Categories</a>
+      
+        <a class="nav-link" href="/about">About</a>
+      
+      <button class="theme-toggle" type="button" aria-label="切换主题" title="切换主题" data-theme-state="light">
+        <svg class="icon-sun" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+        </svg>
+        <svg class="icon-moon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+    <main class="main-content">
+      
+<div class="post-list">
+  
+    <article class="post-card">
+  <h2 class="post-card-title">
+    <a href="/2018/03/21/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/16.InitializingBean%E6%89%A9%E5%B1%95%E7%82%B9%E5%88%86%E6%9E%90/">InitializingBean扩展点分析</a>
+  </h2>
+  <div class="post-card-meta">
+    <time datetime="2018-03-21T03:33:12.000Z">2018-03-21</time>
+    
+      <span class="separator">&middot;</span>
+      
+        <a href="/categories/spring/">spring</a>
+      
+    
+  </div>
+  <div class="post-card-excerpt">
+    
+      <p>InitializingBean扩展点分析
+上面两篇分别分析了扩展点aware、BeanProcessesor，接下来继续分析InitializingBean
+代码示例
+public interface InitializingBean &#123;
+    void afterPropertiesSet() throws Exception;
+&#125;
+
+代码演示
+
+
+
+Instantiat...</p>
+    
+  </div>
+  <a class="read-more" href="/2018/03/21/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/16.InitializingBean%E6%89%A9%E5%B1%95%E7%82%B9%E5%88%86%E6%9E%90/">Read More &rarr;</a>
+  
+    <div class="post-card-tags">
+      
+        <a href="/tags/spring%E6%BA%90%E4%BB%A3%E7%A0%81/">#spring源代码</a>
+      
+    </div>
+  
+</article>
+
+  
+    <article class="post-card">
+  <h2 class="post-card-title">
+    <a href="/2018/03/20/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/15.BeanPostProcessor%E6%89%A9%E5%B1%95%E7%82%B9%E5%88%86%E6%9E%90/">BeanPostProcessor扩展点分析</a>
+  </h2>
+  <div class="post-card-meta">
+    <time datetime="2018-03-19T16:47:03.000Z">2018-03-20</time>
+    
+      <span class="separator">&middot;</span>
+      
+        <a href="/categories/spring/">spring</a>
+      
+    
+  </div>
+  <div class="post-card-excerpt">
+    
+      <p>BeanPostProcessor扩展点分析
+
+BeanPostProcess接口是在Bean完成实例化后，如果我们要对所有的加载bean进行一些处理或增加配置的接口
+
+
+BeanPostProcessor.java
+
+BeanPostProcessor&#123;
+    Object postProcessBeforeInitialization(Object bean, String bea...</p>
+    
+  </div>
+  <a class="read-more" href="/2018/03/20/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/15.BeanPostProcessor%E6%89%A9%E5%B1%95%E7%82%B9%E5%88%86%E6%9E%90/">Read More &rarr;</a>
+  
+    <div class="post-card-tags">
+      
+        <a href="/tags/spring%E6%BA%90%E4%BB%A3%E7%A0%81/">#spring源代码</a>
+      
+    </div>
+  
+</article>
+
+  
+    <article class="post-card">
+  <h2 class="post-card-title">
+    <a href="/2018/03/20/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/14.Aware%E6%8E%A5%E5%8F%A3%E6%89%A9%E5%B1%95%E7%82%B9%E7%9A%84%E5%88%86%E6%9E%90/">Aware接口扩展点的分析</a>
+  </h2>
+  <div class="post-card-meta">
+    <time datetime="2018-03-19T16:30:00.000Z">2018-03-20</time>
+    
+      <span class="separator">&middot;</span>
+      
+        <a href="/categories/spring/">spring</a>
+      
+    
+  </div>
+  <div class="post-card-excerpt">
+    
+      <p>Aware接口扩展点的分析
+aware字面上的意思为感知，在spring中就是感知容器、bean的时机并进行自定义扩展的
+使用
+
+常用的Aware
+
+
+
+类名
+作用
+
+
+
+
+LoadTimeWeaverAware
+加载Spring Bean时织入第三方模块，如AspectJ
+
+
+BeanClassLoaderAware
+加载Spring Bean的类加载器
+
+
+BootstrapContextAw...</p>
+    
+  </div>
+  <a class="read-more" href="/2018/03/20/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/14.Aware%E6%8E%A5%E5%8F%A3%E6%89%A9%E5%B1%95%E7%82%B9%E7%9A%84%E5%88%86%E6%9E%90/">Read More &rarr;</a>
+  
+    <div class="post-card-tags">
+      
+        <a href="/tags/spring%E6%BA%90%E4%BB%A3%E7%A0%81/">#spring源代码</a>
+      
+    </div>
+  
+</article>
+
+  
+    <article class="post-card">
+  <h2 class="post-card-title">
+    <a href="/2018/03/19/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/13.%E5%88%9B%E5%BB%BAbean%E7%9A%84%E6%B5%81%E7%A8%8B/">创建bean的流程</a>
+  </h2>
+  <div class="post-card-meta">
+    <time datetime="2018-03-19T13:46:35.000Z">2018-03-19</time>
+    
+      <span class="separator">&middot;</span>
+      
+        <a href="/categories/spring/">spring</a>
+      
+    
+  </div>
+  <div class="post-card-excerpt">
+    
+      <p>创建bean的流程
+通过上面几个流程的分析，终于来到了spring初始化bean的流程了。在这个过程中主要的功能有实列化bean对象、加载到缓存、前后置处理;
+创建流程
+@Override
+	protected Object createBean(String beanName, RootBeanDefinition mbd, @Nullable Object[] args)
+			throws ...</p>
+    
+  </div>
+  <a class="read-more" href="/2018/03/19/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/13.%E5%88%9B%E5%BB%BAbean%E7%9A%84%E6%B5%81%E7%A8%8B/">Read More &rarr;</a>
+  
+    <div class="post-card-tags">
+      
+        <a href="/tags/spring%E6%BA%90%E4%BB%A3%E7%A0%81/">#spring源代码</a>
+      
+    </div>
+  
+</article>
+
+  
+    <article class="post-card">
+  <h2 class="post-card-title">
+    <a href="/2018/03/19/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/12.Bean%E7%9A%84%E5%8A%A0%E8%BD%BD/">Bean的加载1</a>
+  </h2>
+  <div class="post-card-meta">
+    <time datetime="2018-03-18T16:32:21.000Z">2018-03-19</time>
+    
+      <span class="separator">&middot;</span>
+      
+        <a href="/categories/spring/">spring</a>
+      
+    
+  </div>
+  <div class="post-card-excerpt">
+    
+      <p>Bean的加载
+Spring Ioc容器就是以某种方式加载配置文件并创建相应的对象进行绑定形成一个可取可存的容器。
+spring在实现过程中分为两个阶段：
+
+容器初始化阶段
+加载bean阶段
+
+容器初始化阶段
+
+通过某种方式(ResourceLoadle)将配置文件(Resource)加载
+通过BeanDefinitionReader将配置文件转换为BeanDefinition
+通过BeanDef...</p>
+    
+  </div>
+  <a class="read-more" href="/2018/03/19/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/12.Bean%E7%9A%84%E5%8A%A0%E8%BD%BD/">Read More &rarr;</a>
+  
+    <div class="post-card-tags">
+      
+        <a href="/tags/spring%E6%BA%90%E4%BB%A3%E7%A0%81/">#spring源代码</a>
+      
+    </div>
+  
+</article>
+
+  
+    <article class="post-card">
+  <h2 class="post-card-title">
+    <a href="/2018/03/18/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/11.spring%E7%9A%84BeanDefinition%E4%BD%93%E7%B3%BB/">spring的BeanDefinition体系</a>
+  </h2>
+  <div class="post-card-meta">
+    <time datetime="2018-03-18T13:11:05.000Z">2018-03-18</time>
+    
+      <span class="separator">&middot;</span>
+      
+        <a href="/categories/spring/">spring</a>
+      
+    
+  </div>
+  <div class="post-card-excerpt">
+    
+      <p>spring的BeanDefinition体系
+BeanDefinition是作为记录Bean的原始信息。读取完成配置文件后就要将配置文件解析为BeanDefinition。我们来分析一一下这个流程
+bean的元数据
+
+BeanDefinition -&gt; bean的元数据
+
+String SCOPE_SINGLETON = ConfigurableBeanFactory.SCOPE_SING...</p>
+    
+  </div>
+  <a class="read-more" href="/2018/03/18/4.spring%E6%BA%90%E4%BB%A3%E7%A0%81/11.spring%E7%9A%84BeanDefinition%E4%BD%93%E7%B3%BB/">Read More &rarr;</a>
+  
+    <div class="post-card-tags">
+      
+        <a href="/tags/spring%E6%BA%90%E4%BB%A3%E7%A0%81/">#spring源代码</a>
+      
+    </div>
+  
+</article>
+
+  
+</div>
+
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/29/">← Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/28/">28</a><a class="page-number" href="/page/29/">29</a><span class="page-number current">30</span><a class="page-number" href="/page/31/">31</a><a class="page-number" href="/page/32/">32</a><span class="space">&hellip;</span><a class="page-number" href="/page/34/">34</a><a class="extend next" rel="next" href="/page/31/">Next →</a>
+  </nav>
+
+
+
+    </main>
+    <footer class="site-footer">
+  
+    <p>&copy; 2026 agmtopy</p>
+  
+</footer>
+
+  </div>
+  
+<script src="/js/main.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-Hans">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=5">
+  <title>agmtopy博客</title>
+  <meta name="description" content="你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯">
+<meta property="og:type" content="website">
+<meta property="og:title" content="agmtopy博客">
+<meta property="og:url" content="https://agmtopy.gitee.io/page/26/index.html">
+<meta property="og:site_name" content="agmtopy博客">
+<meta property="og:description" content="你瞧这些白云聚了又散，散了又聚，人生离合，亦复如斯">
+<meta property="og:locale">
+<meta property="article:author" content="agmtopy">
+<meta name="twitter:card" content="summary">
+  <link rel="icon" href="/images/logo.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+<link rel="stylesheet" href="/css/style.css">
+
+  
+  <script>
+    (function () {
+      try {
+        var saved = localStorage.getItem('warmpaper-theme');
+        if (saved === 'dark' || saved === 'light') {
+          document.documentElement.setAttribute('data-theme', saved);
+        }
+      } catch (e) {}
+    })();
+  </script>
+<meta name="generator" content="Hexo 5.4.0"><link rel="alternate" href="/atom.xml" title="agmtopy博客" type="application/atom+xml">
+</head>
+
+<body>
+  <div class="site-wrapper">
+    <header class="site-header">
+  <div class="header-inner">
+    <a class="site-title" href="/"><img class="site-logo" src="/images/logo.svg" alt="Logo">agmtopy博客</a>
+    <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+      <span class="nav-toggle-icon"></span>
+    </button>
+    <nav class="site-nav">
+      
+        <a class="nav-link" href="/">Home</a>
+      
+        <a class="nav-link" href="/tags">Tags</a>
+      
+        <a class="nav-link" href="/categories">Categories</a>
+      
+        <a class="nav-link" href="/about">About</a>
+      
+      <button class="theme-toggle" type="button" aria-label="切换主题" title="切换主题" data-theme-state="light">
+        <svg class="icon-sun" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="4"/>
+          <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/>
+        </svg>
+        <svg class="icon-moon" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+        </svg>
+      </button>
+    </nav>
+  </div>
+</header>
+
+    <main class="main-content">
+      
+<div class="post-list">
+  
+    <article class="post-card">
+  <h2 class="post-card-title">
+    <a href="/2019/06/28/1.%E6%9D%82%E8%AE%B0/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E6%80%9D%E8%80%83/">分布式事务理解</a>
+  </h2>
+  <div class="post-card-meta">
+    <time datetime="2019-06-28T14:21:19.000Z">2019-06-28</time>
+    
+      <span class="separator">&middot;</span>
+      
+        <a href="/categories/%E6%9D%82%E8%AE%B0/">杂记</a>
+      
+    
+  </div>
+  <div class="post-card-excerpt">
+    
+      <p>分布式事务理解
+分布式事务是为了解决在微服务架构下，业务数据在跨进程执行时，需要保证业务的事务性。
+分布式事务框架主要有Seata、atomikos、TX-LCN。其他方式处理我目前已知的有通过mq的方式(待研究);
+基本原理
+
+CAP定理
+BASE理论
+ACID理论
+
+CAP理论
+CAP理论指的是在一个分布式系统中无法同时满足Consistency(一致性)、Availability(可用性)、...</p>
+    
+  </div>
+  <a class="read-more" href="/2019/06/28/1.%E6%9D%82%E8%AE%B0/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1%E6%80%9D%E8%80%83/">Read More &rarr;</a>
+  
+    <div class="post-card-tags">
+      
+        <a href="/tags/%E5%88%86%E5%B8%83%E5%BC%8F%E4%BA%8B%E5%8A%A1/">#分布式事务</a>
+      
+    </div>
+  
+</article>
+
+  
+    <article class="post-card">
+  <h2 class="post-card-title">
+    <a href="/2019/04/01/7.%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9F%A5%E8%AF%86/11.rocketmq%E7%9A%84%E5%AD%98%E5%82%A8%E5%8E%9F%E7%90%86/">rocketmq的存储原理</a>
+  </h2>
+  <div class="post-card-meta">
+    <time datetime="2019-04-01T13:53:55.000Z">2019-04-01</time>
+    
+      <span class="separator">&middot;</span>
+      
+        <a href="/categories/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">消息队列</a>
+      
+    
+  </div>
+  <div class="post-card-excerpt">
+    
+      <p>rocketmq的存储原理
+rocketmq的存储设计主要是分为三个文件：
+
+comitLog文件，该文件是用来顺序存放所有的消息
+consumeQueue文件，该文件是用来保存每一个消费队列的消费信息的
+IndexFile文件，该文件是用来加速消息的检索性能，根据消息的属性快速从comitLog获取信息的
+
+消息如何实现存储的？
+commitLog是消息存储的文件，是一个容量为1G的文件。该文件...</p>
+    
+  </div>
+  <a class="read-more" href="/2019/04/01/7.%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9F%A5%E8%AF%86/11.rocketmq%E7%9A%84%E5%AD%98%E5%82%A8%E5%8E%9F%E7%90%86/">Read More &rarr;</a>
+  
+    <div class="post-card-tags">
+      
+        <a href="/tags/RocketMQ/">#RocketMQ</a>
+      
+    </div>
+  
+</article>
+
+  
+    <article class="post-card">
+  <h2 class="post-card-title">
+    <a href="/2019/03/31/7.%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9F%A5%E8%AF%86/10.rocketmq%E9%A1%BA%E5%BA%8F%E6%B6%88%E6%81%AF%E7%9A%84%E5%88%86%E6%9E%90/">rocketmq顺序消息的分析</a>
+  </h2>
+  <div class="post-card-meta">
+    <time datetime="2019-03-31T13:56:05.000Z">2019-03-31</time>
+    
+      <span class="separator">&middot;</span>
+      
+        <a href="/categories/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">消息队列</a>
+      
+    
+  </div>
+  <div class="post-card-excerpt">
+    
+      <p>rocketmq顺序消息的分析
+顺序消息是指的是一组需要有序的消息集合，在同一参照系下才有意义。rocketmq的顺序消息主要是分为两个方面：
+
+product保证将一组有序的消息发送到同一个messageQueue下
+consumer消费时保证同一时刻一个消费组下只有一个线程在消费消息
+
+
+范围
+
+
+分区顺序：单个messagequeue中的消息是有序的
+全局顺序：单个Topic中的消息都是有序...</p>
+    
+  </div>
+  <a class="read-more" href="/2019/03/31/7.%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9F%A5%E8%AF%86/10.rocketmq%E9%A1%BA%E5%BA%8F%E6%B6%88%E6%81%AF%E7%9A%84%E5%88%86%E6%9E%90/">Read More &rarr;</a>
+  
+    <div class="post-card-tags">
+      
+        <a href="/tags/RocketMQ/">#RocketMQ</a>
+      
+    </div>
+  
+</article>
+
+  
+    <article class="post-card">
+  <h2 class="post-card-title">
+    <a href="/2019/03/29/7.%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9F%A5%E8%AF%86/9.rocketmq%E7%9A%84%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE%E5%88%86%E6%9E%90/">rocketmq的通信协议分析</a>
+  </h2>
+  <div class="post-card-meta">
+    <time datetime="2019-03-29T03:49:50.000Z">2019-03-29</time>
+    
+      <span class="separator">&middot;</span>
+      
+        <a href="/categories/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">消息队列</a>
+      
+    
+  </div>
+  <div class="post-card-excerpt">
+    
+      <p>rocketmq的通信协议分析
+rocketmq底层的通信是放在org.apache.rocketmq.remoting包下的，主要有RPCHook、RemotingServer、RemotingClient、RemotingUtil、RemotingHelper等接口和类组成
+RemotingCommand协议
+RemotingCommand是rocketmq定义的远程通信协议
+//请求头sta...</p>
+    
+  </div>
+  <a class="read-more" href="/2019/03/29/7.%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9F%A5%E8%AF%86/9.rocketmq%E7%9A%84%E9%80%9A%E4%BF%A1%E5%8D%8F%E8%AE%AE%E5%88%86%E6%9E%90/">Read More &rarr;</a>
+  
+    <div class="post-card-tags">
+      
+        <a href="/tags/RocketMQ/">#RocketMQ</a>
+      
+    </div>
+  
+</article>
+
+  
+    <article class="post-card">
+  <h2 class="post-card-title">
+    <a href="/2019/03/29/21.linux/Linux%E7%8E%AF%E5%A2%83%E6%8E%92%E6%9F%A5%E9%97%AE%E9%A2%98%E7%9A%84%E6%80%9D%E8%B7%AF/">Linux环境排查问题的思路</a>
+  </h2>
+  <div class="post-card-meta">
+    <time datetime="2019-03-28T16:28:05.000Z">2019-03-29</time>
+    
+      <span class="separator">&middot;</span>
+      
+        <a href="/categories/%E6%9D%82%E8%AE%B0/">杂记</a>
+      
+    
+  </div>
+  <div class="post-card-excerpt">
+    
+      <p>Linux环境排查问题的工具和思路
+将工作中使用到的在Linux下进行排查问题的工具和思路进行一个总结，主要从CPU、内存、I/O、网络、JVM这五个方面来进行。
+CPU部分
+CPU的性能指标
+
+图示
+
+
+CPU的性能分析工具
+
+
+
+性能指标
+性能工具
+描述
+
+
+
+
+系统CPU使用率
+top、vmstat、mpstat、sar、/proc/stat
+top、vmstat、mpstat作为实时的监控...</p>
+    
+  </div>
+  <a class="read-more" href="/2019/03/29/21.linux/Linux%E7%8E%AF%E5%A2%83%E6%8E%92%E6%9F%A5%E9%97%AE%E9%A2%98%E7%9A%84%E6%80%9D%E8%B7%AF/">Read More &rarr;</a>
+  
+    <div class="post-card-tags">
+      
+        <a href="/tags/linux/">#linux</a>
+      
+        <a href="/tags/arthas/">#arthas</a>
+      
+    </div>
+  
+</article>
+
+  
+    <article class="post-card">
+  <h2 class="post-card-title">
+    <a href="/2019/03/28/7.%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9F%A5%E8%AF%86/8.RocketMQ%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/">RocketMQ主从同步机制分析</a>
+  </h2>
+  <div class="post-card-meta">
+    <time datetime="2019-03-28T13:12:55.000Z">2019-03-28</time>
+    
+      <span class="separator">&middot;</span>
+      
+        <a href="/categories/%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97/">消息队列</a>
+      
+    
+  </div>
+  <div class="post-card-excerpt">
+    
+      <p>RocketMQ主从同步机制分析
+Broker分为Slave、Master两种角色，因此Slave会从master中同步信息、topicConfig、ConsumerOffer、DelayOffset、SubscriptionGroupConfig等信息
+启动同步
+
+handleSlaveSynchronize
+
+
+handleSlaveSynchronize是处理Slave Broker同步Ma...</p>
+    
+  </div>
+  <a class="read-more" href="/2019/03/28/7.%E6%B6%88%E6%81%AF%E9%98%9F%E5%88%97%E7%9F%A5%E8%AF%86/8.RocketMQ%E4%B8%BB%E4%BB%8E%E5%90%8C%E6%AD%A5%E6%9C%BA%E5%88%B6%E5%88%86%E6%9E%90/">Read More &rarr;</a>
+  
+    <div class="post-card-tags">
+      
+        <a href="/tags/RocketMQ/">#RocketMQ</a>
+      
+    </div>
+  
+</article>
+
+  
+</div>
+
+  <nav class="pagination">
+    <a class="extend prev" rel="prev" href="/page/25/">← Prev</a><a class="page-number" href="/">1</a><span class="space">&hellip;</span><a class="page-number" href="/page/24/">24</a><a class="page-number" href="/page/25/">25</a><span class="page-number current">26</span><a class="page-number" href="/page/27/">27</a><a class="page-number" href="/page/28/">28</a><span class="space">&hellip;</span><a class="page-number" href="/page/34/">34</a><a class="extend next" rel="next" href="/page/27/">Next →</a>
+  </nav>
+
+
+
+    </main>
+    <footer class="site-footer">
+  
+    <p>&copy; 2026 agmtopy</p>
+  
+</footer>
+
+  </div>
+  
+<script src="/js/main.js"></script>
+
+</body>
+</html>
